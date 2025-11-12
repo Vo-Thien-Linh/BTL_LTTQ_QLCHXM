@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.FormUI;
 
 namespace BTL_LTTQ_QLCHXM
 {
@@ -16,7 +17,7 @@ namespace BTL_LTTQ_QLCHXM
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Test());
         }
     }
 }
