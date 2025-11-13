@@ -20,9 +20,9 @@ namespace UI.FormUI
         private Color contentBgColor = Color.FromArgb(236, 240, 241);
         private Color buttonNormalColor = Color.FromArgb(52, 73, 94);
 
-        private Color logoutNormalColor = Color.FromArgb(192, 57, 43);  // Đỏ
-        private Color logoutHoverColor = Color.FromArgb(231, 76, 60);   // Đỏ sáng
-        private Color logoutClickColor = Color.FromArgb(169, 50, 38);   // Đỏ đậm
+        private Color logoutNormalColor = Color.FromArgb(192, 57, 43); 
+        private Color logoutHoverColor = Color.FromArgb(231, 76, 60); 
+        private Color logoutClickColor = Color.FromArgb(169, 50, 38);   
 
         // Lưu màu và font gốc của button
         private Dictionary<Button, Color> originalColors = new Dictionary<Button, Color>();
@@ -47,7 +47,7 @@ namespace UI.FormUI
         private void InitializeSlideTimer()
         {
             slideTimer = new Timer();
-            slideTimer.Interval = 1; // Tốc độ animation
+            slideTimer.Interval = 1;
             slideTimer.Tick += SlideTimer_Tick;
         }
 
@@ -71,7 +71,6 @@ namespace UI.FormUI
             }
             else
             {
-                // Ẩn text trước khi thu gọn
                 if (pnlMenuBar.Width > expandedWidth - 50 && pnlMenuBar.Width <= expandedWidth)
                 {
                     ShowButtonText(false);
@@ -85,7 +84,7 @@ namespace UI.FormUI
                     {
                         pnlMenuBar.Width = targetWidth;
                         slideTimer.Stop();
-                        ShowButtonText(false); // Đảm bảo chỉ hiển thị icon
+                        ShowButtonText(false);
                     }
                 }
             }
@@ -95,7 +94,6 @@ namespace UI.FormUI
         {
             if (show)
             {
-                // Hiển thị text đầy đủ
                 btnThongKe.Text = "🏠 Dashboard";
                 btnQuanLyNhanVien.Text = "👥 Quản Lý Nhân Viên";
                 btnQuanLyKhachHang.Text = "👤 Quản Lý Khách Hàng";
@@ -105,7 +103,6 @@ namespace UI.FormUI
                 btnQuanLyXuLy.Text = "⚙️ Quản Lý Xử Lý";
                 btnDangXuat.Text = "🚪 Đăng Xuất";
 
-                // Căn trái
                 btnThongKe.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyNhanVien.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyKhachHang.TextAlign = ContentAlignment.MiddleLeft;
@@ -114,10 +111,18 @@ namespace UI.FormUI
                 btnQuanLyChoThue.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyXuLy.TextAlign = ContentAlignment.MiddleLeft;
                 btnDangXuat.TextAlign = ContentAlignment.MiddleLeft;
+
+                btnThongKe.Padding = new Padding(15, 0, 0, 0);
+                btnQuanLyNhanVien.Padding = new Padding(15, 0, 0, 0);
+                btnQuanLyKhachHang.Padding = new Padding(15, 0, 0, 0);
+                btnQuanLySanPham.Padding = new Padding(15, 0, 0, 0);
+                btnQuanLyBanHang.Padding = new Padding(15, 0, 0, 0);
+                btnQuanLyChoThue.Padding = new Padding(15, 0, 0, 0);
+                btnQuanLyXuLy.Padding = new Padding(15, 0, 0, 0);
+                btnDangXuat.Padding = new Padding(15, 0, 0, 0);
             }
             else
             {
-                // Chỉ hiển thị icon
                 btnThongKe.Text = "🏠";
                 btnQuanLyNhanVien.Text = "👥";
                 btnQuanLyKhachHang.Text = "👤";
@@ -126,36 +131,31 @@ namespace UI.FormUI
                 btnQuanLyChoThue.Text = "🏢";
                 btnQuanLyXuLy.Text = "⚙️";
 
-                // Căn giữa và padding 0
-                btnThongKe.TextAlign = ContentAlignment.MiddleCenter;
-                btnQuanLyNhanVien.TextAlign = ContentAlignment.MiddleCenter;
-                btnQuanLyKhachHang.TextAlign = ContentAlignment.MiddleCenter;
-                btnQuanLySanPham.TextAlign = ContentAlignment.MiddleCenter;
-                btnQuanLyBanHang.TextAlign = ContentAlignment.MiddleCenter;
-                btnQuanLyChoThue.TextAlign = ContentAlignment.MiddleCenter;
-                btnQuanLyXuLy.TextAlign = ContentAlignment.MiddleCenter;
+                btnThongKe.TextAlign = ContentAlignment.MiddleLeft;
+                btnQuanLyNhanVien.TextAlign = ContentAlignment.MiddleLeft;
+                btnQuanLyKhachHang.TextAlign = ContentAlignment.MiddleLeft;
+                btnQuanLySanPham.TextAlign = ContentAlignment.MiddleLeft;
+                btnQuanLyBanHang.TextAlign = ContentAlignment.MiddleLeft;
+                btnQuanLyChoThue.TextAlign = ContentAlignment.MiddleLeft;
+                btnQuanLyXuLy.TextAlign = ContentAlignment.MiddleLeft;
 
-                btnThongKe.Padding = new Padding(0);
-                btnQuanLyNhanVien.Padding = new Padding(0);
-                btnQuanLyKhachHang.Padding = new Padding(0);
-                btnQuanLySanPham.Padding = new Padding(0);
-                btnQuanLyBanHang.Padding = new Padding(0);
-                btnQuanLyChoThue.Padding = new Padding(0);
-                btnQuanLyXuLy.Padding = new Padding(0);
+                btnThongKe.Padding = new Padding(10, 0, 0, 0);
+                btnQuanLyNhanVien.Padding = new Padding(10, 0, 0, 0);
+                btnQuanLyKhachHang.Padding = new Padding(10, 0, 0, 0);
+                btnQuanLySanPham.Padding = new Padding(10, 0, 0, 0);
+                btnQuanLyBanHang.Padding = new Padding(10, 0, 0, 0);
+                btnQuanLyChoThue.Padding = new Padding(10, 0, 0, 0);
+                btnQuanLyXuLy.Padding = new Padding(10, 0, 0, 0);
             }
         }
         private void CustomizeForm()
         {
-            // Cấu hình Form
             this.BackColor = contentBgColor;
 
-            // Thiết lập panel menu
             pnlMenuBar.Width = expandedWidth;
 
-            // Thêm sự kiện cho panel
             AddMouseEventToControlAndChildren(pnlMenuBar);
 
-            // Tùy chỉnh các button đã có
             CustomizeButton(btnThongKe, "🏠 Dashboard");
             CustomizeButton(btnQuanLyNhanVien, "👥 Quản Lý Nhân Viên");
             CustomizeButton(btnQuanLyKhachHang, "👤 Quản Lý Khách Hàng");
@@ -164,7 +164,6 @@ namespace UI.FormUI
             CustomizeButton(btnQuanLyChoThue, "🏢 Quản Lý Cho Thuê");
             CustomizeButton(btnQuanLyXuLy, "⚙️ Quản Lý Xử Lý");
 
-            // Tùy chỉnh riêng cho nút Đăng Xuất với màu đỏ
             CustomizeLogoutButton(btnDangXuat, "🚪 Đăng Xuất");
         }
 
@@ -181,7 +180,6 @@ namespace UI.FormUI
 
         private void PnlMenuBar_MouseEnter(object sender, EventArgs e)
         {
-            // Mở rộng panel
             isExpanded = true;
             targetWidth = expandedWidth;
             slideTimer.Start();
@@ -189,10 +187,8 @@ namespace UI.FormUI
 
         private void PnlMenuBar_MouseLeave(object sender, EventArgs e)
         {
-            // Kiểm tra xem chuột có thực sự rời khỏi panel không
             if (!pnlMenuBar.ClientRectangle.Contains(pnlMenuBar.PointToClient(Control.MousePosition)))
             {
-                // Thu gọn panel
                 isExpanded = false;
                 targetWidth = collapsedWidth;
                 ShowButtonText(false);
@@ -203,11 +199,9 @@ namespace UI.FormUI
 
         private void CustomizeButton(Button btn, string text)
         {
-            // Lưu màu và font gốc
             originalColors[btn] = btn.BackColor;
             originalFonts[btn] = btn.Font;
 
-            // Thiết lập style cho button
             btn.Text = text;
             btn.FlatStyle = FlatStyle.Flat;
             btn.BackColor = buttonNormalColor;
@@ -218,7 +212,6 @@ namespace UI.FormUI
             btn.Cursor = Cursors.Hand;
             btn.FlatAppearance.BorderSize = 0;
 
-            // Hiệu ứng hover
             btn.MouseEnter += Button_MouseEnter;
             btn.MouseLeave += Button_MouseLeave;
             btn.MouseDown += Button_MouseDown;
@@ -227,14 +220,12 @@ namespace UI.FormUI
 
         private void CustomizeLogoutButton(Button btn, string text)
         {
-            // Lưu màu và font gốc
             originalColors[btn] = btn.BackColor;
             originalFonts[btn] = btn.Font;
 
-            // Thiết lập style cho button Đăng Xuất với màu đỏ
             btn.Text = text;
             btn.FlatStyle = FlatStyle.Flat;
-            btn.BackColor = logoutNormalColor;  // Màu đỏ
+            btn.BackColor = logoutNormalColor; 
             btn.ForeColor = Color.White;
             btn.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
             btn.TextAlign = ContentAlignment.MiddleLeft;
@@ -242,14 +233,12 @@ namespace UI.FormUI
             btn.Cursor = Cursors.Hand;
             btn.FlatAppearance.BorderSize = 0;
 
-            // Hiệu ứng hover riêng cho nút Đăng Xuất
             btn.MouseEnter += LogoutButton_MouseEnter;
             btn.MouseLeave += LogoutButton_MouseLeave;
             btn.MouseDown += LogoutButton_MouseDown;
             btn.MouseUp += LogoutButton_MouseUp;
         }
 
-        // Hiệu ứng cho các button thông thường
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
@@ -278,11 +267,10 @@ namespace UI.FormUI
             btn.BackColor = primaryColor;
         }
 
-        // Hiệu ứng riêng cho nút Đăng Xuất (màu đỏ)
         private void LogoutButton_MouseEnter(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutHoverColor;  // Đỏ sáng
+            btn.BackColor = logoutHoverColor; 
             btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btn.Width += 5;
         }
@@ -290,7 +278,7 @@ namespace UI.FormUI
         private void LogoutButton_MouseLeave(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutNormalColor;  // Đỏ thường
+            btn.BackColor = logoutNormalColor; 
             btn.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
             btn.Width -= 5;
         }
@@ -298,13 +286,13 @@ namespace UI.FormUI
         private void LogoutButton_MouseDown(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutClickColor;  // Đỏ đậm
+            btn.BackColor = logoutClickColor; 
         }
 
         private void LogoutButton_MouseUp(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutHoverColor;  // Đỏ sáng
+            btn.BackColor = logoutHoverColor;  
         }
 
         private void MainForm_Load(object sender, EventArgs e)

@@ -20,3 +20,14 @@ F:\BTL_LTTQ\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
 F:\BTL_LTTQ\BLL\obj\Debug\BLL.csproj.Up2Date
 F:\BTL_LTTQ\BLL\obj\Debug\BLL.dll
 F:\BTL_LTTQ\BLL\obj\Debug\BLL.pdb
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\bin\Debug\BLL.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\bin\Debug\BLL.pdb
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\bin\Debug\DAL.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\bin\Debug\DTO.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\bin\Debug\DAL.pdb
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\bin\Debug\DTO.pdb
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.csproj.AssemblyReference.cache
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.csproj.Up2Date
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.pdb

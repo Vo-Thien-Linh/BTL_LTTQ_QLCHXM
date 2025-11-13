@@ -24,3 +24,17 @@ D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.dll
 D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.pdb
 D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.FormUI.MainForm.resources
 D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.Properties.Resources.resources
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\bin\Debug\UI.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\bin\Debug\UI.pdb
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\bin\Debug\BLL.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\bin\Debug\BLL.pdb
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.csproj.AssemblyReference.cache
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.FormUI.LoginForm.resources
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.FormUI.MainForm.resources
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.FormUI.RegisterForm.resources
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.Properties.Resources.resources
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.csproj.GenerateResource.cache
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.csproj.CoreCompileInputs.cache
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.csproj.Up2Date
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.dll
+D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ_QLCHXM\UI\obj\Debug\UI.pdb
