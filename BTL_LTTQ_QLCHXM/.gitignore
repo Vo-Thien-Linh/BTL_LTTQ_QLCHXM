@@ -1,7 +1,10 @@
-# Visual Studio / MSBuild
+﻿# Visual Studio / MSBuild
 .vs/
-bin/
-obj/
+**/bin/
+**/obj/
+**/packages/
+**/[Bb]in/
+**/[Oo]bj/
 *.user
 *.suo
 *.sln.docstates
@@ -14,16 +17,33 @@ obj/
 *.vssscc
 *.userossc
 *.vsxproj.user
-# Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-[Aa]rchive/
-[Dd]ebugPS/
-[Rr]eleasePS/
+
+# Build results (case-insensitive, recursive)
+**/ [Dd]ebug/
+**/ [Dd]ebugPublic/
+**/ [Rr]elease/
+**/ [Rr]eleases/
+**/ x64/
+**/ x86/
+**/ [Aa]rchive/
+**/ [Dd]ebugPS/
+**/ [Rr]eleasePS/
+
+# MSBuild temporary files (thêm cho cache/temp trong .csproj)
+**/*.cache
+**/FileListAbsolute.txt
+**/TemporaryItems.*
+**/GenerateResource.cache
+**/*.tmp_  # Temp files with underscore
+
+# Build outputs (chỉ ignore DLL/PDB/EXE từ build, không code thật)
+**/bin/**/*.dll
+**/bin/**/*.pdb
+**/bin/**/*.exe
+**/obj/**/*.dll
+**/obj/**/*.pdb
+**/obj/**/*.exe
+
 # NuGet
 packages/
 *.nupkg
@@ -31,26 +51,37 @@ packages/
 # !packages/build/
 # Uncomment if necessary
 # !packages/repositories.config
+
 # Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
 # Temporary files
 *.tmp
 *.bak
 *.swp
 *.swo
 *~.nib
+
 # .NET Core
 project.lock.json
 project.fragment.lock.json
 artifacts/
 **/Properties/launchSettings.json
+
 # .NET Scaffolding
 *.dotnet/
+
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
+
 # Ignore temporary files created by VS
 *.local
+
+# Temp resources (nếu .resx là generated, ignore trong obj/bin)
+**/obj/**/*.resx
+**/bin/**/*.resx
+
 # Git
 .gitattributes
