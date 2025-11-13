@@ -1,16 +1,56 @@
-# Ignore Visual Studio files
+# Visual Studio / MSBuild
 .vs/
 bin/
 obj/
 *.user
 *.suo
+*.sln.docstates
 *.cache
 *.dbmdl
 *.log
 *.tlog
 *.vsidx
-
-# Ignore temporary files
+*.vspscc
+*.vssscc
+*.userossc
+*.vsxproj.user
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rchive/
+[Dd]ebugPS/
+[Rr]eleasePS/
+# NuGet
+packages/
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+# !packages/build/
+# Uncomment if necessary
+# !packages/repositories.config
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# Temporary files
 *.tmp
 *.bak
+*.swp
+*.swo
+*~.nib
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+# .NET Scaffolding
+*.dotnet/
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+# Ignore temporary files created by VS
 *.local
+# Git
+.gitattributes
