@@ -35,7 +35,9 @@ namespace UI.FormUI
 
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
-
+            MainForm mainForm = new MainForm();
+            mainForm.Show();
+            this.Hide();
         }
 
         private void lnkDangKy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
