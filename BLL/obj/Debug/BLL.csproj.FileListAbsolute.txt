@@ -9,3 +9,14 @@ D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.csproj.C
 D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.csproj.Up2Date
 D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.dll
 D:\CongDuc\Ki_I_nam_III\LTTQ\BTL_LTTQ\BTL_LTTQ_QLCHXM\BLL\obj\Debug\BLL.pdb
+F:\BTL_LTTQ\BLL\bin\Debug\BLL.dll
+F:\BTL_LTTQ\BLL\bin\Debug\BLL.pdb
+F:\BTL_LTTQ\BLL\bin\Debug\DAL.dll
+F:\BTL_LTTQ\BLL\bin\Debug\DTO.dll
+F:\BTL_LTTQ\BLL\bin\Debug\DAL.pdb
+F:\BTL_LTTQ\BLL\bin\Debug\DTO.pdb
+F:\BTL_LTTQ\BLL\obj\Debug\BLL.csproj.AssemblyReference.cache
+F:\BTL_LTTQ\BLL\obj\Debug\BLL.csproj.CoreCompileInputs.cache
+F:\BTL_LTTQ\BLL\obj\Debug\BLL.csproj.Up2Date
+F:\BTL_LTTQ\BLL\obj\Debug\BLL.dll
+F:\BTL_LTTQ\BLL\obj\Debug\BLL.pdb

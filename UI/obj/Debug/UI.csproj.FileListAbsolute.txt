@@ -1,0 +1,12 @@
+F:\BTL_LTTQ\UI\bin\Debug\UI.dll
+F:\BTL_LTTQ\UI\bin\Debug\UI.pdb
+F:\BTL_LTTQ\UI\bin\Debug\BLL.dll
+F:\BTL_LTTQ\UI\bin\Debug\BLL.pdb
+F:\BTL_LTTQ\UI\obj\Debug\UI.csproj.AssemblyReference.cache
+F:\BTL_LTTQ\UI\obj\Debug\UI.FormUI.LoginForm.resources
+F:\BTL_LTTQ\UI\obj\Debug\UI.FormUI.RegisterForm.resources
+F:\BTL_LTTQ\UI\obj\Debug\UI.csproj.GenerateResource.cache
+F:\BTL_LTTQ\UI\obj\Debug\UI.csproj.CoreCompileInputs.cache
+F:\BTL_LTTQ\UI\obj\Debug\UI.csproj.Up2Date
+F:\BTL_LTTQ\UI\obj\Debug\UI.dll
+F:\BTL_LTTQ\UI\obj\Debug\UI.pdb
