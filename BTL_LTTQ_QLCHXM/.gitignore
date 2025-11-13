@@ -3,8 +3,6 @@
 **/bin/
 **/obj/
 **/packages/
-**/[Bb]in/
-**/[Oo]bj/
 *.user
 *.suo
 *.sln.docstates
@@ -19,24 +17,24 @@
 *.vsxproj.user
 
 # Build results (case-insensitive, recursive)
-**/ [Dd]ebug/
-**/ [Dd]ebugPublic/
-**/ [Rr]elease/
-**/ [Rr]eleases/
-**/ x64/
-**/ x86/
-**/ [Aa]rchive/
-**/ [Dd]ebugPS/
-**/ [Rr]eleasePS/
+**/[Dd]ebug/
+**/[Dd]ebugPublic/
+**/[Rr]elease/
+**/[Rr]eleases/
+**/x64/
+**/x86/
+**/[Aa]rchive/
+**/[Dd]ebugPS/
+**/[Rr]eleasePS/
 
-# MSBuild temporary files (thêm cho cache/temp trong .csproj)
+# MSBuild temporary files
 **/*.cache
 **/FileListAbsolute.txt
 **/TemporaryItems.*
 **/GenerateResource.cache
-**/*.tmp_  # Temp files with underscore
+**/*.tmp_
 
-# Build outputs (chỉ ignore DLL/PDB/EXE từ build, không code thật)
+# Build outputs (DLL/PDB/EXE from build directories)
 **/bin/**/*.dll
 **/bin/**/*.pdb
 **/bin/**/*.exe
@@ -47,10 +45,6 @@
 # NuGet
 packages/
 *.nupkg
-# The packages folder can be ignored because of Package Restore
-# !packages/build/
-# Uncomment if necessary
-# !packages/repositories.config
 
 # Windows
 Thumbs.db
@@ -76,12 +70,9 @@ artifacts/
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
 
-# Ignore temporary files created by VS
+# Temporary files created by VS
 *.local
 
-# Temp resources (nếu .resx là generated, ignore trong obj/bin)
+# Temp resources
 **/obj/**/*.resx
 **/bin/**/*.resx
-
-# Git
-.gitattributes
