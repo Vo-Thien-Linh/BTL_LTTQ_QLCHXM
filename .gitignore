@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/DAL/obj/Debug/DAL.csproj.AssemblyReference.cache
+/BLL/obj/Debug/BLL.csproj.AssemblyReference.cache
+/UI/obj/Debug/UI.csproj.AssemblyReference.cache
