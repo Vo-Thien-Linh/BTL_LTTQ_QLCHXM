@@ -44,6 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormUI\FormQuanLiNV.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormQuanLiNV.Designer.cs">
+      <DependentUpon>FormQuanLiNV.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUI\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,16 +74,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyNhanVien.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyNhanVien.Designer.cs">
+      <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{64a32c34-eb5a-429d-b2d1-8ef6fe5c0fec}</Project>
       <Name>BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DTO\DTO.csproj">
+      <Project>{4f8d5951-243b-43d8-b13d-c25cc01275e7}</Project>
+      <Name>DTO</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UserControlUI\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="FormUI\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -91,6 +105,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyNhanVien.resx">
+      <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
