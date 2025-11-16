@@ -1,10 +1,86 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿# Visual Studio / MSBuild
+.vs/
+**/bin/
+**/obj/
+**/packages/
+*.user
+*.suo
+*.sln.docstates
+*.cache
+*.dbmdl
+*.log
+*.tlog
+*.vsidx
+*.vspscc
+*.vssscc
+*.userossc
+*.vsxproj.user
+# Build results (case-insensitive, recursive)
+**/[Dd]ebug/
+**/[Dd]ebugPublic/
+**/[Rr]elease/
+**/[Rr]eleases/
+**/x64/
+**/x86/
+**/[Aa]rchive/
+**/[Dd]ebugPS/
+**/[Rr]eleasePS/
+# MSBuild temporary files
+**/*.cache
+**/FileListAbsolute.txt
+**/TemporaryItems.*
+**/GenerateResource.cache
+**/*.tmp_
+# DesignTime cache files (THÊM MỚI)
+**/DesignTimeResolveAssemblyReferences.cache
+**/DesignTimeResolveAssemblyReferencesInput.cache
+**/ResolveAssemblyReference.cache
+**/*.DesignTime.cache
+# Build outputs (DLL/PDB/EXE from build directories)
+**/bin/**/*.dll
+**/bin/**/*.pdb
+**/bin/**/*.exe
+**/obj/**/*.dll
+**/obj/**/*.pdb
+**/obj/**/*.exe
+# CoreCompileInputs
+**/obj/**/*.csproj.CoreCompileInputs.cache
+**/obj/**/*.csproj.FileListAbsolute.txt
+# NuGet
+packages/
+*.nupkg
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+*~.nib
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+# .NET Scaffolding
+*.dotnet/
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+# Temporary files created by VS
+*.local
+# Temp resources
+**/obj/**/*.resx
+**/bin/**/*.resx
 
-/DAL/obj/Debug/DAL.csproj.AssemblyReference.cache
-/BLL/obj/Debug/BLL.csproj.AssemblyReference.cache
-/UI/obj/Debug/UI.csproj.AssemblyReference.cache
-/BLL/bin/Debug/BLL.dll
-/BLL/bin/Debug/BLL.dll
-/.vs
+# BỔ SUNG MỚI (dành cho project WinForms C# của chúng ta)
+# Ignore config files với sensitive info (connection strings)
+app.config
+# Test results (nếu có unit tests sau này)
+TestResults/
+# IDE khác (VS Code, IntelliJ) - an toàn cho team
+.vscode/
+.idea/
+# Code coverage reports (nếu dùng tools như Coverlet)
+coverage/

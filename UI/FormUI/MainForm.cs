@@ -312,7 +312,7 @@ namespace UI.FormUI
 
         private void btnQuanLyNhanVien_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new UserControlUI.ViewQuanLyNhanVien());
         }
 
         private void btnQuanLyKhachHang_Click(object sender, EventArgs e)
@@ -377,6 +377,11 @@ namespace UI.FormUI
         }
 
         private void pnlMenuBar_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlContent_Paint(object sender, PaintEventArgs e)
         {
 
         }
