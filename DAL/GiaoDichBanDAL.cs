@@ -1,0 +1,271 @@
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using DTO;
+
+namespace DAL
+{
+    public class GiaoDichBanDAL
+    {
+        /// <summary>
+        /// Lấy tất cả giao dịch bán với thông tin chi tiết
+        /// </summary>
+        public DataTable GetAllGiaoDichBan()
+        {
+            string query = @"
+                SELECT 
+                    gd.MaGDBan, 
+                    gd.MaKH, 
+                    kh.HoTenKH, 
+                    kh.Sdt AS SdtKhachHang,
+                    gd.ID_Xe, 
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
+                    xe.BienSo,
+                    gd.NgayBan, 
+                    gd.GiaBan, 
+                    gd.TrangThaiThanhToan, 
+                    gd.HinhThucThanhToan,
+                    gd.TrangThaiDuyet,
+                    gd.NguoiDuyet,
+                    gd.NgayDuyet,
+                    gd.GhiChuDuyet,
+                    nv.HoTenNV AS TenNhanVien
+                FROM GiaoDichBan gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                ORDER BY gd.NgayBan DESC";
+
+            return DataProvider.ExecuteQuery(query);
+        }
+
+        /// <summary>
+        /// Lấy giao dịch bán theo trạng thái duyệt
+        /// </summary>
+        public DataTable GetGiaoDichBanByTrangThai(string trangThaiDuyet)
+        {
+            string query = @"
+                SELECT 
+                    gd.MaGDBan, 
+                    gd.MaKH, 
+                    kh.HoTenKH, 
+                    kh.Sdt AS SdtKhachHang,
+                    gd.ID_Xe, 
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
+                    xe.BienSo,
+                    gd.NgayBan, 
+                    gd.GiaBan, 
+                    gd.TrangThaiThanhToan, 
+                    gd.HinhThucThanhToan,
+                    gd.TrangThaiDuyet,
+                    gd.NguoiDuyet,
+                    gd.NgayDuyet,
+                    gd.GhiChuDuyet,
+                    nv.HoTenNV AS TenNhanVien
+                FROM GiaoDichBan gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                WHERE gd.TrangThaiDuyet = @TrangThaiDuyet
+                ORDER BY gd.NgayBan DESC";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@TrangThaiDuyet", trangThaiDuyet)
+            };
+
+            return DataProvider.ExecuteQuery(query, parameters);
+        }
+
+        /// <summary>
+        /// Lấy thông tin chi tiết giao dịch bán theo mã
+        /// </summary>
+        public DataTable GetGiaoDichBanByMa(int maGDBan)
+        {
+            string query = @"
+                SELECT 
+                    gd.MaGDBan, 
+                    gd.MaKH, 
+                    kh.HoTenKH, 
+                    kh.Sdt AS SdtKhachHang,
+                    kh.Email AS EmailKhachHang,
+                    kh.DiaChi AS DiaChiKhachHang,
+                    gd.ID_Xe, 
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
+                    xe.BienSo,
+                    gd.NgayBan, 
+                    gd.GiaBan, 
+                    gd.TrangThaiThanhToan, 
+                    gd.HinhThucThanhToan,
+                    gd.TrangThaiDuyet,
+                    gd.NguoiDuyet,
+                    gd.NgayDuyet,
+                    gd.GhiChuDuyet,
+                    gd.MaTaiKhoan,
+                    nv.HoTenNV AS TenNhanVien
+                FROM GiaoDichBan gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                WHERE gd.MaGDBan = @MaGDBan";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaGDBan", maGDBan)
+            };
+
+            return DataProvider.ExecuteQuery(query, parameters);
+        }
+
+        /// <summary>
+        /// Thêm giao dịch bán mới
+        /// </summary>
+        public bool InsertGiaoDichBan(GiaoDichBan gd)
+        {
+            string query = @"
+                INSERT INTO GiaoDichBan (MaKH, ID_Xe, NgayBan, GiaBan, TrangThaiThanhToan, 
+                    HinhThucThanhToan, MaTaiKhoan, TrangThaiDuyet)
+                VALUES (@MaKH, @ID_Xe, @NgayBan, @GiaBan, @TrangThaiThanhToan, 
+                    @HinhThucThanhToan, @MaTaiKhoan, @TrangThaiDuyet)";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaKH", gd.MaKH),
+                new SqlParameter("@ID_Xe", gd.ID_Xe),
+                new SqlParameter("@NgayBan", gd.NgayBan),
+                new SqlParameter("@GiaBan", gd.GiaBan),
+                new SqlParameter("@TrangThaiThanhToan", (object)gd.TrangThaiThanhToan ?? DBNull.Value),
+                new SqlParameter("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value),
+                new SqlParameter("@MaTaiKhoan", (object)gd.MaTaiKhoan ?? DBNull.Value),
+                new SqlParameter("@TrangThaiDuyet", gd.TrangThaiDuyet)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        /// <summary>
+        /// Duyệt đơn hàng
+        /// </summary>
+        public bool ApproveGiaoDichBan(int maGDBan, string nguoiDuyet, string ghiChu)
+        {
+            string query = @"
+                UPDATE GiaoDichBan 
+                SET TrangThaiDuyet = N'Đã duyệt', 
+                    NguoiDuyet = @NguoiDuyet, 
+                    NgayDuyet = @NgayDuyet,
+                    GhiChuDuyet = @GhiChu
+                WHERE MaGDBan = @MaGDBan";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaGDBan", maGDBan),
+                new SqlParameter("@NguoiDuyet", nguoiDuyet),
+                new SqlParameter("@NgayDuyet", DateTime.Now),
+                new SqlParameter("@GhiChu", (object)ghiChu ?? DBNull.Value)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        /// <summary>
+        /// Từ chối đơn hàng
+        /// </summary>
+        public bool RejectGiaoDichBan(int maGDBan, string nguoiDuyet, string lyDo)
+        {
+            string query = @"
+                UPDATE GiaoDichBan 
+                SET TrangThaiDuyet = N'Từ chối', 
+                    NguoiDuyet = @NguoiDuyet, 
+                    NgayDuyet = @NgayDuyet,
+                    GhiChuDuyet = @LyDo
+                WHERE MaGDBan = @MaGDBan";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaGDBan", maGDBan),
+                new SqlParameter("@NguoiDuyet", nguoiDuyet),
+                new SqlParameter("@NgayDuyet", DateTime.Now),
+                new SqlParameter("@LyDo", lyDo)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        /// <summary>
+        /// Cập nhật trạng thái xe sau khi duyệt
+        /// </summary>
+        public bool UpdateTrangThaiXe(string idXe, string trangThai)
+        {
+            string query = "UPDATE XeMay SET TrangThai = @TrangThai WHERE ID_Xe = @ID_Xe";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@ID_Xe", idXe),
+                new SqlParameter("@TrangThai", trangThai)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        /// <summary>
+        /// Tìm kiếm giao dịch bán
+        /// </summary>
+        public DataTable SearchGiaoDichBan(string keyword)
+        {
+            string query = @"
+                SELECT 
+                    gd.MaGDBan, 
+                    gd.MaKH, 
+                    kh.HoTenKH, 
+                    kh.Sdt AS SdtKhachHang,
+                    gd.ID_Xe, 
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
+                    xe.BienSo,
+                    gd.NgayBan, 
+                    gd.GiaBan, 
+                    gd.TrangThaiThanhToan, 
+                    gd.HinhThucThanhToan,
+                    gd.TrangThaiDuyet,
+                    gd.NguoiDuyet,
+                    gd.NgayDuyet,
+                    gd.GhiChuDuyet,
+                    nv.HoTenNV AS TenNhanVien
+                FROM GiaoDichBan gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                WHERE kh.HoTenKH LIKE @Keyword 
+                   OR kh.Sdt LIKE @Keyword
+                   OR xe.BienSo LIKE @Keyword
+                   OR CAST(gd.MaGDBan AS NVARCHAR) LIKE @Keyword
+                ORDER BY gd.NgayBan DESC";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Keyword", "%" + keyword + "%")
+            };
+
+            return DataProvider.ExecuteQuery(query, parameters);
+        }
+    }
+}
