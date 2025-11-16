@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="DataProvider.cs" />
+    <Compile Include="GiaoDichBanDAL.cs" />
+    <Compile Include="GiaoDichThueDAL.cs" />
     <Compile Include="NhanVienDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -55,6 +55,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormUI\FormDuyetDonHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormDuyetDonHang.Designer.cs">
+      <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormNhapLyDo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormNhapLyDo.Designer.cs">
+      <DependentUpon>FormNhapLyDo.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUI\FormQuanLiNV.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,6 +103,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyBanHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyBanHang.Designer.cs">
+      <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControlUI\ViewQuanLyNhanVien.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -112,6 +130,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormUI\FormDuyetDonHang.resx">
+      <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormNhapLyDo.resx">
+      <DependentUpon>FormNhapLyDo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormQuanLiNV.resx">
       <DependentUpon>FormQuanLiNV.cs</DependentUpon>
     </EmbeddedResource>
@@ -130,6 +154,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyBanHang.resx">
+      <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyNhanVien.resx">
       <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>
