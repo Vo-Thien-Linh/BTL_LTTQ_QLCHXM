@@ -20,6 +20,9 @@
             this.panelHeader = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnChooseImage = new System.Windows.Forms.Button();
+            this.picNhanVien = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cboTrinhDo = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -45,18 +48,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtMaNV = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnChooseImage = new System.Windows.Forms.Button();
-            this.picNhanVien = new System.Windows.Forms.PictureBox();
             this.panelFooter = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.panelHeader.SuspendLayout();
             this.panelMain.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numLuong)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picNhanVien)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numLuong)).BeginInit();
             this.panelFooter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -93,6 +93,45 @@
             this.panelMain.Padding = new System.Windows.Forms.Padding(20);
             this.panelMain.Size = new System.Drawing.Size(1000, 580);
             this.panelMain.TabIndex = 1;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnChooseImage);
+            this.groupBox2.Controls.Add(this.picNhanVien);
+            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.groupBox2.Location = new System.Drawing.Point(740, 20);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(240, 310);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Ảnh Nhân Viên";
+            // 
+            // btnChooseImage
+            // 
+            this.btnChooseImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(110)))), ((int)(((byte)(250)))));
+            this.btnChooseImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnChooseImage.FlatAppearance.BorderSize = 0;
+            this.btnChooseImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChooseImage.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnChooseImage.ForeColor = System.Drawing.Color.White;
+            this.btnChooseImage.Location = new System.Drawing.Point(20, 250);
+            this.btnChooseImage.Name = "btnChooseImage";
+            this.btnChooseImage.Size = new System.Drawing.Size(200, 40);
+            this.btnChooseImage.TabIndex = 1;
+            this.btnChooseImage.Text = "📷 Chọn ảnh";
+            this.btnChooseImage.UseVisualStyleBackColor = false;
+            this.btnChooseImage.Click += new System.EventHandler(this.btnChooseImage_Click_1);
+            // 
+            // picNhanVien
+            // 
+            this.picNhanVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
+            this.picNhanVien.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picNhanVien.Location = new System.Drawing.Point(20, 35);
+            this.picNhanVien.Name = "picNhanVien";
+            this.picNhanVien.Size = new System.Drawing.Size(200, 200);
+            this.picNhanVien.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picNhanVien.TabIndex = 0;
+            this.picNhanVien.TabStop = false;
             // 
             // groupBox1
             // 
@@ -144,7 +183,7 @@
             this.label12.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label12.Location = new System.Drawing.Point(350, 473);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(76, 23);
+            this.label12.Size = new System.Drawing.Size(77, 23);
             this.label12.TabIndex = 22;
             this.label12.Text = "Trình độ:";
             // 
@@ -163,7 +202,7 @@
             this.label11.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label11.Location = new System.Drawing.Point(20, 473);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(57, 23);
+            this.label11.Size = new System.Drawing.Size(59, 23);
             this.label11.TabIndex = 20;
             this.label11.Text = "CCCD:";
             // 
@@ -183,7 +222,7 @@
             this.label10.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label10.Location = new System.Drawing.Point(350, 418);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(94, 23);
+            this.label10.Size = new System.Drawing.Size(93, 23);
             this.label10.TabIndex = 18;
             this.label10.Text = "Tình trạng:";
             // 
@@ -212,7 +251,7 @@
             this.label9.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label9.Location = new System.Drawing.Point(20, 418);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(108, 23);
+            this.label9.Size = new System.Drawing.Size(119, 23);
             this.label9.TabIndex = 16;
             this.label9.Text = "Lương cơ bản:";
             // 
@@ -232,7 +271,7 @@
             this.label8.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label8.Location = new System.Drawing.Point(350, 363);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(75, 23);
+            this.label8.Size = new System.Drawing.Size(76, 23);
             this.label8.TabIndex = 14;
             this.label8.Text = "Chức vụ:";
             // 
@@ -269,7 +308,7 @@
             this.label6.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label6.Location = new System.Drawing.Point(20, 253);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 23);
+            this.label6.Size = new System.Drawing.Size(55, 23);
             this.label6.TabIndex = 10;
             this.label6.Text = "Email:";
             // 
@@ -288,7 +327,7 @@
             this.label5.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label5.Location = new System.Drawing.Point(20, 198);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 23);
+            this.label5.Size = new System.Drawing.Size(44, 23);
             this.label5.TabIndex = 8;
             this.label5.Text = "SĐT:";
             // 
@@ -308,7 +347,7 @@
             this.label4.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label4.Location = new System.Drawing.Point(350, 143);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(78, 23);
+            this.label4.Size = new System.Drawing.Size(79, 23);
             this.label4.TabIndex = 6;
             this.label4.Text = "Giới tính:";
             // 
@@ -328,7 +367,7 @@
             this.label3.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label3.Location = new System.Drawing.Point(20, 143);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 23);
+            this.label3.Size = new System.Drawing.Size(90, 23);
             this.label3.TabIndex = 4;
             this.label3.Text = "Ngày sinh:";
             // 
@@ -364,48 +403,9 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label1.Location = new System.Drawing.Point(20, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 23);
+            this.label1.Size = new System.Drawing.Size(67, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "Mã NV:";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnChooseImage);
-            this.groupBox2.Controls.Add(this.picNhanVien);
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.groupBox2.Location = new System.Drawing.Point(740, 20);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(240, 310);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Ảnh Nhân Viên";
-            // 
-            // btnChooseImage
-            // 
-            this.btnChooseImage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(99)))), ((int)(((byte)(110)))), ((int)(((byte)(250)))));
-            this.btnChooseImage.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnChooseImage.FlatAppearance.BorderSize = 0;
-            this.btnChooseImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChooseImage.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnChooseImage.ForeColor = System.Drawing.Color.White;
-            this.btnChooseImage.Location = new System.Drawing.Point(20, 250);
-            this.btnChooseImage.Name = "btnChooseImage";
-            this.btnChooseImage.Size = new System.Drawing.Size(200, 40);
-            this.btnChooseImage.TabIndex = 1;
-            this.btnChooseImage.Text = "📷 Chọn ảnh";
-            this.btnChooseImage.UseVisualStyleBackColor = false;
-            //this.btnChooseImage.Click += new System.EventHandler(this.BtnChooseImage_Click);
-            // 
-            // picNhanVien
-            // 
-            this.picNhanVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(248)))), ((int)(((byte)(250)))), ((int)(((byte)(252)))));
-            this.picNhanVien.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picNhanVien.Location = new System.Drawing.Point(20, 35);
-            this.picNhanVien.Name = "picNhanVien";
-            this.picNhanVien.Size = new System.Drawing.Size(200, 200);
-            this.picNhanVien.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picNhanVien.TabIndex = 0;
-            this.picNhanVien.TabStop = false;
             // 
             // panelFooter
             // 
@@ -432,7 +432,7 @@
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "❌ Hủy";
             this.btnCancel.UseVisualStyleBackColor = false;
-            //this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click_1);
             // 
             // btnSave
             // 
@@ -448,9 +448,9 @@
             this.btnSave.TabIndex = 0;
             this.btnSave.Text = "💾 Lưu";
             this.btnSave.UseVisualStyleBackColor = false;
-            //this.btnSave.Click += new System.EventHandler(this.BtnSave_Click);
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click_1);
             // 
-            // FormThemSuaNhanVien
+            // FormQuanLiNV
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -461,17 +461,16 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormThemSuaNhanVien";
+            this.Name = "FormQuanLiNV";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Thêm Nhân Viên";
-            //this.Load += new System.EventHandler(this.formquan);
             this.panelHeader.ResumeLayout(false);
             this.panelMain.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picNhanVien)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numLuong)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picNhanVien)).EndInit();
             this.panelFooter.ResumeLayout(false);
             this.ResumeLayout(false);
 

@@ -7,22 +7,20 @@ namespace DAL
 {
     public class NhanVienDAL
     {
-        /// <summary>
+        
         /// Lấy tất cả nhân viên
-        /// </summary>
         public DataTable GetAllNhanVien()
         {
             string query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                            ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                            AnhNhanVien, NgayVaoLam 
-                            FROM NhanVien 
-                            ORDER BY MaNV";
+                     ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
+                     AnhNhanVien, NgayVaoLam  -- Đảm bảo có AnhNhanVien
+                     FROM NhanVien 
+                     ORDER BY MaNV";
             return DataProvider.ExecuteQuery(query);
         }
 
-        /// <summary>
+        
         /// Tìm kiếm nhân viên theo nhiều tiêu chí
-        /// </summary>
         public DataTable SearchNhanVien(string searchBy, string keyword)
         {
             string query = "";
@@ -74,9 +72,8 @@ namespace DAL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-        /// <summary>
+        
         /// Lấy thông tin nhân viên theo mã
-        /// </summary>
         public DataTable GetNhanVienByMaNV(string maNV)
         {
             string query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
@@ -91,9 +88,10 @@ namespace DAL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-        /// <summary>
+        
         /// Thêm nhân viên mới
-        /// </summary>
+        
+
         public bool InsertNhanVien(NhanVien nv)
         {
             string query = @"INSERT INTO NhanVien (MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, 
@@ -124,9 +122,9 @@ namespace DAL
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        /// <summary>
+        
         /// Cập nhật thông tin nhân viên
-        /// </summary>
+       
         public bool UpdateNhanVien(NhanVien nv)
         {
             string query = @"UPDATE NhanVien 
@@ -164,9 +162,8 @@ namespace DAL
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        /// <summary>
+        
         /// Xóa nhân viên
-        /// </summary>
         public bool DeleteNhanVien(string maNV)
         {
             string query = "DELETE FROM NhanVien WHERE MaNV = @MaNV";
@@ -177,9 +174,8 @@ namespace DAL
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        /// <summary>
+        
         /// Kiểm tra mã nhân viên đã tồn tại
-        /// </summary>
         public bool CheckMaNVExists(string maNV)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE MaNV = @MaNV";
@@ -191,9 +187,8 @@ namespace DAL
             return count > 0;
         }
 
-        /// <summary>
+        
         /// Kiểm tra số điện thoại đã tồn tại
-        /// </summary>
         public bool CheckSdtExists(string sdt, string maNV = null)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE Sdt = @Sdt";
@@ -223,9 +218,8 @@ namespace DAL
             return count > 0;
         }
 
-        /// <summary>
+        
         /// Kiểm tra email đã tồn tại
-        /// </summary>
         public bool CheckEmailExists(string email, string maNV = null)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE Email = @Email";
@@ -255,9 +249,9 @@ namespace DAL
             return count > 0;
         }
 
-        /// <summary>
+        
         /// Kiểm tra CCCD đã tồn tại
-        /// </summary>
+       
         public bool CheckCCCDExists(string cccd, string maNV = null)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE CCCD = @CCCD";
@@ -287,9 +281,8 @@ namespace DAL
             return count > 0;
         }
 
-        /// <summary>
+        
         /// Tự động tạo mã nhân viên mới
-        /// </summary>
         public string GenerateMaNV()
         {
             string query = "SELECT TOP 1 MaNV FROM NhanVien ORDER BY MaNV DESC";

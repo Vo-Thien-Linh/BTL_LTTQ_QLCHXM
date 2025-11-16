@@ -1,11 +1,14 @@
-﻿using System.Data;
+﻿using System;
+using System.Configuration;  // Thêm dòng này
+using System.Data;
 using System.Data.SqlClient;
 
 namespace DAL
 {
     public class DataProvider
     {
-        private static string connectionString = "Data Source=.;Initial Catalog=QLCuaHangXeMay;Integrated Security=True";
+        // Đọc chuỗi kết nối từ app.config
+        private static string connectionString = ConfigurationManager.ConnectionStrings["QLCuaHangXeMayConn"].ConnectionString;
 
         /// <summary>
         /// Thực thi câu lệnh INSERT, UPDATE, DELETE
@@ -26,9 +29,7 @@ namespace DAL
             return result;
         }
 
-        /// <summary>
-        /// Thực thi câu lệnh SELECT trả về 1 giá trị
-        /// </summary>
+        // Các method khác giữ nguyên (ExecuteScalar, ExecuteQuery)
         public static object ExecuteScalar(string query, SqlParameter[] parameters = null)
         {
             object result = null;
@@ -45,9 +46,6 @@ namespace DAL
             return result;
         }
 
-        /// <summary>
-        /// Thực thi câu lệnh SELECT trả về DataTable
-        /// </summary>
         public static DataTable ExecuteQuery(string query, SqlParameter[] parameters = null)
         {
             DataTable dt = new DataTable();
@@ -66,4 +64,3 @@ namespace DAL
         }
     }
 }
-

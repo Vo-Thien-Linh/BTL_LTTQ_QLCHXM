@@ -138,32 +138,7 @@ namespace UI.FormUI
 
         private void BtnChooseImage_Click(object sender, EventArgs e)
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
-            {
-                ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
-                ofd.Title = "Chọn ảnh nhân viên";
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        Image img = Image.FromFile(ofd.FileName);
-                        Image resizedImg = ResizeImage(img, 200, 200);
-                        picNhanVien.Image = resizedImg;
-
-                        using (MemoryStream ms = new MemoryStream())
-                        {
-                            resizedImg.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                            imageData = ms.ToArray();
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Lỗi tải ảnh: " + ex.Message, "Lỗi",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
+            
         }
 
         private Image ResizeImage(Image image, int width, int height)
@@ -178,6 +153,53 @@ namespace UI.FormUI
         }
 
         private void BtnSave_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            {
+                MessageBox.Show("Vui lòng nhập mã nhân viên!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMaNV.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
+            {
+                MessageBox.Show("Vui lòng nhập họ tên nhân viên!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtHoTen.Focus();
+                return false;
+            }
+
+            if (cboGioiTinh.SelectedIndex < 0)
+            {
+                MessageBox.Show("Vui lòng chọn giới tính!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboGioiTinh.Focus();
+                return false;
+            }
+
+            if (cboTinhTrang.SelectedIndex < 0)
+            {
+                MessageBox.Show("Vui lòng chọn tình trạng làm việc!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cboTinhTrang.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void btnSave_Click_1(object sender, EventArgs e)
         {
             if (!ValidateInput())
                 return;
@@ -231,48 +253,40 @@ namespace UI.FormUI
             }
         }
 
-        private bool ValidateInput()
+        private void btnChooseImage_Click_1(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtMaNV.Text))
+            using (OpenFileDialog ofd = new OpenFileDialog())
             {
-                MessageBox.Show("Vui lòng nhập mã nhân viên!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtMaNV.Focus();
-                return false;
-            }
+                ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+                ofd.Title = "Chọn ảnh nhân viên";
 
-            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
-            {
-                MessageBox.Show("Vui lòng nhập họ tên nhân viên!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtHoTen.Focus();
-                return false;
-            }
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Image img = Image.FromFile(ofd.FileName);
+                        Image resizedImg = ResizeImage(img, 200, 200);
+                        picNhanVien.Image = resizedImg;
 
-            if (cboGioiTinh.SelectedIndex < 0)
-            {
-                MessageBox.Show("Vui lòng chọn giới tính!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboGioiTinh.Focus();
-                return false;
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            resizedImg.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                            imageData = ms.ToArray();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi tải ảnh: " + ex.Message, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
-
-            if (cboTinhTrang.SelectedIndex < 0)
-            {
-                MessageBox.Show("Vui lòng chọn tình trạng làm việc!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboTinhTrang.Focus();
-                return false;
-            }
-
-            return true;
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void btnCancel_Click_1(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
-
     }
 }

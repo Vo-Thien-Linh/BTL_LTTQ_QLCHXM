@@ -53,10 +53,10 @@
             this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.panelHeader.Controls.Add(this.lblTitle);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelHeader.Location = new System.Drawing.Point(20, 20);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.panelHeader.Size = new System.Drawing.Size(1200, 70);
+            this.panelHeader.Size = new System.Drawing.Size(1160, 70);
             this.panelHeader.TabIndex = 0;
             // 
             // lblTitle
@@ -66,7 +66,7 @@
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location = new System.Drawing.Point(20, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(1160, 70);
+            this.lblTitle.Size = new System.Drawing.Size(1120, 70);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN LÝ NHÂN VIÊN";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -80,10 +80,10 @@
             this.panelSearch.Controls.Add(this.cboSearchBy);
             this.panelSearch.Controls.Add(this.lblSearchBy);
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSearch.Location = new System.Drawing.Point(0, 70);
+            this.panelSearch.Location = new System.Drawing.Point(20, 90);
             this.panelSearch.Name = "panelSearch";
             this.panelSearch.Padding = new System.Windows.Forms.Padding(20, 15, 20, 15);
-            this.panelSearch.Size = new System.Drawing.Size(1200, 80);
+            this.panelSearch.Size = new System.Drawing.Size(1160, 80);
             this.panelSearch.TabIndex = 1;
             // 
             // btnSearch
@@ -94,7 +94,7 @@
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSearch.ForeColor = System.Drawing.Color.White;
-            this.btnSearch.Location = new System.Drawing.Point(720, 20);
+            this.btnSearch.Location = new System.Drawing.Point(744, 20);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(100, 35);
             this.btnSearch.TabIndex = 4;
@@ -104,7 +104,7 @@
             // txtSearch
             // 
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtSearch.Location = new System.Drawing.Point(400, 25);
+            this.txtSearch.Location = new System.Drawing.Point(438, 24);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(300, 30);
             this.txtSearch.TabIndex = 3;
@@ -113,7 +113,7 @@
             // 
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSearch.Location = new System.Drawing.Point(330, 28);
+            this.lblSearch.Location = new System.Drawing.Point(357, 28);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(75, 23);
             this.lblSearch.TabIndex = 2;
@@ -129,7 +129,7 @@
             "Họ và tên",
             "Số điện thoại",
             "Email"});
-            this.cboSearchBy.Location = new System.Drawing.Point(130, 25);
+            this.cboSearchBy.Location = new System.Drawing.Point(149, 24);
             this.cboSearchBy.Name = "cboSearchBy";
             this.cboSearchBy.Size = new System.Drawing.Size(180, 31);
             this.cboSearchBy.TabIndex = 1;
@@ -152,10 +152,10 @@
             this.panelActions.Controls.Add(this.btn_EditEmployee);
             this.panelActions.Controls.Add(this.btn_AddEmployee);
             this.panelActions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelActions.Location = new System.Drawing.Point(0, 150);
+            this.panelActions.Location = new System.Drawing.Point(20, 170);
             this.panelActions.Name = "panelActions";
             this.panelActions.Padding = new System.Windows.Forms.Padding(20, 10, 20, 10);
-            this.panelActions.Size = new System.Drawing.Size(1200, 70);
+            this.panelActions.Size = new System.Drawing.Size(1160, 70);
             this.panelActions.TabIndex = 2;
             // 
             // btn_RefreshEmployee
@@ -222,10 +222,10 @@
             // 
             this.panelDataGrid.BackColor = System.Drawing.Color.White;
             this.panelDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDataGrid.Location = new System.Drawing.Point(20, 220);
+            this.panelDataGrid.Location = new System.Drawing.Point(20, 240);
             this.panelDataGrid.Name = "panelDataGrid";
             this.panelDataGrid.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
-            this.panelDataGrid.Size = new System.Drawing.Size(1160, 480);
+            this.panelDataGrid.Size = new System.Drawing.Size(1160, 440);
             this.panelDataGrid.TabIndex = 3;
             // 
             // lblRecordCount
@@ -233,7 +233,7 @@
             this.lblRecordCount.BackColor = System.Drawing.Color.White;
             this.lblRecordCount.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblRecordCount.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
-            this.lblRecordCount.Location = new System.Drawing.Point(20, 700);
+            this.lblRecordCount.Location = new System.Drawing.Point(20, 680);
             this.lblRecordCount.Name = "lblRecordCount";
             this.lblRecordCount.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
             this.lblRecordCount.Size = new System.Drawing.Size(1160, 40);
@@ -241,7 +241,7 @@
             this.lblRecordCount.Text = "Tổng số bản ghi: 0";
             this.lblRecordCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // FormQuanLyNhanVien
+            // ViewQuanLyNhanVien
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -251,18 +251,15 @@
             this.Controls.Add(this.panelActions);
             this.Controls.Add(this.panelSearch);
             this.Controls.Add(this.panelHeader);
-            this.Name = "FormQuanLyNhanVien";
+            this.Name = "ViewQuanLyNhanVien";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.Size = new System.Drawing.Size(1200, 740);
-           // this.Load += new System.EventHandler(this.FormQuanLyNhanVien_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelSearch.ResumeLayout(false);
             this.panelSearch.PerformLayout();
             this.panelActions.ResumeLayout(false);
             this.ResumeLayout(false);
 
-            // Set default selected index
-            this.cboSearchBy.SelectedIndex = 0;
         }
 
         #endregion
