@@ -179,7 +179,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.CheckBox chkGhiNhoMatKhau;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

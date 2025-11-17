@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Configuration;  // Thêm dòng này
+using System.Configuration;  
 using System.Data;
 using System.Data.SqlClient;
+using System.Windows.Forms;
 
 namespace DAL
 {
     public class DataProvider
     {
         // Đọc chuỗi kết nối từ app.config
-        private static string connectionString = ConfigurationManager.ConnectionStrings["QLCuaHangXeMayConn"].ConnectionString;
+        public static string connectionString = ConfigurationManager.ConnectionStrings["QLCuaHangXeMayConn"].ConnectionString;
 
         /// <summary>
         /// Thực thi câu lệnh INSERT, UPDATE, DELETE
