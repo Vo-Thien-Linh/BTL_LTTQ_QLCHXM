@@ -56,6 +56,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormHandleUI\FormSuaPhuTung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormSuaPhuTung.Designer.cs">
+      <DependentUpon>FormSuaPhuTung.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormSuaXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormSuaXe.Designer.cs">
+      <DependentUpon>FormSuaXe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormThemPhuTung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormThemPhuTung.Designer.cs">
+      <DependentUpon>FormThemPhuTung.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormThemXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormThemXe.Designer.cs">
+      <DependentUpon>FormThemXe.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUI\FormDuyetDonHang.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +141,24 @@
     <Compile Include="UserControlUI\ViewQuanLyNhanVien.Designer.cs">
       <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyPhuTung.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyPhuTung.Designer.cs">
+      <DependentUpon>ViewQuanLyPhuTung.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLySanPham.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLySanPham.Designer.cs">
+      <DependentUpon>ViewQuanLySanPham.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyXe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyXe.Designer.cs">
+      <DependentUpon>ViewQuanLyXe.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">
@@ -133,6 +175,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormHandleUI\FormSuaPhuTung.resx">
+      <DependentUpon>FormSuaPhuTung.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormSuaXe.resx">
+      <DependentUpon>FormSuaXe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormThemPhuTung.resx">
+      <DependentUpon>FormThemPhuTung.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormThemXe.resx">
+      <DependentUpon>FormThemXe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormDuyetDonHang.resx">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
     </EmbeddedResource>
@@ -163,6 +217,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyNhanVien.resx">
       <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyPhuTung.resx">
+      <DependentUpon>ViewQuanLyPhuTung.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLySanPham.resx">
+      <DependentUpon>ViewQuanLySanPham.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyXe.resx">
+      <DependentUpon>ViewQuanLyXe.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -70,6 +70,7 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN LÝ NHÂN VIÊN";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // panelSearch
             // 
@@ -217,6 +218,7 @@
             this.btn_AddEmployee.TabIndex = 0;
             this.btn_AddEmployee.Text = "+ Thêm mới";
             this.btn_AddEmployee.UseVisualStyleBackColor = false;
+            this.btn_AddEmployee.Click += new System.EventHandler(this.btn_AddEmployee_Click_1);
             // 
             // panelDataGrid
             // 

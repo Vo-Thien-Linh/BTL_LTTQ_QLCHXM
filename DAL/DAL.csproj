@@ -53,12 +53,19 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="DataProvider.cs" />
+    <Compile Include="DongXeDAL.cs" />
     <Compile Include="GiaoDichBanDAL.cs" />
     <Compile Include="GiaoDichThueDAL.cs" />
     <Compile Include="DangKyDAL.cs" />
+    <Compile Include="HangXeDAL.cs" />
+    <Compile Include="LoaiXeDAL.cs" />
+    <Compile Include="MauSacDAL.cs" />
+    <Compile Include="NhaCungCapDAL.cs" />
     <Compile Include="NhanVienDAL.cs" />
+    <Compile Include="PhuTungDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaiKhoanDAL.cs" />
+    <Compile Include="XeMayDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj">
