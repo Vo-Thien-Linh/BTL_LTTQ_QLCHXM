@@ -212,5 +212,15 @@ namespace UI.UserControlUI
             lblRecordCount.Text = $"Tổng số bản ghi: {count}";
             lblRecordCount.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
         }
+
+        private void lblTitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_AddEmployee_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -322,7 +322,7 @@ namespace UI.FormUI
 
         private void btnQuanLySanPham_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new UserControlUI.ViewQuanLySanPham());
         }
 
         private void btnQuanLyBanHang_Click(object sender, EventArgs e)
