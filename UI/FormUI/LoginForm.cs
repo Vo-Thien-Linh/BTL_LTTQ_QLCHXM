@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BLL;
+using DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -19,6 +21,8 @@ namespace UI.FormUI
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            txtMatKhau.UseSystemPasswordChar = true;
+
             btnDangNhap.BackColor = Color.MediumSlateBlue;
             btnDangNhap.ForeColor = Color.White;
             btnDangNhap.Font = new Font("Segoe UI", 12, FontStyle.Bold);
@@ -35,9 +39,26 @@ namespace UI.FormUI
 
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
-            MainForm mainForm = new MainForm();
-            mainForm.Show();
-            this.Hide();
+            string sdt = txtSoDienThoai.Text.Trim();
+            string matKhau = txtMatKhau.Text;
+
+            if (string.IsNullOrWhiteSpace(sdt) || string.IsNullOrWhiteSpace(matKhau))
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ!", "Thiếu", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // === GỌI BLL (KHÔNG GỌI DAL) ===
+            if (TaiKhoanBLL.DangNhap(sdt, matKhau))
+            {
+                MessageBox.Show($"Chào {CurrentUser.HoTen}!", "Đăng nhập thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                new MainForm().Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("SĐT hoặc mật khẩu sai!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void lnkDangKy_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

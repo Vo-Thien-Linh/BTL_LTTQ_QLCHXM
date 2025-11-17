@@ -55,8 +55,10 @@
     <Compile Include="DataProvider.cs" />
     <Compile Include="GiaoDichBanDAL.cs" />
     <Compile Include="GiaoDichThueDAL.cs" />
+    <Compile Include="DangKyDAL.cs" />
     <Compile Include="NhanVienDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaiKhoanDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTO\DTO.csproj">
