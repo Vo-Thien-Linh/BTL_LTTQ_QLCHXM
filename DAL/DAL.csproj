@@ -58,6 +58,7 @@
     <Compile Include="GiaoDichThueDAL.cs" />
     <Compile Include="DangKyDAL.cs" />
     <Compile Include="HangXeDAL.cs" />
+    <Compile Include="KhachHangDAL.cs" />
     <Compile Include="LoaiXeDAL.cs" />
     <Compile Include="MauSacDAL.cs" />
     <Compile Include="NhaCungCapDAL.cs" />

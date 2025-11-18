@@ -47,13 +47,13 @@ namespace UI.FormUI
         private void InitializeSlideTimer()
         {
             slideTimer = new Timer();
-            slideTimer.Interval = 1;
+            slideTimer.Interval = 3;
             slideTimer.Tick += SlideTimer_Tick;
         }
 
         private void SlideTimer_Tick(object sender, EventArgs e)
         {
-            int step = 20;
+            int step = 150;
 
             if (isExpanded)
             {
@@ -317,7 +317,7 @@ namespace UI.FormUI
 
         private void btnQuanLyKhachHang_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new UserControlUI.ViewQuanLyKhachHang());
         }
 
         private void btnQuanLySanPham_Click(object sender, EventArgs e)
@@ -384,6 +384,14 @@ namespace UI.FormUI
         private void pnlContent_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void LoadControl(UserControl control)
+        {
+            pnlContent.Controls.Clear();
+            control.Dock = DockStyle.Fill;
+            pnlContent.Controls.Add(control);
+            control.BringToFront();
         }
     }
 }

@@ -56,6 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormHandleUI\FormQuanLyKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormQuanLyKhachHang.Designer.cs">
+      <DependentUpon>FormQuanLyKhachHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHandleUI\FormSuaPhuTung.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,12 @@
     <Compile Include="UserControlUI\ViewQuanLyBanHang.Designer.cs">
       <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyKhachHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyKhachHang.Designer.cs">
+      <DependentUpon>ViewQuanLyKhachHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControlUI\ViewQuanLyNhanVien.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -171,10 +183,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormHandleUI\FormQuanLyKhachHang.resx">
+      <DependentUpon>FormQuanLyKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormSuaPhuTung.resx">
       <DependentUpon>FormSuaPhuTung.cs</DependentUpon>
     </EmbeddedResource>
@@ -214,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyBanHang.resx">
       <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyKhachHang.resx">
+      <DependentUpon>ViewQuanLyKhachHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyNhanVien.resx">
       <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>

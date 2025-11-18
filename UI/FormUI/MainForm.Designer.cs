@@ -225,13 +225,6 @@ namespace UI.FormUI
 
         #endregion
 
-        public void LoadControl(UserControl userControl)
-        {
-            this.pnlContent.Controls.Clear();
-            userControl.Dock = DockStyle.Fill;
-            this.pnlContent.Controls.Add(userControl);
-        }
-
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Panel pnlMenuBar;
         private System.Windows.Forms.PictureBox pictureBox1;
