@@ -64,6 +64,7 @@
     <Compile Include="PhuTungBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaiKhoanBLL.cs" />
+    <Compile Include="ThongTinGiaXeBLL.cs" />
     <Compile Include="XeMayBLL.cs" />
   </ItemGroup>
   <ItemGroup>

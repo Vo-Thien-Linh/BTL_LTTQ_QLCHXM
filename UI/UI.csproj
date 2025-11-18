@@ -92,6 +92,12 @@
     <Compile Include="FormUI\FormDuyetDonHang.Designer.cs">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormUI\FormKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormKhachHang.Designer.cs">
+      <DependentUpon>FormKhachHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUI\FormNhapLyDo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +109,24 @@
     </Compile>
     <Compile Include="FormUI\FormQuanLiNV.Designer.cs">
       <DependentUpon>FormQuanLiNV.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormTestViewXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormTestViewXe.Designer.cs">
+      <DependentUpon>FormTestViewXe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormThemDonThue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormThemDonThue.Designer.cs">
+      <DependentUpon>FormThemDonThue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormXemHopDongThue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormXemHopDongThue.Designer.cs">
+      <DependentUpon>FormXemHopDongThue.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\LoginForm.cs">
       <SubType>Form</SubType>
@@ -135,11 +159,29 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\ViewLichSuDonHang.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewLichSuDonHang.Designer.cs">
+      <DependentUpon>ViewLichSuDonHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewMuaThueXe.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewMuaThueXe.Designer.cs">
+      <DependentUpon>ViewMuaThueXe.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControlUI\ViewQuanLyBanHang.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControlUI\ViewQuanLyBanHang.Designer.cs">
       <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyChoThue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyChoThue.Designer.cs">
+      <DependentUpon>ViewQuanLyChoThue.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControlUI\ViewQuanLyKhachHang.cs">
       <SubType>UserControl</SubType>
@@ -170,6 +212,12 @@
     </Compile>
     <Compile Include="UserControlUI\ViewQuanLyXe.Designer.cs">
       <DependentUpon>ViewQuanLyXe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewTaiKhoanKH.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewTaiKhoanKH.Designer.cs">
+      <DependentUpon>ViewTaiKhoanKH.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +252,9 @@
     <EmbeddedResource Include="FormUI\FormDuyetDonHang.resx">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormKhachHang.resx">
+      <DependentUpon>FormKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormNhapLyDo.resx">
       <DependentUpon>FormNhapLyDo.cs</DependentUpon>
     </EmbeddedResource>
@@ -226,8 +277,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewLichSuDonHang.resx">
+      <DependentUpon>ViewLichSuDonHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewMuaThueXe.resx">
+      <DependentUpon>ViewMuaThueXe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyBanHang.resx">
       <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyChoThue.resx">
+      <DependentUpon>ViewQuanLyChoThue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyKhachHang.resx">
       <DependentUpon>ViewQuanLyKhachHang.cs</DependentUpon>
@@ -243,6 +303,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyXe.resx">
       <DependentUpon>ViewQuanLyXe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewTaiKhoanKH.resx">
+      <DependentUpon>ViewTaiKhoanKH.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

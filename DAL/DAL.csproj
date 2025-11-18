@@ -57,6 +57,7 @@
     <Compile Include="GiaoDichBanDAL.cs" />
     <Compile Include="GiaoDichThueDAL.cs" />
     <Compile Include="DangKyDAL.cs" />
+    <Compile Include="GiaoDichTraThueDAL.cs" />
     <Compile Include="HangXeDAL.cs" />
     <Compile Include="KhachHangDAL.cs" />
     <Compile Include="LoaiXeDAL.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="PhuTungDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaiKhoanDAL.cs" />
+    <Compile Include="ThongTinGiaXeDAL.cs" />
     <Compile Include="XeMayDAL.cs" />
   </ItemGroup>
   <ItemGroup>

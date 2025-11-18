@@ -250,5 +250,31 @@ namespace DAL
             int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters.ToArray()));
             return count > 0;
         }
+
+        /// <summary>
+        /// Lấy danh sách xe có thể cho thuê (Sẵn sàng + có giá thuê)
+        /// </summary>
+        public DataTable GetXeCoTheThue()
+        {
+            string query = @"
+        SELECT 
+            xe.ID_Xe,
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' (', xe.BienSo, ')') AS TenXe,
+            xe.BienSo,
+            tg.GiaThueNgay
+        FROM XeMay xe
+        INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+        INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+        INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+        INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+        INNER JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe
+        WHERE xe.TrangThai = N'Sẵn sàng'
+          AND tg.PhanLoai = N'Thuê'
+          AND tg.GiaThueNgay IS NOT NULL
+          AND tg.GiaThueNgay > 0
+        ORDER BY hx.TenHang, dx.TenDong";
+
+            return DataProvider.ExecuteQuery(query);
+        }
     }
 }
