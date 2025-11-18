@@ -53,6 +53,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="DangKyBLL.cs" />
     <Compile Include="DongXeBLL.cs" />
+    <Compile Include="EmailHelper.cs" />
     <Compile Include="GiaoDichBanBLL.cs" />
     <Compile Include="GiaoDichThueBLL.cs" />
     <Compile Include="HangXeBLL.cs" />
@@ -61,8 +62,10 @@
     <Compile Include="MauSacBLL.cs" />
     <Compile Include="NhaCungCapBLL.cs" />
     <Compile Include="NhanVienBLL.cs" />
+    <Compile Include="OTPManager.cs" />
     <Compile Include="PhuTungBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuenMatKhauBLL.cs" />
     <Compile Include="TaiKhoanBLL.cs" />
     <Compile Include="ThongTinGiaXeBLL.cs" />
     <Compile Include="XeMayBLL.cs" />

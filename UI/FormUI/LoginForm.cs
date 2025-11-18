@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UI.FormHandleUI;
 
 namespace UI.FormUI
 {
@@ -65,6 +66,13 @@ namespace UI.FormUI
         {
             RegisterForm registerForm = new RegisterForm();
             registerForm.Show();
+            this.Hide();
+        }
+
+        private void lnkQuenMatKhau_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FormDienGmailQuenMK formDienGmailQuenMK = new FormDienGmailQuenMK();
+            formDienGmailQuenMK.Show();
             this.Hide();
         }
     }

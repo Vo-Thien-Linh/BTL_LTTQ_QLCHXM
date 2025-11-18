@@ -122,6 +122,7 @@
             this.lnkQuenMatKhau.TabIndex = 3;
             this.lnkQuenMatKhau.TabStop = true;
             this.lnkQuenMatKhau.Text = "Quên mật khẩu";
+            this.lnkQuenMatKhau.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkQuenMatKhau_LinkClicked);
             // 
             // label3
             // 
