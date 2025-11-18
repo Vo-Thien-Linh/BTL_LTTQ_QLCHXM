@@ -56,6 +56,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormHandleUI\FormDienGmailQuenMK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormDienGmailQuenMK.Designer.cs">
+      <DependentUpon>FormDienGmailQuenMK.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormDienMaQuenMK.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormDienMaQuenMK.Designer.cs">
+      <DependentUpon>FormDienMaQuenMK.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHandleUI\FormQuanLyKhachHang.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +85,12 @@
     </Compile>
     <Compile Include="FormHandleUI\FormSuaXe.Designer.cs">
       <DependentUpon>FormSuaXe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormTaoMatKhauMoi.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormTaoMatKhauMoi.Designer.cs">
+      <DependentUpon>FormTaoMatKhauMoi.cs</DependentUpon>
     </Compile>
     <Compile Include="FormHandleUI\FormThemPhuTung.cs">
       <SubType>Form</SubType>
@@ -234,6 +252,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormHandleUI\FormDienGmailQuenMK.resx">
+      <DependentUpon>FormDienGmailQuenMK.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormDienMaQuenMK.resx">
+      <DependentUpon>FormDienMaQuenMK.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormQuanLyKhachHang.resx">
       <DependentUpon>FormQuanLyKhachHang.cs</DependentUpon>
     </EmbeddedResource>
@@ -242,6 +266,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormSuaXe.resx">
       <DependentUpon>FormSuaXe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormTaoMatKhauMoi.resx">
+      <DependentUpon>FormTaoMatKhauMoi.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormThemPhuTung.resx">
       <DependentUpon>FormThemPhuTung.cs</DependentUpon>
