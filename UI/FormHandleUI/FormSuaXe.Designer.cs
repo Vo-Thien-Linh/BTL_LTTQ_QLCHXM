@@ -47,6 +47,12 @@
             this.txtMaXe = new System.Windows.Forms.TextBox();
             this.dtpNgayHetHanBaoHiem = new System.Windows.Forms.DateTimePicker();
             this.nudKHDaChay = new System.Windows.Forms.NumericUpDown();
+            this.cbbMucDichSuDung = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.txtGiaNhap = new System.Windows.Forms.TextBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.nudSoLuong = new System.Windows.Forms.NumericUpDown();
+            this.label20 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -68,6 +74,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudKHDaChay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSoLuong)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAnhXe)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -209,7 +216,7 @@
             this.txtGiaMua.Name = "txtGiaMua";
             this.txtGiaMua.Size = new System.Drawing.Size(129, 22);
             this.txtGiaMua.TabIndex = 15;
-            this.txtGiaMua.TextChanged += new System.EventHandler(this.txtGiaMua_TextChanged);
+//this.txtGiaMua.TextChanged += new System.EventHandler(this.txtGiaMua_TextChanged);
             // 
             // txtBienSo
             // 
@@ -237,6 +244,71 @@
             this.dtpNgayHetHanBaoHiem.Size = new System.Drawing.Size(200, 22);
             this.dtpNgayHetHanBaoHiem.TabIndex = 9;
             this.dtpNgayHetHanBaoHiem.ValueChanged += new System.EventHandler(this.dtpNgayHetHanBaoHiem_ValueChanged);
+            // 
+            // cbbMucDichSuDung
+            // 
+            this.cbbMucDichSuDung.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbMucDichSuDung.FormattingEnabled = true;
+            this.cbbMucDichSuDung.Location = new System.Drawing.Point(200, 294);
+            this.cbbMucDichSuDung.Name = "cbbMucDichSuDung";
+            this.cbbMucDichSuDung.Size = new System.Drawing.Size(194, 24);
+            this.cbbMucDichSuDung.TabIndex = 10;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(31, 297);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(116, 16);
+            this.label18.TabIndex = 11;
+            this.label18.Text = "Mục đích sử dụng";
+            // 
+            // txtGiaNhap
+            // 
+            this.txtGiaNhap.Location = new System.Drawing.Point(200, 337);
+            this.txtGiaNhap.Name = "txtGiaNhap";
+            this.txtGiaNhap.Size = new System.Drawing.Size(194, 22);
+            this.txtGiaNhap.TabIndex = 12;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(31, 340);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(63, 16);
+            this.label19.TabIndex = 13;
+            this.label19.Text = "Giá nhập";
+            // 
+            // nudSoLuong
+            // 
+            this.nudSoLuong.Location = new System.Drawing.Point(200, 377);
+            this.nudSoLuong.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudSoLuong.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSoLuong.Name = "nudSoLuong";
+            this.nudSoLuong.Size = new System.Drawing.Size(194, 22);
+            this.nudSoLuong.TabIndex = 14;
+            this.nudSoLuong.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(31, 379);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(64, 16);
+            this.label20.TabIndex = 15;
+            this.label20.Text = "Số lượng";
             // 
             // nudKHDaChay
             // 
@@ -352,6 +424,12 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.nudSoLuong);
+            this.groupBox2.Controls.Add(this.label19);
+            this.groupBox2.Controls.Add(this.txtGiaNhap);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.cbbMucDichSuDung);
             this.groupBox2.Controls.Add(this.dtpNgayHetHanBaoHiem);
             this.groupBox2.Controls.Add(this.dtpNgayHetHanDangKy);
             this.groupBox2.Controls.Add(this.label17);
@@ -362,10 +440,10 @@
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Location = new System.Drawing.Point(599, 146);
+            this.groupBox2.Location = new System.Drawing.Point(599, 145);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(435, 300);
-            this.groupBox2.TabIndex = 6;
+            this.groupBox2.Size = new System.Drawing.Size(435, 350);
+            this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Thông tin kỹ thuật";
             // 
@@ -479,6 +557,7 @@
             this.Text = "FormSuaXe";
             this.Load += new System.EventHandler(this.FormSuaXe_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudKHDaChay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSoLuong)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAnhXe)).EndInit();
@@ -531,5 +610,11 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbbMucDichSuDung;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox txtGiaNhap;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.NumericUpDown nudSoLuong;
+        private System.Windows.Forms.Label label20;
     }
 }

@@ -104,10 +104,10 @@
     <Compile Include="FormUI\FormNhapLyDo.Designer.cs">
       <DependentUpon>FormNhapLyDo.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormUI\FormQuanLiNV.cs">
+    <Compile Include="FormHandleUI\FormQuanLiNV.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormUI\FormQuanLiNV.Designer.cs">
+    <Compile Include="FormHandleUI\FormQuanLiNV.Designer.cs">
       <DependentUpon>FormQuanLiNV.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormTestViewXe.cs">
@@ -258,7 +258,7 @@
     <EmbeddedResource Include="FormUI\FormNhapLyDo.resx">
       <DependentUpon>FormNhapLyDo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormUI\FormQuanLiNV.resx">
+    <EmbeddedResource Include="FormHandleUI\FormQuanLiNV.resx">
       <DependentUpon>FormQuanLiNV.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\LoginForm.resx">

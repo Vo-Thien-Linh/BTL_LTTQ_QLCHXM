@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             this.panelHeader = new System.Windows.Forms.Panel();
-            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblTieuDe = new System.Windows.Forms.Label();
             this.panelSearch = new System.Windows.Forms.Panel();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.lblSearch = new System.Windows.Forms.Label();
-            this.cboSearchBy = new System.Windows.Forms.ComboBox();
-            this.lblSearchBy = new System.Windows.Forms.Label();
+            this.btnTimKiem = new System.Windows.Forms.Button();
+            this.txtTuKhoa = new System.Windows.Forms.TextBox();
+            this.lblTuKhoa = new System.Windows.Forms.Label();
+            this.cboTimKiem = new System.Windows.Forms.ComboBox();
+            this.lblTimKiem = new System.Windows.Forms.Label();
             this.panelActions = new System.Windows.Forms.Panel();
-            this.btn_RefreshEmployee = new System.Windows.Forms.Button();
-            this.btn_DeleteEmployee = new System.Windows.Forms.Button();
-            this.btn_EditEmployee = new System.Windows.Forms.Button();
-            this.btn_AddEmployee = new System.Windows.Forms.Button();
+            this.btnLamMoi = new System.Windows.Forms.Button();
+            this.btnXoaNhanVien = new System.Windows.Forms.Button();
+            this.btnSuaNhanVien = new System.Windows.Forms.Button();
+            this.btnThemNhanVien = new System.Windows.Forms.Button();
             this.panelDataGrid = new System.Windows.Forms.Panel();
-            this.lblRecordCount = new System.Windows.Forms.Label();
+            this.lblDemNhanVien = new System.Windows.Forms.Label();
             this.panelHeader.SuspendLayout();
             this.panelSearch.SuspendLayout();
             this.panelActions.SuspendLayout();
@@ -51,7 +51,7 @@
             // panelHeader
             // 
             this.panelHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.panelHeader.Controls.Add(this.lblTitle);
+            this.panelHeader.Controls.Add(this.lblTieuDe);
             this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelHeader.Location = new System.Drawing.Point(20, 20);
             this.panelHeader.Name = "panelHeader";
@@ -59,27 +59,27 @@
             this.panelHeader.Size = new System.Drawing.Size(1160, 70);
             this.panelHeader.TabIndex = 0;
             // 
-            // lblTitle
+            // lblTieuDe
             // 
-            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(20, 0);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(1120, 70);
-            this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "QUẢN LÝ NHÂN VIÊN";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
+            this.lblTieuDe.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblTieuDe.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.lblTieuDe.ForeColor = System.Drawing.Color.White;
+            this.lblTieuDe.Location = new System.Drawing.Point(20, 0);
+            this.lblTieuDe.Name = "lblTieuDe";
+            this.lblTieuDe.Size = new System.Drawing.Size(1120, 70);
+            this.lblTieuDe.TabIndex = 0;
+            this.lblTieuDe.Text = "QUẢN LÝ NHÂN VIÊN";
+            this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTieuDe.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // panelSearch
             // 
             this.panelSearch.BackColor = System.Drawing.Color.White;
-            this.panelSearch.Controls.Add(this.btnSearch);
-            this.panelSearch.Controls.Add(this.txtSearch);
-            this.panelSearch.Controls.Add(this.lblSearch);
-            this.panelSearch.Controls.Add(this.cboSearchBy);
-            this.panelSearch.Controls.Add(this.lblSearchBy);
+            this.panelSearch.Controls.Add(this.btnTimKiem);
+            this.panelSearch.Controls.Add(this.txtTuKhoa);
+            this.panelSearch.Controls.Add(this.lblTuKhoa);
+            this.panelSearch.Controls.Add(this.cboTimKiem);
+            this.panelSearch.Controls.Add(this.lblTimKiem);
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSearch.Location = new System.Drawing.Point(20, 90);
             this.panelSearch.Name = "panelSearch";
@@ -87,71 +87,71 @@
             this.panelSearch.Size = new System.Drawing.Size(1160, 80);
             this.panelSearch.TabIndex = 1;
             // 
-            // btnSearch
+            // btnTimKiem
             // 
-            this.btnSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.btnSearch.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSearch.FlatAppearance.BorderSize = 0;
-            this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSearch.ForeColor = System.Drawing.Color.White;
-            this.btnSearch.Location = new System.Drawing.Point(744, 20);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(100, 35);
-            this.btnSearch.TabIndex = 4;
-            this.btnSearch.Text = "🔍 Tìm";
-            this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnTimKiem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.btnTimKiem.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTimKiem.FlatAppearance.BorderSize = 0;
+            this.btnTimKiem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTimKiem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnTimKiem.ForeColor = System.Drawing.Color.White;
+            this.btnTimKiem.Location = new System.Drawing.Point(744, 20);
+            this.btnTimKiem.Name = "btnTimKiem";
+            this.btnTimKiem.Size = new System.Drawing.Size(100, 35);
+            this.btnTimKiem.TabIndex = 4;
+            this.btnTimKiem.Text = "🔍 Tìm";
+            this.btnTimKiem.UseVisualStyleBackColor = false;
             // 
-            // txtSearch
+            // txtTuKhoa
             // 
-            this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtSearch.Location = new System.Drawing.Point(438, 24);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(300, 30);
-            this.txtSearch.TabIndex = 3;
+            this.txtTuKhoa.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtTuKhoa.Location = new System.Drawing.Point(438, 24);
+            this.txtTuKhoa.Name = "txtTuKhoa";
+            this.txtTuKhoa.Size = new System.Drawing.Size(300, 30);
+            this.txtTuKhoa.TabIndex = 3;
             // 
-            // lblSearch
+            // lblTuKhoa
             // 
-            this.lblSearch.AutoSize = true;
-            this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSearch.Location = new System.Drawing.Point(357, 28);
-            this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(75, 23);
-            this.lblSearch.TabIndex = 2;
-            this.lblSearch.Text = "Từ khóa:";
+            this.lblTuKhoa.AutoSize = true;
+            this.lblTuKhoa.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblTuKhoa.Location = new System.Drawing.Point(357, 28);
+            this.lblTuKhoa.Name = "lblTuKhoa";
+            this.lblTuKhoa.Size = new System.Drawing.Size(75, 23);
+            this.lblTuKhoa.TabIndex = 2;
+            this.lblTuKhoa.Text = "Từ khóa:";
             // 
-            // cboSearchBy
+            // cboTimKiem
             // 
-            this.cboSearchBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboSearchBy.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.cboSearchBy.FormattingEnabled = true;
-            this.cboSearchBy.Items.AddRange(new object[] {
+            this.cboTimKiem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboTimKiem.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cboTimKiem.FormattingEnabled = true;
+            this.cboTimKiem.Items.AddRange(new object[] {
             "Mã nhân viên",
             "Họ và tên",
             "Số điện thoại",
             "Email"});
-            this.cboSearchBy.Location = new System.Drawing.Point(149, 24);
-            this.cboSearchBy.Name = "cboSearchBy";
-            this.cboSearchBy.Size = new System.Drawing.Size(180, 31);
-            this.cboSearchBy.TabIndex = 1;
+            this.cboTimKiem.Location = new System.Drawing.Point(149, 24);
+            this.cboTimKiem.Name = "cboTimKiem";
+            this.cboTimKiem.Size = new System.Drawing.Size(180, 31);
+            this.cboTimKiem.TabIndex = 1;
             // 
-            // lblSearchBy
+            // lblTimKiem
             // 
-            this.lblSearchBy.AutoSize = true;
-            this.lblSearchBy.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSearchBy.Location = new System.Drawing.Point(20, 28);
-            this.lblSearchBy.Name = "lblSearchBy";
-            this.lblSearchBy.Size = new System.Drawing.Size(123, 23);
-            this.lblSearchBy.TabIndex = 0;
-            this.lblSearchBy.Text = "Tìm kiếm theo:";
+            this.lblTimKiem.AutoSize = true;
+            this.lblTimKiem.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblTimKiem.Location = new System.Drawing.Point(20, 28);
+            this.lblTimKiem.Name = "lblTimKiem";
+            this.lblTimKiem.Size = new System.Drawing.Size(123, 23);
+            this.lblTimKiem.TabIndex = 0;
+            this.lblTimKiem.Text = "Tìm kiếm theo:";
             // 
             // panelActions
             // 
             this.panelActions.BackColor = System.Drawing.Color.White;
-            this.panelActions.Controls.Add(this.btn_RefreshEmployee);
-            this.panelActions.Controls.Add(this.btn_DeleteEmployee);
-            this.panelActions.Controls.Add(this.btn_EditEmployee);
-            this.panelActions.Controls.Add(this.btn_AddEmployee);
+            this.panelActions.Controls.Add(this.btnLamMoi);
+            this.panelActions.Controls.Add(this.btnXoaNhanVien);
+            this.panelActions.Controls.Add(this.btnSuaNhanVien);
+            this.panelActions.Controls.Add(this.btnThemNhanVien);
             this.panelActions.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelActions.Location = new System.Drawing.Point(20, 170);
             this.panelActions.Name = "panelActions";
@@ -159,66 +159,66 @@
             this.panelActions.Size = new System.Drawing.Size(1160, 70);
             this.panelActions.TabIndex = 2;
             // 
-            // btn_RefreshEmployee
+            // btnLamMoi
             // 
-            this.btn_RefreshEmployee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(125)))), ((int)(((byte)(139)))));
-            this.btn_RefreshEmployee.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_RefreshEmployee.FlatAppearance.BorderSize = 0;
-            this.btn_RefreshEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_RefreshEmployee.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btn_RefreshEmployee.ForeColor = System.Drawing.Color.White;
-            this.btn_RefreshEmployee.Location = new System.Drawing.Point(500, 13);
-            this.btn_RefreshEmployee.Name = "btn_RefreshEmployee";
-            this.btn_RefreshEmployee.Size = new System.Drawing.Size(140, 45);
-            this.btn_RefreshEmployee.TabIndex = 3;
-            this.btn_RefreshEmployee.Text = "🔄 Làm mới";
-            this.btn_RefreshEmployee.UseVisualStyleBackColor = false;
+            this.btnLamMoi.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(96)))), ((int)(((byte)(125)))), ((int)(((byte)(139)))));
+            this.btnLamMoi.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLamMoi.FlatAppearance.BorderSize = 0;
+            this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLamMoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnLamMoi.ForeColor = System.Drawing.Color.White;
+            this.btnLamMoi.Location = new System.Drawing.Point(500, 13);
+            this.btnLamMoi.Name = "btnLamMoi";
+            this.btnLamMoi.Size = new System.Drawing.Size(140, 45);
+            this.btnLamMoi.TabIndex = 3;
+            this.btnLamMoi.Text = "🔄 Làm mới";
+            this.btnLamMoi.UseVisualStyleBackColor = false;
             // 
-            // btn_DeleteEmployee
+            // btnXoaNhanVien
             // 
-            this.btn_DeleteEmployee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
-            this.btn_DeleteEmployee.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_DeleteEmployee.FlatAppearance.BorderSize = 0;
-            this.btn_DeleteEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_DeleteEmployee.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btn_DeleteEmployee.ForeColor = System.Drawing.Color.White;
-            this.btn_DeleteEmployee.Location = new System.Drawing.Point(340, 13);
-            this.btn_DeleteEmployee.Name = "btn_DeleteEmployee";
-            this.btn_DeleteEmployee.Size = new System.Drawing.Size(140, 45);
-            this.btn_DeleteEmployee.TabIndex = 2;
-            this.btn_DeleteEmployee.Text = "🗑️ Xóa";
-            this.btn_DeleteEmployee.UseVisualStyleBackColor = false;
+            this.btnXoaNhanVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.btnXoaNhanVien.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnXoaNhanVien.FlatAppearance.BorderSize = 0;
+            this.btnXoaNhanVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXoaNhanVien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnXoaNhanVien.ForeColor = System.Drawing.Color.White;
+            this.btnXoaNhanVien.Location = new System.Drawing.Point(340, 13);
+            this.btnXoaNhanVien.Name = "btnXoaNhanVien";
+            this.btnXoaNhanVien.Size = new System.Drawing.Size(140, 45);
+            this.btnXoaNhanVien.TabIndex = 2;
+            this.btnXoaNhanVien.Text = "🗑️ Xóa";
+            this.btnXoaNhanVien.UseVisualStyleBackColor = false;
             // 
-            // btn_EditEmployee
+            // btnSuaNhanVien
             // 
-            this.btn_EditEmployee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.btn_EditEmployee.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_EditEmployee.FlatAppearance.BorderSize = 0;
-            this.btn_EditEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_EditEmployee.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btn_EditEmployee.ForeColor = System.Drawing.Color.White;
-            this.btn_EditEmployee.Location = new System.Drawing.Point(180, 13);
-            this.btn_EditEmployee.Name = "btn_EditEmployee";
-            this.btn_EditEmployee.Size = new System.Drawing.Size(140, 45);
-            this.btn_EditEmployee.TabIndex = 1;
-            this.btn_EditEmployee.Text = "✏️ Sửa";
-            this.btn_EditEmployee.UseVisualStyleBackColor = false;
+            this.btnSuaNhanVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
+            this.btnSuaNhanVien.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnSuaNhanVien.FlatAppearance.BorderSize = 0;
+            this.btnSuaNhanVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSuaNhanVien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnSuaNhanVien.ForeColor = System.Drawing.Color.White;
+            this.btnSuaNhanVien.Location = new System.Drawing.Point(180, 13);
+            this.btnSuaNhanVien.Name = "btnSuaNhanVien";
+            this.btnSuaNhanVien.Size = new System.Drawing.Size(140, 45);
+            this.btnSuaNhanVien.TabIndex = 1;
+            this.btnSuaNhanVien.Text = "✏️ Sửa";
+            this.btnSuaNhanVien.UseVisualStyleBackColor = false;
             // 
-            // btn_AddEmployee
+            // btnThemNhanVien
             // 
-            this.btn_AddEmployee.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(175)))), ((int)(((byte)(80)))));
-            this.btn_AddEmployee.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_AddEmployee.FlatAppearance.BorderSize = 0;
-            this.btn_AddEmployee.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_AddEmployee.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btn_AddEmployee.ForeColor = System.Drawing.Color.White;
-            this.btn_AddEmployee.Location = new System.Drawing.Point(20, 13);
-            this.btn_AddEmployee.Name = "btn_AddEmployee";
-            this.btn_AddEmployee.Size = new System.Drawing.Size(140, 45);
-            this.btn_AddEmployee.TabIndex = 0;
-            this.btn_AddEmployee.Text = "+ Thêm mới";
-            this.btn_AddEmployee.UseVisualStyleBackColor = false;
-            this.btn_AddEmployee.Click += new System.EventHandler(this.btn_AddEmployee_Click_1);
+            this.btnThemNhanVien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(175)))), ((int)(((byte)(80)))));
+            this.btnThemNhanVien.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnThemNhanVien.FlatAppearance.BorderSize = 0;
+            this.btnThemNhanVien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThemNhanVien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnThemNhanVien.ForeColor = System.Drawing.Color.White;
+            this.btnThemNhanVien.Location = new System.Drawing.Point(20, 13);
+            this.btnThemNhanVien.Name = "btnThemNhanVien";
+            this.btnThemNhanVien.Size = new System.Drawing.Size(140, 45);
+            this.btnThemNhanVien.TabIndex = 0;
+            this.btnThemNhanVien.Text = "+ Thêm mới";
+            this.btnThemNhanVien.UseVisualStyleBackColor = false;
+            this.btnThemNhanVien.Click += new System.EventHandler(this.btn_AddEmployee_Click_1);
             // 
             // panelDataGrid
             // 
@@ -230,18 +230,19 @@
             this.panelDataGrid.Size = new System.Drawing.Size(1160, 440);
             this.panelDataGrid.TabIndex = 3;
             // 
-            // lblRecordCount
+            // lblDemNhanVien
             // 
-            this.lblRecordCount.BackColor = System.Drawing.Color.White;
-            this.lblRecordCount.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblRecordCount.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
-            this.lblRecordCount.Location = new System.Drawing.Point(20, 680);
-            this.lblRecordCount.Name = "lblRecordCount";
-            this.lblRecordCount.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
-            this.lblRecordCount.Size = new System.Drawing.Size(1160, 40);
-            this.lblRecordCount.TabIndex = 4;
-            this.lblRecordCount.Text = "Tổng số bản ghi: 0";
-            this.lblRecordCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDemNhanVien.BackColor = System.Drawing.Color.White;
+            this.lblDemNhanVien.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblDemNhanVien.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
+            this.lblDemNhanVien.Location = new System.Drawing.Point(20, 680);
+            this.lblDemNhanVien.Name = "lblDemNhanVien";
+            this.lblDemNhanVien.Padding = new System.Windows.Forms.Padding(0, 10, 0, 10);
+            this.lblDemNhanVien.Size = new System.Drawing.Size(1160, 40);
+            this.lblDemNhanVien.TabIndex = 4;
+            this.lblDemNhanVien.Text = "Tổng số nhân viên: 0";
+            this.lblDemNhanVien.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDemNhanVien.Click += new System.EventHandler(this.lblRecordCount_Click);
             // 
             // ViewQuanLyNhanVien
             // 
@@ -249,7 +250,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.panelDataGrid);
-            this.Controls.Add(this.lblRecordCount);
+            this.Controls.Add(this.lblDemNhanVien);
             this.Controls.Add(this.panelActions);
             this.Controls.Add(this.panelSearch);
             this.Controls.Add(this.panelHeader);
@@ -267,19 +268,19 @@
         #endregion
 
         private System.Windows.Forms.Panel panelHeader;
-        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblTieuDe;
         private System.Windows.Forms.Panel panelSearch;
-        private System.Windows.Forms.Label lblSearchBy;
-        private System.Windows.Forms.ComboBox cboSearchBy;
-        private System.Windows.Forms.Label lblSearch;
-        private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.Button btnSearch;
+        private System.Windows.Forms.Label lblTimKiem;
+        private System.Windows.Forms.ComboBox cboTimKiem;
+        private System.Windows.Forms.Label lblTuKhoa;
+        private System.Windows.Forms.TextBox txtTuKhoa;
+        private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.Panel panelActions;
-        private System.Windows.Forms.Button btn_AddEmployee;
-        private System.Windows.Forms.Button btn_EditEmployee;
-        private System.Windows.Forms.Button btn_DeleteEmployee;
-        private System.Windows.Forms.Button btn_RefreshEmployee;
+        private System.Windows.Forms.Button btnThemNhanVien;
+        private System.Windows.Forms.Button btnSuaNhanVien;
+        private System.Windows.Forms.Button btnXoaNhanVien;
+        private System.Windows.Forms.Button btnLamMoi;
         private System.Windows.Forms.Panel panelDataGrid;
-        private System.Windows.Forms.Label lblRecordCount;
+        private System.Windows.Forms.Label lblDemNhanVien;
     }
 }
