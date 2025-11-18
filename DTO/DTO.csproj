@@ -55,6 +55,7 @@
     <Compile Include="DongXeDTO.cs" />
     <Compile Include="GiaoDichBanDTO.cs" />
     <Compile Include="GiaoDichThueDTO.cs" />
+    <Compile Include="GiaoDichTraThue.cs" />
     <Compile Include="HangXeDTO.cs" />
     <Compile Include="KhachHangDTO.cs" />
     <Compile Include="MauSacDTO.cs" />

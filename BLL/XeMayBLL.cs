@@ -204,5 +204,13 @@ namespace BLL
                 throw new Exception("Lỗi khi cập nhật trạng thái: " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Lấy danh sách xe có thể cho thuê
+        /// </summary>
+        public DataTable GetXeCoTheThue()
+        {
+            return xeMayDAL.GetXeCoTheThue();
+        }
     }
 }

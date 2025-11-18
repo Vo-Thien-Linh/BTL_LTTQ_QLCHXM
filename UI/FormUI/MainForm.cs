@@ -1,13 +1,15 @@
-﻿using System;
+﻿using DTO;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Drawing2D;
+using UI.UserControlUI;
 
 namespace UI.FormUI
 {
@@ -332,6 +334,7 @@ namespace UI.FormUI
 
         private void btnQuanLyChoThue_Click(object sender, EventArgs e)
         {
+            LoadControl(new ViewQuanLyChoThue(CurrentUser.MaNV));
 
         }
 
