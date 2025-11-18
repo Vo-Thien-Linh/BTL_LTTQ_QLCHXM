@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel3 = new System.Windows.Forms.Panel();
+            this.cbbTrangThai = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.txtTuKhoa = new System.Windows.Forms.TextBox();
             this.cbbTimKiemTheo = new System.Windows.Forms.ComboBox();
@@ -40,8 +42,6 @@
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.cbbTrangThai = new System.Windows.Forms.ComboBox();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuanLyXe)).BeginInit();
@@ -63,6 +63,24 @@
             this.panel3.Size = new System.Drawing.Size(1934, 134);
             this.panel3.TabIndex = 3;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
+            // 
+            // cbbTrangThai
+            // 
+            this.cbbTrangThai.FormattingEnabled = true;
+            this.cbbTrangThai.Location = new System.Drawing.Point(507, 73);
+            this.cbbTrangThai.Name = "cbbTrangThai";
+            this.cbbTrangThai.Size = new System.Drawing.Size(369, 24);
+            this.cbbTrangThai.TabIndex = 5;
+            this.cbbTrangThai.SelectedIndexChanged += new System.EventHandler(this.cbbTrangThai_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(504, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 16);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Trạng Thái";
             // 
             // btnTimKiem
             // 
@@ -133,11 +151,11 @@
             // 
             this.dgvQuanLyXe.BackgroundColor = System.Drawing.Color.White;
             this.dgvQuanLyXe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuanLyXe.Location = new System.Drawing.Point(70, 112);
+            this.dgvQuanLyXe.Location = new System.Drawing.Point(3, 112);
             this.dgvQuanLyXe.Name = "dgvQuanLyXe";
             this.dgvQuanLyXe.RowHeadersWidth = 51;
             this.dgvQuanLyXe.RowTemplate.Height = 24;
-            this.dgvQuanLyXe.Size = new System.Drawing.Size(1683, 449);
+            this.dgvQuanLyXe.Size = new System.Drawing.Size(1928, 449);
             this.dgvQuanLyXe.TabIndex = 8;
             this.dgvQuanLyXe.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvQuanLyXe_CellContentClick);
             // 
@@ -204,24 +222,6 @@
             this.btnThem.Text = "+ Thêm mới";
             this.btnThem.UseVisualStyleBackColor = false;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(504, 37);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 16);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Trạng Thái";
-            // 
-            // cbbTrangThai
-            // 
-            this.cbbTrangThai.FormattingEnabled = true;
-            this.cbbTrangThai.Location = new System.Drawing.Point(507, 73);
-            this.cbbTrangThai.Name = "cbbTrangThai";
-            this.cbbTrangThai.Size = new System.Drawing.Size(369, 24);
-            this.cbbTrangThai.TabIndex = 5;
-            this.cbbTrangThai.SelectedIndexChanged += new System.EventHandler(this.cbbTrangThai_SelectedIndexChanged);
             // 
             // ViewQuanLyXe
             // 

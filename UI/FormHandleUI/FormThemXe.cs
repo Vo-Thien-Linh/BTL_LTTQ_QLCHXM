@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace UI.FormHandleUI
         private NhaCungCapBLL NhaCungCapBLL = new NhaCungCapBLL();
         private LoaiXeBLL LoaiXeBLL = new LoaiXeBLL();
         private XeMayBLL xeMayBLL = new XeMayBLL();
+        private byte[] anhXeBytes = null; // Lưu ảnh dạng byte[]
 
         public FormThemXe()
         {
@@ -113,11 +115,6 @@ namespace UI.FormHandleUI
 
         }
 
-        private void txtGiaMua_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void btnChonFileAnh_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -125,10 +122,23 @@ namespace UI.FormHandleUI
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                picAnhXe.ImageLocation = ofd.FileName; // gán cho PictureBox
-                picAnhXe.SizeMode = PictureBoxSizeMode.Zoom; // auto fit
-                                                             // Nếu cần lưu đường dẫn:
-                                                             // txtAnhXe.Text = ofd.FileName; hoặc biến string đường dẫn ảnh xe
+                try
+                {
+                    // Hiển thị ảnh trong PictureBox
+                    picAnhXe.Image = Image.FromFile(ofd.FileName);
+                    picAnhXe.SizeMode = PictureBoxSizeMode.Zoom;
+                    
+                    // Chuyển ảnh thành byte[] để lưu vào database
+                    using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
+                    {
+                        anhXeBytes = new byte[fs.Length];
+                        fs.Read(anhXeBytes, 0, (int)fs.Length);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải ảnh: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -164,51 +174,60 @@ namespace UI.FormHandleUI
 
         private void btnThemXe_Click(object sender, EventArgs e)
         {
-            // Validate dữ liệu (ví dụ: chưa nhập đủ...)
-            if (string.IsNullOrWhiteSpace(txtMaXe.Text) ||
-                string.IsNullOrWhiteSpace(txtBienSo.Text) ||
-                cbbHangXe.SelectedItem == null ||
-                cbbDongXe.SelectedItem == null ||
-                cbbMauSac.SelectedItem == null ||
-                cbbNhaCungCap.SelectedItem == null ||
-                cbbTrangThai.SelectedItem == null)
+            try
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Build DTO
+                XeMayDTO dto = new XeMayDTO
+                {
+                    ID_Xe = txtMaXe.Text.Trim(),
+                    BienSo = txtBienSo.Text.Trim(),
+                    MaNCC = cbbNhaCungCap.SelectedValue?.ToString(),
+                    NgayMua = dtpNgayMua.Value,
+                    GiaMua = string.IsNullOrWhiteSpace(txtGiaMua.Text) ? (decimal?)null : decimal.Parse(txtGiaMua.Text),
+                    GiaNhap = string.IsNullOrWhiteSpace(txtGiaNhap.Text) ? (decimal?)null : decimal.Parse(txtGiaNhap.Text),
+                    SoLuong = (int?)nudSoLuong.Value,
+                    SoLuongBanRa = 0, // Luôn = 0 khi thêm mới, chỉ tăng khi có hóa đơn bán
+                    NgayDangKy = dtpNgayDangKy.Value,
+                    HetHanDangKy = dtpNgayHetHanDangKy.Value,
+                    HetHanBaoHiem = dtpNgayHetHanBaoHiem.Value,
+                    KmDaChay = Convert.ToInt32(nudKHDaChay.Value),
+                    ThongTinXang = txtThongTinXang.Text.Trim(),
+                    AnhXe = anhXeBytes, // Sử dụng byte[] thay vì file path
+                    TrangThai = cbbTrangThai.SelectedItem?.ToString(),
+                    MucDichSuDung = cbbMucDichSuDung.SelectedItem?.ToString(),
+                    
+                    // Thông tin cho việc build ID_Loai
+                    MaHang = cbbHangXe.SelectedValue?.ToString(),
+                    MaDong = cbbDongXe.SelectedValue?.ToString(),
+                    MaMau = cbbMauSac.SelectedValue?.ToString(),
+                    NamSX = cbbNamSanXuat.SelectedItem != null ? (int?)Convert.ToInt32(cbbNamSanXuat.SelectedItem) : null
+                };
+
+                // Tìm hoặc tạo ID_Loai từ MaHang, MaDong, MaMau, NamSX
+                if (!string.IsNullOrEmpty(dto.MaHang) && !string.IsNullOrEmpty(dto.MaDong) && 
+                    !string.IsNullOrEmpty(dto.MaMau) && dto.NamSX.HasValue)
+                {
+                    dto.ID_Loai = LoaiXeBLL.GetOrCreateIDLoai(dto.MaHang, dto.MaDong, dto.MaMau, dto.NamSX.Value);
+                }
+
+                // BLL xử lý - sẽ throw Exception nếu có lỗi với thông báo chi tiết
+                bool success = xeMayBLL.InsertXeMay(dto);
+
+                if (success)
+                {
+                    MessageBox.Show("Thêm xe thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Thêm xe thất bại!\nVui lòng kiểm tra lại thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-
-            // Build DTO
-            XeMayDTO dto = new XeMayDTO
+            catch (Exception ex)
             {
-                ID_Xe = txtMaXe.Text.Trim(),
-                BienSo = txtBienSo.Text.Trim(),
-                // Tính/gán đúng ID_Loai theo logic của bạn, ví dụ:
-                ID_Loai = cbbLoaiXe.SelectedValue?.ToString(), // hoặc xử lý build từ hãng, dòng, màu, năm
-                MaNCC = cbbNhaCungCap.SelectedValue.ToString(),
-                NgayMua = dtpNgayMua.Value,
-                GiaMua = decimal.Parse(txtGiaMua.Text), // nếu dùng NumericUpDown thì dùng .Value
-                NgayDangKy = dtpNgayDangKy.Value,
-                HetHanDangKy = dtpNgayHetHanDangKy.Value,
-                HetHanBaoHiem = dtpNgayHetHanBaoHiem.Value,
-                KmDaChay = Convert.ToInt32(nudKHDaChay.Value),
-                ThongTinXang = txtThongTinXang.Text,
-                AnhXeXeBan = picAnhXe.ImageLocation, // nếu lưu link
-                TrangThai = cbbTrangThai.SelectedItem.ToString()
-            };
-
-            // BLL xử lý
-            var xeMayBLL = new XeMayBLL();
-            bool success = xeMayBLL.InsertXeMay(dto);
-
-            if (success)
-            {
-                MessageBox.Show("Thêm xe thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK; // Để form gốc nhận biết đã thêm thành công
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Thêm xe thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Hiển thị lỗi chi tiết từ BLL
+                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -234,6 +253,25 @@ namespace UI.FormHandleUI
             cbbTrangThai.Items.Add("Đã bán");
             cbbTrangThai.Items.Add("Đang bảo trì");
             cbbTrangThai.SelectedIndex = 0;
+
+            // Đổ mục đích sử dụng
+            cbbMucDichSuDung.Items.Clear();
+            cbbMucDichSuDung.Items.Add("Cho thuê");
+            cbbMucDichSuDung.Items.Add("Bán");
+            cbbMucDichSuDung.SelectedIndex = 0; // Mặc định "Cho thuê"
+        }
+
+        private void txtGiaMua_TextChanged(object sender, EventArgs e)
+        {
+            // Tự động tính GiaNhap = 85% GiaMua
+            if (decimal.TryParse(txtGiaMua.Text, out decimal giaMua))
+            {
+                txtGiaNhap.Text = (giaMua * 0.85m).ToString("0.##");
+            }
+            else
+            {
+                txtGiaNhap.Text = "";
+            }
         }
     }
 }

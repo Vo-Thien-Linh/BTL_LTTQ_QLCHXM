@@ -42,7 +42,11 @@ namespace DAL
                     xm.HetHanDangKy,
                     xm.HetHanBaoHiem,
                     xm.ThongTinXang,
-                    xm.AnhXeXeBan
+                    xm.AnhXe,
+                    xm.MucDichSuDung,
+                    xm.GiaNhap,
+                    xm.SoLuong,
+                    xm.SoLuongBanRa
                 FROM XeMay xm
                 INNER JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
                 INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
@@ -76,7 +80,11 @@ namespace DAL
                     xm.HetHanDangKy,
                     xm.HetHanBaoHiem,
                     xm.ThongTinXang,
-                    xm.AnhXeXeBan
+                    xm.AnhXe,
+                    xm.MucDichSuDung,
+                    xm.GiaNhap,
+                    xm.SoLuong,
+                    xm.SoLuongBanRa
                 FROM XeMay xm
                 INNER JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
                 INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
@@ -122,10 +130,22 @@ namespace DAL
                 return new XeMayDTO
                 {
                     ID_Xe = r["ID_Xe"].ToString(),
-                    BienSo = r["BienSo"].ToString(),
+                    BienSo = r["BienSo"] != DBNull.Value ? r["BienSo"].ToString() : null,
                     ID_Loai = r["ID_Loai"].ToString(),
-                    MaNCC = r["MaNCC"].ToString(),
-                    // ... các trường khác ...
+                    MaNCC = r["MaNCC"] != DBNull.Value ? r["MaNCC"].ToString() : null,
+                    NgayMua = r["NgayMua"] != DBNull.Value ? (DateTime?)r["NgayMua"] : null,
+                    GiaMua = r["GiaMua"] != DBNull.Value ? (decimal?)r["GiaMua"] : null,
+                    NgayDangKy = r["NgayDangKy"] != DBNull.Value ? (DateTime?)r["NgayDangKy"] : null,
+                    HetHanDangKy = r["HetHanDangKy"] != DBNull.Value ? (DateTime?)r["HetHanDangKy"] : null,
+                    HetHanBaoHiem = r["HetHanBaoHiem"] != DBNull.Value ? (DateTime?)r["HetHanBaoHiem"] : null,
+                    KmDaChay = r["KmDaChay"] != DBNull.Value ? (int?)r["KmDaChay"] : null,
+                    ThongTinXang = r["ThongTinXang"] != DBNull.Value ? r["ThongTinXang"].ToString() : null,
+                    AnhXe = r["AnhXe"] != DBNull.Value ? (byte[])r["AnhXe"] : null,
+                    TrangThai = r["TrangThai"].ToString(),
+                    MucDichSuDung = r["MucDichSuDung"] != DBNull.Value ? r["MucDichSuDung"].ToString() : null,
+                    GiaNhap = r["GiaNhap"] != DBNull.Value ? (decimal?)r["GiaNhap"] : null,
+                    SoLuong = r["SoLuong"] != DBNull.Value ? (int?)r["SoLuong"] : null,
+                    SoLuongBanRa = r["SoLuongBanRa"] != DBNull.Value ? (int?)r["SoLuongBanRa"] : null,
                     MaHang = r["MaHang"].ToString(),
                     MaDong = r["MaDong"].ToString(),
                     MaMau = r["MaMau"].ToString(),
@@ -142,10 +162,12 @@ namespace DAL
             string query = @"
                 INSERT INTO XeMay (ID_Xe, BienSo, ID_Loai, MaNCC, NgayMua, GiaMua, 
                                    NgayDangKy, HetHanDangKy, HetHanBaoHiem, KmDaChay, 
-                                   ThongTinXang, AnhXeXeBan, TrangThai)
+                                   ThongTinXang, AnhXe, TrangThai, MucDichSuDung,
+                                   GiaNhap, SoLuong, SoLuongBanRa)
                 VALUES (@ID_Xe, @BienSo, @ID_Loai, @MaNCC, @NgayMua, @GiaMua, 
                         @NgayDangKy, @HetHanDangKy, @HetHanBaoHiem, @KmDaChay, 
-                        @ThongTinXang, @AnhXeXeBan, @TrangThai)";
+                        @ThongTinXang, @AnhXe, @TrangThai, @MucDichSuDung,
+                        @GiaNhap, @SoLuong, @SoLuongBanRa)";
 
             SqlParameter[] parameters = {
                 new SqlParameter("@ID_Xe", xe.ID_Xe),
@@ -159,8 +181,12 @@ namespace DAL
                 new SqlParameter("@HetHanBaoHiem", (object)xe.HetHanBaoHiem ?? DBNull.Value),
                 new SqlParameter("@KmDaChay", (object)xe.KmDaChay ?? DBNull.Value),
                 new SqlParameter("@ThongTinXang", (object)xe.ThongTinXang ?? DBNull.Value),
-                new SqlParameter("@AnhXeXeBan", (object)xe.AnhXeXeBan ?? DBNull.Value),
-                new SqlParameter("@TrangThai", xe.TrangThai)
+                new SqlParameter("@AnhXe", (object)xe.AnhXe ?? DBNull.Value),
+                new SqlParameter("@TrangThai", xe.TrangThai),
+                new SqlParameter("@MucDichSuDung", (object)xe.MucDichSuDung ?? DBNull.Value),
+                new SqlParameter("@GiaNhap", (object)xe.GiaNhap ?? DBNull.Value),
+                new SqlParameter("@SoLuong", (object)xe.SoLuong ?? 1), // Mặc định = 1
+                new SqlParameter("@SoLuongBanRa", (object)xe.SoLuongBanRa ?? 0) // Mặc định = 0
             };
 
             int result = DataProvider.ExecuteNonQuery(query, parameters);
@@ -182,8 +208,12 @@ namespace DAL
                     HetHanBaoHiem = @HetHanBaoHiem,
                     KmDaChay = @KmDaChay,
                     ThongTinXang = @ThongTinXang,
-                    AnhXeXeBan = @AnhXeXeBan,
-                    TrangThai = @TrangThai
+                    AnhXe = @AnhXe,
+                    TrangThai = @TrangThai,
+                    MucDichSuDung = @MucDichSuDung,
+                    GiaNhap = @GiaNhap,
+                    SoLuong = @SoLuong,
+                    SoLuongBanRa = @SoLuongBanRa
                 WHERE ID_Xe = @ID_Xe";
 
             SqlParameter[] parameters = {
@@ -198,8 +228,12 @@ namespace DAL
                 new SqlParameter("@HetHanBaoHiem", (object)xe.HetHanBaoHiem ?? DBNull.Value),
                 new SqlParameter("@KmDaChay", (object)xe.KmDaChay ?? DBNull.Value),
                 new SqlParameter("@ThongTinXang", (object)xe.ThongTinXang ?? DBNull.Value),
-                new SqlParameter("@AnhXeXeBan", (object)xe.AnhXeXeBan ?? DBNull.Value),
-                new SqlParameter("@TrangThai", xe.TrangThai)
+                new SqlParameter("@AnhXe", (object)xe.AnhXe ?? DBNull.Value),
+                new SqlParameter("@TrangThai", xe.TrangThai),
+                new SqlParameter("@MucDichSuDung", (object)xe.MucDichSuDung ?? DBNull.Value),
+                new SqlParameter("@GiaNhap", (object)xe.GiaNhap ?? DBNull.Value),
+                new SqlParameter("@SoLuong", (object)xe.SoLuong ?? DBNull.Value),
+                new SqlParameter("@SoLuongBanRa", (object)xe.SoLuongBanRa ?? DBNull.Value)
             };
 
             int result = DataProvider.ExecuteNonQuery(query, parameters);

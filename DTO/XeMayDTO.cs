@@ -19,8 +19,14 @@ namespace DTO
         public DateTime? HetHanBaoHiem { get; set; }
         public int? KmDaChay { get; set; }
         public string ThongTinXang { get; set; }
-        public string AnhXeXeBan { get; set; }
+        public byte[] AnhXe { get; set; }
         public string TrangThai { get; set; }
+        public string MucDichSuDung { get; set; } // "Cho thuê" hoặc "Bán"
+        
+        // Quản lý kho và giá
+        public decimal? GiaNhap { get; set; }      // Giá vốn nhập về
+        public int? SoLuong { get; set; }          // Số lượng tồn kho
+        public int? SoLuongBanRa { get; set; }     // Thống kê đã bán
 
         // Thông tin JOIN từ các bảng khác
         public string TenHang { get; set; }

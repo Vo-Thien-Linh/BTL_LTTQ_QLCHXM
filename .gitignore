@@ -74,9 +74,6 @@ ScaffoldingReadMe.txt
 **/obj/**/*.resx
 **/bin/**/*.resx
 
-# BỔ SUNG MỚI (dành cho project WinForms C# của chúng ta)
-# Ignore config files với sensitive info (connection strings)
-app.config
 # Test results (nếu có unit tests sau này)
 TestResults/
 # IDE khác (VS Code, IntelliJ) - an toàn cho team
