@@ -185,5 +185,10 @@ namespace UI.FormHandleUI
                 dtpNgaySinh.Value = DateTime.Now;
             }
         }
+
+        private void panelMain_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

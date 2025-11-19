@@ -45,9 +45,17 @@ namespace BLL
                 return false;
             }
 
+            // ✅ KIỂM TRA TRÙNG TRONG BẢNG KHÁCH HÀNG
             if (!string.IsNullOrEmpty(kh.Sdt) && khachHangDAL.CheckSdtExists(kh.Sdt))
             {
-                errorMessage = "Số điện thoại đã được sử dụng!";
+                errorMessage = "Số điện thoại đã được sử dụng bởi khách hàng khác!";
+                return false;
+            }
+
+            // ✅ KIỂM TRA TRÙNG VỚI BẢNG NHÂN VIÊN (MỚI THÊM)
+            if (!string.IsNullOrEmpty(kh.Sdt) && khachHangDAL.CheckSdtExistsInNhanVien(kh.Sdt))
+            {
+                errorMessage = "Số điện thoại đã được sử dụng bởi nhân viên trong hệ thống!";
                 return false;
             }
 
@@ -69,9 +77,17 @@ namespace BLL
                 return false;
             }
 
+            // ✅ KIỂM TRA TRÙNG TRONG BẢNG KHÁCH HÀNG
             if (!string.IsNullOrEmpty(kh.Sdt) && khachHangDAL.CheckSdtExists(kh.Sdt, kh.MaKH))
             {
                 errorMessage = "Số điện thoại đã được sử dụng bởi khách hàng khác!";
+                return false;
+            }
+
+            // ✅ KIỂM TRA TRÙNG VỚI BẢNG NHÂN VIÊN (MỚI THÊM)
+            if (!string.IsNullOrEmpty(kh.Sdt) && khachHangDAL.CheckSdtExistsInNhanVien(kh.Sdt))
+            {
+                errorMessage = "Số điện thoại đã được sử dụng bởi nhân viên trong hệ thống!";
                 return false;
             }
 
