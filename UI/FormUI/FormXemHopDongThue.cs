@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using BLL;
 using DTO;
+using UI.FormHandleUI; 
 
 namespace UI.FormUI
 {
@@ -177,18 +178,18 @@ namespace UI.FormUI
 
         private void SetButtonStyle(Button btn, bool enabled)
         {
-            if (enabled)
-            {
-                btn.Cursor = Cursors.Hand;
-                btn.ForeColor = Color.White;
-            }
-            else
-            {
-                btn.BackColor = Color.FromArgb(189, 189, 189);
-                btn.Cursor = Cursors.No;
-                btn.ForeColor = Color.FromArgb(117, 117, 117);
-            }
+        if (enabled)
+        {
+            btn.Cursor = Cursors.Hand;
+            btn.ForeColor = Color.White;
         }
+        else
+        {
+            btn.BackColor = Color.FromArgb(189, 189, 189);
+            btn.Cursor = Cursors.No;
+            btn.ForeColor = Color.FromArgb(117, 117, 117);
+        }
+    }
 
         private void btnXacNhanThanhToan_Click(object sender, EventArgs e)
         {
@@ -241,72 +242,38 @@ namespace UI.FormUI
 
         private void btnGiaoXe_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show(
-                "Xac nhan giao xe cho khach hang?\n\nSau khi giao, trang thai xe se chuyen thanh 'Dang thue'.",
-                "Xac nhan giao xe",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
+            // ✅ Ensure FormGiaoXe is defined in UI.FormHandleUI or the correct namespace
+            using (FormGiaoXe formGiaoXe = new FormGiaoXe())
             {
-                try
-                {
-                    string errorMessage;
-                    bool success = giaoDichThueBLL.XacNhanGiaoXe(
-                        maGDThue,
-                        maNV,
-                        out errorMessage);
+                if (formGiaoXe.ShowDialog() != DialogResult.OK)
+                    return;
 
-                    if (success)
-                    {
-                        MessageBox.Show("Giao xe thanh cong!", "Thanh cong",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var result = MessageBox.Show(
+                    $"Xac nhan giao xe cho khach hang?\n\nKm bat dau: {formGiaoXe.KmBatDau}\n" +
+                    "Sau khi giao, trang thai xe se chuyen thanh 'Dang thue'.",
+                    "Xac nhan giao xe",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
 
-                        LoadData();
-                        ConfigureButtons();
-                    }
-                    else
-                    {
-                        MessageBox.Show(errorMessage, "Loi",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Loi: " + ex.Message, "Loi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void btnTraXe_Click(object sender, EventArgs e)
-        {
-            using (FormTraXe formTraXe = new FormTraXe(dataGiaoDich))
-            {
-                if (formTraXe.ShowDialog() == DialogResult.OK)
+                if (result == DialogResult.Yes)
                 {
                     try
                     {
                         string errorMessage;
-                        bool success = giaoDichThueBLL.XacNhanTraXe(
+                        bool success = giaoDichThueBLL.XacNhanGiaoXe(
                             maGDThue,
                             maNV,
-                            formTraXe.TinhTrangXe,
-                            formTraXe.ChiPhiPhatSinh,
-                            formTraXe.GhiChu,
+                            formGiaoXe.KmBatDau,
+                            formGiaoXe.GhiChu,
                             out errorMessage);
 
                         if (success)
                         {
-                            MessageBox.Show(
-                                $"Tra xe thanh cong!\n\n" +
-                                $"Tien hoan coc: {formTraXe.TienHoanCoc:N0} VND",
-                                "Thanh cong",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                            MessageBox.Show("Giao xe thanh cong!", "Thanh cong",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            this.DialogResult = DialogResult.OK;
-                            this.Close();
+                            LoadData();
+                            ConfigureButtons();
                         }
                         else
                         {
@@ -323,242 +290,62 @@ namespace UI.FormUI
             }
         }
 
+        private void btnTraXe_Click(object sender, EventArgs e)
+{
+    using (FormTraXe formTraXe = new FormTraXe(dataGiaoDich))
+    {
+        if (formTraXe.ShowDialog() == DialogResult.OK)
+        {
+            try
+            {
+                string errorMessage;
+                // You need to provide values for kmKetThuc, isTraSom, soNgayTraSom
+                // Example placeholders:
+                int kmKetThuc = 0; // TODO: Get actual value from formTraXe or user input
+                bool isTraSom = false; // TODO: Determine if early return
+                int soNgayTraSom = 0; // TODO: Calculate if early return
+
+                bool success = giaoDichThueBLL.XacNhanTraXe(
+                    maGDThue,
+                    maNV,
+                    formTraXe.TinhTrangXe,
+                    formTraXe.ChiPhiPhatSinh,
+                    kmKetThuc,
+                    isTraSom,
+                    soNgayTraSom,
+                    formTraXe.GhiChu,
+                    out errorMessage);
+
+                if (success)
+                {
+                    MessageBox.Show(
+                        $"Tra xe thanh cong!\n\n" +
+                        $"Tien hoan coc: {formTraXe.TienHoanCoc:N0} VND",
+                        "Thanh cong",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(errorMessage, "Loi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Loi: " + ex.Message, "Loi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-    }
-
-    // ===== FORM PHỤ: FormTraXe - Nhập thông tin khi trả xe =====
-    public class FormTraXe : Form
-    {
-        private ComboBox cboTinhTrang;
-        private NumericUpDown nudChiPhiPhatSinh;
-        private TextBox txtGhiChu;
-        private Label lblTienPhat;
-        private Label lblTienHoanCoc;
-        private Button btnXacNhan;
-        private Button btnHuy;
-
-        private DataRow dataGiaoDich;
-        private decimal soTienCoc;
-        private decimal giaThueNgay;
-        private DateTime ngayKetThuc;
-
-        public string TinhTrangXe { get; private set; }
-        public decimal ChiPhiPhatSinh { get; private set; }
-        public string GhiChu { get; private set; }
-        public decimal TienHoanCoc { get; private set; }
-
-        public FormTraXe(DataRow data)
-        {
-            this.dataGiaoDich = data;
-            this.soTienCoc = data["SoTienCoc"] != DBNull.Value
-                ? Convert.ToDecimal(data["SoTienCoc"]) : 0;
-            this.giaThueNgay = Convert.ToDecimal(data["GiaThueNgay"]);
-            this.ngayKetThuc = Convert.ToDateTime(data["NgayKetThuc"]);
-
-            InitializeComponents();
-            TinhToan();
-        }
-
-        private void InitializeComponents()
-        {
-            this.Text = "Xac nhan tra xe";
-            this.Size = new Size(500, 450);
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-
-            int yPos = 20;
-
-            // Title
-            Label lblTitle = new Label
-            {
-                Text = "THONG TIN TRA XE",
-                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(33, 150, 243),
-                Location = new Point(20, yPos),
-                AutoSize = true
-            };
-            this.Controls.Add(lblTitle);
-            yPos += 40;
-
-            // Tình trạng xe
-            Label lbl1 = new Label
-            {
-                Text = "Tinh trang xe:",
-                Location = new Point(20, yPos),
-                Width = 150,
-                Font = new Font("Segoe UI", 10F)
-            };
-            this.Controls.Add(lbl1);
-
-            cboTinhTrang = new ComboBox
-            {
-                Location = new Point(180, yPos - 3),
-                Width = 280,
-                DropDownStyle = ComboBoxStyle.DropDownList,
-                Font = new Font("Segoe UI", 10F)
-            };
-            cboTinhTrang.Items.AddRange(new object[] { "Tot", "Tray xuoc nhe", "Hu hong" });
-            cboTinhTrang.SelectedIndex = 0;
-            this.Controls.Add(cboTinhTrang);
-            yPos += 40;
-
-            // Chi phí phát sinh
-            Label lbl2 = new Label
-            {
-                Text = "Chi phi phat sinh:",
-                Location = new Point(20, yPos),
-                Width = 150,
-                Font = new Font("Segoe UI", 10F)
-            };
-            this.Controls.Add(lbl2);
-
-            nudChiPhiPhatSinh = new NumericUpDown
-            {
-                Location = new Point(180, yPos - 3),
-                Width = 280,
-                Maximum = 100000000,
-                Minimum = 0,
-                Value = 0,
-                ThousandsSeparator = true,
-                Font = new Font("Segoe UI", 10F)
-            };
-            nudChiPhiPhatSinh.ValueChanged += (s, e) => TinhToan();
-            this.Controls.Add(nudChiPhiPhatSinh);
-            yPos += 40;
-
-            // Tiền phạt
-            Label lbl3 = new Label
-            {
-                Text = "Tien phat (qua han):",
-                Location = new Point(20, yPos),
-                Width = 150,
-                Font = new Font("Segoe UI", 10F)
-            };
-            this.Controls.Add(lbl3);
-
-            lblTienPhat = new Label
-            {
-                Location = new Point(180, yPos),
-                Width = 280,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(244, 67, 54),
-                Text = "0 VND"
-            };
-            this.Controls.Add(lblTienPhat);
-            yPos += 40;
-
-            // Tiền hoàn cọc
-            Label lbl4 = new Label
-            {
-                Text = "Tien hoan coc:",
-                Location = new Point(20, yPos),
-                Width = 150,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold)
-            };
-            this.Controls.Add(lbl4);
-
-            lblTienHoanCoc = new Label
-            {
-                Location = new Point(180, yPos),
-                Width = 280,
-                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(76, 175, 80),
-                Text = "0 VND"
-            };
-            this.Controls.Add(lblTienHoanCoc);
-            yPos += 50;
-
-            // Ghi chú
-            Label lbl5 = new Label
-            {
-                Text = "Ghi chu:",
-                Location = new Point(20, yPos),
-                Width = 150,
-                Font = new Font("Segoe UI", 10F)
-            };
-            this.Controls.Add(lbl5);
-
-            txtGhiChu = new TextBox
-            {
-                Location = new Point(180, yPos - 3),
-                Width = 280,
-                Height = 80,
-                Multiline = true,
-                Font = new Font("Segoe UI", 10F)
-            };
-            this.Controls.Add(txtGhiChu);
-            yPos += 100;
-
-            // Buttons
-            btnXacNhan = new Button
-            {
-                Text = "XAC NHAN",
-                Location = new Point(180, yPos),
-                Width = 130,
-                Height = 40,
-                BackColor = Color.FromArgb(76, 175, 80),
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
-            };
-            btnXacNhan.FlatAppearance.BorderSize = 0;
-            btnXacNhan.Click += BtnXacNhan_Click;
-            this.Controls.Add(btnXacNhan);
-
-            btnHuy = new Button
-            {
-                Text = "HUY",
-                Location = new Point(330, yPos),
-                Width = 130,
-                Height = 40,
-                BackColor = Color.FromArgb(158, 158, 158),
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
-            };
-            btnHuy.FlatAppearance.BorderSize = 0;
-            btnHuy.Click += (s, e) => this.DialogResult = DialogResult.Cancel;
-            this.Controls.Add(btnHuy);
-        }
-
-        private void TinhToan()
-        {
-            GiaoDichThueBLL bll = new GiaoDichThueBLL();
-
-            // Tính tiền phạt
-            decimal tienPhat = bll.TinhPhiPhat(ngayKetThuc, giaThueNgay);
-            lblTienPhat.Text = $"{tienPhat:N0} VND";
-
-            // Tính tiền hoàn cọc
-            decimal chiPhiPhatSinh = nudChiPhiPhatSinh.Value;
-            TienHoanCoc = bll.TinhTienHoanCoc(soTienCoc, chiPhiPhatSinh, tienPhat);
-            lblTienHoanCoc.Text = $"{TienHoanCoc:N0} VND";
-
-            if (TienHoanCoc < 0)
-            {
-                lblTienHoanCoc.ForeColor = Color.FromArgb(244, 67, 54);
-                lblTienHoanCoc.Text += " (Khach phai tra them)";
-            }
-            else
-            {
-                lblTienHoanCoc.ForeColor = Color.FromArgb(76, 175, 80);
-            }
-        }
-
-        private void BtnXacNhan_Click(object sender, EventArgs e)
-        {
-            TinhTrangXe = cboTinhTrang.Text;
-            ChiPhiPhatSinh = nudChiPhiPhatSinh.Value;
-            GhiChu = txtGhiChu.Text.Trim();
-
-            this.DialogResult = DialogResult.OK;
         }
     }
 }

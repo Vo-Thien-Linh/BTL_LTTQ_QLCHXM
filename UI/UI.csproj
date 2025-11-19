@@ -68,6 +68,9 @@
     <Compile Include="FormHandleUI\FormDienMaQuenMK.Designer.cs">
       <DependentUpon>FormDienMaQuenMK.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormHandleUI\FormGiaoXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormHandleUI\FormQuanLyKhachHang.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,11 +107,20 @@
     <Compile Include="FormHandleUI\FormThemXe.Designer.cs">
       <DependentUpon>FormThemXe.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormHandleUI\FormTraXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormUI\FormDuyetDonHang.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormUI\FormDuyetDonHang.Designer.cs">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormDuyetDonThue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormDuyetDonThue.Designer.cs">
+      <DependentUpon>FormDuyetDonThue.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormKhachHang.cs">
       <SubType>Form</SubType>
@@ -169,6 +181,12 @@
     </Compile>
     <Compile Include="FormUI\TestThuVien.Designer.cs">
       <DependentUpon>TestThuVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewDuyetDonThue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewDuyetDonThue.Designer.cs">
+      <DependentUpon>ViewDuyetDonThue.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -300,6 +318,9 @@
     <EmbeddedResource Include="FormUI\FormDuyetDonHang.resx">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormDuyetDonThue.resx">
+      <DependentUpon>FormDuyetDonThue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormKhachHang.resx">
       <DependentUpon>FormKhachHang.cs</DependentUpon>
     </EmbeddedResource>
@@ -320,6 +341,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\TestThuVien.resx">
       <DependentUpon>TestThuVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewDuyetDonThue.resx">
+      <DependentUpon>ViewDuyetDonThue.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
