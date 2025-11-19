@@ -17,6 +17,7 @@ namespace BTL_LTTQ_QLCHXM
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new LoginForm());
 
+            //Application.Run(new MainForm());
             //Application.Run(new FormTestViewXe());
         }
 

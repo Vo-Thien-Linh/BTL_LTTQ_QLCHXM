@@ -285,30 +285,139 @@ namespace DAL
             return count > 0;
         }
 
-        /// <summary>
-        /// Lấy danh sách xe có thể cho thuê (Sẵn sàng + có giá thuê)
-        /// </summary>
+        /// Lấy danh sách xe có thể cho thuê (Sẵn sàng + có giá thuê + không bị trùng lịch)
         public DataTable GetXeCoTheThue()
         {
             string query = @"
         SELECT 
             xe.ID_Xe,
-            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' (', xe.BienSo, ')') AS TenXe,
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' (', lx.NamSX, ')') AS TenXe,
             xe.BienSo,
-            tg.GiaThueNgay
-        FROM XeMay xe
-        INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-        INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-        INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-        INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-        INNER JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe
-        WHERE xe.TrangThai = N'Sẵn sàng'
-          AND tg.PhanLoai = N'Thuê'
-          AND tg.GiaThueNgay IS NOT NULL
-          AND tg.GiaThueNgay > 0
-        ORDER BY hx.TenHang, dx.TenDong";
+            hx.TenHang,
+            dx.TenDong,
+            ms.TenMau,
+            lx.NamSX,
+            dx.PhanKhoi,
+            xe.KmDaChay,
+            xe.TrangThai,
+            xe.AnhXe,
+            tg.GiaThueNgay  -- ✅ Chỉ lấy GiaThueNgay
+            FROM XeMay xe
+            INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+            INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+            INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+            INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+            INNER JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe
+            WHERE xe.TrangThai = N'Sẵn sàng'
+              AND xe.MucDichSuDung = N'Cho thuê'
+              AND tg.PhanLoai = N'Thuê'
+              AND tg.GiaThueNgay IS NOT NULL
+              AND tg.GiaThueNgay > 0
+            ORDER BY hx.TenHang, dx.TenDong, lx.NamSX DESC";
 
             return DataProvider.ExecuteQuery(query);
+        }
+
+        /// Lấy danh sách xe có thể cho thuê trong khoảng thời gian cụ thể (kiểm tra lịch trùng)
+        public DataTable GetXeCoTheThueTheoThoiGian(DateTime ngayBatDau, DateTime ngayKetThuc)
+        {
+            string query = @"
+        SELECT 
+            xe.ID_Xe,
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' (', lx.NamSX, ')') AS TenXe,
+            xe.BienSo,
+            hx.TenHang,
+            dx.TenDong,
+            ms.TenMau,
+            lx.NamSX,
+            dx.PhanKhoi,
+            xe.KmDaChay,
+            xe.TrangThai,
+            xe.AnhXe,
+            tg.GiaThueNgay  -- ✅ Chỉ lấy GiaThueNgay
+            FROM XeMay xe
+            INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+            INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+            INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+            INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+            INNER JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe
+            WHERE xe.TrangThai = N'Sẵn sàng'
+              AND xe.MucDichSuDung = N'Cho thuê'
+              AND tg.PhanLoai = N'Thuê'
+              AND tg.GiaThueNgay IS NOT NULL
+              AND tg.GiaThueNgay > 0
+              -- Kiểm tra không trùng lịch thuê
+              AND xe.ID_Xe NOT IN (
+                  SELECT DISTINCT ID_Xe
+                  FROM GiaoDichThue
+                  WHERE TrangThaiDuyet = N'Đã duyệt'
+                    AND TrangThai IN (N'Chờ giao xe', N'Đang thuê')
+                    AND (
+                        (@NgayBatDau BETWEEN NgayBatDau AND NgayKetThuc) OR
+                        (@NgayKetThuc BETWEEN NgayBatDau AND NgayKetThuc) OR
+                        (NgayBatDau BETWEEN @NgayBatDau AND @NgayKetThuc)
+                    )
+              )
+            ORDER BY hx.TenHang, dx.TenDong, lx.NamSX DESC";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+        new SqlParameter("@NgayBatDau", ngayBatDau),
+        new SqlParameter("@NgayKetThuc", ngayKetThuc)
+            };
+
+            return DataProvider.ExecuteQuery(query, parameters);
+        }
+        /// Thêm thông tin giá cho xe vào bảng ThongTinGiaXe
+        public bool InsertThongTinGiaXe(string idXe, string phanLoai, decimal? giaThueNgay = null, decimal? giaBan = null)
+        {
+            try
+            {
+                string query = @"
+            INSERT INTO ThongTinGiaXe (ID_Xe, PhanLoai, GiaThueNgay, GiaBan)
+            VALUES (@ID_Xe, @PhanLoai, @GiaThueNgay, @GiaBan)";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@ID_Xe", idXe),
+            new SqlParameter("@PhanLoai", phanLoai),
+            new SqlParameter("@GiaThueNgay", (object)giaThueNgay ?? DBNull.Value),
+            new SqlParameter("@GiaBan", (object)giaBan ?? DBNull.Value)
+                };
+
+                int result = DataProvider.ExecuteNonQuery(query, parameters);
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi InsertThongTinGiaXe: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// Kiểm tra xe đã có giá trong ThongTinGiaXe chưa
+        public bool IsGiaXeExists(string idXe, string phanLoai)
+        {
+            try
+            {
+                string query = @"
+            SELECT COUNT(*) 
+            FROM ThongTinGiaXe 
+            WHERE ID_Xe = @ID_Xe AND PhanLoai = @PhanLoai";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@ID_Xe", idXe),
+            new SqlParameter("@PhanLoai", phanLoai)
+                };
+
+                int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+                return count > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

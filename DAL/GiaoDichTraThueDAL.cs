@@ -7,16 +7,16 @@ namespace DAL
 {
     public class GiaoDichTraThueDAL
     {
-        /// <summary>
         /// Thêm giao dịch trả xe
-        /// </summary>
         public bool InsertGiaoDichTraXe(GiaoDichTraThue gdTra)
         {
             string query = @"
                 INSERT INTO GiaoDichTraThue 
-                (MaGDThue, NgayTraXe, TinhTrangXe, ChiPhiPhatSinh, GhiChu, MaTaiKhoan)
+                (MaGDThue, NgayTraXe, TinhTrangXe, ChiPhiPhatSinh, TienHoanCoc, 
+                 TienPhat, KmKetThuc, SoNgayTraSom, TienHoanTraSom, GhiChu, MaTaiKhoan)
                 VALUES 
-                (@MaGDThue, @NgayTraXe, @TinhTrangXe, @ChiPhiPhatSinh, @GhiChu, @MaTaiKhoan)";
+                (@MaGDThue, @NgayTraXe, @TinhTrangXe, @ChiPhiPhatSinh, @TienHoanCoc,
+                 @TienPhat, @KmKetThuc, @SoNgayTraSom, @TienHoanTraSom, @GhiChu, @MaTaiKhoan)";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -24,6 +24,11 @@ namespace DAL
                 new SqlParameter("@NgayTraXe", gdTra.NgayTraXe),
                 new SqlParameter("@TinhTrangXe", gdTra.TinhTrangXe),
                 new SqlParameter("@ChiPhiPhatSinh", (object)gdTra.ChiPhiPhatSinh ?? DBNull.Value),
+                new SqlParameter("@TienHoanCoc", (object)gdTra.TienHoanCoc ?? DBNull.Value),
+                new SqlParameter("@TienPhat", (object)gdTra.TienPhat ?? DBNull.Value),
+                new SqlParameter("@KmKetThuc", (object)gdTra.KmKetThuc ?? DBNull.Value),
+                new SqlParameter("@SoNgayTraSom", (object)gdTra.SoNgayTraSom ?? 0),
+                new SqlParameter("@TienHoanTraSom", (object)gdTra.TienHoanTraSom ?? 0),
                 new SqlParameter("@GhiChu", (object)gdTra.GhiChu ?? DBNull.Value),
                 new SqlParameter("@MaTaiKhoan", (object)gdTra.MaTaiKhoan ?? DBNull.Value)
             };
@@ -31,9 +36,7 @@ namespace DAL
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        /// <summary>
         /// Lấy thông tin trả xe theo mã giao dịch thuê
-        /// </summary>
         public DataTable GetByMaGDThue(int maGDThue)
         {
             string query = @"

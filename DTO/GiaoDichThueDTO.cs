@@ -22,6 +22,12 @@ namespace DTO
         public DateTime? NgayDuyet { get; set; }
         public string GhiChuDuyet { get; set; }
 
+        //  Các trường mới
+        public DateTime? NgayGiaoXeThucTe { get; set; }
+        public DateTime? NgayTraXeThucTe { get; set; }
+        public string GhiChuGiaoXe { get; set; }
+        public int? KmBatDau { get; set; }
+
         // Thông tin bổ sung
         public string TenKhachHang { get; set; }
         public string SdtKhachHang { get; set; }

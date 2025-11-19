@@ -10,35 +10,29 @@ namespace BLL
     {
         private GiaoDichThueDAL giaoDichThueDAL;
         private GiaoDichTraThueDAL giaoDichTraThueDAL;
+        private XeMayDAL xeMayDAL;
+        private HopDongThueBLL hopDongThueBLL;
 
         public GiaoDichThueBLL()
         {
             giaoDichThueDAL = new GiaoDichThueDAL();
             giaoDichTraThueDAL = new GiaoDichTraThueDAL();
+            xeMayDAL = new XeMayDAL();
+            hopDongThueBLL = new HopDongThueBLL();
         }
 
         #region Lấy dữ liệu
 
-        /// <summary>
-        /// Lấy tất cả giao dịch thuê
-        /// </summary>
         public DataTable GetAllGiaoDichThue()
         {
             return giaoDichThueDAL.GetAllGiaoDichThue();
         }
 
-        /// <summary>
-        /// Lấy giao dịch thuê theo trạng thái duyệt
-        /// </summary>
         public DataTable GetGiaoDichThueByTrangThai(string trangThaiDuyet)
         {
             return giaoDichThueDAL.GetGiaoDichThueByTrangThai(trangThaiDuyet);
         }
 
-        /// <summary>
-        /// Lấy đơn cho thuê đã duyệt (dành cho quản lý cho thuê)
-        /// Bao gồm cả tính toán số ngày quá hạn
-        /// </summary>
         public DataTable GetDonChoThue()
         {
             string query = @"
@@ -52,7 +46,7 @@ namespace BLL
                     CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
                     xe.BienSo,
                     xe.TrangThai AS TrangThaiXe,
-                    xe.AnhXeXeBan,
+                    xe.AnhXe AS AnhXeXeBan,
                     gd.NgayBatDau,
                     gd.NgayKetThuc,
                     DATEDIFF(DAY, gd.NgayBatDau, gd.NgayKetThuc) AS SoNgayThue,
@@ -64,6 +58,8 @@ namespace BLL
                     gd.SoTienCoc,
                     gd.GiayToGiuLai,
                     gd.TrangThaiDuyet,
+                    gd.NgayGiaoXeThucTe,
+                    gd.KmBatDau,
                     CASE 
                         WHEN gd.NgayKetThuc < GETDATE() AND gd.TrangThai = N'Đang thuê' 
                         THEN DATEDIFF(DAY, gd.NgayKetThuc, GETDATE())
@@ -84,8 +80,12 @@ namespace BLL
                 INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
                 LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
                 LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                WHERE gd.TrangThaiDuyet = N'Đã duyệt'
+                WHERE gd.TrangThaiDuyet IN (N'Chờ duyệt', N'Đã duyệt')
                 ORDER BY 
+                    CASE gd.TrangThaiDuyet
+                        WHEN N'Chờ duyệt' THEN 0
+                        ELSE 1
+                    END,
                     CASE 
                         WHEN gd.NgayKetThuc < GETDATE() AND gd.TrangThai = N'Đang thuê' THEN 0 
                         ELSE 1 
@@ -95,36 +95,6 @@ namespace BLL
             return DataProvider.ExecuteQuery(query);
         }
 
-        /// <summary>
-        /// Lấy đơn quá hạn (chưa trả xe)
-        /// </summary>
-        public DataTable GetDonQuaHan()
-        {
-            string query = @"
-                SELECT 
-                    gd.*,
-                    kh.HoTenKH,
-                    kh.Sdt AS SdtKhachHang,
-                    CONCAT(hx.TenHang, ' ', dx.TenDong) AS TenXe,
-                    xe.BienSo,
-                    DATEDIFF(DAY, gd.NgayKetThuc, GETDATE()) AS SoNgayQuaHan,
-                    DATEDIFF(DAY, gd.NgayKetThuc, GETDATE()) * gd.GiaThueNgay * 1.5 AS TienPhat
-                FROM GiaoDichThue gd
-                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                WHERE gd.TrangThai = N'Đang thuê'
-                  AND gd.NgayKetThuc < GETDATE()
-                ORDER BY SoNgayQuaHan DESC";
-
-            return DataProvider.ExecuteQuery(query);
-        }
-
-        /// <summary>
-        /// Lấy giao dịch thuê theo ID
-        /// </summary>
         public DataTable GetGiaoDichThueById(int maGDThue)
         {
             DataTable dt = GetAllGiaoDichThue();
@@ -133,19 +103,33 @@ namespace BLL
             return dv.ToTable();
         }
 
-        #endregion
 
-        #region Thêm/Sửa giao dịch
 
-        /// <summary>
-        /// Thêm giao dịch thuê mới
-        /// </summary>
+        /// Thêm validation đầy đủ khi tạo đơn thuê
         public bool InsertGiaoDichThue(GiaoDichThue gd, out string errorMessage)
         {
             errorMessage = "";
 
-            // Validate dữ liệu
+            //  Validate dữ liệu đầu vào
             if (!ValidateGiaoDichThue(gd, out errorMessage))
+            {
+                return false;
+            }
+
+            //  Kiểm tra trạng thái xe
+            if (!ValidateTrangThaiXe(gd.ID_Xe, out errorMessage))
+            {
+                return false;
+            }
+
+            // Kiểm tra xe có trùng lịch không
+            if (IsXeDangThue(gd.ID_Xe, gd.NgayBatDau, gd.NgayKetThuc, out errorMessage))
+            {
+                return false;
+            }
+
+            // Kiểm tra thông tin khách hàng
+            if (!ValidateKhachHang(gd.MaKH, out errorMessage))
             {
                 return false;
             }
@@ -160,14 +144,7 @@ namespace BLL
                 return false;
             }
         }
-
-        #endregion
-
-        #region Duyệt đơn thuê
-
-        /// <summary>
-        /// Duyệt đơn thuê xe
-        /// </summary>
+        ///  Duyệt đơn với validation nghiệp vụ đầy đủ
         public bool ApproveGiaoDichThue(int maGDThue, string nguoiDuyet, string ghiChu, out string errorMessage)
         {
             errorMessage = "";
@@ -195,14 +172,70 @@ namespace BLL
                     return false;
                 }
 
-                string trangThaiHienTai = rows[0]["TrangThaiDuyet"].ToString();
+                DataRow row = rows[0];
+
+                // Kiểm tra trạng thái duyệt
+                string trangThaiHienTai = row["TrangThaiDuyet"].ToString();
                 if (trangThaiHienTai != "Chờ duyệt")
                 {
                     errorMessage = $"Không thể duyệt đơn hàng có trạng thái '{trangThaiHienTai}'!";
                     return false;
                 }
 
-                return giaoDichThueDAL.ApproveGiaoDichThue(maGDThue, nguoiDuyet, ghiChu);
+                //  Kiểm tra ngày bắt đầu đã quá hạn chưa
+                DateTime ngayBatDau = Convert.ToDateTime(row["NgayBatDau"]);
+                DateTime ngayKetThuc = Convert.ToDateTime(row["NgayKetThuc"]);
+                DateTime ngayHienTai = DateTime.Now.Date;
+
+                if (ngayKetThuc.Date < ngayHienTai)
+                {
+                    errorMessage = $"Không thể duyệt đơn đã quá hạn!\n" +
+                                 $"Ngày kết thúc: {ngayKetThuc:dd/MM/yyyy}\n" +
+                                 $"Ngày hiện tại: {ngayHienTai:dd/MM/yyyy}";
+                    return false;
+                }
+
+                //  Cảnh báo nếu ngày bắt đầu đã qua
+                if (ngayBatDau.Date < ngayHienTai)
+                {
+                    ghiChu += $" [CẢNH BÁO: Ngày bắt đầu đã qua ({ngayBatDau:dd/MM/yyyy})]";
+                }
+
+                //  Kiểm tra lại xe có khả dụng không
+                string idXe = row["ID_Xe"].ToString();
+                if (IsXeDangThue(idXe, ngayBatDau, ngayKetThuc, out string xeError))
+                {
+                    errorMessage = xeError;
+                    return false;
+                }
+
+                //  Kiểm tra trạng thái xe
+                if (!ValidateTrangThaiXe(idXe, out errorMessage))
+                {
+                    return false;
+                }
+
+                //  Duyệt đơn
+                bool approveSuccess = giaoDichThueDAL.ApproveGiaoDichThue(maGDThue, nguoiDuyet, ghiChu);
+                
+                if (!approveSuccess)
+                {
+                    errorMessage = "Lỗi khi duyệt giao dịch!";
+                    return false;
+                }
+
+                // TẠO HỢP ĐỒNG SAU KHI DUYỆT THÀNH CÔNG
+                string hopDongError;
+                bool hopDongSuccess = hopDongThueBLL.TaoHopDongThue(maGDThue, nguoiDuyet, out hopDongError);
+                
+                if (!hopDongSuccess)
+                {
+                    // Cảnh báo nhưng không rollback việc duyệt
+                    System.Diagnostics.Debug.WriteLine($"Cảnh báo: Không tạo được hợp đồng - {hopDongError}");
+                    // Bạn có thể log lỗi này vào database để theo dõi
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -211,9 +244,6 @@ namespace BLL
             }
         }
 
-        /// <summary>
-        /// Từ chối đơn thuê xe
-        /// </summary>
         public bool RejectGiaoDichThue(int maGDThue, string nguoiDuyet, string lyDo, out string errorMessage)
         {
             errorMessage = "";
@@ -267,16 +297,12 @@ namespace BLL
 
         #region Quản lý cho thuê (Thanh toán, Giao xe, Trả xe)
 
-        /// <summary>
-        /// Xác nhận thanh toán
-        /// </summary>
         public bool XacNhanThanhToan(int maGDThue, string maNV, string hinhThuc, out string errorMessage)
         {
             errorMessage = "";
 
             try
             {
-                // Kiểm tra điều kiện
                 DataTable dt = GetGiaoDichThueById(maGDThue);
                 if (dt.Rows.Count == 0)
                 {
@@ -298,7 +324,6 @@ namespace BLL
                     return false;
                 }
 
-                // Cập nhật
                 string query = @"
                     UPDATE GiaoDichThue 
                     SET TrangThaiThanhToan = N'Đã thanh toán',
@@ -328,16 +353,13 @@ namespace BLL
             }
         }
 
-        /// <summary>
-        /// Xác nhận giao xe cho khách hàng
-        /// </summary>
-        public bool XacNhanGiaoXe(int maGDThue, string maNV, out string errorMessage)
+        ///  Xác nhận giao xe với validation đầy đủ
+        public bool XacNhanGiaoXe(int maGDThue, string maNV, int kmBatDau, string ghiChu, out string errorMessage)
         {
             errorMessage = "";
 
             try
             {
-                // Kiểm tra điều kiện
                 DataTable dt = GetGiaoDichThueById(maGDThue);
                 if (dt.Rows.Count == 0)
                 {
@@ -347,37 +369,78 @@ namespace BLL
 
                 DataRow row = dt.Rows[0];
 
+                // Kiểm tra thanh toán
                 if (row["TrangThaiThanhToan"].ToString() != "Đã thanh toán")
                 {
                     errorMessage = "Khách hàng chưa thanh toán!";
                     return false;
                 }
 
-                if (row["TrangThai"].ToString() == "Đang thuê")
+                //  Kiểm tra trạng thái
+                string trangThai = row["TrangThai"].ToString();
+                if (trangThai == "Đang thuê")
                 {
                     errorMessage = "Xe đã được giao!";
                     return false;
                 }
 
+                if (trangThai != "Chờ giao xe")
+                {
+                    errorMessage = $"Không thể giao xe với trạng thái '{trangThai}'!";
+                    return false;
+                }
+
+                //  Kiểm tra ngày giao xe
+                DateTime ngayBatDau = Convert.ToDateTime(row["NgayBatDau"]);
+                DateTime ngayHienTai = DateTime.Now.Date;
+
+                if (ngayHienTai < ngayBatDau.Date)
+                {
+                    errorMessage = $"Chưa đến ngày giao xe!\n" +
+                                 $"Ngày bắt đầu: {ngayBatDau:dd/MM/yyyy}\n" +
+                                 $"Ngày hiện tại: {ngayHienTai:dd/MM/yyyy}";
+                    return false;
+                }
+
+                //Cảnh báo nếu giao xe muộn
+                if (ngayHienTai > ngayBatDau.Date)
+                {
+                    int soNgayMuon = (ngayHienTai - ngayBatDau.Date).Days;
+                    ghiChu += $" [CẢNH BÁO: Giao xe muộn {soNgayMuon} ngày]";
+                }
+
+                // Validate số km
+                if (kmBatDau < 0)
+                {
+                    errorMessage = "Số km không hợp lệ!";
+                    return false;
+                }
+
+                if (kmBatDau > 999999)
+                {
+                    errorMessage = "Số km quá lớn!";
+                    return false;
+                }
+
                 string idXe = row["ID_Xe"].ToString();
 
-                // Cập nhật trạng thái giao dịch
-                string query1 = @"
-                    UPDATE GiaoDichThue 
-                    SET TrangThai = N'Đang thuê'
-                    WHERE MaGDThue = @MaGDThue";
+                // Gọi DAL để cập nhật
+                bool success = giaoDichThueDAL.XacNhanGiaoXe(maGDThue, maNV, kmBatDau, ghiChu);
 
-                SqlParameter[] params1 = { new SqlParameter("@MaGDThue", maGDThue) };
-                DataProvider.ExecuteNonQuery(query1, params1);
+                if (!success)
+                {
+                    errorMessage = "Không thể cập nhật giao dịch!";
+                    return false;
+                }
 
                 // Cập nhật trạng thái xe
-                string query2 = @"
+                string queryXe = @"
                     UPDATE XeMay 
                     SET TrangThai = N'Đang thuê'
                     WHERE ID_Xe = @ID_Xe";
 
-                SqlParameter[] params2 = { new SqlParameter("@ID_Xe", idXe) };
-                DataProvider.ExecuteNonQuery(query2, params2);
+                SqlParameter[] paramsXe = { new SqlParameter("@ID_Xe", idXe) };
+                DataProvider.ExecuteNonQuery(queryXe, paramsXe);
 
                 return true;
             }
@@ -388,17 +451,22 @@ namespace BLL
             }
         }
 
-        /// <summary>
-        /// Xác nhận trả xe từ khách hàng
-        /// </summary>
-        public bool XacNhanTraXe(int maGDThue, string maNV, string tinhTrangXe,
-            decimal chiPhiPhatSinh, string ghiChu, out string errorMessage)
+        /// Xác nhận trả xe với hỗ trợ trả sớm
+        public bool XacNhanTraXe(
+            int maGDThue,
+            string maNV,
+            string tinhTrangXe,
+            decimal chiPhiPhatSinh,
+            int kmKetThuc,
+            bool isTraSom,
+            int soNgayTraSom,
+            string ghiChu,
+            out string errorMessage)
         {
             errorMessage = "";
 
             try
             {
-                // Lấy thông tin giao dịch
                 DataTable dt = GetGiaoDichThueById(maGDThue);
                 if (dt.Rows.Count == 0)
                 {
@@ -414,6 +482,21 @@ namespace BLL
                     return false;
                 }
 
+                // Validate km
+                int kmBatDau = row["KmBatDau"] != DBNull.Value ? Convert.ToInt32(row["KmBatDau"]) : 0;
+                if (kmKetThuc < kmBatDau)
+                {
+                    errorMessage = $"Số km kết thúc ({kmKetThuc:N0}) không thể nhỏ hơn km bắt đầu ({kmBatDau:N0})!";
+                    return false;
+                }
+
+                int kmChay = kmKetThuc - kmBatDau;
+                if (kmChay > 10000)
+                {
+                    // Cảnh báo nhưng vẫn cho phép
+                    ghiChu += $" [CẢNH BÁO: Xe chạy {kmChay:N0}km]";
+                }
+
                 string idXe = row["ID_Xe"].ToString();
                 DateTime ngayKetThuc = Convert.ToDateTime(row["NgayKetThuc"]);
                 decimal giaThueNgay = Convert.ToDecimal(row["GiaThueNgay"]);
@@ -421,17 +504,17 @@ namespace BLL
                     ? Convert.ToDecimal(row["SoTienCoc"]) : 0;
 
                 // Tính phí phạt nếu trả muộn
-                int soNgayQuaHan = (DateTime.Now.Date - ngayKetThuc.Date).Days;
-                decimal tienPhat = 0;
+                decimal tienPhat = TinhPhiPhat(ngayKetThuc, giaThueNgay);
 
-                if (soNgayQuaHan > 0)
+                // Tính tiền hoàn lại nếu trả sớm
+                decimal tienHoanTraSom = 0;
+                if (isTraSom && soNgayTraSom > 0)
                 {
-                    tienPhat = TinhPhiPhat(ngayKetThuc, giaThueNgay);
+                    tienHoanTraSom = TinhTienHoanTraSom(soNgayTraSom, giaThueNgay);
                 }
 
                 // Tính tiền hoàn cọc
-                decimal tienHoanCoc = soTienCoc - chiPhiPhatSinh - tienPhat;
-                if (tienHoanCoc < 0) tienHoanCoc = 0;
+                decimal tienHoanCoc = TinhTienHoanCoc(soTienCoc, chiPhiPhatSinh, tienPhat, tienHoanTraSom);
 
                 // Tạo giao dịch trả xe
                 GiaoDichTraThue gdTra = new GiaoDichTraThue
@@ -442,6 +525,9 @@ namespace BLL
                     ChiPhiPhatSinh = chiPhiPhatSinh,
                     TienHoanCoc = tienHoanCoc,
                     TienPhat = tienPhat,
+                    KmKetThuc = kmKetThuc,
+                    SoNgayTraSom = soNgayTraSom,
+                    TienHoanTraSom = tienHoanTraSom,
                     GhiChu = ghiChu,
                     MaTaiKhoan = maNV
                 };
@@ -456,19 +542,28 @@ namespace BLL
                 // Cập nhật trạng thái giao dịch thuê
                 string query1 = @"
                     UPDATE GiaoDichThue 
-                    SET TrangThai = N'Đã thuê'
+                    SET TrangThai = N'Đã thuê',
+                        NgayTraXeThucTe = @NgayTra
                     WHERE MaGDThue = @MaGDThue";
 
-                SqlParameter[] params1 = { new SqlParameter("@MaGDThue", maGDThue) };
+                SqlParameter[] params1 =
+                {
+                    new SqlParameter("@MaGDThue", maGDThue),
+                    new SqlParameter("@NgayTra", DateTime.Now)
+                };
                 DataProvider.ExecuteNonQuery(query1, params1);
 
                 // Cập nhật trạng thái xe về sẵn sàng
                 string query2 = @"
                     UPDATE XeMay 
-                    SET TrangThai = N'Sẵn sàng'
+                    SET TrangThai = N'Sẵn sàng',
+                        KmDaChay = @KmKetThuc
                     WHERE ID_Xe = @ID_Xe";
 
-                SqlParameter[] params2 = { new SqlParameter("@ID_Xe", idXe) };
+                SqlParameter[] params2 = {
+                    new SqlParameter("@ID_Xe", idXe),
+                    new SqlParameter("@KmKetThuc", kmKetThuc)
+                };
                 DataProvider.ExecuteNonQuery(query2, params2);
 
                 return true;
@@ -484,9 +579,6 @@ namespace BLL
 
         #region Tìm kiếm và lọc
 
-        /// <summary>
-        /// Tìm kiếm giao dịch thuê
-        /// </summary>
         public DataTable SearchGiaoDichThue(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))
@@ -497,9 +589,6 @@ namespace BLL
             return giaoDichThueDAL.SearchGiaoDichThue(keyword);
         }
 
-        /// <summary>
-        /// Tìm kiếm trong quản lý cho thuê (chỉ đơn đã duyệt)
-        /// </summary>
         public DataTable SearchDonChoThue(string keyword)
         {
             DataTable dt = GetDonChoThue();
@@ -520,9 +609,6 @@ namespace BLL
             return dv.ToTable();
         }
 
-        /// <summary>
-        /// Lọc đơn cho thuê theo trạng thái
-        /// </summary>
         public DataTable FilterDonChoThueByStatus(string trangThai)
         {
             DataTable dt = GetDonChoThue();
@@ -541,9 +627,6 @@ namespace BLL
 
         #region Tính toán
 
-        /// <summary>
-        /// Tính toán tổng giá thuê
-        /// </summary>
         public decimal TinhTongGiaThue(DateTime ngayBatDau, DateTime ngayKetThuc, decimal giaThueNgay)
         {
             int soNgayThue = (ngayKetThuc - ngayBatDau).Days;
@@ -555,110 +638,34 @@ namespace BLL
             return giaThueNgay * soNgayThue;
         }
 
-        /// <summary>
-        /// Tính phí phạt trả muộn (150% giá thuê/ngày)
-        /// </summary>
         public decimal TinhPhiPhat(DateTime ngayKetThuc, decimal giaThueNgay)
         {
             int soNgayQuaHan = (DateTime.Now.Date - ngayKetThuc.Date).Days;
             if (soNgayQuaHan <= 0) return 0;
 
-            return soNgayQuaHan * giaThueNgay * 1.5m; // Phạt 150%
+            return soNgayQuaHan * giaThueNgay * 1.5m;
         }
 
-        /// <summary>
-        /// Tính số ngày quá hạn
-        /// </summary>
+        public decimal TinhTienHoanTraSom(int soNgayTraSom, decimal giaThueNgay)
+        {
+            if (soNgayTraSom <= 0) return 0;
+
+            return soNgayTraSom * giaThueNgay * 0.7m;
+        }
+
         public int TinhSoNgayQuaHan(DateTime ngayKetThuc)
         {
             int soNgay = (DateTime.Now.Date - ngayKetThuc.Date).Days;
             return soNgay > 0 ? soNgay : 0;
         }
 
-        /// <summary>
-        /// Tính tiền hoàn cọc
-        /// </summary>
-        public decimal TinhTienHoanCoc(decimal soTienCoc, decimal chiPhiPhatSinh, decimal tienPhat)
+        public decimal TinhTienHoanCoc(decimal soTienCoc, decimal chiPhiPhatSinh, decimal tienPhat, decimal tienHoanTraSom = 0)
         {
-            decimal tienHoan = soTienCoc - chiPhiPhatSinh - tienPhat;
-            return tienHoan > 0 ? tienHoan : 0;
+            decimal tienHoan = soTienCoc - chiPhiPhatSinh - tienPhat + tienHoanTraSom;
+            return tienHoan;
         }
 
-        #endregion
-
-        #region Validation
-
-        /// <summary>
-        /// Validate dữ liệu giao dịch thuê
-        /// </summary>
-        private bool ValidateGiaoDichThue(GiaoDichThue gd, out string errorMessage)
-        {
-            errorMessage = "";
-
-            if (string.IsNullOrWhiteSpace(gd.MaKH))
-            {
-                errorMessage = "Mã khách hàng không được để trống!";
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(gd.ID_Xe))
-            {
-                errorMessage = "Mã xe không được để trống!";
-                return false;
-            }
-
-            if (gd.NgayBatDau >= gd.NgayKetThuc)
-            {
-                errorMessage = "Ngày kết thúc phải lớn hơn ngày bắt đầu!";
-                return false;
-            }
-
-            if (gd.NgayBatDau < DateTime.Now.Date)
-            {
-                errorMessage = "Ngày bắt đầu không được nhỏ hơn ngày hiện tại!";
-                return false;
-            }
-
-            if (gd.GiaThueNgay <= 0)
-            {
-                errorMessage = "Giá thuê ngày phải lớn hơn 0!";
-                return false;
-            }
-
-            if (gd.TongGia <= 0)
-            {
-                errorMessage = "Tổng giá phải lớn hơn 0!";
-                return false;
-            }
-
-            // Validate số ngày thuê hợp lý
-            int soNgayThue = (gd.NgayKetThuc - gd.NgayBatDau).Days;
-            if (soNgayThue <= 0)
-            {
-                errorMessage = "Số ngày thuê phải lớn hơn 0!";
-                return false;
-            }
-
-            if (soNgayThue > 365)
-            {
-                errorMessage = "Số ngày thuê không được vượt quá 365 ngày!";
-                return false;
-            }
-
-            // Validate tổng giá
-            decimal tongGiaExpected = gd.GiaThueNgay * soNgayThue;
-            if (Math.Abs(gd.TongGia - tongGiaExpected) > 1) // Cho phép sai số 1đ
-            {
-                errorMessage = $"Tổng giá không khớp! Tính được: {tongGiaExpected:N0}đ";
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Kiểm tra xe có đang được thuê không
-        /// </summary>
+        ///  Kiểm tra xe có đang được thuê trong khoảng thời gian không
         public bool IsXeDangThue(string idXe, DateTime ngayBatDau, DateTime ngayKetThuc, out string errorMessage)
         {
             errorMessage = "";
@@ -669,7 +676,8 @@ namespace BLL
                     SELECT COUNT(*) 
                     FROM GiaoDichThue 
                     WHERE ID_Xe = @ID_Xe 
-                      AND TrangThai IN (N'Đang thuê', N'Chờ xác nhận')
+                      AND TrangThaiDuyet = N'Đã duyệt'
+                      AND TrangThai IN (N'Chờ giao xe', N'Đang thuê')
                       AND (
                           (@NgayBatDau BETWEEN NgayBatDau AND NgayKetThuc) OR
                           (@NgayKetThuc BETWEEN NgayBatDau AND NgayKetThuc) OR
@@ -696,17 +704,187 @@ namespace BLL
             catch (Exception ex)
             {
                 errorMessage = "Lỗi kiểm tra: " + ex.Message;
-                return true; // Trả về true để không cho thuê khi có lỗi
+                return true;
             }
+        }
+
+        /// Kiểm tra trạng thái xe
+        private bool ValidateTrangThaiXe(string idXe, out string errorMessage)
+        {
+            errorMessage = "";
+
+            try
+            {
+                string query = "SELECT TrangThai FROM XeMay WHERE ID_Xe = @ID_Xe";
+                SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+
+                object result = DataProvider.ExecuteScalar(query, parameters);
+
+                if (result == null)
+                {
+                    errorMessage = "Không tìm thấy xe!";
+                    return false;
+                }
+
+                string trangThai = result.ToString();
+
+                if (trangThai != "Sẵn sàng")
+                {
+                    errorMessage = $"Xe đang ở trạng thái '{trangThai}', không thể thuê!";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi kiểm tra trạng thái xe: " + ex.Message;
+                return false;
+            }
+        }
+
+        /// Kiểm tra thông tin khách hàng
+        private bool ValidateKhachHang(string maKH, out string errorMessage)
+        {
+            errorMessage = "";
+
+            try
+            {
+                string query = "SELECT COUNT(*) FROM KhachHang WHERE MaKH = @MaKH";
+                SqlParameter[] parameters = { new SqlParameter("@MaKH", maKH) };
+
+                int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+
+                if (count == 0)
+                {
+                    errorMessage = "Không tìm thấy khách hàng!";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi kiểm tra khách hàng: " + ex.Message;
+                return false;
+            }
+        }
+
+        ///  Validate đầy đủ khi tạo đơn thuê
+        private bool ValidateGiaoDichThue(GiaoDichThue gd, out string errorMessage)
+        {
+            errorMessage = "";
+
+            // 1. Kiểm tra mã khách hàng
+            if (string.IsNullOrWhiteSpace(gd.MaKH))
+            {
+                errorMessage = "Mã khách hàng không được để trống!";
+                return false;
+            }
+
+            //  Kiểm tra mã xe
+            if (string.IsNullOrWhiteSpace(gd.ID_Xe))
+            {
+                errorMessage = "Mã xe không được để trống!";
+                return false;
+            }
+
+            // Kiểm tra ngày bắt đầu phải >= ngày hiện tại
+            if (gd.NgayBatDau.Date < DateTime.Now.Date)
+            {
+                errorMessage = $"Ngày bắt đầu không được nhỏ hơn ngày hiện tại!\n" +
+                             $"Ngày bắt đầu: {gd.NgayBatDau:dd/MM/yyyy}\n" +
+                             $"Ngày hiện tại: {DateTime.Now:dd/MM/yyyy}";
+                return false;
+            }
+
+            //  Kiểm tra ngày bắt đầu không quá xa (3 tháng)
+            DateTime ngayToiDa = DateTime.Now.Date.AddMonths(3);
+            if (gd.NgayBatDau.Date > ngayToiDa)
+            {
+                errorMessage = $"Ngày bắt đầu không được vượt quá 3 tháng kể từ hôm nay!\n" +
+                             $"Ngày bắt đầu: {gd.NgayBatDau:dd/MM/yyyy}\n" +
+                             $"Ngày tối đa: {ngayToiDa:dd/MM/yyyy}";
+                return false;
+            }
+
+            //  Kiểm tra ngày kết thúc > ngày bắt đầu
+            if (gd.NgayKetThuc <= gd.NgayBatDau)
+            {
+                errorMessage = "Ngày kết thúc phải lớn hơn ngày bắt đầu!";
+                return false;
+            }
+
+            // Kiểm tra số ngày thuê
+            int soNgayThue = (gd.NgayKetThuc - gd.NgayBatDau).Days;
+
+            if (soNgayThue <= 0)
+            {
+                errorMessage = "Số ngày thuê phải lớn hơn 0!";
+                return false;
+            }
+
+            // Thời gian thuê tối thiểu 1 ngày
+            if (soNgayThue < 1)
+            {
+                errorMessage = "Thời gian thuê tối thiểu là 1 ngày!";
+                return false;
+            }
+
+            //  Kiểm tra số ngày thuê tối đa
+            if (soNgayThue > 365)
+            {
+                errorMessage = "Số ngày thuê không được vượt quá 365 ngày!";
+                return false;
+            }
+
+            //  Kiểm tra giá thuê
+            if (gd.GiaThueNgay <= 0)
+            {
+                errorMessage = "Giá thuê ngày phải lớn hơn 0!";
+                return false;
+            }
+
+            //  Kiểm tra tổng giá
+            if (gd.TongGia <= 0)
+            {
+                errorMessage = "Tổng giá phải lớn hơn 0!";
+                return false;
+            }
+
+            //  Kiểm tra tính toán tổng giá
+            decimal tongGiaExpected = gd.GiaThueNgay * soNgayThue;
+            if (Math.Abs(gd.TongGia - tongGiaExpected) > 1)
+            {
+                errorMessage = $"Tổng giá không khớp!\n" +
+                             $"Tính được: {tongGiaExpected:N0}đ\n" +
+                             $"Nhập vào: {gd.TongGia:N0}đ";
+                return false;
+            }
+
+            // Kiểm tra tiền cọc
+            if (gd.SoTienCoc.HasValue)
+            {
+                if (gd.SoTienCoc.Value < 0)
+                {
+                    errorMessage = "Tiền cọc không được âm!";
+                    return false;
+                }
+
+                if (gd.SoTienCoc.Value > gd.TongGia)
+                {
+                    errorMessage = "Tiền cọc không được lớn hơn tổng tiền thuê!";
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         #endregion
 
         #region Thống kê
 
-        /// <summary>
-        /// Lấy thống kê giao dịch thuê
-        /// </summary>
         public DataTable GetThongKeGiaoDichThue(DateTime tuNgay, DateTime denNgay)
         {
             string query = @"
@@ -733,9 +911,6 @@ namespace BLL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-        /// <summary>
-        /// Đếm số đơn theo trạng thái
-        /// </summary>
         public int CountByStatus(string trangThai)
         {
             DataTable dt = GetDonChoThue();

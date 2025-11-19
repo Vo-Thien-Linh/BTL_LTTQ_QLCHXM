@@ -31,7 +31,7 @@
         private System.Windows.Forms.Label lblTongTien;
         private System.Windows.Forms.Label lblTienCoc;
         private System.Windows.Forms.GroupBox grpThanhToan;
-        private System.Windows.Forms.TextBox txtGiayToGiuLai;
+        private System.Windows.Forms.ComboBox cboGiayToGiuLai;
         private System.Windows.Forms.Label lblGiayToGiuLai;
         private System.Windows.Forms.Button btnLuu;
         private System.Windows.Forms.Button btnHuy;
@@ -78,7 +78,7 @@
             this.txtTienCoc = new System.Windows.Forms.TextBox();
             this.grpThanhToan = new System.Windows.Forms.GroupBox();
             this.lblGiayToGiuLai = new System.Windows.Forms.Label();
-            this.txtGiayToGiuLai = new System.Windows.Forms.TextBox();
+            this.cboGiayToGiuLai = new System.Windows.Forms.ComboBox();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
@@ -412,7 +412,7 @@
             // grpThanhToan
             // 
             this.grpThanhToan.Controls.Add(this.lblGiayToGiuLai);
-            this.grpThanhToan.Controls.Add(this.txtGiayToGiuLai);
+            this.grpThanhToan.Controls.Add(this.cboGiayToGiuLai);
             this.grpThanhToan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.grpThanhToan.Location = new System.Drawing.Point(20, 450);
             this.grpThanhToan.Name = "grpThanhToan";
@@ -431,13 +431,22 @@
             this.lblGiayToGiuLai.Text = "Giấy tờ giữ lại:";
             this.lblGiayToGiuLai.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // txtGiayToGiuLai
+            // cboGiayToGiuLai
             // 
-            this.txtGiayToGiuLai.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtGiayToGiuLai.Location = new System.Drawing.Point(120, 30);
-            this.txtGiayToGiuLai.Name = "txtGiayToGiuLai";
-            this.txtGiayToGiuLai.Size = new System.Drawing.Size(715, 23);
-            this.txtGiayToGiuLai.TabIndex = 1;
+            this.cboGiayToGiuLai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboGiayToGiuLai.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cboGiayToGiuLai.FormattingEnabled = true;
+            this.cboGiayToGiuLai.Items.AddRange(new object[] {
+            "CMND/CCCD",
+            "Bằng lái xe",
+            "Hộ chiếu",
+            "Giấy phép lái xe quốc tế",
+            "Thẻ sinh viên",
+            "Thẻ nhân viên"});
+            this.cboGiayToGiuLai.Location = new System.Drawing.Point(120, 30);
+            this.cboGiayToGiuLai.Name = "cboGiayToGiuLai";
+            this.cboGiayToGiuLai.Size = new System.Drawing.Size(715, 25);
+            this.cboGiayToGiuLai.TabIndex = 1;
             // 
             // btnLuu
             // 

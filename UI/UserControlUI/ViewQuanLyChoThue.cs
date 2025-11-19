@@ -315,6 +315,30 @@ namespace UI.UserControlUI
             btnXemHopDong.Click += (s, e) => OpenHopDongForm(row);
             card.Controls.Add(btnXemHopDong);
 
+            // Thêm badge "Chờ duyệt" nếu cần
+            string trangThaiDuyet = row["TrangThaiDuyet"].ToString();
+            if (trangThaiDuyet == "Chờ duyệt")
+            {
+                Panel badgePanel = new Panel
+                {
+                    Location = new Point(250, 10),
+                    Size = new Size(90, 25),
+                    BackColor = Color.FromArgb(255, 152, 0)
+                };
+
+                Label lblBadge = new Label
+                {
+                    Text = "CHỜ DUYỆT",
+                    Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                    ForeColor = Color.White,
+                    Dock = DockStyle.Fill,
+                    TextAlign = ContentAlignment.MiddleCenter
+                };
+                badgePanel.Controls.Add(lblBadge);
+                card.Controls.Add(badgePanel);
+                badgePanel.BringToFront();
+            }
+
             return card;
         }
 
@@ -417,7 +441,7 @@ namespace UI.UserControlUI
             // Hiển thị số đơn quá hạn
             try
             {
-                DataTable dtQuaHan = giaoDichThueBLL.GetDonQuaHan();
+                DataTable dtQuaHan = giaoDichThueBLL.FilterDonChoThueByStatus("Quá hạn");
                 if (dtQuaHan.Rows.Count > 0)
                 {
                     lblCount.Text += $" ({dtQuaHan.Rows.Count} qua han)";
@@ -437,10 +461,14 @@ namespace UI.UserControlUI
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
-                    // Reload lại dữ liệu sau khi thêm đơn thành công
+                    //  Reset filter về "Tất cả"
+                    currentFilter = "";
+                    if (cboFilter != null)
+                    {
+                        cboFilter.SelectedIndex = 0;  // Giả sử index 0 là "Tất cả"
+                    }
+                    //  Reload dữ liệu
                     LoadData();
-                    MessageBox.Show("Đã tải lại dữ liệu!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

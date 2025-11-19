@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace BLL
 {
@@ -148,7 +149,83 @@ namespace BLL
                     throw new Exception("Ngày mua xe không được lớn hơn ngày hiện tại!");
                 }
 
-                return xeMayDAL.InsertXeMay(xe);
+                //  Thêm xe vào bảng XeMay
+                bool insertXeSuccess = xeMayDAL.InsertXeMay(xe);
+                
+                if (!insertXeSuccess)
+                {
+                    throw new Exception("Không thể thêm xe vào hệ thống!");
+                }
+
+                //  Tự động thêm giá vào bảng ThongTinGiaXe
+                try
+                {
+                    if (xe.MucDichSuDung == "Cho thuê")
+                    {
+                        // Tính giá thuê mặc định: 1% giá mua/ngày
+                        decimal giaThueNgay = (xe.GiaMua ?? 0) * 0.01m;
+
+                        bool insertGiaSuccess = xeMayDAL.InsertThongTinGiaXe(
+                            xe.ID_Xe, 
+                            "Thuê", 
+                            giaThueNgay,
+                            null  // Không có giá bán
+                        );
+
+                        if (!insertGiaSuccess)
+                        {
+                            MessageBox.Show(
+                                "Xe đã được thêm thành công!\n\n" +
+                                "Tuy nhiên, không thể tự động tạo giá thuê.\n" +
+                                "Vui lòng vào Quản Lý Giá để cập nhật thủ công.",
+                                "Cảnh báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning
+                            );
+                        }
+                    }
+                    else if (xe.MucDichSuDung == "Bán")
+                    {
+                        // Giá bán = Giá mua + 10% lãi
+                        decimal giaBan = (xe.GiaMua ?? 0) * 1.1m;
+                
+                        bool insertGiaSuccess = xeMayDAL.InsertThongTinGiaXe(
+                            xe.ID_Xe, 
+                            "Bán", 
+                            null,    // Không có giá thuê
+                            giaBan
+                        );
+
+                        if (!insertGiaSuccess)
+                        {
+                            MessageBox.Show(
+                                "Xe đã được thêm thành công!\n\n" +
+                                "Tuy nhiên, không thể tự động tạo giá bán.\n" +
+                                "Vui lòng vào Quản Lý Giá để cập nhật thủ công.",
+                                "Cảnh báo",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning
+                            );
+                        }
+                    }
+                }
+                catch (Exception exGia)
+                {
+                    // Log lỗi nhưng không throw (xe đã thêm thành công)
+                    System.Diagnostics.Debug.WriteLine($"Lỗi thêm giá: {exGia.Message}");
+            
+                    MessageBox.Show(
+                        "Xe đã được thêm thành công!\n\n" +
+                        "Tuy nhiên, có lỗi khi tạo giá tự động:\n" +
+                        exGia.Message + "\n\n" +
+                        "Vui lòng vào Quản Lý Giá để cập nhật thủ công.",
+                        "Cảnh báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -368,9 +445,123 @@ namespace BLL
             }
         }
 
+        /// Lấy danh sách xe có thể cho thuê (không kiểm tra lịch)
         public DataTable GetXeCoTheThue()
         {
-            return xeMayDAL.GetXeCoTheThue();
+            try
+            {
+                DataTable dt = xeMayDAL.GetXeCoTheThue();
+                
+                if (dt.Rows.Count == 0)
+                {
+                    throw new Exception("Hiện tại không có xe nào có thể cho thuê!\nVui lòng kiểm tra lại kho xe.");
+                }
+                
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// Lấy danh sách xe có thể cho thuê trong khoảng thời gian (kiểm tra lịch trùng)
+        public DataTable GetXeCoTheThueTheoThoiGian(DateTime ngayBatDau, DateTime ngayKetThuc)
+        {
+            try
+            {
+                // Validate thời gian
+                if (ngayBatDau >= ngayKetThuc)
+                {
+                    throw new Exception("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
+                }
+
+                if (ngayBatDau < DateTime.Now.Date)
+                {
+                    throw new Exception("Ngày bắt đầu không được nhỏ hơn ngày hiện tại!");
+                }
+
+                DataTable dt = xeMayDAL.GetXeCoTheThueTheoThoiGian(ngayBatDau, ngayKetThuc);
+                
+                if (dt.Rows.Count == 0)
+                {
+                    throw new Exception($"Không có xe nào khả dụng từ {ngayBatDau:dd/MM/yyyy} đến {ngayKetThuc:dd/MM/yyyy}!\n\n" +
+                                      "Lý do có thể:\n" +
+                                      "- Tất cả xe đều đã được đặt trong thời gian này\n" +
+                                      "- Không có xe nào trong kho cho thuê\n" +
+                                      "- Vui lòng chọn thời gian khác!");
+                }
+                
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        /// Kiểm tra xe có thể thuê trong khoảng thời gian không
+        public bool KiemTraXeKhaDungTheoThoiGian(string idXe, DateTime ngayBatDau, DateTime ngayKetThuc, out string errorMessage)
+        {
+            errorMessage = "";
+            
+            try
+            {
+                // Kiểm tra xe tồn tại và trạng thái
+                XeMayDTO xe = xeMayDAL.GetXeMayById(idXe);
+                if (xe == null)
+                {
+                    errorMessage = "Không tìm thấy xe!";
+                    return false;
+                }
+
+                if (xe.TrangThai != "Sẵn sàng")
+                {
+                    errorMessage = $"Xe hiện đang ở trạng thái '{xe.TrangThai}'!";
+                    return false;
+                }
+
+                if (xe.MucDichSuDung != "Cho thuê")
+                {
+                    errorMessage = "Xe này không dành cho thuê!";
+                    return false;
+                }
+
+                // Kiểm tra lịch trùng
+                string query = @"
+                    SELECT COUNT(*) 
+                    FROM GiaoDichThue 
+                    WHERE ID_Xe = @ID_Xe 
+                      AND TrangThaiDuyet = N'Đã duyệt'
+                      AND TrangThai IN (N'Chờ giao xe', N'Đang thuê')
+                      AND (
+                          (@NgayBatDau BETWEEN NgayBatDau AND NgayKetThuc) OR
+                          (@NgayKetThuc BETWEEN NgayBatDau AND NgayKetThuc) OR
+                          (NgayBatDau BETWEEN @NgayBatDau AND @NgayKetThuc)
+                      )";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ID_Xe", idXe),
+                    new SqlParameter("@NgayBatDau", ngayBatDau),
+                    new SqlParameter("@NgayKetThuc", ngayKetThuc)
+                };
+
+                int count = Convert.ToInt32(DAL.DataProvider.ExecuteScalar(query, parameters));
+
+                if (count > 0)
+                {
+                    errorMessage = "Xe đã có lịch thuê trong khoảng thời gian này!";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi kiểm tra: " + ex.Message;
+                return false;
+            }
         }
     }
 }
