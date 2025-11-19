@@ -58,6 +58,7 @@
     <Compile Include="GiaoDichThueBLL.cs" />
     <Compile Include="HangXeBLL.cs" />
     <Compile Include="KhachHangBLL.cs" />
+    <Compile Include="LanguageManagerBLL.cs" />
     <Compile Include="LoaiXeBLL.cs" />
     <Compile Include="MauSacBLL.cs" />
     <Compile Include="NhaCungCapBLL.cs" />
@@ -66,7 +67,9 @@
     <Compile Include="PhuTungBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuenMatKhauBLL.cs" />
+    <Compile Include="SettingsBLL.cs" />
     <Compile Include="TaiKhoanBLL.cs" />
+    <Compile Include="ThemeManager.cs" />
     <Compile Include="ThongTinGiaXeBLL.cs" />
     <Compile Include="XeMayBLL.cs" />
   </ItemGroup>

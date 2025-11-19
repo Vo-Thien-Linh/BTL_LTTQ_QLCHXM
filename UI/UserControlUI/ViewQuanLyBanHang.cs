@@ -450,5 +450,10 @@ namespace UI.UserControlUI
             lblRecordCount.Text = $"Tổng số giao dịch: {count}";
             lblRecordCount.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
         }
+
+        private void panelTop_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

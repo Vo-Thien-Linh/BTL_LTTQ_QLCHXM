@@ -56,19 +56,22 @@
             this.panelTop.Controls.Add(this.btnRefresh);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Padding = new System.Windows.Forms.Padding(15);
-            this.panelTop.Size = new System.Drawing.Size(1000, 120);
+            this.panelTop.Padding = new System.Windows.Forms.Padding(20, 18, 20, 18);
+            this.panelTop.Size = new System.Drawing.Size(1333, 148);
             this.panelTop.TabIndex = 0;
+            this.panelTop.Paint += new System.Windows.Forms.PaintEventHandler(this.panelTop_Paint);
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.lblTitle.Location = new System.Drawing.Point(15, 15);
+            this.lblTitle.Location = new System.Drawing.Point(20, 18);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(300, 32);
+            this.lblTitle.Size = new System.Drawing.Size(317, 41);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN LÝ BÁN HÀNG";
             // 
@@ -80,11 +83,11 @@
             this.cboLoaiGiaoDich.Items.AddRange(new object[] {
             "Giao Dịch Bán",
             "Giao Dịch Thuê"});
-            this.cboLoaiGiaoDich.Location = new System.Drawing.Point(20, 65);
+            this.cboLoaiGiaoDich.Location = new System.Drawing.Point(27, 80);
+            this.cboLoaiGiaoDich.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboLoaiGiaoDich.Name = "cboLoaiGiaoDich";
-            this.cboLoaiGiaoDich.Size = new System.Drawing.Size(160, 25);
+            this.cboLoaiGiaoDich.Size = new System.Drawing.Size(212, 31);
             this.cboLoaiGiaoDich.TabIndex = 1;
-            this.cboLoaiGiaoDich.SelectedIndex = 0;
             // 
             // cboTrangThai
             // 
@@ -96,18 +99,19 @@
             "Chờ duyệt",
             "Đã duyệt",
             "Từ chối"});
-            this.cboTrangThai.Location = new System.Drawing.Point(190, 65);
+            this.cboTrangThai.Location = new System.Drawing.Point(253, 80);
+            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboTrangThai.Name = "cboTrangThai";
-            this.cboTrangThai.Size = new System.Drawing.Size(150, 25);
+            this.cboTrangThai.Size = new System.Drawing.Size(199, 31);
             this.cboTrangThai.TabIndex = 2;
-            this.cboTrangThai.SelectedIndex = 0;
             // 
             // txtSearch
             // 
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtSearch.Location = new System.Drawing.Point(350, 65);
+            this.txtSearch.Location = new System.Drawing.Point(467, 80);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(300, 25);
+            this.txtSearch.Size = new System.Drawing.Size(399, 30);
             this.txtSearch.TabIndex = 3;
             // 
             // btnSearch
@@ -116,9 +120,10 @@
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSearch.ForeColor = System.Drawing.Color.White;
-            this.btnSearch.Location = new System.Drawing.Point(660, 63);
+            this.btnSearch.Location = new System.Drawing.Point(880, 78);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(100, 30);
+            this.btnSearch.Size = new System.Drawing.Size(133, 37);
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "🔍 Tìm";
             this.btnSearch.UseVisualStyleBackColor = false;
@@ -129,9 +134,10 @@
             this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRefresh.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnRefresh.ForeColor = System.Drawing.Color.White;
-            this.btnRefresh.Location = new System.Drawing.Point(770, 63);
+            this.btnRefresh.Location = new System.Drawing.Point(1027, 78);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(120, 30);
+            this.btnRefresh.Size = new System.Drawing.Size(160, 37);
             this.btnRefresh.TabIndex = 5;
             this.btnRefresh.Text = "Làm mới";
             this.btnRefresh.UseVisualStyleBackColor = false;
@@ -139,10 +145,11 @@
             // panelDataGrid
             // 
             this.panelDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDataGrid.Location = new System.Drawing.Point(0, 120);
+            this.panelDataGrid.Location = new System.Drawing.Point(0, 148);
+            this.panelDataGrid.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelDataGrid.Name = "panelDataGrid";
-            this.panelDataGrid.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
-            this.panelDataGrid.Size = new System.Drawing.Size(1000, 480);
+            this.panelDataGrid.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.panelDataGrid.Size = new System.Drawing.Size(1333, 591);
             this.panelDataGrid.TabIndex = 1;
             // 
             // panelBottom
@@ -153,10 +160,11 @@
             this.panelBottom.Controls.Add(this.btnReject);
             this.panelBottom.Controls.Add(this.lblRecordCount);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 600);
+            this.panelBottom.Location = new System.Drawing.Point(0, 739);
+            this.panelBottom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Padding = new System.Windows.Forms.Padding(15);
-            this.panelBottom.Size = new System.Drawing.Size(1000, 70);
+            this.panelBottom.Padding = new System.Windows.Forms.Padding(20, 18, 20, 18);
+            this.panelBottom.Size = new System.Drawing.Size(1333, 86);
             this.panelBottom.TabIndex = 2;
             // 
             // btnViewDetail
@@ -165,9 +173,10 @@
             this.btnViewDetail.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnViewDetail.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnViewDetail.ForeColor = System.Drawing.Color.White;
-            this.btnViewDetail.Location = new System.Drawing.Point(20, 20);
+            this.btnViewDetail.Location = new System.Drawing.Point(27, 25);
+            this.btnViewDetail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnViewDetail.Name = "btnViewDetail";
-            this.btnViewDetail.Size = new System.Drawing.Size(150, 35);
+            this.btnViewDetail.Size = new System.Drawing.Size(200, 43);
             this.btnViewDetail.TabIndex = 0;
             this.btnViewDetail.Text = " Xem Chi Tiết";
             this.btnViewDetail.UseVisualStyleBackColor = false;
@@ -178,9 +187,10 @@
             this.btnApprove.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnApprove.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnApprove.ForeColor = System.Drawing.Color.White;
-            this.btnApprove.Location = new System.Drawing.Point(180, 20);
+            this.btnApprove.Location = new System.Drawing.Point(240, 25);
+            this.btnApprove.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnApprove.Name = "btnApprove";
-            this.btnApprove.Size = new System.Drawing.Size(130, 35);
+            this.btnApprove.Size = new System.Drawing.Size(173, 43);
             this.btnApprove.TabIndex = 1;
             this.btnApprove.Text = " Duyệt";
             this.btnApprove.UseVisualStyleBackColor = false;
@@ -191,9 +201,10 @@
             this.btnReject.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnReject.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnReject.ForeColor = System.Drawing.Color.White;
-            this.btnReject.Location = new System.Drawing.Point(320, 20);
+            this.btnReject.Location = new System.Drawing.Point(427, 25);
+            this.btnReject.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnReject.Name = "btnReject";
-            this.btnReject.Size = new System.Drawing.Size(130, 35);
+            this.btnReject.Size = new System.Drawing.Size(173, 43);
             this.btnReject.TabIndex = 2;
             this.btnReject.Text = " Từ Chối";
             this.btnReject.UseVisualStyleBackColor = false;
@@ -203,27 +214,30 @@
             this.lblRecordCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblRecordCount.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblRecordCount.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
-            this.lblRecordCount.Location = new System.Drawing.Point(700, 25);
+            this.lblRecordCount.Location = new System.Drawing.Point(933, 31);
+            this.lblRecordCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblRecordCount.Name = "lblRecordCount";
-            this.lblRecordCount.Size = new System.Drawing.Size(280, 25);
+            this.lblRecordCount.Size = new System.Drawing.Size(373, 31);
             this.lblRecordCount.TabIndex = 3;
             this.lblRecordCount.Text = "Tổng số giao dịch: 0";
             this.lblRecordCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // ViewQuanLyBanHang
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(240)))), ((int)(((byte)(241)))));
             this.Controls.Add(this.panelDataGrid);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ViewQuanLyBanHang";
-            this.Size = new System.Drawing.Size(1000, 670);
+            this.Size = new System.Drawing.Size(1333, 825);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
     }
 }

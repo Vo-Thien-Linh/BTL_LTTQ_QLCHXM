@@ -229,6 +229,7 @@
             this.panelDataGrid.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
             this.panelDataGrid.Size = new System.Drawing.Size(1160, 440);
             this.panelDataGrid.TabIndex = 3;
+            this.panelDataGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDataGrid_Paint);
             // 
             // lblDemNhanVien
             // 

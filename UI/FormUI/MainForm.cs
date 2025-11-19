@@ -1,4 +1,5 @@
-﻿using DTO;
+﻿using BLL;
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,6 +45,36 @@ namespace UI.FormUI
             InitializeComponent();
             CustomizeForm();
             InitializeSlideTimer();
+            LanguageManagerBLL.Instance.InitResourceManagerFromUI(typeof(MainForm).Assembly);
+            LanguageManagerBLL.Instance.LanguageChanged += OnLanguageChanged_Menu;
+            ThemeManager.Instance.ThemeChanged += OnThemeChanged;
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+
+        private void ApplyTheme(string theme)
+        {
+            if (theme == "Dark")
+            {
+                this.BackColor = Color.FromArgb(45, 45, 48);
+                this.ForeColor = Color.White;
+                // đổi màu cho child controls...
+            }
+            else
+            {
+                this.BackColor = Color.White;
+                this.ForeColor = Color.Black;
+                // đổi màu cho child controls...
+            }
+        }
+
+
+        private void OnLanguageChanged_Menu(object sender, EventArgs e)
+        {
+            ShowButtonText(isExpanded);
         }
 
         private void InitializeSlideTimer()
@@ -53,6 +84,20 @@ namespace UI.FormUI
             slideTimer.Tick += SlideTimer_Tick;
         }
 
+        private void UpdateMenuLanguage()
+        {
+            var langMgr = LanguageManagerBLL.Instance;
+
+            btnThongKe.Text = "🏠 " + langMgr.GetString("MenuDashboard");
+            btnQuanLyNhanVien.Text = "👥 " + langMgr.GetString("MenuEmployee");
+            btnQuanLyKhachHang.Text = "👤 " + langMgr.GetString("MenuCustomer");
+            btnQuanLySanPham.Text = "📦 " + langMgr.GetString("MenuProduct");
+            btnQuanLyBanHang.Text = "🛒 " + langMgr.GetString("MenuSales");
+            btnQuanLyChoThue.Text = "🏢 " + langMgr.GetString("MenuRental");
+            btnQuanLyXuLy.Text = "⚙️ " + langMgr.GetString("MenuProcessing");
+            btnCaiDat.Text = "🛠️ " + langMgr.GetString("MenuSettings");
+            btnDangXuat.Text = "🚪 " + langMgr.GetString("MenuLogout");
+        }
         private void SlideTimer_Tick(object sender, EventArgs e)
         {
             int step = 150;
@@ -92,18 +137,22 @@ namespace UI.FormUI
             }
         }
 
+
+
         private void ShowButtonText(bool show)
         {
+            var langMgr = LanguageManagerBLL.Instance;
             if (show)
             {
-                btnThongKe.Text = "🏠 Dashboard";
-                btnQuanLyNhanVien.Text = "👥 Quản Lý Nhân Viên";
-                btnQuanLyKhachHang.Text = "👤 Quản Lý Khách Hàng";
-                btnQuanLySanPham.Text = "📦 Quản Lý Sản Phẩm";
-                btnQuanLyBanHang.Text = "🛒 Quản Lý Bán Hàng";
-                btnQuanLyChoThue.Text = "🏢 Quản Lý Cho Thuê";
-                btnQuanLyXuLy.Text = "⚙️ Quản Lý Xử Lý";
-                btnDangXuat.Text = "🚪 Đăng Xuất";
+                btnThongKe.Text = "🏠 " + langMgr.GetString("MenuDashboard");
+                btnQuanLyNhanVien.Text = "👥 " + langMgr.GetString("MenuEmployee");
+                btnQuanLyKhachHang.Text = "👤 " + langMgr.GetString("MenuCustomer");
+                btnQuanLySanPham.Text = "📦 " + langMgr.GetString("MenuProduct");
+                btnQuanLyBanHang.Text = "🛒 " + langMgr.GetString("MenuSales");
+                btnQuanLyChoThue.Text = "🏢 " + langMgr.GetString("MenuRental");
+                btnQuanLyXuLy.Text = "⚙️ " + langMgr.GetString("MenuProcessing");
+                btnCaiDat.Text = "🛠️ " + langMgr.GetString("MenuSettings");
+                btnDangXuat.Text = "🚪 " + langMgr.GetString("MenuLogout");
 
                 btnThongKe.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyNhanVien.TextAlign = ContentAlignment.MiddleLeft;
@@ -112,6 +161,7 @@ namespace UI.FormUI
                 btnQuanLyBanHang.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyChoThue.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyXuLy.TextAlign = ContentAlignment.MiddleLeft;
+                btnCaiDat.TextAlign = ContentAlignment.MiddleLeft;
                 btnDangXuat.TextAlign = ContentAlignment.MiddleLeft;
 
                 btnThongKe.Padding = new Padding(15, 0, 0, 0);
@@ -121,6 +171,7 @@ namespace UI.FormUI
                 btnQuanLyBanHang.Padding = new Padding(15, 0, 0, 0);
                 btnQuanLyChoThue.Padding = new Padding(15, 0, 0, 0);
                 btnQuanLyXuLy.Padding = new Padding(15, 0, 0, 0);
+                btnCaiDat.Padding = new Padding(15, 0, 0, 0);
                 btnDangXuat.Padding = new Padding(15, 0, 0, 0);
             }
             else
@@ -132,6 +183,8 @@ namespace UI.FormUI
                 btnQuanLyBanHang.Text = "🛒";
                 btnQuanLyChoThue.Text = "🏢";
                 btnQuanLyXuLy.Text = "⚙️";
+                btnCaiDat.Text = "🛠️";
+                btnDangXuat.Text = "🚪";
 
                 btnThongKe.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyNhanVien.TextAlign = ContentAlignment.MiddleLeft;
@@ -140,6 +193,7 @@ namespace UI.FormUI
                 btnQuanLyBanHang.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyChoThue.TextAlign = ContentAlignment.MiddleLeft;
                 btnQuanLyXuLy.TextAlign = ContentAlignment.MiddleLeft;
+                btnCaiDat.TextAlign = ContentAlignment.MiddleLeft;
 
                 btnThongKe.Padding = new Padding(10, 0, 0, 0);
                 btnQuanLyNhanVien.Padding = new Padding(10, 0, 0, 0);
@@ -148,6 +202,7 @@ namespace UI.FormUI
                 btnQuanLyBanHang.Padding = new Padding(10, 0, 0, 0);
                 btnQuanLyChoThue.Padding = new Padding(10, 0, 0, 0);
                 btnQuanLyXuLy.Padding = new Padding(10, 0, 0, 0);
+                btnCaiDat.Padding = new Padding(10, 0, 0, 0);
             }
         }
         private void CustomizeForm()
@@ -165,6 +220,7 @@ namespace UI.FormUI
             CustomizeButton(btnQuanLyBanHang, "🛒 Quản Lý Bán Hàng");
             CustomizeButton(btnQuanLyChoThue, "🏢 Quản Lý Cho Thuê");
             CustomizeButton(btnQuanLyXuLy, "⚙️ Quản Lý Xử Lý");
+            CustomizeButton(btnCaiDat, "🛠️ Cài Đặt");
 
             CustomizeLogoutButton(btnDangXuat, "🚪 Đăng Xuất");
         }
@@ -300,6 +356,7 @@ namespace UI.FormUI
         private void MainForm_Load(object sender, EventArgs e)
         {
             ShowWelcomeMessage();
+            UpdateMenuLanguage();
         }
 
         private void ShowWelcomeMessage()
@@ -395,6 +452,11 @@ namespace UI.FormUI
             control.Dock = DockStyle.Fill;
             pnlContent.Controls.Add(control);
             control.BringToFront();
+        }
+
+        private void btnCaiDat_Click(object sender, EventArgs e)
+        {
+            LoadControl(new ViewCaiDat());
         }
     }
 }
