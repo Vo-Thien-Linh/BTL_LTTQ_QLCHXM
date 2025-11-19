@@ -431,7 +431,7 @@ namespace UI.FormUI
 
         private void btnQuanLyXuLy_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new UserControlUI.ViewQuanLyBaoTri());
         }
 
         private void btnDashBoard_Click(object sender, EventArgs e)

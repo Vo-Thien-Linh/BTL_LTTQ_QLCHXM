@@ -35,6 +35,7 @@ namespace UI.FormUI
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pnlMenuBar = new System.Windows.Forms.Panel();
+            this.btnCaiDat = new System.Windows.Forms.Button();
             this.btnThongKe = new System.Windows.Forms.Button();
             this.btnDangXuat = new System.Windows.Forms.Button();
             this.btnQuanLyXuLy = new System.Windows.Forms.Button();
@@ -45,7 +46,6 @@ namespace UI.FormUI
             this.btnQuanLyNhanVien = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pnlContent = new System.Windows.Forms.Panel();
-            this.btnCaiDat = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -60,18 +60,18 @@ namespace UI.FormUI
             this.pnlHeader.Controls.Add(this.pictureBox1);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
-            this.pnlHeader.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlHeader.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(779, 132);
+            this.pnlHeader.Size = new System.Drawing.Size(1385, 162);
             this.pnlHeader.TabIndex = 0;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(126, 39);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox2.Location = new System.Drawing.Point(168, 48);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(199, 77);
+            this.pictureBox2.Size = new System.Drawing.Size(265, 95);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
@@ -79,10 +79,10 @@ namespace UI.FormUI
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(19, 10);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Location = new System.Drawing.Point(25, 12);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(103, 106);
+            this.pictureBox1.Size = new System.Drawing.Size(137, 130);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -100,23 +100,30 @@ namespace UI.FormUI
             this.pnlMenuBar.Controls.Add(this.btnQuanLyKhachHang);
             this.pnlMenuBar.Controls.Add(this.btnQuanLyNhanVien);
             this.pnlMenuBar.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlMenuBar.Location = new System.Drawing.Point(0, 132);
-            this.pnlMenuBar.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlMenuBar.Location = new System.Drawing.Point(0, 162);
+            this.pnlMenuBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlMenuBar.Name = "pnlMenuBar";
-
-            this.pnlMenuBar.Size = new System.Drawing.Size(200, 754);
-
-            this.pnlMenuBar.Size = new System.Drawing.Size(267, 881);
-
+            this.pnlMenuBar.Size = new System.Drawing.Size(356, 893);
             this.pnlMenuBar.TabIndex = 1;
             this.pnlMenuBar.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMenuBar_Paint);
             // 
+            // btnCaiDat
+            // 
+            this.btnCaiDat.Location = new System.Drawing.Point(0, 837);
+            this.btnCaiDat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCaiDat.Name = "btnCaiDat";
+            this.btnCaiDat.Size = new System.Drawing.Size(356, 122);
+            this.btnCaiDat.TabIndex = 8;
+            this.btnCaiDat.Text = "Cài đặt";
+            this.btnCaiDat.UseVisualStyleBackColor = true;
+            this.btnCaiDat.Click += new System.EventHandler(this.btnCaiDat_Click);
+            // 
             // btnThongKe
             // 
-            this.btnThongKe.Location = new System.Drawing.Point(0, 473);
-            this.btnThongKe.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnThongKe.Location = new System.Drawing.Point(0, 582);
+            this.btnThongKe.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnThongKe.Name = "btnThongKe";
-            this.btnThongKe.Size = new System.Drawing.Size(200, 80);
+            this.btnThongKe.Size = new System.Drawing.Size(267, 98);
             this.btnThongKe.TabIndex = 0;
             this.btnThongKe.Text = "Thống kê";
             this.btnThongKe.UseVisualStyleBackColor = true;
@@ -124,14 +131,10 @@ namespace UI.FormUI
             // 
             // btnDangXuat
             // 
-
-            this.btnDangXuat.Location = new System.Drawing.Point(29, 624);
-            this.btnDangXuat.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-
-            this.btnDangXuat.Location = new System.Drawing.Point(39, 810);
-
+            this.btnDangXuat.Location = new System.Drawing.Point(52, 997);
+            this.btnDangXuat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnDangXuat.Name = "btnDangXuat";
-            this.btnDangXuat.Size = new System.Drawing.Size(136, 48);
+            this.btnDangXuat.Size = new System.Drawing.Size(181, 59);
             this.btnDangXuat.TabIndex = 7;
             this.btnDangXuat.Text = "Đăng xuất";
             this.btnDangXuat.UseVisualStyleBackColor = true;
@@ -139,21 +142,21 @@ namespace UI.FormUI
             // 
             // btnQuanLyXuLy
             // 
-            this.btnQuanLyXuLy.Location = new System.Drawing.Point(0, 394);
-            this.btnQuanLyXuLy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuanLyXuLy.Location = new System.Drawing.Point(0, 485);
+            this.btnQuanLyXuLy.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnQuanLyXuLy.Name = "btnQuanLyXuLy";
-            this.btnQuanLyXuLy.Size = new System.Drawing.Size(200, 80);
+            this.btnQuanLyXuLy.Size = new System.Drawing.Size(267, 98);
             this.btnQuanLyXuLy.TabIndex = 6;
-            this.btnQuanLyXuLy.Text = "Quản lý xử lý";
+            this.btnQuanLyXuLy.Text = "Quản lý bảo trì";
             this.btnQuanLyXuLy.UseVisualStyleBackColor = true;
             this.btnQuanLyXuLy.Click += new System.EventHandler(this.btnQuanLyXuLy_Click);
             // 
             // btnQuanLyChoThue
             // 
-            this.btnQuanLyChoThue.Location = new System.Drawing.Point(0, 315);
-            this.btnQuanLyChoThue.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuanLyChoThue.Location = new System.Drawing.Point(0, 388);
+            this.btnQuanLyChoThue.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnQuanLyChoThue.Name = "btnQuanLyChoThue";
-            this.btnQuanLyChoThue.Size = new System.Drawing.Size(200, 80);
+            this.btnQuanLyChoThue.Size = new System.Drawing.Size(267, 98);
             this.btnQuanLyChoThue.TabIndex = 5;
             this.btnQuanLyChoThue.Text = "Quản lý cho thuê";
             this.btnQuanLyChoThue.UseVisualStyleBackColor = true;
@@ -161,10 +164,10 @@ namespace UI.FormUI
             // 
             // btnQuanLyBanHang
             // 
-            this.btnQuanLyBanHang.Location = new System.Drawing.Point(0, 236);
-            this.btnQuanLyBanHang.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuanLyBanHang.Location = new System.Drawing.Point(0, 290);
+            this.btnQuanLyBanHang.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnQuanLyBanHang.Name = "btnQuanLyBanHang";
-            this.btnQuanLyBanHang.Size = new System.Drawing.Size(200, 80);
+            this.btnQuanLyBanHang.Size = new System.Drawing.Size(267, 98);
             this.btnQuanLyBanHang.TabIndex = 4;
             this.btnQuanLyBanHang.Text = "Quản lý bán hàng";
             this.btnQuanLyBanHang.UseVisualStyleBackColor = true;
@@ -172,10 +175,10 @@ namespace UI.FormUI
             // 
             // btnQuanLySanPham
             // 
-            this.btnQuanLySanPham.Location = new System.Drawing.Point(0, 158);
-            this.btnQuanLySanPham.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuanLySanPham.Location = new System.Drawing.Point(0, 194);
+            this.btnQuanLySanPham.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnQuanLySanPham.Name = "btnQuanLySanPham";
-            this.btnQuanLySanPham.Size = new System.Drawing.Size(200, 80);
+            this.btnQuanLySanPham.Size = new System.Drawing.Size(267, 98);
             this.btnQuanLySanPham.TabIndex = 3;
             this.btnQuanLySanPham.Text = "Quản lý sản phẩm";
             this.btnQuanLySanPham.UseVisualStyleBackColor = true;
@@ -183,10 +186,10 @@ namespace UI.FormUI
             // 
             // btnQuanLyKhachHang
             // 
-            this.btnQuanLyKhachHang.Location = new System.Drawing.Point(0, 79);
-            this.btnQuanLyKhachHang.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuanLyKhachHang.Location = new System.Drawing.Point(0, 97);
+            this.btnQuanLyKhachHang.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnQuanLyKhachHang.Name = "btnQuanLyKhachHang";
-            this.btnQuanLyKhachHang.Size = new System.Drawing.Size(200, 80);
+            this.btnQuanLyKhachHang.Size = new System.Drawing.Size(267, 98);
             this.btnQuanLyKhachHang.TabIndex = 2;
             this.btnQuanLyKhachHang.Text = "Quản lý khách hàng";
             this.btnQuanLyKhachHang.UseVisualStyleBackColor = true;
@@ -195,9 +198,9 @@ namespace UI.FormUI
             // btnQuanLyNhanVien
             // 
             this.btnQuanLyNhanVien.Location = new System.Drawing.Point(0, 0);
-            this.btnQuanLyNhanVien.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnQuanLyNhanVien.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnQuanLyNhanVien.Name = "btnQuanLyNhanVien";
-            this.btnQuanLyNhanVien.Size = new System.Drawing.Size(200, 80);
+            this.btnQuanLyNhanVien.Size = new System.Drawing.Size(267, 98);
             this.btnQuanLyNhanVien.TabIndex = 1;
             this.btnQuanLyNhanVien.Text = "Quản lý nhân viên";
             this.btnQuanLyNhanVien.UseVisualStyleBackColor = true;
@@ -208,14 +211,10 @@ namespace UI.FormUI
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.pnlContent);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(200, 132);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Location = new System.Drawing.Point(356, 162);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-
-            this.panel1.Size = new System.Drawing.Size(579, 754);
-
-            this.panel1.Size = new System.Drawing.Size(772, 881);
-
+            this.panel1.Size = new System.Drawing.Size(1029, 893);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -223,40 +222,22 @@ namespace UI.FormUI
             // 
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContent.Location = new System.Drawing.Point(0, 0);
-            this.pnlContent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlContent.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlContent.Name = "pnlContent";
-
-            this.pnlContent.Size = new System.Drawing.Size(579, 754);
-
-            this.pnlContent.Size = new System.Drawing.Size(772, 881);
-
+            this.pnlContent.Size = new System.Drawing.Size(1029, 893);
             this.pnlContent.TabIndex = 0;
             this.pnlContent.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContent_Paint);
             // 
-            // btnCaiDat
-            // 
-            this.btnCaiDat.Location = new System.Drawing.Point(0, 680);
-            this.btnCaiDat.Name = "btnCaiDat";
-            this.btnCaiDat.Size = new System.Drawing.Size(267, 99);
-            this.btnCaiDat.TabIndex = 8;
-            this.btnCaiDat.Text = "Cài đặt";
-            this.btnCaiDat.UseVisualStyleBackColor = true;
-            this.btnCaiDat.Click += new System.EventHandler(this.btnCaiDat_Click);
-            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-
-            this.ClientSize = new System.Drawing.Size(779, 886);
-
-            this.ClientSize = new System.Drawing.Size(1039, 1044);
-
+            this.ClientSize = new System.Drawing.Size(1385, 1055);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlMenuBar);
             this.Controls.Add(this.pnlHeader);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
