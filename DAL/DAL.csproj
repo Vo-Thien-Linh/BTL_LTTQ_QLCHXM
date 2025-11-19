@@ -68,6 +68,7 @@
     <Compile Include="PhuTungDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuenMatKhauDAL.cs" />
+    <Compile Include="SettingsDAL.cs" />
     <Compile Include="TaiKhoanDAL.cs" />
     <Compile Include="ThongTinGiaXeDAL.cs" />
     <Compile Include="XeMayDAL.cs" />

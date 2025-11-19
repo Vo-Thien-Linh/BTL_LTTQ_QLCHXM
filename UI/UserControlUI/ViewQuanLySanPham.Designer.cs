@@ -31,8 +31,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btnQuanLyXe = new System.Windows.Forms.Button();
             this.btnQuanLyPhuTung = new System.Windows.Forms.Button();
+            this.btnQuanLyXe = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
@@ -48,6 +48,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(2012, 91);
             this.panel1.TabIndex = 0;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // lblTitle
             // 
@@ -71,16 +72,6 @@
             this.panel2.Size = new System.Drawing.Size(1947, 100);
             this.panel2.TabIndex = 1;
             // 
-            // btnQuanLyXe
-            // 
-            this.btnQuanLyXe.Location = new System.Drawing.Point(27, 26);
-            this.btnQuanLyXe.Name = "btnQuanLyXe";
-            this.btnQuanLyXe.Size = new System.Drawing.Size(165, 57);
-            this.btnQuanLyXe.TabIndex = 0;
-            this.btnQuanLyXe.Text = "Quản Lý xe";
-            this.btnQuanLyXe.UseVisualStyleBackColor = true;
-            this.btnQuanLyXe.Click += new System.EventHandler(this.btnQuanLyXe_Click);
-            // 
             // btnQuanLyPhuTung
             // 
             this.btnQuanLyPhuTung.Location = new System.Drawing.Point(223, 26);
@@ -90,6 +81,16 @@
             this.btnQuanLyPhuTung.Text = "Quản lý phụ tùng";
             this.btnQuanLyPhuTung.UseVisualStyleBackColor = true;
             this.btnQuanLyPhuTung.Click += new System.EventHandler(this.btnQuanLyPhuTung_Click);
+            // 
+            // btnQuanLyXe
+            // 
+            this.btnQuanLyXe.Location = new System.Drawing.Point(27, 26);
+            this.btnQuanLyXe.Name = "btnQuanLyXe";
+            this.btnQuanLyXe.Size = new System.Drawing.Size(165, 57);
+            this.btnQuanLyXe.TabIndex = 0;
+            this.btnQuanLyXe.Text = "Quản Lý xe";
+            this.btnQuanLyXe.UseVisualStyleBackColor = true;
+            this.btnQuanLyXe.Click += new System.EventHandler(this.btnQuanLyXe_Click);
             // 
             // panel3
             // 
@@ -118,7 +119,7 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Name = "ViewQuanLySanPham";
-            this.Size = new System.Drawing.Size(1949, 815);
+            this.Size = new System.Drawing.Size(1928, 794);
             this.Load += new System.EventHandler(this.ViewQuanLySanPham_Load);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);

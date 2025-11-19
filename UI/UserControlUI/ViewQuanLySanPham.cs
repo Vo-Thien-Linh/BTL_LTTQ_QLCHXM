@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BLL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,29 @@ namespace UI.UserControlUI
         public ViewQuanLySanPham()
         {
             InitializeComponent();
+            ThemeManager.Instance.ThemeChanged += OnThemeChanged;
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+
+        private void ApplyTheme(string theme)
+        {
+            if (theme == "Dark")
+            {
+                this.BackColor = Color.FromArgb(45, 45, 48);
+                this.ForeColor = Color.White;
+                // đổi màu cho child controls...
+            }
+            else
+            {
+                this.BackColor = Color.White;
+                this.ForeColor = Color.Black;
+                // đổi màu cho child controls...
+            }
         }
 
         private void ViewQuanLySanPham_Load(object sender, EventArgs e)
@@ -56,6 +80,11 @@ namespace UI.UserControlUI
             pnlMain.Controls.Add(viewQuanLyPhuTung);
 
             viewQuanLyPhuTung.BringToFront();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

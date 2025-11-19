@@ -29,6 +29,29 @@ namespace UI.UserControlUI
             InitializeCardView();
             InitializeTimKiemTheoComboBox();
             LoadData();
+            ThemeManager.Instance.ThemeChanged += OnThemeChanged;
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+
+        private void ApplyTheme(string theme)
+        {
+            if (theme == "Dark")
+            {
+                this.BackColor = Color.FromArgb(45, 45, 48);
+                this.ForeColor = Color.White;
+                // đổi màu cho child controls...
+            }
+            else
+            {
+                this.BackColor = Color.White;
+                this.ForeColor = Color.Black;
+                // đổi màu cho child controls...
+            }
         }
         // Thiết lập ComboBox
         private void InitializeComboBox()

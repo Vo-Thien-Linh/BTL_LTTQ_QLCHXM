@@ -27,6 +27,8 @@ namespace UI.FormUI
 
             InitializeForm();
             LoadData();
+
+
         }
 
         private void InitializeForm()
@@ -291,6 +293,11 @@ namespace UI.FormUI
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void FormDuyetDonHang_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
