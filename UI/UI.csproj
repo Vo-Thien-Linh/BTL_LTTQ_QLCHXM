@@ -71,6 +71,9 @@
     <Compile Include="FormHandleUI\FormGiaoXe.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormHandleUI\FormGiaoXe.Designer.cs">
+      <DependentUpon>FormGiaoXe.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHandleUI\FormQuanLyKhachHang.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +112,9 @@
     </Compile>
     <Compile Include="FormHandleUI\FormTraXe.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormTraXe.Designer.cs">
+      <DependentUpon>FormTraXe.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormDuyetDonHang.cs">
       <SubType>Form</SubType>
