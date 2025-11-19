@@ -247,5 +247,20 @@ namespace DAL
             number++;
             return "KH" + number.ToString("D8");
         }
+        /// <summary>
+        /// Kiểm tra số điện thoại đã tồn tại trong bảng NhanVien
+        /// </summary>
+        public bool CheckSdtExistsInNhanVien(string sdt)
+        {
+            string query = "SELECT COUNT(*) FROM NhanVien WHERE Sdt = @Sdt";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+        new SqlParameter("@Sdt", sdt)
+            };
+            int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+            return count > 0;
+        }
     }
+
+
 }

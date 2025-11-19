@@ -77,6 +77,7 @@
             this.panelMain.Padding = new System.Windows.Forms.Padding(20);
             this.panelMain.Size = new System.Drawing.Size(800, 450);
             this.panelMain.TabIndex = 1;
+            this.panelMain.Paint += new System.Windows.Forms.PaintEventHandler(this.panelMain_Paint);
             // 
             // groupBox1
             // 
@@ -112,7 +113,7 @@
             this.chkNgaySinh.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.chkNgaySinh.Location = new System.Drawing.Point(400, 143);
             this.chkNgaySinh.Name = "chkNgaySinh";
-            this.chkNgaySinh.Size = new System.Drawing.Size(137, 27);
+            this.chkNgaySinh.Size = new System.Drawing.Size(131, 27);
             this.chkNgaySinh.TabIndex = 14;
             this.chkNgaySinh.Text = "Có ngày sinh";
             this.chkNgaySinh.UseVisualStyleBackColor = true;
@@ -246,7 +247,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.label1.Location = new System.Drawing.Point(20, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 23);
+            this.label1.Size = new System.Drawing.Size(65, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "Mã KH:";
             // 
@@ -273,7 +274,6 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(140, 45);
             this.btnCancel.TabIndex = 1;
-            // Sửa thành:
             this.btnCancel.Text = "✖ Hủy";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
@@ -314,6 +314,7 @@
             this.groupBox1.PerformLayout();
             this.panelFooter.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion

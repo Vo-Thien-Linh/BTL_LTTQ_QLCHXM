@@ -45,9 +45,17 @@ namespace BLL
                 return false;
             }
 
+            // ✅ KIỂM TRA TRÙNG TRONG BẢNG NHÂN VIÊN
             if (!string.IsNullOrEmpty(nv.Sdt) && nhanVienDAL.CheckSdtExists(nv.Sdt))
             {
-                errorMessage = "Số điện thoại đã được sử dụng!";
+                errorMessage = "Số điện thoại đã được sử dụng bởi nhân viên khác!";
+                return false;
+            }
+
+            // ✅ KIỂM TRA TRÙNG VỚI BẢNG KHÁCH HÀNG (MỚI THÊM)
+            if (!string.IsNullOrEmpty(nv.Sdt) && nhanVienDAL.CheckSdtExistsInKhachHang(nv.Sdt))
+            {
+                errorMessage = "Số điện thoại đã được sử dụng bởi khách hàng trong hệ thống!";
                 return false;
             }
 
@@ -75,9 +83,17 @@ namespace BLL
                 return false;
             }
 
+            // ✅ KIỂM TRA TRÙNG TRONG BẢNG NHÂN VIÊN
             if (!string.IsNullOrEmpty(nv.Sdt) && nhanVienDAL.CheckSdtExists(nv.Sdt, nv.MaNV))
             {
                 errorMessage = "Số điện thoại đã được sử dụng bởi nhân viên khác!";
+                return false;
+            }
+
+            // ✅ KIỂM TRA TRÙNG VỚI BẢNG KHÁCH HÀNG (MỚI THÊM)
+            if (!string.IsNullOrEmpty(nv.Sdt) && nhanVienDAL.CheckSdtExistsInKhachHang(nv.Sdt))
+            {
+                errorMessage = "Số điện thoại đã được sử dụng bởi khách hàng trong hệ thống!";
                 return false;
             }
 
@@ -95,7 +111,6 @@ namespace BLL
 
             return nhanVienDAL.UpdateNhanVien(nv);
         }
-
         public bool DeleteNhanVien(string maNV, out string errorMessage)
         {
             errorMessage = "";

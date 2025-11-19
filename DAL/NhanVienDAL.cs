@@ -218,7 +218,20 @@ namespace DAL
             return count > 0;
         }
 
-        
+        /// <summary>
+        /// Kiểm tra số điện thoại đã tồn tại trong bảng KhachHang
+        /// </summary>
+        public bool CheckSdtExistsInKhachHang(string sdt)
+        {
+            string query = "SELECT COUNT(*) FROM KhachHang WHERE Sdt = @Sdt";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+        new SqlParameter("@Sdt", sdt)
+            };
+            int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+            return count > 0;
+        }
+
         /// Kiểm tra email đã tồn tại
         public bool CheckEmailExists(string email, string maNV = null)
         {
