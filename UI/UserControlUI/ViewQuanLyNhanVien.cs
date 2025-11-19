@@ -33,8 +33,31 @@ namespace UI.UserControlUI
             btnXoaNhanVien.Click += Btn_DeleteEmployee_Click;
             btnLamMoi.Click += Btn_RefreshEmployee_Click;
             txtTuKhoa.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) BtnSearch_Click(s, e); };
+
+            ThemeManager.Instance.ThemeChanged += OnThemeChanged;
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
         }
 
+        private void OnThemeChanged(object sender, EventArgs e)
+        {
+            ApplyTheme(ThemeManager.Instance.CurrentTheme);
+        }
+
+        private void ApplyTheme(string theme)
+        {
+            if (theme == "Dark")
+            {
+                this.BackColor = Color.FromArgb(45, 45, 48);
+                this.ForeColor = Color.White;
+                // đổi màu cho child controls...
+            }
+            else
+            {
+                this.BackColor = Color.White;
+                this.ForeColor = Color.Black;
+                // đổi màu cho child controls...
+            }
+        }
         private void InitializeCardView()
         {
             // FlowLayoutPanel để chứa các card nhân viên
@@ -623,6 +646,11 @@ namespace UI.UserControlUI
         }
 
         private void lblRecordCount_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelDataGrid_Paint(object sender, PaintEventArgs e)
         {
 
         }

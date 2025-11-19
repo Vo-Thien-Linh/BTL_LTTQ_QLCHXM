@@ -44,8 +44,9 @@
             this.panelTop.Controls.Add(this.lblTitle);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(500, 60);
+            this.panelTop.Size = new System.Drawing.Size(667, 74);
             this.panelTop.TabIndex = 0;
             // 
             // lblTitle
@@ -53,9 +54,10 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(20, 15);
+            this.lblTitle.Location = new System.Drawing.Point(27, 18);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(264, 30);
+            this.lblTitle.Size = new System.Drawing.Size(364, 37);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "LY DO TU CHOI DON HANG";
             // 
@@ -66,43 +68,48 @@
             this.panelMain.Controls.Add(this.txtLyDo);
             this.panelMain.Controls.Add(this.lblLyDo);
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelMain.Location = new System.Drawing.Point(0, 60);
+            this.panelMain.Location = new System.Drawing.Point(0, 74);
+            this.panelMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Padding = new System.Windows.Forms.Padding(20);
-            this.panelMain.Size = new System.Drawing.Size(500, 240);
+            this.panelMain.Padding = new System.Windows.Forms.Padding(27, 25, 27, 25);
+            this.panelMain.Size = new System.Drawing.Size(667, 295);
             this.panelMain.TabIndex = 1;
-            // 
-            // lblLyDo
-            // 
-            this.lblLyDo.AutoSize = true;
-            this.lblLyDo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.lblLyDo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
-            this.lblLyDo.Location = new System.Drawing.Point(20, 20);
-            this.lblLyDo.Name = "lblLyDo";
-            this.lblLyDo.Size = new System.Drawing.Size(121, 19);
-            this.lblLyDo.TabIndex = 0;
-            this.lblLyDo.Text = "Lý do từ chối: *";
-            // 
-            // txtLyDo
-            // 
-            this.txtLyDo.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtLyDo.Location = new System.Drawing.Point(20, 50);
-            this.txtLyDo.Multiline = true;
-            this.txtLyDo.Name = "txtLyDo";
-            this.txtLyDo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLyDo.Size = new System.Drawing.Size(460, 120);
-            this.txtLyDo.TabIndex = 1;
             // 
             // lblGuidance
             // 
             this.lblGuidance.AutoSize = true;
             this.lblGuidance.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Italic);
             this.lblGuidance.ForeColor = System.Drawing.Color.Gray;
-            this.lblGuidance.Location = new System.Drawing.Point(20, 180);
+            this.lblGuidance.Location = new System.Drawing.Point(27, 222);
+            this.lblGuidance.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblGuidance.Name = "lblGuidance";
-            this.lblGuidance.Size = new System.Drawing.Size(395, 30);
+            this.lblGuidance.Size = new System.Drawing.Size(320, 40);
             this.lblGuidance.TabIndex = 2;
-            this.lblGuidance.Text = "Lưu ý: Lý do từ chối sẽ được gửi đến khách hàng.\r\nVui lòng nhập rõ ràng và lịch sự (10-500 ký tự).";
+            this.lblGuidance.Text = "Lưu ý: Lý do từ chối sẽ được gửi đến khách hàng.\r\nVui lòng nhập rõ ràng và lịch s" +
+    "ự (10-500 ký tự).";
+            // 
+            // txtLyDo
+            // 
+            this.txtLyDo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtLyDo.Location = new System.Drawing.Point(27, 62);
+            this.txtLyDo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtLyDo.Multiline = true;
+            this.txtLyDo.Name = "txtLyDo";
+            this.txtLyDo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtLyDo.Size = new System.Drawing.Size(612, 147);
+            this.txtLyDo.TabIndex = 1;
+            // 
+            // lblLyDo
+            // 
+            this.lblLyDo.AutoSize = true;
+            this.lblLyDo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblLyDo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(33)))), ((int)(((byte)(33)))));
+            this.lblLyDo.Location = new System.Drawing.Point(27, 25);
+            this.lblLyDo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLyDo.Name = "lblLyDo";
+            this.lblLyDo.Size = new System.Drawing.Size(133, 23);
+            this.lblLyDo.TabIndex = 0;
+            this.lblLyDo.Text = "Lý do từ chối: *";
             // 
             // panelBottom
             // 
@@ -110,25 +117,11 @@
             this.panelBottom.Controls.Add(this.btnCancel);
             this.panelBottom.Controls.Add(this.btnOK);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 300);
+            this.panelBottom.Location = new System.Drawing.Point(0, 369);
+            this.panelBottom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(500, 70);
+            this.panelBottom.Size = new System.Drawing.Size(667, 86);
             this.panelBottom.TabIndex = 2;
-            // 
-            // btnOK
-            // 
-            this.btnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
-            this.btnOK.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnOK.FlatAppearance.BorderSize = 0;
-            this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOK.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.btnOK.ForeColor = System.Drawing.Color.White;
-            this.btnOK.Location = new System.Drawing.Point(170, 15);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(150, 40);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "✓ Xác Nhận";
-            this.btnOK.UseVisualStyleBackColor = false;
             // 
             // btnCancel
             // 
@@ -138,34 +131,54 @@
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.btnCancel.ForeColor = System.Drawing.Color.White;
-            this.btnCancel.Location = new System.Drawing.Point(330, 15);
+            this.btnCancel.Location = new System.Drawing.Point(440, 18);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(150, 40);
+            this.btnCancel.Size = new System.Drawing.Size(200, 49);
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "✕ Hủy";
             this.btnCancel.UseVisualStyleBackColor = false;
             // 
+            // btnOK
+            // 
+            this.btnOK.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.btnOK.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnOK.FlatAppearance.BorderSize = 0;
+            this.btnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOK.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.btnOK.ForeColor = System.Drawing.Color.White;
+            this.btnOK.Location = new System.Drawing.Point(227, 18);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(200, 49);
+            this.btnOK.TabIndex = 0;
+            this.btnOK.Text = "✓ Xác Nhận";
+            this.btnOK.UseVisualStyleBackColor = false;
+            // 
             // FormNhapLyDo
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(500, 370);
+            this.ClientSize = new System.Drawing.Size(667, 455);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormNhapLyDo";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Lý Do Từ Chối";
+            this.Load += new System.EventHandler(this.FormNhapLyDo_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelMain.ResumeLayout(false);
             this.panelMain.PerformLayout();
             this.panelBottom.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="PhuTungDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuenMatKhauDTO.cs" />
+    <Compile Include="SettingsDTO.cs" />
     <Compile Include="XeMayDTO.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,7 @@ namespace UI.FormUI
         {
             InitializeComponent();
             InitializeFormSettings();
+
         }
 
         private void InitializeFormSettings()
@@ -97,6 +98,11 @@ namespace UI.FormUI
             }
 
             return true;
+        }
+
+        private void FormNhapLyDo_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

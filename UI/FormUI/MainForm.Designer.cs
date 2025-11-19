@@ -45,6 +45,7 @@ namespace UI.FormUI
             this.btnQuanLyNhanVien = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pnlContent = new System.Windows.Forms.Panel();
+            this.btnCaiDat = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -86,6 +87,7 @@ namespace UI.FormUI
             // pnlMenuBar
             // 
             this.pnlMenuBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.pnlMenuBar.Controls.Add(this.btnCaiDat);
             this.pnlMenuBar.Controls.Add(this.btnThongKe);
             this.pnlMenuBar.Controls.Add(this.btnDangXuat);
             this.pnlMenuBar.Controls.Add(this.btnQuanLyXuLy);
@@ -97,7 +99,7 @@ namespace UI.FormUI
             this.pnlMenuBar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlMenuBar.Location = new System.Drawing.Point(0, 163);
             this.pnlMenuBar.Name = "pnlMenuBar";
-            this.pnlMenuBar.Size = new System.Drawing.Size(267, 858);
+            this.pnlMenuBar.Size = new System.Drawing.Size(267, 881);
             this.pnlMenuBar.TabIndex = 1;
             this.pnlMenuBar.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMenuBar_Paint);
             // 
@@ -113,7 +115,7 @@ namespace UI.FormUI
             // 
             // btnDangXuat
             // 
-            this.btnDangXuat.Location = new System.Drawing.Point(39, 768);
+            this.btnDangXuat.Location = new System.Drawing.Point(39, 810);
             this.btnDangXuat.Name = "btnDangXuat";
             this.btnDangXuat.Size = new System.Drawing.Size(181, 59);
             this.btnDangXuat.TabIndex = 7;
@@ -188,7 +190,7 @@ namespace UI.FormUI
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(267, 163);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(772, 858);
+            this.panel1.Size = new System.Drawing.Size(772, 881);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -197,16 +199,26 @@ namespace UI.FormUI
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContent.Location = new System.Drawing.Point(0, 0);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(772, 858);
+            this.pnlContent.Size = new System.Drawing.Size(772, 881);
             this.pnlContent.TabIndex = 0;
             this.pnlContent.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContent_Paint);
+            // 
+            // btnCaiDat
+            // 
+            this.btnCaiDat.Location = new System.Drawing.Point(0, 680);
+            this.btnCaiDat.Name = "btnCaiDat";
+            this.btnCaiDat.Size = new System.Drawing.Size(267, 99);
+            this.btnCaiDat.TabIndex = 8;
+            this.btnCaiDat.Text = "Cài đặt";
+            this.btnCaiDat.UseVisualStyleBackColor = true;
+            this.btnCaiDat.Click += new System.EventHandler(this.btnCaiDat_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1039, 1021);
+            this.ClientSize = new System.Drawing.Size(1039, 1044);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlMenuBar);
             this.Controls.Add(this.pnlHeader);
@@ -239,5 +251,6 @@ namespace UI.FormUI
         private System.Windows.Forms.Button btnQuanLyNhanVien;
         private System.Windows.Forms.Button btnThongKe;
         private System.Windows.Forms.Panel pnlContent;
+        private Button btnCaiDat;
     }
 }
