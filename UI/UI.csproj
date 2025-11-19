@@ -146,6 +146,12 @@
     <Compile Include="FormHandleUI\FormQuanLiNV.Designer.cs">
       <DependentUpon>FormQuanLiNV.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormUI\FormQuanLyBaoTri.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormQuanLyBaoTri.Designer.cs">
+      <DependentUpon>FormQuanLyBaoTri.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUI\FormTestViewXe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -235,6 +241,12 @@
     <Compile Include="UserControlUI\ViewQuanLyBanHang.Designer.cs">
       <DependentUpon>ViewQuanLyBanHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyBaoTri.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyBaoTri.Designer.cs">
+      <DependentUpon>ViewQuanLyBaoTri.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControlUI\ViewQuanLyChoThue.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -289,7 +301,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -335,6 +346,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormQuanLiNV.resx">
       <DependentUpon>FormQuanLiNV.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormQuanLyBaoTri.resx">
+      <DependentUpon>FormQuanLyBaoTri.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
