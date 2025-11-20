@@ -101,7 +101,7 @@ namespace UI.FormHandleUI
 
             try
             {
-                KhachHang kh = new KhachHang
+                KhachHangDTO kh = new KhachHangDTO
                 {
                     MaKH = txtMaKH.Text.Trim(),
                     HoTenKH = txtHoTen.Text.Trim(),

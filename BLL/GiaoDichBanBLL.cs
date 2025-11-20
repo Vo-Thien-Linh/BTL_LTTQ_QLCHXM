@@ -39,26 +39,26 @@ namespace BLL
         }
 
         /// <summary>
-        /// Thêm giao dịch bán mới
+        /// Thêm giao dịch bán mới và trả về MaGDBan
         /// </summary>
-        public bool InsertGiaoDichBan(GiaoDichBan gd, out string errorMessage)
+        public int InsertGiaoDichBan(GiaoDichBan gd, out string errorMessage)
         {
             errorMessage = "";
 
             // Validate dữ liệu
             if (!ValidateGiaoDichBan(gd, out errorMessage))
             {
-                return false;
+                return 0;
             }
 
             try
             {
-                return giaoDichBanDAL.InsertGiaoDichBan(gd);
+                return giaoDichBanDAL.InsertGiaoDichBan(gd, out errorMessage);
             }
             catch (Exception ex)
             {
                 errorMessage = "Lỗi khi thêm giao dịch bán: " + ex.Message;
-                return false;
+                return 0;
             }
         }
 

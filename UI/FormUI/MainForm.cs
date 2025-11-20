@@ -386,7 +386,7 @@ namespace UI.FormUI
 
         private void btnQuanLyBanHang_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new UserControlUI.ViewQuanLyBanHang(CurrentUser.MaNV));
         }
 
         private void btnQuanLyChoThue_Click(object sender, EventArgs e)

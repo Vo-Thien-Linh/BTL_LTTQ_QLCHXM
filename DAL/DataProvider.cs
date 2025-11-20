@@ -12,6 +12,14 @@ namespace DAL
         public static string connectionString = ConfigurationManager.ConnectionStrings["QLCuaHangXeMayConn"].ConnectionString;
 
         /// <summary>
+        /// Tạo và trả về SqlConnection mới
+        /// </summary>
+        public static SqlConnection GetConnection()
+        {
+            return new SqlConnection(connectionString);
+        }
+
+        /// <summary>
         /// Thực thi câu lệnh INSERT, UPDATE, DELETE
         /// </summary>
         public static int ExecuteNonQuery(string query, SqlParameter[] parameters = null)

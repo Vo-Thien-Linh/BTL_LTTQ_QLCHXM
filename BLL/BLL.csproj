@@ -59,6 +59,7 @@
     <Compile Include="GiaoDichBanBLL.cs" />
     <Compile Include="GiaoDichThueBLL.cs" />
     <Compile Include="HangXeBLL.cs" />
+    <Compile Include="HopDongMuaBLL.cs" />
     <Compile Include="HopDongThueBLL.cs" />
     <Compile Include="KhachHangBLL.cs" />
     <Compile Include="LanguageManagerBLL.cs" />

@@ -285,6 +285,42 @@ namespace DAL
             return count > 0;
         }
 
+        /// Lấy danh sách xe có thể bán (Sẵn sàng + có giá bán + SoLuong > 0)
+        public DataTable GetXeCoTheBan()
+        {
+            string query = @"
+        SELECT 
+            xe.ID_Xe,
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' (', lx.NamSX, ')', 
+                   ' - ', dx.PhanKhoi, 'cc') AS TenXe,
+            xe.BienSo,
+            hx.TenHang,
+            dx.TenDong,
+            ms.TenMau,
+            lx.NamSX,
+            dx.PhanKhoi,
+            xe.ThongTinXang,
+            xe.SoLuong,
+            xe.TrangThai,
+            xe.MucDichSuDung,
+            xe.AnhXe,
+            ISNULL(COALESCE(tg.GiaBan, xe.GiaNhap, xe.GiaMua), 0) AS GiaBan
+            FROM XeMay xe
+            INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+            INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+            INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+            INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+            LEFT JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe AND tg.PhanLoai = N'Bán'
+            WHERE xe.TrangThai = N'Sẵn sàng'
+              AND (xe.MucDichSuDung = N'Bán' OR xe.MucDichSuDung IS NULL)
+              AND xe.SoLuong IS NOT NULL
+              AND xe.SoLuong > 0
+              AND (tg.GiaBan IS NOT NULL OR xe.GiaNhap IS NOT NULL OR xe.GiaMua IS NOT NULL)
+            ORDER BY hx.TenHang, dx.TenDong, lx.NamSX DESC";
+
+            return DataProvider.ExecuteQuery(query);
+        }
+
         /// Lấy danh sách xe có thể cho thuê (Sẵn sàng + có giá thuê + không bị trùng lịch)
         public DataTable GetXeCoTheThue()
         {
@@ -417,6 +453,113 @@ namespace DAL
             catch
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Lấy giá xe theo loại
+        /// </summary>
+        public DataTable GetGiaXe(string idXe, string phanLoai)
+        {
+            try
+            {
+                string query = @"
+                    SELECT ID_ThongTinGia, ID_Xe, PhanLoai, GiaBan, GiaThueNgay, TienDatCoc, NgayCapNhat, GhiChu
+                    FROM ThongTinGiaXe
+                    WHERE ID_Xe = @ID_Xe AND PhanLoai = @PhanLoai";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ID_Xe", idXe),
+                    new SqlParameter("@PhanLoai", phanLoai)
+                };
+
+                return DataProvider.ExecuteQuery(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi GetGiaXe: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Lấy danh sách loại xe sẵn sàng bán (nhóm theo loại)
+        /// </summary>
+        public DataTable GetLoaiXeSanSangBan()
+        {
+            try
+            {
+                string query = @"
+                    SELECT 
+                        xe.ID_Loai,
+                        hx.TenHang,
+                        dx.TenDong,
+                        ms.TenMau,
+                        lx.NamSX,
+                        dx.PhanKhoi,
+                        COUNT(xe.ID_Xe) AS SoLuong,
+                        MAX(ISNULL(xe.GiaMua, xe.GiaNhap)) AS GiaBanGanNhat
+                    FROM XeMay xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    WHERE xe.MucDichSuDung = N'Bán' 
+                      AND xe.TrangThai = N'Sẵn sàng'
+                      AND (xe.SoLuong IS NULL OR xe.SoLuong > 0)
+                    GROUP BY xe.ID_Loai, hx.TenHang, dx.TenDong, ms.TenMau, lx.NamSX, dx.PhanKhoi
+                    HAVING COUNT(xe.ID_Xe) > 0
+                    ORDER BY hx.TenHang, dx.TenDong";
+
+                return DataProvider.ExecuteQuery(query);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi GetLoaiXeSanSangBan: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Lấy 1 xe cụ thể từ loại xe để bán
+        /// </summary>
+        public DataTable GetXeTheoLoaiDeBan(string idLoai)
+        {
+            try
+            {
+                string query = @"
+                    SELECT TOP 1
+                        xe.ID_Xe,
+                        xe.BienSo,
+                        hx.TenHang,
+                        dx.TenDong,
+                        ms.TenMau,
+                        lx.NamSX,
+                        ISNULL(xe.GiaMua, xe.GiaNhap) AS GiaBan,
+                        xe.SoLuong
+                    FROM XeMay xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    WHERE xe.ID_Loai = @ID_Loai
+                      AND xe.MucDichSuDung = N'Bán'
+                      AND xe.TrangThai = N'Sẵn sàng'
+                      AND (xe.SoLuong IS NULL OR xe.SoLuong > 0)
+                    ORDER BY xe.ID_Xe";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@ID_Loai", idLoai)
+                };
+
+                return DataProvider.ExecuteQuery(query, parameters);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi GetXeTheoLoaiDeBan: {ex.Message}");
+                return null;
             }
         }
     }
