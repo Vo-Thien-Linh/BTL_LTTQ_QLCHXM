@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddBtn" xml:space="preserve">
+    <value>+ Thêm mới</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Địa Chỉ</value>
+  </data>
   <data name="Animations" xml:space="preserve">
     <value>Hiệu ứng chuyển động</value>
+  </data>
+  <data name="BirthDate" xml:space="preserve">
+    <value>Ngày Sinh</value>
   </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Hủy</value>
@@ -132,11 +141,38 @@
   <data name="CancelConfirm" xml:space="preserve">
     <value>Đã hủy các thay đổi!</value>
   </data>
+  <data name="Cashier" xml:space="preserve">
+    <value>Thu ngân</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Xác nhận</value>
   </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Ngày Tạo</value>
+  </data>
+  <data name="CustomerID" xml:space="preserve">
+    <value>Mã KH</value>
+  </data>
+  <data name="CustomerTitle" xml:space="preserve">
+    <value>QUẢN LÝ KHÁCH HÀNG</value>
+  </data>
   <data name="DaysBefore" xml:space="preserve">
     <value>Số ngày nhắc trước:</value>
+  </data>
+  <data name="DeleteBtn" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="EditBtn" xml:space="preserve">
+    <value>Sửa</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmployeeTitle" xml:space="preserve">
+    <value>QUẢN LÝ NHÂN VIÊN</value>
+  </data>
+  <data name="Engineer" xml:space="preserve">
+    <value>Kỹ thuật</value>
   </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
@@ -147,14 +183,32 @@
   <data name="FontSize" xml:space="preserve">
     <value>Kích thước font:</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Họ Tên</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Giới Tính</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value> Thông báo</value>
+  </data>
   <data name="Interface" xml:space="preserve">
     <value>Giao diện</value>
+  </data>
+  <data name="Keyword" xml:space="preserve">
+    <value>Từ khóa:</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Ngôn ngữ / Language</value>
   </data>
+  <data name="Left" xml:space="preserve">
+    <value>Nghỉ</value>
+  </data>
   <data name="LoadError" xml:space="preserve">
     <value>Lỗi khi tải cài đặt:</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Quản lý</value>
   </data>
   <data name="MenuCustomer" xml:space="preserve">
     <value>Quản Lý Khách Hàng</value>
@@ -183,6 +237,12 @@
   <data name="MenuSettings" xml:space="preserve">
     <value>Cài Đặt</value>
   </data>
+  <data name="NoCustomerData" xml:space="preserve">
+    <value>Không có dữ liệu khách hàng</value>
+  </data>
+  <data name="NoEmployeeData" xml:space="preserve">
+    <value>Không có dữ liệu nhân viên</value>
+  </data>
   <data name="Notifications" xml:space="preserve">
     <value>Thông báo</value>
   </data>
@@ -197,6 +257,15 @@
   </data>
   <data name="NotifyRental" xml:space="preserve">
     <value>Thông báo khi khách hàng sắp hết hạn thuê</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>SĐT</value>
+  </data>
+  <data name="RecordCount" xml:space="preserve">
+    <value>Tổng số bản ghi: {0}</value>
+  </data>
+  <data name="RefreshBtn" xml:space="preserve">
+    <value>Làm mới</value>
   </data>
   <data name="RestoreConfirm" xml:space="preserve">
     <value> Bạn có chắc chắn muốn khôi phục cài đặt về mặc định?</value>
@@ -213,6 +282,12 @@
   <data name="SaveSuccessTitle" xml:space="preserve">
     <value>Thành công</value>
   </data>
+  <data name="SearchBtn" xml:space="preserve">
+    <value>Tìm</value>
+  </data>
+  <data name="SearchBy" xml:space="preserve">
+    <value>Tìm kiếm theo:</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Cài đặt</value>
   </data>
@@ -228,10 +303,19 @@
   <data name="ThemeLight" xml:space="preserve">
     <value>Sáng</value>
   </data>
+  <data name="Trial" xml:space="preserve">
+    <value>Thử việc</value>
+  </data>
+  <data name="UpdatedDate" xml:space="preserve">
+    <value>Cập Nhật</value>
+  </data>
   <data name="Vietnamese" xml:space="preserve">
     <value>Tiếng Việt</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Cảnh báo</value>
+  </data>
+  <data name="Working" xml:space="preserve">
+    <value>Đang làm việc</value>
   </data>
 </root>
