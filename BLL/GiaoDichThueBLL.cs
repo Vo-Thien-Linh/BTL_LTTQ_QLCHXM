@@ -71,17 +71,17 @@ namespace BLL
                         ELSE 0 
                     END AS TienPhatDuKien,
                     nv.HoTenNV AS TenNhanVien
-                FROM GiaoDichThue gd
-                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
-                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                WHERE gd.TrangThaiDuyet IN (N'Chờ duyệt', N'Đã duyệt')
-                ORDER BY 
+                    FROM GiaoDichThue gd
+                    INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                    INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                    LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                    WHERE gd.TrangThaiDuyet IN (N'Chờ duyệt', N'Đã duyệt')
+                    ORDER BY 
                     CASE gd.TrangThaiDuyet
                         WHEN N'Chờ duyệt' THEN 0
                         ELSE 1
@@ -97,7 +97,7 @@ namespace BLL
 
         public DataTable GetGiaoDichThueById(int maGDThue)
         {
-            // ✅ SỬA: LẤY TRỰC TIẾP TỪ DATABASE, KHÔNG QUA CACHE
+            //lay du lieu tu db
             string query = @"
                 SELECT 
                     gd.MaGDThue, 
@@ -148,47 +148,40 @@ namespace BLL
 
             try
             {
-                // 1. Validate dữ liệu đầu vào
+                //  Validate dữ liệu đầu vào
                 if (!ValidateGiaoDichThue(gd, out errorMessage))
                 {
                     return false;
                 }
-
-                // 2. Kiểm tra khách hàng tồn tại
+                //  Kiểm tra khách hàng tồn tại
                 if (!ValidateKhachHang(gd.MaKH, out errorMessage))
                 {
                     return false;
                 }
-
-                // 3. Kiểm tra trạng thái xe
+                // Kiểm tra trạng thái xe
                 if (!ValidateTrangThaiXe(gd.ID_Xe, out errorMessage))
                 {
                     return false;
                 }
-
-                // 4. Kiểm tra xe có trùng lịch không
+                //  Kiểm tra xe có trùng lịch không
                 if (IsXeDangThue(gd.ID_Xe, gd.NgayBatDau, gd.NgayKetThuc, out errorMessage))
                 {
                     return false;
                 }
-
-                // 5. Đảm bảo các trường mặc định
+                //  Đảm bảo các trường mặc định
                 if (string.IsNullOrWhiteSpace(gd.TrangThai))
                 {
                     gd.TrangThai = "Chờ xác nhận";
                 }
-
                 if (string.IsNullOrWhiteSpace(gd.TrangThaiThanhToan))
                 {
                     gd.TrangThaiThanhToan = "Chưa thanh toán";
                 }
-
                 if (string.IsNullOrWhiteSpace(gd.TrangThaiDuyet))
                 {
                     gd.TrangThaiDuyet = "Chờ duyệt";
                 }
-
-                // 6. Gọi DAL để insert
+                //  Gọi DAL để insert
                 bool success = giaoDichThueDAL.InsertGiaoDichThue(gd);
 
                 if (!success)
@@ -263,7 +256,6 @@ namespace BLL
                     return false;
                 }
 
-                //  Kiểm tra ngày bắt đầu đã quá hạn chưa
                 DateTime ngayBatDau = Convert.ToDateTime(row["NgayBatDau"]);
                 DateTime ngayKetThuc = Convert.ToDateTime(row["NgayKetThuc"]);
                 DateTime ngayHienTai = DateTime.Now.Date;
@@ -276,13 +268,11 @@ namespace BLL
                     return false;
                 }
 
-                //  Cảnh báo nếu ngày bắt đầu đã qua
                 if (ngayBatDau.Date < ngayHienTai)
                 {
                     ghiChu += $" [CẢNH BÁO: Ngày bắt đầu đã qua ({ngayBatDau:dd/MM/yyyy})]";
                 }
 
-                //  Kiểm tra lại xe có khả dụng không
                 string idXe = row["ID_Xe"].ToString();
                 if (IsXeDangThue(idXe, ngayBatDau, ngayKetThuc, out string xeError))
                 {
@@ -290,13 +280,12 @@ namespace BLL
                     return false;
                 }
 
-                //  Kiểm tra trạng thái xe
                 if (!ValidateTrangThaiXe(idXe, out errorMessage))
                 {
                     return false;
                 }
 
-                //  Duyệt đơn
+                //  duyet don
                 bool approveSuccess = giaoDichThueDAL.ApproveGiaoDichThue(maGDThue, nguoiDuyet, ghiChu);
                 
                 if (!approveSuccess)
@@ -305,28 +294,35 @@ namespace BLL
                     return false;
                 }
 
-                // TẠO HỢP ĐỒNG SAU KHI DUYỆT THÀNH CÔNG
+                //  TẠO HỢP ĐỒNG TỰ ĐỘNG (SAU KHI DUYỆT THÀNH CÔNG)
                 string hopDongError;
-                bool hopDongSuccess = hopDongThueBLL.TaoHopDongThue(maGDThue, nguoiDuyet, out hopDongError);
+                bool hopDongSuccess = hopDongThueBLL.TaoHopDongThue(
+                    maGDThue, 
+                    nguoiDuyet,  //  Truyền đúng MaTaiKhoan
+                    out hopDongError
+                );
                 
                 if (!hopDongSuccess)
                 {
-                    // ❌ SỬA: THÔNG BÁO CHO USER THAY VÌ CHỈ LOG
-                    errorMessage = $"Duyệt đơn thành công NHƯNG không tạo được hợp đồng!\n\n" +
-                   $"Lý do: {hopDongError}\n\n" +
-                   $"Vui lòng kiểm tra lại hoặc tạo hợp đồng thủ công.";
-    
-                    System.Diagnostics.Debug.WriteLine($"Cảnh báo: Không tạo được hợp đồng - {hopDongError}");
-    
-                    // VẪN RETURN TRUE VÌ DUYỆT ĐÃ THÀNH CÔNG
+                    //  Đơn đã duyệt NHƯNG chưa có hợp đồng
+                    errorMessage = $"✓ Duyệt đơn thành công!\n\n" +
+                                  $"⚠ NHƯNG không tạo được hợp đồng:\n{hopDongError}\n\n" +
+                                  $"→ Vui lòng kiểm tra và tạo hợp đồng thủ công!";
+
+                    System.Diagnostics.Debug.WriteLine($"[CẢNH BÁO] Duyệt GD #{maGDThue} OK nhưng không tạo được hợp đồng: {hopDongError}");
+                    
+                    //  VẪN RETURN TRUE vì duyệt đơn đã thành công
                     return true;
                 }
 
+                //  THÀNH CÔNG HOÀN TOÀN
+                System.Diagnostics.Debug.WriteLine($"[THÀNH CÔNG] Duyệt GD #{maGDThue} và tạo hợp đồng thành công!");
                 return true;
             }
             catch (Exception ex)
             {
                 errorMessage = "Lỗi khi duyệt giao dịch thuê: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[LỖI] ApproveGiaoDichThue: {ex.Message}\n{ex.StackTrace}");
                 return false;
             }
         }
@@ -411,10 +407,12 @@ namespace BLL
                     return false;
                 }
 
+                //  Cập nhật cả TrangThai sang "Chờ giao xe"
                 string query = @"
                     UPDATE GiaoDichThue 
                     SET TrangThaiThanhToan = N'Đã thanh toán',
-                        HinhThucThanhToan = @HinhThuc
+                        HinhThucThanhToan = @HinhThuc,
+                        TrangThai = N'Chờ giao xe'
                     WHERE MaGDThue = @MaGDThue";
 
                 SqlParameter[] parameters = new SqlParameter[]
@@ -980,14 +978,14 @@ namespace BLL
                     kh.HoTenKH,
                     CONCAT(hx.TenHang, ' ', dx.TenDong) AS TenXe,
                     xe.BienSo
-                FROM GiaoDichThue gd
-                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                WHERE gd.NgayBatDau BETWEEN @TuNgay AND @DenNgay
-                ORDER BY gd.NgayBatDau DESC";
+                    FROM GiaoDichThue gd
+                    INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                    INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    WHERE gd.NgayBatDau BETWEEN @TuNgay AND @DenNgay
+                    ORDER BY gd.NgayBatDau DESC";
 
             SqlParameter[] parameters = new SqlParameter[]
             {

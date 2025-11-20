@@ -14,21 +14,37 @@ namespace BLL
             hopDongThueDAL = new HopDongThueDAL();
         }
 
-        /// Tạo hợp đồng thuê từ giao dịch thuê
+        /// <summary>
+        /// Tạo hợp đồng thuê từ giao dịch thuê đã được duyệt
+        /// </summary>
         public bool TaoHopDongThue(int maGDThue, string maTaiKhoan, out string errorMessage)
         {
             errorMessage = "";
 
             try
             {
-                //  Kiểm tra đã có hợp đồng chưa
-                if (hopDongThueDAL.IsHopDongExists(maGDThue))
+                //  Validate tham số
+                if (maGDThue <= 0)
                 {
-                    errorMessage = "Giao dịch này đã có hợp đồng!";
+                    errorMessage = "Mã giao dịch không hợp lệ!";
                     return false;
                 }
 
-                //  Lấy thông tin giao dịch thuê
+                if (string.IsNullOrWhiteSpace(maTaiKhoan))
+                {
+                    errorMessage = "Mã tài khoản không được để trống!";
+                    return false;
+                }
+
+                // Kiểm tra đã có hợp đồng chưa
+                if (hopDongThueDAL.IsHopDongExists(maGDThue))
+                {
+                    errorMessage = "Giao dịch này đã có hợp đồng!";
+                    System.Diagnostics.Debug.WriteLine($"[INFO] GD #{maGDThue} đã có hợp đồng");
+                    return false;
+                }
+
+                // Lấy thông tin giao dịch thuê
                 GiaoDichThueBLL gdBLL = new GiaoDichThueBLL();
                 DataTable dt = gdBLL.GetGiaoDichThueById(maGDThue);
 
@@ -40,15 +56,25 @@ namespace BLL
 
                 DataRow row = dt.Rows[0];
 
-                //  Kiểm tra trạng thái
+                // Kiểm tra trạng thái
                 string trangThaiDuyet = row["TrangThaiDuyet"].ToString();
                 if (trangThaiDuyet != "Đã duyệt")
                 {
-                    errorMessage = "Chỉ tạo hợp đồng cho đơn đã được duyệt!";
+                    errorMessage = $"Chỉ tạo hợp đồng cho đơn đã được duyệt! (Trạng thái hiện tại: {trangThaiDuyet})";
                     return false;
                 }
 
-                //  Tạo hợp đồng
+                string dieuKhoan = TaoDieuKhoanMacDinh();
+                
+                //  Kiểm tra độ dài trước khi insert
+                int maxLength = 500; // Thay bằng độ dài thực tế của cột DieuKhoan trong DB
+                if (dieuKhoan.Length > maxLength)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[CẢNH BÁO] Điều khoản quá dài ({dieuKhoan.Length} ký tự), đã cắt xuống {maxLength}");
+                    dieuKhoan = dieuKhoan.Substring(0, maxLength);
+                }
+
+                // Tạo hợp đồng
                 HopDongThue hd = new HopDongThue
                 {
                     MaGDThue = maGDThue,
@@ -61,10 +87,19 @@ namespace BLL
                     GiaThue = Convert.ToDecimal(row["TongGia"]),
                     TienDatCoc = row["SoTienCoc"] != DBNull.Value 
                         ? Convert.ToDecimal(row["SoTienCoc"]) : (decimal?)null,
-                    DieuKhoan = TaoDieuKhoanMacDinh(),
-                    GhiChu = $"Hợp đồng tự động tạo từ GD #{maGDThue}",
-                    TrangThaiHopDong = "Đang hiệu lực"
+                    DieuKhoan = dieuKhoan, //  Sử dụng điều khoản đã kiểm tra
+                    GhiChu = $"Hợp đồng tự động tạo từ GD #{maGDThue} vào lúc {DateTime.Now:dd/MM/yyyy HH:mm}",
+                    TrangThaiHopDong = "Đang hiệu lực",
+                    FileHopDong = null  //  Có thể sinh file PDF sau
                 };
+
+                // Log thông tin trước khi insert
+                System.Diagnostics.Debug.WriteLine($"[DEBUG] Tạo hợp đồng:");
+                System.Diagnostics.Debug.WriteLine($"  - MaGDThue: {hd.MaGDThue}");
+                System.Diagnostics.Debug.WriteLine($"  - MaKH: {hd.MaKH}");
+                System.Diagnostics.Debug.WriteLine($"  - MaTaiKhoan: {hd.MaTaiKhoan}");
+                System.Diagnostics.Debug.WriteLine($"  - ID_Xe: {hd.ID_Xe}");
+                System.Diagnostics.Debug.WriteLine($"  - GiaThue: {hd.GiaThue:N0}");
 
                 bool success = hopDongThueDAL.InsertHopDongThue(hd);
 
@@ -74,47 +109,31 @@ namespace BLL
                     return false;
                 }
 
+                System.Diagnostics.Debug.WriteLine($"[THÀNH CÔNG] Đã tạo hợp đồng cho GD #{maGDThue}");
                 return true;
             }
             catch (Exception ex)
             {
-                errorMessage = "Lỗi: " + ex.Message;
+                errorMessage = "Lỗi khi tạo hợp đồng: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine($"[LỖI] TaoHopDongThue: {ex.Message}\n{ex.StackTrace}");
                 return false;
             }
         }
 
-        /// Lấy hợp đồng theo mã giao dịch
-        public DataTable GetHopDongByMaGDThue(int maGDThue)
-        {
-            return hopDongThueDAL.GetHopDongByMaGDThue(maGDThue);
-        }
-
-        /// Cập nhật trạng thái hợp đồng
-        public bool UpdateTrangThai(int maHDT, string trangThai, out string errorMessage)
-        {
-            errorMessage = "";
-
-            try
-            {
-                return hopDongThueDAL.UpdateTrangThaiHopDong(maHDT, trangThai);
-            }
-            catch (Exception ex)
-            {
-                errorMessage = "Lỗi: " + ex.Message;
-                return false;
-            }
-        }
-
-        /// Tạo điều khoản mặc định
+        /// <summary>
+        /// Tạo điều khoản mặc định cho hợp đồng thuê (RÚT NGẮN)
+        /// </summary>
         private string TaoDieuKhoanMacDinh()
         {
-            return @"
-                1. Khách hàng cam kết sử dụng xe đúng mục đích, không vi phạm pháp luật.
-                2. Khách hàng chịu trách nhiệm về mọi hành vi vi phạm giao thông trong thời gian thuê.
-                3. Trả xe đúng hạn, nếu trễ sẽ tính phí 150% giá thuê/ngày.
-                4. Bồi thường 100% giá trị xe nếu mất cắp hoặc hư hỏng nặng.
-                5. Xe trả về phải đủ xăng như khi nhận.
-                ";
+            return @"ĐIỀU KHOẢN HỢP ĐỒNG THUÊ XE
+
+            1. BÊN THUÊ cam kết sử dụng xe đúng mục đích, không vi phạm pháp luật.
+            2. BÊN THUÊ chịu trách nhiệm về mọi hành vi vi phạm giao thông.
+            3. Trả xe đúng hạn, nếu trễ tính phí 150%/ngày.
+            4. Bồi thường 100% giá trị xe nếu mất cắp/hư hỏng nặng.
+            5. Xe trả về phải đủ xăng như lúc nhận.
+            6. Hai bên cam kết thực hiện đúng hợp đồng.
+            7. Mọi tranh chấp giải quyết theo pháp luật Việt Nam.";
         }
     }
 }
