@@ -30,7 +30,7 @@ namespace BLL
             return khachHangDAL.GetKhachHangByMaKH(maKH);
         }
 
-        public bool InsertKhachHang(KhachHang kh, out string errorMessage)
+        public bool InsertKhachHang(KhachHangDTO kh, out string errorMessage)
         {
             errorMessage = "";
 
@@ -68,7 +68,7 @@ namespace BLL
             return khachHangDAL.InsertKhachHang(kh);
         }
 
-        public bool UpdateKhachHang(KhachHang kh, out string errorMessage)
+        public bool UpdateKhachHang(KhachHangDTO kh, out string errorMessage)
         {
             errorMessage = "";
 
@@ -126,7 +126,7 @@ namespace BLL
             return khachHangDAL.GenerateMaKH();
         }
 
-        private bool ValidateKhachHang(KhachHang kh, out string errorMessage, bool isUpdate)
+        private bool ValidateKhachHang(KhachHangDTO kh, out string errorMessage, bool isUpdate)
         {
             errorMessage = "";
 
@@ -185,6 +185,14 @@ namespace BLL
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Tìm khách hàng theo số điện thoại
+        /// </summary>
+        public KhachHangDTO GetKhachHangBySdt(string sdt)
+        {
+            return khachHangDAL.GetKhachHangBySdt(sdt);
         }
     }
 }

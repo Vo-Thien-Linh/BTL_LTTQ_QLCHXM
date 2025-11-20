@@ -133,29 +133,76 @@ namespace DAL
         }
 
         /// <summary>
-        /// Thêm giao dịch bán mới
+        /// Thêm giao dịch bán mới và trả về MaGDBan
         /// </summary>
-        public bool InsertGiaoDichBan(GiaoDichBan gd)
+        public int InsertGiaoDichBan(GiaoDichBan gd, out string errorMessage)
         {
-            string query = @"
-                INSERT INTO GiaoDichBan (MaKH, ID_Xe, NgayBan, GiaBan, TrangThaiThanhToan, 
-                    HinhThucThanhToan, MaTaiKhoan, TrangThaiDuyet)
-                VALUES (@MaKH, @ID_Xe, @NgayBan, @GiaBan, @TrangThaiThanhToan, 
-                    @HinhThucThanhToan, @MaTaiKhoan, @TrangThaiDuyet)";
-
-            SqlParameter[] parameters = new SqlParameter[]
+            errorMessage = "";
+            using (SqlConnection connection = DataProvider.GetConnection())
             {
-                new SqlParameter("@MaKH", gd.MaKH),
-                new SqlParameter("@ID_Xe", gd.ID_Xe),
-                new SqlParameter("@NgayBan", gd.NgayBan),
-                new SqlParameter("@GiaBan", gd.GiaBan),
-                new SqlParameter("@TrangThaiThanhToan", (object)gd.TrangThaiThanhToan ?? DBNull.Value),
-                new SqlParameter("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value),
-                new SqlParameter("@MaTaiKhoan", (object)gd.MaTaiKhoan ?? DBNull.Value),
-                new SqlParameter("@TrangThaiDuyet", gd.TrangThaiDuyet)
-            };
+                connection.Open();
+                SqlTransaction transaction = connection.BeginTransaction();
 
-            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+                try
+                {
+                    // 1. Kiểm tra số lượng tồn
+                    string checkQuery = "SELECT SoLuong FROM XeMay WHERE ID_Xe = @ID_Xe";
+                    SqlCommand checkCmd = new SqlCommand(checkQuery, connection, transaction);
+                    checkCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
+                    
+                    object result = checkCmd.ExecuteScalar();
+                    if (result == null || Convert.ToInt32(result) <= 0)
+                    {
+                        transaction.Rollback();
+                        errorMessage = "Xe đã hết hàng!";
+                        return 0;
+                    }
+
+                    // 2. Thêm giao dịch bán và lấy MaGDBan
+                    string insertQuery = @"
+                        INSERT INTO GiaoDichBan (MaKH, ID_Xe, NgayBan, GiaBan, TrangThaiThanhToan, 
+                            HinhThucThanhToan, MaTaiKhoan)
+                        VALUES (@MaKH, @ID_Xe, @NgayBan, @GiaBan, @TrangThaiThanhToan, 
+                            @HinhThucThanhToan, @MaTaiKhoan);
+                        SELECT CAST(SCOPE_IDENTITY() AS INT);";
+
+                    SqlCommand insertCmd = new SqlCommand(insertQuery, connection, transaction);
+                    insertCmd.Parameters.AddWithValue("@MaKH", gd.MaKH);
+                    insertCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
+                    insertCmd.Parameters.AddWithValue("@NgayBan", gd.NgayBan);
+                    insertCmd.Parameters.AddWithValue("@GiaBan", gd.GiaBan);
+                    insertCmd.Parameters.AddWithValue("@TrangThaiThanhToan", (object)gd.TrangThaiThanhToan ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@MaTaiKhoan", (object)gd.MaTaiKhoan ?? DBNull.Value);
+                    
+                    int maGDBan = Convert.ToInt32(insertCmd.ExecuteScalar());
+
+                    // 3. Cập nhật số lượng xe (giảm 1) và tăng SoLuongBanRa
+                    string updateQuery = @"
+                        UPDATE XeMay 
+                        SET SoLuong = SoLuong - 1,
+                            SoLuongBanRa = ISNULL(SoLuongBanRa, 0) + 1,
+                            TrangThai = CASE 
+                                WHEN SoLuong - 1 = 0 THEN N'Đã bán'
+                                ELSE TrangThai
+                            END
+                        WHERE ID_Xe = @ID_Xe";
+
+                    SqlCommand updateCmd = new SqlCommand(updateQuery, connection, transaction);
+                    updateCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
+                    updateCmd.ExecuteNonQuery();
+
+                    transaction.Commit();
+                    return maGDBan;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    errorMessage = ex.Message;
+                    System.Diagnostics.Debug.WriteLine($"Lỗi InsertGiaoDichBan: {ex.Message}");
+                    return 0;
+                }
+            }
         }
 
         /// <summary>

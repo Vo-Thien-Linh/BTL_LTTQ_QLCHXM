@@ -13,7 +13,7 @@ namespace DAL
         public DataTable GetAllKhachHang()
         {
             string query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                            NgayTao, NgayCapNhat 
+                            NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
                             FROM KhachHang 
                             ORDER BY MaKH DESC";
             return DataProvider.ExecuteQuery(query);
@@ -31,28 +31,28 @@ namespace DAL
             {
                 case "Mã khách hàng":
                     query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat 
+                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
                              FROM KhachHang 
                              WHERE MaKH LIKE @keyword 
                              ORDER BY MaKH DESC";
                     break;
                 case "Họ và tên":
                     query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat 
+                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
                              FROM KhachHang 
                              WHERE HoTenKH LIKE @keyword 
                              ORDER BY MaKH DESC";
                     break;
                 case "Số điện thoại":
                     query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat 
+                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
                              FROM KhachHang 
                              WHERE Sdt LIKE @keyword 
                              ORDER BY MaKH DESC";
                     break;
                 case "Email":
                     query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat 
+                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
                              FROM KhachHang 
                              WHERE Email LIKE @keyword 
                              ORDER BY MaKH DESC";
@@ -75,7 +75,7 @@ namespace DAL
         public DataTable GetKhachHangByMaKH(string maKH)
         {
             string query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                            NgayTao, NgayCapNhat 
+                            NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
                             FROM KhachHang 
                             WHERE MaKH = @MaKH";
             SqlParameter[] parameters = new SqlParameter[]
@@ -88,12 +88,12 @@ namespace DAL
         /// <summary>
         /// Thêm khách hàng mới
         /// </summary>
-        public bool InsertKhachHang(KhachHang kh)
+        public bool InsertKhachHang(KhachHangDTO kh)
         {
             string query = @"INSERT INTO KhachHang (MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, 
-                            Email, DiaChi, NgayTao, NgayCapNhat)
+                            Email, DiaChi, NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo)
                             VALUES (@MaKH, @HoTenKH, @NgaySinh, @GioiTinh, @Sdt, 
-                            @Email, @DiaChi, GETDATE(), GETDATE())";
+                            @Email, @DiaChi, GETDATE(), GETDATE(), @SoCCCD, @LoaiGiayTo, @AnhGiayTo)";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -103,7 +103,10 @@ namespace DAL
                 new SqlParameter("@GioiTinh", (object)kh.GioiTinh ?? DBNull.Value),
                 new SqlParameter("@Sdt", (object)kh.Sdt ?? DBNull.Value),
                 new SqlParameter("@Email", (object)kh.Email ?? DBNull.Value),
-                new SqlParameter("@DiaChi", (object)kh.DiaChi ?? DBNull.Value)
+                new SqlParameter("@DiaChi", (object)kh.DiaChi ?? DBNull.Value),
+                new SqlParameter("@SoCCCD", (object)kh.SoCCCD ?? DBNull.Value),
+                new SqlParameter("@LoaiGiayTo", (object)kh.LoaiGiayTo ?? DBNull.Value),
+                new SqlParameter("@AnhGiayTo", (object)kh.AnhGiayTo ?? DBNull.Value)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
@@ -112,7 +115,7 @@ namespace DAL
         /// <summary>
         /// Cập nhật thông tin khách hàng
         /// </summary>
-        public bool UpdateKhachHang(KhachHang kh)
+        public bool UpdateKhachHang(KhachHangDTO kh)
         {
             string query = @"UPDATE KhachHang 
                             SET HoTenKH = @HoTenKH, 
@@ -121,6 +124,9 @@ namespace DAL
                                 Sdt = @Sdt, 
                                 Email = @Email, 
                                 DiaChi = @DiaChi, 
+                                SoCCCD = @SoCCCD,
+                                LoaiGiayTo = @LoaiGiayTo,
+                                AnhGiayTo = @AnhGiayTo,
                                 NgayCapNhat = GETDATE()
                             WHERE MaKH = @MaKH";
 
@@ -132,7 +138,10 @@ namespace DAL
                 new SqlParameter("@GioiTinh", (object)kh.GioiTinh ?? DBNull.Value),
                 new SqlParameter("@Sdt", (object)kh.Sdt ?? DBNull.Value),
                 new SqlParameter("@Email", (object)kh.Email ?? DBNull.Value),
-                new SqlParameter("@DiaChi", (object)kh.DiaChi ?? DBNull.Value)
+                new SqlParameter("@DiaChi", (object)kh.DiaChi ?? DBNull.Value),
+                new SqlParameter("@SoCCCD", (object)kh.SoCCCD ?? DBNull.Value),
+                new SqlParameter("@LoaiGiayTo", (object)kh.LoaiGiayTo ?? DBNull.Value),
+                new SqlParameter("@AnhGiayTo", (object)kh.AnhGiayTo ?? DBNull.Value)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
@@ -247,6 +256,46 @@ namespace DAL
             number++;
             return "KH" + number.ToString("D8");
         }
+
+        /// <summary>
+        /// Lấy khách hàng theo số điện thoại
+        /// </summary>
+        public KhachHangDTO GetKhachHangBySdt(string sdt)
+        {
+            string query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
+                            NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
+                            FROM KhachHang 
+                            WHERE Sdt = @Sdt";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Sdt", sdt)
+            };
+
+            DataTable dt = DataProvider.ExecuteQuery(query, parameters);
+
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+                return new KhachHangDTO
+                {
+                    MaKH = row["MaKH"].ToString(),
+                    HoTenKH = row["HoTenKH"].ToString(),
+                    NgaySinh = row["NgaySinh"] != DBNull.Value ? Convert.ToDateTime(row["NgaySinh"]) : (DateTime?)null,
+                    GioiTinh = row["GioiTinh"] != DBNull.Value ? row["GioiTinh"].ToString() : null,
+                    Sdt = row["Sdt"] != DBNull.Value ? row["Sdt"].ToString() : null,
+                    Email = row["Email"] != DBNull.Value ? row["Email"].ToString() : null,
+                    DiaChi = row["DiaChi"] != DBNull.Value ? row["DiaChi"].ToString() : null,
+                    SoCCCD = row["SoCCCD"] != DBNull.Value ? row["SoCCCD"].ToString() : null,
+                    LoaiGiayTo = row["LoaiGiayTo"] != DBNull.Value ? row["LoaiGiayTo"].ToString() : null,
+                    AnhGiayTo = row["AnhGiayTo"] != DBNull.Value ? (byte[])row["AnhGiayTo"] : null,
+                    NgayTao = Convert.ToDateTime(row["NgayTao"]),
+                    NgayCapNhat = Convert.ToDateTime(row["NgayCapNhat"])
+                };
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Kiểm tra số điện thoại đã tồn tại trong bảng NhanVien
         /// </summary>

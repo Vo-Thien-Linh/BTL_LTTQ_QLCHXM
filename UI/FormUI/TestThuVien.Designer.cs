@@ -39,7 +39,7 @@
             this.uiButton1.Location = new System.Drawing.Point(193, 209);
             this.uiButton1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiButton1.Name = "uiButton1";
-            this.uiButton1.Size = new System.Drawing.Size(100, 35);
+            this.uiButton1.Size = new System.Drawing.Size(121, 35);
             this.uiButton1.TabIndex = 0;
             this.uiButton1.Text = "uiButton1";
             this.uiButton1.TipsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F);

@@ -110,11 +110,23 @@
     <Compile Include="FormHandleUI\FormThemXe.Designer.cs">
       <DependentUpon>FormThemXe.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormHandleUI\FormThongTinBanHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormThongTinBanHang.Designer.cs">
+      <DependentUpon>FormThongTinBanHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHandleUI\FormTraXe.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormHandleUI\FormTraXe.Designer.cs">
       <DependentUpon>FormTraXe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormDanhSachHopDongMua.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormDanhSachHopDongMua.Designer.cs">
+      <DependentUpon>FormDanhSachHopDongMua.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormDuyetDonHang.cs">
       <SubType>Form</SubType>
@@ -133,6 +145,12 @@
     </Compile>
     <Compile Include="FormUI\FormKhachHang.Designer.cs">
       <DependentUpon>FormKhachHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormMuaXe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormMuaXe.Designer.cs">
+      <DependentUpon>FormMuaXe.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormNhapLyDo.cs">
       <SubType>Form</SubType>
@@ -163,6 +181,18 @@
     </Compile>
     <Compile Include="FormUI\FormThemDonThue.Designer.cs">
       <DependentUpon>FormThemDonThue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormThemKhachHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormThemKhachHang.Designer.cs">
+      <DependentUpon>FormThemKhachHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormUI\FormXemHopDongMua.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormXemHopDongMua.Designer.cs">
+      <DependentUpon>FormXemHopDongMua.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormXemHopDongThue.cs">
       <SubType>Form</SubType>
@@ -300,6 +330,10 @@
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{64a32c34-eb5a-429d-b2d1-8ef6fe5c0fec}</Project>
       <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{f6d05ce4-43e1-45a2-abca-ec162a6fa4ba}</Project>
+      <Name>DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\DTO\DTO.csproj">
       <Project>{4f8d5951-243b-43d8-b13d-c25cc01275e7}</Project>

@@ -12,10 +12,6 @@ namespace DTO
         public string TrangThaiThanhToan { get; set; }
         public string HinhThucThanhToan { get; set; }
         public string MaTaiKhoan { get; set; }
-        public string TrangThaiDuyet { get; set; }
-        public string NguoiDuyet { get; set; }
-        public DateTime? NgayDuyet { get; set; }
-        public string GhiChuDuyet { get; set; }
 
         // Thông tin bổ sung từ các bảng liên quan (không lưu DB)
         public string TenKhachHang { get; set; }
@@ -26,14 +22,12 @@ namespace DTO
 
         public GiaoDichBan()
         {
-            TrangThaiDuyet = "Chờ duyệt";
             TrangThaiThanhToan = "Chưa thanh toán";
         }
 
         public GiaoDichBan(int maGDBan, string maKH, string iD_Xe, DateTime ngayBan,
             decimal giaBan, string trangThaiThanhToan, string hinhThucThanhToan,
-            string maTaiKhoan, string trangThaiDuyet, string nguoiDuyet,
-            DateTime? ngayDuyet, string ghiChuDuyet)
+            string maTaiKhoan)
         {
             MaGDBan = maGDBan;
             MaKH = maKH;
@@ -43,10 +37,6 @@ namespace DTO
             TrangThaiThanhToan = trangThaiThanhToan;
             HinhThucThanhToan = hinhThucThanhToan;
             MaTaiKhoan = maTaiKhoan;
-            TrangThaiDuyet = trangThaiDuyet;
-            NguoiDuyet = nguoiDuyet;
-            NgayDuyet = ngayDuyet;
-            GhiChuDuyet = ghiChuDuyet;
         }
     }
 }

@@ -15,6 +15,7 @@
         private System.Windows.Forms.Button btnViewDetail;
         private System.Windows.Forms.Button btnApprove;
         private System.Windows.Forms.Button btnReject;
+        private System.Windows.Forms.Button btnXemHopDong;
         private System.Windows.Forms.Label lblRecordCount;
 
         protected override void Dispose(bool disposing)
@@ -158,6 +159,7 @@
             this.panelBottom.Controls.Add(this.btnViewDetail);
             this.panelBottom.Controls.Add(this.btnApprove);
             this.panelBottom.Controls.Add(this.btnReject);
+            this.panelBottom.Controls.Add(this.btnXemHopDong);
             this.panelBottom.Controls.Add(this.lblRecordCount);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 739);
@@ -208,6 +210,20 @@
             this.btnReject.TabIndex = 2;
             this.btnReject.Text = " Từ Chối";
             this.btnReject.UseVisualStyleBackColor = false;
+            // 
+            // btnXemHopDong
+            // 
+            this.btnXemHopDong.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(39)))), ((int)(((byte)(176)))));
+            this.btnXemHopDong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXemHopDong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnXemHopDong.ForeColor = System.Drawing.Color.White;
+            this.btnXemHopDong.Location = new System.Drawing.Point(614, 25);
+            this.btnXemHopDong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnXemHopDong.Name = "btnXemHopDong";
+            this.btnXemHopDong.Size = new System.Drawing.Size(200, 43);
+            this.btnXemHopDong.TabIndex = 4;
+            this.btnXemHopDong.Text = "📋 Xem Hợp Đồng";
+            this.btnXemHopDong.UseVisualStyleBackColor = false;
             // 
             // lblRecordCount
             // 

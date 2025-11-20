@@ -3,119 +3,58 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using BLL;
+using DTO;
 using UI.FormUI;
 
 namespace UI.UserControlUI
 {
     public partial class ViewQuanLyBanHang : UserControl
     {
-        private GiaoDichBanBLL giaoDichBanBLL;
-        private GiaoDichThueBLL giaoDichThueBLL;
-        private DataGridView dgvGiaoDich;
-        private bool isViewingBan = true; // true = Bán, false = Thuê
-        private string currentMaNV; // Mã nhân viên đang đăng nhập
+        private XeMayBLL xeMayBLL;
+        private FlowLayoutPanel flowPanelCards;
+        private string currentMaNV;
 
         public ViewQuanLyBanHang(string maNV)
         {
             InitializeComponent();
-            giaoDichBanBLL = new GiaoDichBanBLL();
-            giaoDichThueBLL = new GiaoDichThueBLL();
+            xeMayBLL = new XeMayBLL();
             currentMaNV = maNV;
 
-            InitializeDataGrid();
-            LoadData();
+            InitializeCardView();
+            LoadXeBan();
 
             // Gán sự kiện
             this.Load += ViewQuanLyBanHang_Load;
             btnSearch.Click += BtnSearch_Click;
             btnRefresh.Click += BtnRefresh_Click;
-            btnViewDetail.Click += BtnViewDetail_Click;
-            btnApprove.Click += BtnApprove_Click;
-            btnReject.Click += BtnReject_Click;
-            cboLoaiGiaoDich.SelectedIndexChanged += CboLoaiGiaoDich_SelectedIndexChanged;
-            cboTrangThai.SelectedIndexChanged += CboTrangThai_SelectedIndexChanged;
-            txtSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) BtnSearch_Click(s, e); };
+            btnXemHopDong.Click += BtnXemHopDong_Click;
         }
 
-        private void InitializeDataGrid()
+        private void InitializeCardView()
         {
-            dgvGiaoDich = new DataGridView
+            flowPanelCards = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                AutoGenerateColumns = true,
-                ReadOnly = true,
-                SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false,
-                AllowUserToAddRows = false,
-                AllowUserToDeleteRows = false,
-                BackgroundColor = Color.White,
-                BorderStyle = BorderStyle.None,
-                AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.FromArgb(248, 250, 252) },
-                RowHeadersVisible = false,
-                ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
-                {
-                    BackColor = Color.FromArgb(25, 118, 210),
-                    ForeColor = Color.White,
-                    Font = new Font("Segoe UI", 10F, FontStyle.Bold)
-                }
+                AutoScroll = true,
+                BackColor = Color.FromArgb(240, 240, 240),
+                Padding = new Padding(20)
             };
 
-            panelDataGrid.Controls.Add(dgvGiaoDich);
-
-            // Xử lý double click để xem chi tiết
-            dgvGiaoDich.CellDoubleClick += (s, e) =>
-            {
-                if (e.RowIndex >= 0)
-                {
-                    BtnViewDetail_Click(s, e);
-                }
-            };
-
-            // Xử lý selection changed
-            dgvGiaoDich.SelectionChanged += DgvGiaoDich_SelectionChanged;
+            panelDataGrid.Controls.Add(flowPanelCards);
         }
 
         private void ViewQuanLyBanHang_Load(object sender, EventArgs e)
         {
-            LoadData();
+            LoadXeBan();
         }
 
-        private void LoadData()
+        private void LoadXeBan()
         {
             try
             {
-                DataTable dt;
-                string trangThai = cboTrangThai.SelectedItem?.ToString();
-
-                if (isViewingBan)
-                {
-                    // Load giao dịch bán
-                    if (string.IsNullOrEmpty(trangThai) || trangThai == "Tất cả")
-                    {
-                        dt = giaoDichBanBLL.GetAllGiaoDichBan();
-                    }
-                    else
-                    {
-                        dt = giaoDichBanBLL.GetGiaoDichBanByTrangThai(trangThai);
-                    }
-                }
-                else
-                {
-                    // Load giao dịch thuê
-                    if (string.IsNullOrEmpty(trangThai) || trangThai == "Tất cả")
-                    {
-                        dt = giaoDichThueBLL.GetAllGiaoDichThue();
-                    }
-                    else
-                    {
-                        dt = giaoDichThueBLL.GetGiaoDichThueByTrangThai(trangThai);
-                    }
-                }
-
-                dgvGiaoDich.DataSource = dt;
-                UpdateRecordCount(dt.Rows.Count);
-                FormatDataGridView();
-                UpdateButtonStates();
+                DataTable dt = xeMayBLL.GetLoaiXeSanSangBan();
+                DisplayXeCards(dt);
+                UpdateRecordCount(dt?.Rows.Count ?? 0);
             }
             catch (Exception ex)
             {
@@ -124,128 +63,153 @@ namespace UI.UserControlUI
             }
         }
 
-        private void FormatDataGridView()
+        private void DisplayXeCards(DataTable dt)
         {
-            if (dgvGiaoDich.Columns.Count == 0) return;
+            flowPanelCards.Controls.Clear();
 
-            // Ẩn các cột không cần thiết
-            if (dgvGiaoDich.Columns.Contains("MaTaiKhoan"))
-                dgvGiaoDich.Columns["MaTaiKhoan"].Visible = false;
-            if (dgvGiaoDich.Columns.Contains("NguoiDuyet"))
-                dgvGiaoDich.Columns["NguoiDuyet"].Visible = false;
-            if (dgvGiaoDich.Columns.Contains("GhiChuDuyet"))
-                dgvGiaoDich.Columns["GhiChuDuyet"].Visible = false;
-
-            // Đổi tên cột hiển thị
-            if (isViewingBan)
+            if (dt == null || dt.Rows.Count == 0)
             {
-                if (dgvGiaoDich.Columns.Contains("MaGDBan"))
-                    dgvGiaoDich.Columns["MaGDBan"].HeaderText = "Mã GD";
-                if (dgvGiaoDich.Columns.Contains("NgayBan"))
-                    dgvGiaoDich.Columns["NgayBan"].HeaderText = "Ngày Bán";
-                if (dgvGiaoDich.Columns.Contains("GiaBan"))
+                Label lblEmpty = new Label
                 {
-                    dgvGiaoDich.Columns["GiaBan"].HeaderText = "Giá Bán";
-                    dgvGiaoDich.Columns["GiaBan"].DefaultCellStyle.Format = "N0";
-                }
-            }
-            else
-            {
-                if (dgvGiaoDich.Columns.Contains("MaGDThue"))
-                    dgvGiaoDich.Columns["MaGDThue"].HeaderText = "Mã GD";
-                if (dgvGiaoDich.Columns.Contains("NgayBatDau"))
-                    dgvGiaoDich.Columns["NgayBatDau"].HeaderText = "Ngày Bắt Đầu";
-                if (dgvGiaoDich.Columns.Contains("NgayKetThuc"))
-                    dgvGiaoDich.Columns["NgayKetThuc"].HeaderText = "Ngày Kết Thúc";
-                if (dgvGiaoDich.Columns.Contains("SoNgayThue"))
-                    dgvGiaoDich.Columns["SoNgayThue"].HeaderText = "Số Ngày";
-                if (dgvGiaoDich.Columns.Contains("GiaThueNgay"))
-                {
-                    dgvGiaoDich.Columns["GiaThueNgay"].HeaderText = "Giá/Ngày";
-                    dgvGiaoDich.Columns["GiaThueNgay"].DefaultCellStyle.Format = "N0";
-                }
-                if (dgvGiaoDich.Columns.Contains("TongGia"))
-                {
-                    dgvGiaoDich.Columns["TongGia"].HeaderText = "Tổng Giá";
-                    dgvGiaoDich.Columns["TongGia"].DefaultCellStyle.Format = "N0";
-                }
-                if (dgvGiaoDich.Columns.Contains("SoTienCoc"))
-                {
-                    dgvGiaoDich.Columns["SoTienCoc"].HeaderText = "Tiền Cọc";
-                    dgvGiaoDich.Columns["SoTienCoc"].DefaultCellStyle.Format = "N0";
-                }
+                    Text = "Không có xe nào sẵn sàng bán",
+                    Font = new Font("Segoe UI", 14F, FontStyle.Italic),
+                    ForeColor = Color.Gray,
+                    AutoSize = true,
+                    Padding = new Padding(20)
+                };
+                flowPanelCards.Controls.Add(lblEmpty);
+                return;
             }
 
-            // Cột chung
-            if (dgvGiaoDich.Columns.Contains("HoTenKH"))
-                dgvGiaoDich.Columns["HoTenKH"].HeaderText = "Khách Hàng";
-            if (dgvGiaoDich.Columns.Contains("SdtKhachHang"))
-                dgvGiaoDich.Columns["SdtKhachHang"].HeaderText = "SĐT";
-            if (dgvGiaoDich.Columns.Contains("TenXe"))
-                dgvGiaoDich.Columns["TenXe"].HeaderText = "Xe";
-            if (dgvGiaoDich.Columns.Contains("BienSo"))
-                dgvGiaoDich.Columns["BienSo"].HeaderText = "Biển Số";
-            if (dgvGiaoDich.Columns.Contains("TrangThaiDuyet"))
-                dgvGiaoDich.Columns["TrangThaiDuyet"].HeaderText = "Trạng Thái";
-            if (dgvGiaoDich.Columns.Contains("TrangThaiThanhToan"))
-                dgvGiaoDich.Columns["TrangThaiThanhToan"].HeaderText = "Thanh Toán";
-            if (dgvGiaoDich.Columns.Contains("NgayDuyet"))
-                dgvGiaoDich.Columns["NgayDuyet"].HeaderText = "Ngày Duyệt";
-            if (dgvGiaoDich.Columns.Contains("TenNhanVien"))
-                dgvGiaoDich.Columns["TenNhanVien"].HeaderText = "Người Duyệt";
-
-            // Set column width
-            dgvGiaoDich.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-            // Highlight trạng thái
-            dgvGiaoDich.CellFormatting += DgvGiaoDich_CellFormatting;
-        }
-
-        private void DgvGiaoDich_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            if (dgvGiaoDich.Columns[e.ColumnIndex].Name == "TrangThaiDuyet")
+            foreach (DataRow row in dt.Rows)
             {
-                if (e.Value != null)
-                {
-                    string trangThai = e.Value.ToString();
-                    if (trangThai == "Chờ duyệt")
-                    {
-                        e.CellStyle.BackColor = Color.FromArgb(255, 243, 205); // Vàng nhạt
-                        e.CellStyle.ForeColor = Color.FromArgb(255, 152, 0);
-                    }
-                    else if (trangThai == "Đã duyệt")
-                    {
-                        e.CellStyle.BackColor = Color.FromArgb(200, 230, 201); // Xanh lá nhạt
-                        e.CellStyle.ForeColor = Color.FromArgb(56, 142, 60);
-                    }
-                    else if (trangThai == "Từ chối")
-                    {
-                        e.CellStyle.BackColor = Color.FromArgb(255, 205, 210); // Đỏ nhạt
-                        e.CellStyle.ForeColor = Color.FromArgb(211, 47, 47);
-                    }
-                }
+                Panel card = CreateXeCard(row);
+                flowPanelCards.Controls.Add(card);
             }
         }
 
-        private void DgvGiaoDich_SelectionChanged(object sender, EventArgs e)
+        private Panel CreateXeCard(DataRow row)
         {
-            UpdateButtonStates();
+            string idLoai = row["ID_Loai"].ToString();
+            string tenHang = row["TenHang"].ToString();
+            string tenDong = row["TenDong"].ToString();
+            string tenMau = row["TenMau"].ToString();
+            string tenXe = $"{tenHang} {tenDong} - {tenMau}";
+            int namSX = row["NamSX"] != DBNull.Value ? Convert.ToInt32(row["NamSX"]) : 0;
+            int soLuong = Convert.ToInt32(row["SoLuong"]);
+            decimal giaBan = row["GiaBanGanNhat"] != DBNull.Value ? Convert.ToDecimal(row["GiaBanGanNhat"]) : 0;
+            int phanKhoi = row["PhanKhoi"] != DBNull.Value ? Convert.ToInt32(row["PhanKhoi"]) : 0;
+
+            // Panel chính của card
+            Panel card = new Panel
+            {
+                Width = 280,
+                Height = 220,
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle,
+                Margin = new Padding(10),
+                Padding = new Padding(15)
+            };
+
+            // Tên xe
+            Label lblTenXe = new Label
+            {
+                Text = tenXe,
+                Location = new Point(10, 10),
+                Width = 250,
+                Height = 45,
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(33, 150, 243),
+                TextAlign = ContentAlignment.TopLeft
+            };
+            card.Controls.Add(lblTenXe);
+
+            // Thông tin phân khối và năm
+            Label lblThongTin = new Label
+            {
+                Text = $"{phanKhoi}cc - Năm {namSX}",
+                Location = new Point(10, 60),
+                Width = 250,
+                Font = new Font("Segoe UI", 9F),
+                ForeColor = Color.Gray
+            };
+            card.Controls.Add(lblThongTin);
+
+            // Số lượng
+            Label lblSoLuong = new Label
+            {
+                Text = $"Còn: {soLuong} xe",
+                Location = new Point(10, 85),
+                Width = 250,
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = soLuong > 5 ? Color.FromArgb(76, 175, 80) : Color.FromArgb(255, 152, 0)
+            };
+            card.Controls.Add(lblSoLuong);
+
+            // Đường kẻ
+            Panel divider = new Panel
+            {
+                Location = new Point(10, 115),
+                Width = 250,
+                Height = 1,
+                BackColor = Color.FromArgb(224, 224, 224)
+            };
+            card.Controls.Add(divider);
+
+            // Giá bán
+            Label lblGia = new Label
+            {
+                Text = giaBan > 0 ? $"{giaBan:N0} VNĐ" : "Liên hệ",
+                Location = new Point(10, 125),
+                Width = 250,
+                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
+                ForeColor = Color.FromArgb(244, 67, 54),
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+            card.Controls.Add(lblGia);
+
+            // Nút MUA
+            Button btnMua = new Button
+            {
+                Text = "MUA",
+                Location = new Point(10, 165),
+                Width = 250,
+                Height = 40,
+                BackColor = Color.FromArgb(76, 175, 80),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                Cursor = Cursors.Hand
+            };
+            btnMua.FlatAppearance.BorderSize = 0;
+            btnMua.Click += (s, e) => BtnMua_Click(s, e, idLoai);
+            card.Controls.Add(btnMua);
+
+            // Hover effect
+            card.MouseEnter += (s, e) => card.BackColor = Color.FromArgb(245, 245, 245);
+            card.MouseLeave += (s, e) => card.BackColor = Color.White;
+
+            return card;
         }
 
-        private void UpdateButtonStates()
+        private void BtnMua_Click(object sender, EventArgs e, string idLoai)
         {
-            bool hasSelection = dgvGiaoDich.SelectedRows.Count > 0;
-            bool isChoDuyet = false;
-
-            if (hasSelection)
+            try
             {
-                string trangThai = dgvGiaoDich.SelectedRows[0].Cells["TrangThaiDuyet"].Value.ToString();
-                isChoDuyet = trangThai == "Chờ duyệt";
+                // Mở form bán xe mới (không phải form cũ trong FormHandleUI)
+                FormMuaXe formBan = new FormMuaXe(currentMaNV);
+                if (formBan.ShowDialog() == DialogResult.OK)
+                {
+                    MessageBox.Show("Bán xe thành công!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadXeBan(); // Refresh danh sách
+                }
             }
-
-            btnViewDetail.Enabled = hasSelection;
-            btnApprove.Enabled = hasSelection && isChoDuyet;
-            btnReject.Enabled = hasSelection && isChoDuyet;
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnSearch_Click(object sender, EventArgs e)
@@ -254,25 +218,20 @@ namespace UI.UserControlUI
 
             if (string.IsNullOrEmpty(keyword))
             {
-                LoadData();
+                LoadXeBan();
                 return;
             }
 
             try
             {
-                DataTable dt;
-                if (isViewingBan)
-                {
-                    dt = giaoDichBanBLL.SearchGiaoDichBan(keyword);
-                }
-                else
-                {
-                    dt = giaoDichThueBLL.SearchGiaoDichThue(keyword);
-                }
-
-                dgvGiaoDich.DataSource = dt;
-                UpdateRecordCount(dt.Rows.Count);
-                FormatDataGridView();
+                DataTable dt = xeMayBLL.GetLoaiXeSanSangBan();
+                
+                // Lọc theo từ khóa
+                DataView dv = dt.DefaultView;
+                dv.RowFilter = $"TenHang LIKE '%{keyword}%' OR TenDong LIKE '%{keyword}%' OR TenMau LIKE '%{keyword}%'";
+                
+                DisplayXeCards(dv.ToTable());
+                UpdateRecordCount(dv.Count);
             }
             catch (Exception ex)
             {
@@ -284,176 +243,25 @@ namespace UI.UserControlUI
         private void BtnRefresh_Click(object sender, EventArgs e)
         {
             txtSearch.Clear();
-            cboTrangThai.SelectedIndex = 0;
-            LoadData();
-        }
-
-        private void CboLoaiGiaoDich_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            isViewingBan = cboLoaiGiaoDich.SelectedIndex == 0;
-            LoadData();
-        }
-
-        private void CboTrangThai_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
-        private void BtnViewDetail_Click(object sender, EventArgs e)
-        {
-            if (dgvGiaoDich.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Vui lòng chọn một giao dịch để xem chi tiết!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            try
-            {
-                if (isViewingBan)
-                {
-                    int maGDBan = Convert.ToInt32(dgvGiaoDich.SelectedRows[0].Cells["MaGDBan"].Value);
-                    using (FormDuyetDonHang form = new FormDuyetDonHang(maGDBan, true, currentMaNV))
-                    {
-                        if (form.ShowDialog() == DialogResult.OK)
-                        {
-                            LoadData();
-                        }
-                    }
-                }
-                else
-                {
-                    int maGDThue = Convert.ToInt32(dgvGiaoDich.SelectedRows[0].Cells["MaGDThue"].Value);
-                    using (FormDuyetDonHang form = new FormDuyetDonHang(maGDThue, false, currentMaNV))
-                    {
-                        if (form.ShowDialog() == DialogResult.OK)
-                        {
-                            LoadData();
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi xem chi tiết: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void BtnApprove_Click(object sender, EventArgs e)
-        {
-            if (dgvGiaoDich.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Vui lòng chọn một giao dịch để duyệt!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var confirmResult = MessageBox.Show(
-                "Bạn có chắc chắn muốn duyệt đơn hàng này?",
-                "Xác nhận duyệt",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (confirmResult == DialogResult.Yes)
-            {
-                try
-                {
-                    string errorMessage;
-                    bool success;
-
-                    if (isViewingBan)
-                    {
-                        int maGDBan = Convert.ToInt32(dgvGiaoDich.SelectedRows[0].Cells["MaGDBan"].Value);
-                        success = giaoDichBanBLL.ApproveGiaoDichBan(maGDBan, currentMaNV, "", out errorMessage);
-                    }
-                    else
-                    {
-                        int maGDThue = Convert.ToInt32(dgvGiaoDich.SelectedRows[0].Cells["MaGDThue"].Value);
-                        success = giaoDichThueBLL.ApproveGiaoDichThue(maGDThue, currentMaNV, "", out errorMessage);
-                    }
-
-                    if (success)
-                    {
-                        MessageBox.Show("Duyệt đơn hàng thành công!", "Thông báo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadData();
-                    }
-                    else
-                    {
-                        MessageBox.Show(errorMessage, "Lỗi",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi duyệt đơn hàng: " + ex.Message, "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void BtnReject_Click(object sender, EventArgs e)
-        {
-            if (dgvGiaoDich.SelectedRows.Count == 0)
-            {
-                MessageBox.Show("Vui lòng chọn một giao dịch để từ chối!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Hiển thị form nhập lý do từ chối
-            using (FormNhapLyDo formLyDo = new FormNhapLyDo())
-            {
-                if (formLyDo.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        string errorMessage;
-                        bool success;
-
-                        if (isViewingBan)
-                        {
-                            int maGDBan = Convert.ToInt32(dgvGiaoDich.SelectedRows[0].Cells["MaGDBan"].Value);
-                            success = giaoDichBanBLL.RejectGiaoDichBan(maGDBan, currentMaNV, formLyDo.LyDo, out errorMessage);
-                        }
-                        else
-                        {
-                            int maGDThue = Convert.ToInt32(dgvGiaoDich.SelectedRows[0].Cells["MaGDThue"].Value);
-                            success = giaoDichThueBLL.RejectGiaoDichThue(maGDThue, currentMaNV, formLyDo.LyDo, out errorMessage);
-                        }
-
-                        if (success)
-                        {
-                            MessageBox.Show("Từ chối đơn hàng thành công!", "Thông báo",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            LoadData();
-                        }
-                        else
-                        {
-                            MessageBox.Show(errorMessage, "Lỗi",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Lỗi từ chối đơn hàng: " + ex.Message, "Lỗi",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
+            LoadXeBan();
         }
 
         private void UpdateRecordCount(int count)
         {
-            lblRecordCount.Text = $"Tổng số giao dịch: {count}";
+            lblRecordCount.Text = $"Tổng số loại xe có thể bán: {count}";
             lblRecordCount.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
+        }
+
+        private void BtnXemHopDong_Click(object sender, EventArgs e)
+        {
+            // Mở form danh sách hợp đồng mua
+            FormDanhSachHopDongMua formHopDong = new FormDanhSachHopDongMua();
+            formHopDong.ShowDialog();
         }
 
         private void panelTop_Paint(object sender, PaintEventArgs e)
         {
-
+            // Empty
         }
     }
 }

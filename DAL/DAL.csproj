@@ -61,6 +61,7 @@
     <Compile Include="DangKyDAL.cs" />
     <Compile Include="GiaoDichTraThueDAL.cs" />
     <Compile Include="HangXeDAL.cs" />
+    <Compile Include="HopDongMuaDAL.cs" />
     <Compile Include="HopDongThueDAL.cs" />
     <Compile Include="KhachHangDAL.cs" />
     <Compile Include="LoaiXeDAL.cs" />

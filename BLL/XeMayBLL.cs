@@ -445,6 +445,26 @@ namespace BLL
             }
         }
 
+        /// Lấy danh sách xe có thể bán
+        public DataTable GetXeCoTheBan()
+        {
+            try
+            {
+                DataTable dt = xeMayDAL.GetXeCoTheBan();
+                
+                if (dt.Rows.Count == 0)
+                {
+                    throw new Exception("Hiện tại không có xe nào có thể bán!\nVui lòng kiểm tra lại kho xe.");
+                }
+                
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         /// Lấy danh sách xe có thể cho thuê (không kiểm tra lịch)
         public DataTable GetXeCoTheThue()
         {
@@ -561,6 +581,51 @@ namespace BLL
             {
                 errorMessage = "Lỗi kiểm tra: " + ex.Message;
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Lấy giá xe theo loại (Bán hoặc Thuê)
+        /// </summary>
+        public DataTable GetGiaXe(string idXe, string phanLoai)
+        {
+            try
+            {
+                return xeMayDAL.GetGiaXe(idXe, phanLoai);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi lấy giá xe: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Lấy danh sách loại xe sẵn sàng bán
+        /// </summary>
+        public DataTable GetLoaiXeSanSangBan()
+        {
+            try
+            {
+                return xeMayDAL.GetLoaiXeSanSangBan();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi lấy danh sách loại xe bán: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Lấy xe theo loại để bán
+        /// </summary>
+        public DataTable GetXeTheoLoaiDeBan(string idLoai)
+        {
+            try
+            {
+                return xeMayDAL.GetXeTheoLoaiDeBan(idLoai);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi lấy xe theo loại: " + ex.Message);
             }
         }
     }
