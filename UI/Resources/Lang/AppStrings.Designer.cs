@@ -61,11 +61,38 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to + Thêm mới.
+        /// </summary>
+        internal static string AddBtn {
+            get {
+                return ResourceManager.GetString("AddBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Địa Chỉ.
+        /// </summary>
+        internal static string Address {
+            get {
+                return ResourceManager.GetString("Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hiệu ứng chuyển động.
         /// </summary>
         internal static string Animations {
             get {
                 return ResourceManager.GetString("Animations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày Sinh.
+        /// </summary>
+        internal static string BirthDate {
+            get {
+                return ResourceManager.GetString("BirthDate", resourceCulture);
             }
         }
         
@@ -106,6 +133,15 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thu ngân.
+        /// </summary>
+        internal static string Cashier {
+            get {
+                return ResourceManager.GetString("Cashier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Xác nhận.
         /// </summary>
         internal static string Confirm {
@@ -115,11 +151,83 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày Tạo.
+        /// </summary>
+        internal static string CreatedDate {
+            get {
+                return ResourceManager.GetString("CreatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã KH.
+        /// </summary>
+        internal static string CustomerID {
+            get {
+                return ResourceManager.GetString("CustomerID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QUẢN LÝ KHÁCH HÀNG.
+        /// </summary>
+        internal static string CustomerTitle {
+            get {
+                return ResourceManager.GetString("CustomerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số ngày nhắc trước:.
         /// </summary>
         internal static string DaysBefore {
             get {
                 return ResourceManager.GetString("DaysBefore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Xóa.
+        /// </summary>
+        internal static string DeleteBtn {
+            get {
+                return ResourceManager.GetString("DeleteBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sửa.
+        /// </summary>
+        internal static string EditBtn {
+            get {
+                return ResourceManager.GetString("EditBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        internal static string Email {
+            get {
+                return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to QUẢN LÝ NHÂN VIÊN.
+        /// </summary>
+        internal static string EmployeeTitle {
+            get {
+                return ResourceManager.GetString("EmployeeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kỹ thuật.
+        /// </summary>
+        internal static string Engineer {
+            get {
+                return ResourceManager.GetString("Engineer", resourceCulture);
             }
         }
         
@@ -151,11 +259,47 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Họ Tên.
+        /// </summary>
+        internal static string FullName {
+            get {
+                return ResourceManager.GetString("FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Giới Tính.
+        /// </summary>
+        internal static string Gender {
+            get {
+                return ResourceManager.GetString("Gender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Thông báo.
+        /// </summary>
+        internal static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Giao diện.
         /// </summary>
         internal static string Interface {
             get {
                 return ResourceManager.GetString("Interface", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Từ khóa:.
+        /// </summary>
+        internal static string Keyword {
+            get {
+                return ResourceManager.GetString("Keyword", resourceCulture);
             }
         }
         
@@ -169,11 +313,29 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nghỉ.
+        /// </summary>
+        internal static string Left {
+            get {
+                return ResourceManager.GetString("Left", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lỗi khi tải cài đặt:.
         /// </summary>
         internal static string LoadError {
             get {
                 return ResourceManager.GetString("LoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quản lý.
+        /// </summary>
+        internal static string Manager {
+            get {
+                return ResourceManager.GetString("Manager", resourceCulture);
             }
         }
         
@@ -259,6 +421,24 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Không có dữ liệu khách hàng.
+        /// </summary>
+        internal static string NoCustomerData {
+            get {
+                return ResourceManager.GetString("NoCustomerData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Không có dữ liệu nhân viên.
+        /// </summary>
+        internal static string NoEmployeeData {
+            get {
+                return ResourceManager.GetString("NoEmployeeData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thông báo.
         /// </summary>
         internal static string Notifications {
@@ -300,6 +480,33 @@ namespace UI.Resources.Lang {
         internal static string NotifyRental {
             get {
                 return ResourceManager.GetString("NotifyRental", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SĐT.
+        /// </summary>
+        internal static string Phone {
+            get {
+                return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tổng số bản ghi: {0}.
+        /// </summary>
+        internal static string RecordCount {
+            get {
+                return ResourceManager.GetString("RecordCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Làm mới.
+        /// </summary>
+        internal static string RefreshBtn {
+            get {
+                return ResourceManager.GetString("RefreshBtn", resourceCulture);
             }
         }
         
@@ -349,6 +556,24 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tìm.
+        /// </summary>
+        internal static string SearchBtn {
+            get {
+                return ResourceManager.GetString("SearchBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tìm kiếm theo:.
+        /// </summary>
+        internal static string SearchBy {
+            get {
+                return ResourceManager.GetString("SearchBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cài đặt.
         /// </summary>
         internal static string Settings {
@@ -394,6 +619,24 @@ namespace UI.Resources.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Thử việc.
+        /// </summary>
+        internal static string Trial {
+            get {
+                return ResourceManager.GetString("Trial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cập Nhật.
+        /// </summary>
+        internal static string UpdatedDate {
+            get {
+                return ResourceManager.GetString("UpdatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tiếng Việt.
         /// </summary>
         internal static string Vietnamese {
@@ -408,6 +651,15 @@ namespace UI.Resources.Lang {
         internal static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Đang làm việc.
+        /// </summary>
+        internal static string Working {
+            get {
+                return ResourceManager.GetString("Working", resourceCulture);
             }
         }
     }

@@ -258,6 +258,7 @@
             this.Name = "ViewQuanLyNhanVien";
             this.Padding = new System.Windows.Forms.Padding(20);
             this.Size = new System.Drawing.Size(1200, 740);
+            this.Load += new System.EventHandler(this.ViewQuanLyNhanVien_Load_1);
             this.panelHeader.ResumeLayout(false);
             this.panelSearch.ResumeLayout(false);
             this.panelSearch.PerformLayout();

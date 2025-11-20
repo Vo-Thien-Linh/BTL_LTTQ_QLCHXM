@@ -70,6 +70,7 @@ partial class ViewQuanLyKhachHang
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "QUẢN LÝ KHÁCH HÀNG";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
             // 
             // panelSearch
             // 
@@ -85,6 +86,7 @@ partial class ViewQuanLyKhachHang
             this.panelSearch.Padding = new System.Windows.Forms.Padding(20, 15, 20, 15);
             this.panelSearch.Size = new System.Drawing.Size(1160, 80);
             this.panelSearch.TabIndex = 1;
+            this.panelSearch.Paint += new System.Windows.Forms.PaintEventHandler(this.panelSearch_Paint);
             // 
             // btnSearch
             // 
@@ -100,6 +102,7 @@ partial class ViewQuanLyKhachHang
             this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = false;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
             // txtSearch
             // 
@@ -118,6 +121,7 @@ partial class ViewQuanLyKhachHang
             this.lblSearch.Size = new System.Drawing.Size(75, 23);
             this.lblSearch.TabIndex = 2;
             this.lblSearch.Text = "Từ khóa:";
+            this.lblSearch.Click += new System.EventHandler(this.lblSearch_Click);
             // 
             // cboSearchBy
             // 
@@ -143,6 +147,7 @@ partial class ViewQuanLyKhachHang
             this.lblSearchBy.Size = new System.Drawing.Size(123, 23);
             this.lblSearchBy.TabIndex = 0;
             this.lblSearchBy.Text = "Tìm kiếm theo:";
+            this.lblSearchBy.Click += new System.EventHandler(this.lblSearchBy_Click);
             // 
             // panelActions
             // 
@@ -217,6 +222,7 @@ partial class ViewQuanLyKhachHang
             this.btn_AddCustomer.TabIndex = 0;
             this.btn_AddCustomer.Text = "Thêm mới";
             this.btn_AddCustomer.UseVisualStyleBackColor = false;
+            this.btn_AddCustomer.Click += new System.EventHandler(this.btn_AddCustomer_Click);
             // 
             // panelDataGrid
             // 
@@ -227,6 +233,7 @@ partial class ViewQuanLyKhachHang
             this.panelDataGrid.Padding = new System.Windows.Forms.Padding(0, 0, 0, 50);
             this.panelDataGrid.Size = new System.Drawing.Size(1160, 440);
             this.panelDataGrid.TabIndex = 3;
+            this.panelDataGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDataGrid_Paint);
             // 
             // lblRecordCount
             // 
