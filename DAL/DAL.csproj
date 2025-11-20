@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="BaoTriDAL.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="DashboardDAL.cs" />
     <Compile Include="DataProvider.cs" />
     <Compile Include="DongXeDAL.cs" />
     <Compile Include="GiaoDichBanDAL.cs" />
