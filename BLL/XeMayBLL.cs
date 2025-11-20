@@ -636,5 +636,39 @@ namespace BLL
                 throw new Exception("Lỗi khi lấy xe theo loại: " + ex.Message);
             }
         }
+        // Thêm 3 methods này vào class XeMayBLL
+
+        public bool SoftDeleteXeMay(string idXe)
+        {
+            try
+            {
+                // Kiểm tra xe đã có giao dịch chưa
+                if (KiemTraXeCoGiaoDich(idXe))
+                {
+                    // Chuyển trạng thái thay vì xóa
+                    return CapNhatTrangThaiXe(idXe, "Đã xóa");
+                }
+                else
+                {
+                    // Nếu chưa có giao dịch thì có thể xóa hẳn
+                    return DeleteXeMay(idXe);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi xóa xe: " + ex.Message);
+            }
+        }
+
+        public bool KiemTraXeCoGiaoDich(string idXe)
+        {
+            return xeMayDAL.KiemTraXeCoGiaoDich(idXe);
+        }
+
+        public bool CapNhatTrangThaiXe(string idXe, string trangThai)
+        {
+            return xeMayDAL.CapNhatTrangThaiXe(idXe, trangThai);
+        }
+
     }
 }

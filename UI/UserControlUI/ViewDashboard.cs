@@ -6,21 +6,19 @@ using System.Windows.Forms;
 using BLL;
 using DTO;
 using Sunny.UI;
+using UI.FormHandleUI;
 
 namespace UI.UserControlUI
 {
     public partial class ViewDashboard : UserControl
     {
         private readonly DashboardBLL _bll = new DashboardBLL();
-
-        // THÊM MỚI: Biến lưu trữ dữ liệu gốc
         private DataTable _originalData;
 
         public ViewDashboard()
         {
             InitializeComponent();
             EnableDoubleBuffer(dgvXeMoiNhap);
-            // Icons đã được setup trong Designer nên không cần setup ở đây nữa
         }
 
         private void ViewDashboard_Load(object sender, EventArgs e)
@@ -62,7 +60,6 @@ namespace UI.UserControlUI
 
         private void LoadXeMoiNhap(DataTable dt)
         {
-            // THÊM MỚI: Lưu dữ liệu gốc để dùng cho filter
             _originalData = dt;
 
             dgvXeMoiNhap.Columns.Clear();
@@ -92,7 +89,7 @@ namespace UI.UserControlUI
             UpdateButtonState(btnFilterAll);
         }
 
-        // --- PHẦN THÊM MỚI: LOGIC XỬ LÝ LỌC ---
+        // --- FILTER LOGIC ---
 
         private void btnFilterAll_Click(object sender, EventArgs e)
         {
@@ -102,14 +99,12 @@ namespace UI.UserControlUI
 
         private void btnFilterRent_Click(object sender, EventArgs e)
         {
-            // Lọc xe có phân loại là Thuê (dựa vào cột PhanLoai trả về từ SQL)
             ApplyFilter("PhanLoai LIKE '%Thuê%'");
             UpdateButtonState(btnFilterRent);
         }
 
         private void btnFilterSale_Click(object sender, EventArgs e)
         {
-            // Lọc xe có phân loại là Bán
             ApplyFilter("PhanLoai LIKE '%Bán%'");
             UpdateButtonState(btnFilterSale);
         }
@@ -123,8 +118,6 @@ namespace UI.UserControlUI
                 DataView dv = _originalData.DefaultView;
                 dv.RowFilter = filterExpr;
                 dgvXeMoiNhap.DataSource = dv;
-
-                // Khi gán lại DataSource, cần đảm bảo Action Columns vẫn hiển thị đúng
                 AddActionColumns();
             }
             catch (Exception ex)
@@ -135,20 +128,14 @@ namespace UI.UserControlUI
 
         private void UpdateButtonState(Button activeBtn)
         {
-            // Style cho nút Active (Xanh, chữ Trắng)
             Color activeBack = Color.FromArgb(80, 160, 255);
             Color activeFore = Color.White;
-
-            // Style cho nút Inactive (Trắng, viền xám, chữ đen)
             Color inactiveBack = Color.White;
             Color inactiveFore = Color.FromArgb(64, 64, 64);
 
-            // Reset tất cả về inactive
             SetButtonStyle(btnFilterAll, inactiveBack, inactiveFore, 1);
             SetButtonStyle(btnFilterRent, inactiveBack, inactiveFore, 1);
             SetButtonStyle(btnFilterSale, inactiveBack, inactiveFore, 1);
-
-            // Set nút được chọn
             SetButtonStyle(activeBtn, activeBack, activeFore, 0);
         }
 
@@ -159,7 +146,7 @@ namespace UI.UserControlUI
             btn.FlatAppearance.BorderSize = borderSize;
         }
 
-        // --- HẾT PHẦN THÊM MỚI ---
+        // --- ACTION COLUMNS ---
 
         private void AddActionColumns()
         {
@@ -291,6 +278,13 @@ namespace UI.UserControlUI
             var colName = dgvXeMoiNhap.Columns[e.ColumnIndex].Name;
             var idXe = dgvXeMoiNhap.Rows[e.RowIndex].Cells["IDXe"].Value?.ToString() ?? "";
 
+            if (string.IsNullOrEmpty(idXe))
+            {
+                UIMessageBox.Show("Không xác định được ID xe!", "Lỗi",
+                    UIStyle.Red, UIMessageBoxButtons.OK);
+                return;
+            }
+
             switch (colName)
             {
                 case "colView":
@@ -305,38 +299,83 @@ namespace UI.UserControlUI
             }
         }
 
+        // ==================== TÍCH HỢP CÁC FORM ====================
+
         private void ViewDetail(string idXe)
         {
-            UIMessageBox.Show($"Xem chi tiết xe: {idXe}", "Thông tin",
-                UIStyle.Blue, UIMessageBoxButtons.OK);
+            try
+            {
+                var formXem = new FormXemXeDashBoard(idXe);
+                formXem.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                UIMessageBox.Show("Lỗi khi xem chi tiết: " + ex.Message, "Lỗi",
+                    UIStyle.Red, UIMessageBoxButtons.OK);
+            }
         }
 
         private void EditVehicle(string idXe)
         {
-            UIMessageBox.Show($"Sửa thông tin xe: {idXe}", "Chỉnh sửa",
-                UIStyle.Orange, UIMessageBoxButtons.OK);
+            try
+            {
+                var formSua = new FormChinhSuaThongTinXeDashBoard(idXe);
+
+                if (formSua.ShowDialog() == DialogResult.OK && formSua.IsUpdated)
+                {
+                    UIMessageBox.Show("Cập nhật thông tin xe thành công!", "Thành công",
+                        UIStyle.Green, UIMessageBoxButtons.OK);
+
+                    // Reload dữ liệu dashboard
+                    LoadDashboardData();
+                }
+            }
+            catch (Exception ex)
+            {
+                UIMessageBox.Show("Lỗi khi sửa thông tin: " + ex.Message, "Lỗi",
+                    UIStyle.Red, UIMessageBoxButtons.OK);
+            }
         }
 
         private void DeleteVehicle(string idXe)
         {
-            bool result = UIMessageBox.Show($"Bạn có chắc muốn xóa xe {idXe}?", "Xác nhận",
-                UIStyle.Red, UIMessageBoxButtons.OKCancel);
-
-            if (result)
+            try
             {
-                try
+                // Mở form xóa xe với chức năng soft delete
+                using (var formXoa = new FormXoaXeDashBoard(idXe))
                 {
-                    UIMessageBox.Show("Đã xóa xe thành công!", "Thành công",
-                        UIStyle.Green, UIMessageBoxButtons.OK);
-                    LoadDashboardData(); // Reload data
-                }
-                catch (Exception ex)
-                {
-                    UIMessageBox.Show("Lỗi khi xóa: " + ex.Message, "Lỗi",
-                        UIStyle.Red, UIMessageBoxButtons.OK);
+                    formXoa.StartPosition = FormStartPosition.CenterParent;
+
+                    if (formXoa.ShowDialog() == DialogResult.OK)
+                    {
+                        // Nếu xóa thành công, reload dashboard
+                        if (formXoa.IsDeleted)
+                        {
+                            UIMessageBox.Show(
+                                "Xóa xe thành công!",
+                                "Thành công",
+                                UIStyle.Green,
+                                UIMessageBoxButtons.OK
+                            );
+
+                            // Reload lại dữ liệu dashboard
+                            RefreshDashboard();
+                        }
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                UIMessageBox.Show(
+                    "Lỗi khi xóa xe: " + ex.Message,
+                    "Lỗi",
+                    UIStyle.Red,
+                    UIMessageBoxButtons.OK
+                );
+            }
         }
+
+        // ==================== CÁC PHƯƠNG THỨC KHÁC ====================
 
         private void btnXemTatCa_Click(object sender, EventArgs e)
         {

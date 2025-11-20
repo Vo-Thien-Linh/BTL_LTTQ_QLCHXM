@@ -1,6 +1,8 @@
+
 ﻿using DTO;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -11,6 +13,8 @@ namespace DAL
 {
     public class XeMayDAL
     {
+        private readonly string _connStr =
+      ConfigurationManager.ConnectionStrings["QLCuaHangXeMayConn"].ConnectionString;
         public string GetMaxID_Xe()
         {
             string query = "SELECT TOP 1 ID_Xe FROM XeMay ORDER BY ID_Xe DESC";
@@ -115,13 +119,26 @@ namespace DAL
         }
 
         // Lấy thông tin xe theo ID
+        // Lấy thông tin xe theo ID
         public XeMayDTO GetXeMayById(string idXe)
         {
             string query = @"
-        SELECT xm.*, lx.MaHang, lx.MaDong, lx.MaMau, lx.NamSX
-        FROM XeMay xm
-        INNER JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
-        WHERE xm.ID_Xe = @ID_Xe";
+                SELECT 
+                    xm.*,
+                    lx.MaHang,
+                    lx.MaDong,
+                    lx.MaMau,
+                    lx.NamSX,
+                    hx.TenHang,
+                    dx.TenDong,
+                    ms.TenMau
+                FROM XeMay xm
+                INNER JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                WHERE xm.ID_Xe = @ID_Xe";
+
             SqlParameter[] prm = { new SqlParameter("@ID_Xe", idXe) };
             DataTable dt = DataProvider.ExecuteQuery(query, prm);
             if (dt.Rows.Count > 0)
@@ -138,23 +155,25 @@ namespace DAL
                     NgayDangKy = r["NgayDangKy"] != DBNull.Value ? (DateTime?)r["NgayDangKy"] : null,
                     HetHanDangKy = r["HetHanDangKy"] != DBNull.Value ? (DateTime?)r["HetHanDangKy"] : null,
                     HetHanBaoHiem = r["HetHanBaoHiem"] != DBNull.Value ? (DateTime?)r["HetHanBaoHiem"] : null,
-                    KmDaChay = r["KmDaChay"] != DBNull.Value ? (int?)r["KmDaChay"] : null,
+                    KmDaChay = r["KmDaChay"] != DBNull.Value ? Convert.ToInt32(r["KmDaChay"]) : (int?)null,
                     ThongTinXang = r["ThongTinXang"] != DBNull.Value ? r["ThongTinXang"].ToString() : null,
                     AnhXe = r["AnhXe"] != DBNull.Value ? (byte[])r["AnhXe"] : null,
                     TrangThai = r["TrangThai"].ToString(),
                     MucDichSuDung = r["MucDichSuDung"] != DBNull.Value ? r["MucDichSuDung"].ToString() : null,
                     GiaNhap = r["GiaNhap"] != DBNull.Value ? (decimal?)r["GiaNhap"] : null,
-                    SoLuong = r["SoLuong"] != DBNull.Value ? (int?)r["SoLuong"] : null,
-                    SoLuongBanRa = r["SoLuongBanRa"] != DBNull.Value ? (int?)r["SoLuongBanRa"] : null,
+                    SoLuong = r["SoLuong"] != DBNull.Value ? Convert.ToInt32(r["SoLuong"]) : (int?)null,
+                    SoLuongBanRa = r["SoLuongBanRa"] != DBNull.Value ? Convert.ToInt32(r["SoLuongBanRa"]) : (int?)null,
                     MaHang = r["MaHang"].ToString(),
                     MaDong = r["MaDong"].ToString(),
                     MaMau = r["MaMau"].ToString(),
-                    NamSX = r["NamSX"] != DBNull.Value ? Convert.ToInt32(r["NamSX"]) : (int?)null
+                    NamSX = r["NamSX"] != DBNull.Value ? Convert.ToInt32(r["NamSX"]) : (int?)null,
+                    TenHang = r["TenHang"] != DBNull.Value ? r["TenHang"].ToString() : null,
+                    TenDong = r["TenDong"] != DBNull.Value ? r["TenDong"].ToString() : null,
+                    TenMau = r["TenMau"] != DBNull.Value ? r["TenMau"].ToString() : null
                 };
             }
             return null;
         }
-
 
         // Thêm xe mới
         public bool InsertXeMay(XeMayDTO xe)
@@ -370,7 +389,7 @@ namespace DAL
             xe.KmDaChay,
             xe.TrangThai,
             xe.AnhXe,
-            tg.GiaThueNgay 
+            tg.GiaThueNgay  -- ✅ Chỉ lấy GiaThueNgay
             FROM XeMay xe
             INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
             INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
@@ -560,6 +579,41 @@ namespace DAL
             {
                 System.Diagnostics.Debug.WriteLine($"Lỗi GetXeTheoLoaiDeBan: {ex.Message}");
                 return null;
+            }
+        }
+        // Thêm 2 methods này vào class XeMayDAL
+
+        public bool KiemTraXeCoGiaoDich(string idXe)
+        {
+            string sql = @"
+        SELECT COUNT(*) 
+        FROM (
+            SELECT ID_Xe FROM GiaoDichBan WHERE ID_Xe = @IdXe
+            UNION ALL
+            SELECT ID_Xe FROM GiaoDichThue WHERE ID_Xe = @IdXe
+        ) AS GiaoDich";
+
+            using (var conn = new SqlConnection(_connStr))
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@IdXe", idXe);
+                conn.Open();
+                int count = (int)cmd.ExecuteScalar();
+                return count > 0;
+            }
+        }
+
+        public bool CapNhatTrangThaiXe(string idXe, string trangThai)
+        {
+            string sql = "UPDATE XeMay SET TrangThai = @TrangThai WHERE ID_Xe = @IdXe";
+
+            using (var conn = new SqlConnection(_connStr))
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@TrangThai", trangThai);
+                cmd.Parameters.AddWithValue("@IdXe", idXe);
+                conn.Open();
+                return cmd.ExecuteNonQuery() > 0;
             }
         }
     }
