@@ -370,7 +370,7 @@ namespace DAL
             xe.KmDaChay,
             xe.TrangThai,
             xe.AnhXe,
-            tg.GiaThueNgay  -- ✅ Chỉ lấy GiaThueNgay
+            tg.GiaThueNgay 
             FROM XeMay xe
             INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
             INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang

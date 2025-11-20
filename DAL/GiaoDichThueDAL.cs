@@ -96,32 +96,47 @@ namespace DAL
         /// Thêm giao dịch thuê mới
         public bool InsertGiaoDichThue(GiaoDichThue gd)
         {
-            string query = @"
-                INSERT INTO GiaoDichThue (ID_Xe, MaKH, NgayBatDau, NgayKetThuc, GiaThueNgay, 
-                    TongGia, TrangThai, TrangThaiThanhToan, HinhThucThanhToan, SoTienCoc, 
-                    GiayToGiuLai, MaTaiKhoan, TrangThaiDuyet)
-                VALUES (@ID_Xe, @MaKH, @NgayBatDau, @NgayKetThuc, @GiaThueNgay, 
-                    @TongGia, @TrangThai, @TrangThaiThanhToan, @HinhThucThanhToan, @SoTienCoc, 
-                    @GiayToGiuLai, @MaTaiKhoan, @TrangThaiDuyet)";
-
-            SqlParameter[] parameters = new SqlParameter[]
+            try
             {
-                new SqlParameter("@ID_Xe", gd.ID_Xe),
-                new SqlParameter("@MaKH", gd.MaKH),
-                new SqlParameter("@NgayBatDau", gd.NgayBatDau),
-                new SqlParameter("@NgayKetThuc", gd.NgayKetThuc),
-                new SqlParameter("@GiaThueNgay", gd.GiaThueNgay),
-                new SqlParameter("@TongGia", gd.TongGia),
-                new SqlParameter("@TrangThai", (object)gd.TrangThai ?? DBNull.Value),
-                new SqlParameter("@TrangThaiThanhToan", (object)gd.TrangThaiThanhToan ?? DBNull.Value),
-                new SqlParameter("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value),
-                new SqlParameter("@SoTienCoc", (object)gd.SoTienCoc ?? DBNull.Value),
-                new SqlParameter("@GiayToGiuLai", (object)gd.GiayToGiuLai ?? DBNull.Value),
-                new SqlParameter("@MaTaiKhoan", (object)gd.MaTaiKhoan ?? DBNull.Value),
-                new SqlParameter("@TrangThaiDuyet", gd.TrangThaiDuyet)
-            };
+                string query = @"
+            INSERT INTO GiaoDichThue (
+                ID_Xe, MaKH, NgayBatDau, NgayKetThuc,
+                GiaThueNgay, TongGia, TrangThai, TrangThaiThanhToan,
+                SoTienCoc, GiayToGiuLai, MaTaiKhoan, TrangThaiDuyet,
+                HinhThucThanhToan
+            )
+            VALUES (
+                @ID_Xe, @MaKH, @NgayBatDau, @NgayKetThuc,
+                @GiaThueNgay, @TongGia, @TrangThai, @TrangThaiThanhToan,
+                @SoTienCoc, @GiayToGiuLai, @MaTaiKhoan, @TrangThaiDuyet,
+                @HinhThucThanhToan
+            )";
 
-            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@ID_Xe", gd.ID_Xe),
+            new SqlParameter("@MaKH", gd.MaKH),
+            new SqlParameter("@NgayBatDau", gd.NgayBatDau),
+            new SqlParameter("@NgayKetThuc", gd.NgayKetThuc),
+            new SqlParameter("@GiaThueNgay", gd.GiaThueNgay),
+            new SqlParameter("@TongGia", gd.TongGia),
+            new SqlParameter("@TrangThai", gd.TrangThai ?? "Chờ xác nhận"),
+            new SqlParameter("@TrangThaiThanhToan", gd.TrangThaiThanhToan ?? "Chưa thanh toán"),
+            new SqlParameter("@SoTienCoc", (object)gd.SoTienCoc ?? DBNull.Value),
+            new SqlParameter("@GiayToGiuLai", gd.GiayToGiuLai ?? ""),
+            new SqlParameter("@MaTaiKhoan", gd.MaTaiKhoan),
+            new SqlParameter("@TrangThaiDuyet", gd.TrangThaiDuyet ?? "Chờ duyệt"),
+            new SqlParameter("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value)
+                };
+
+                int result = DataProvider.ExecuteNonQuery(query, parameters);
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"DAL Insert Error: {ex.Message}");
+                throw new Exception("Lỗi khi thêm giao dịch thuê vào database: " + ex.Message);
+            }
         }
 
         /// Duyệt đơn thuê

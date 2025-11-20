@@ -12,6 +12,7 @@ namespace UI.FormUI
     {
         private int maGDThue;
         private string maNV;
+        private string maTaiKhoan;  // ✅ THÊM BIẾN MÃ TÀI KHOẢN
         private GiaoDichThueBLL giaoDichThueBLL;
         private DataRow dataGiaoDich;
 
@@ -20,6 +21,24 @@ namespace UI.FormUI
             InitializeComponent();
             this.maGDThue = maGD;
             this.maNV = maNhanVien;
+            
+            // ✅ LẤY MÃ TÀI KHOẢN TỪ CurrentUser
+            this.maTaiKhoan = CurrentUser.MaTaiKhoan;
+            
+            // ✅ KIỂM TRA
+            if (string.IsNullOrWhiteSpace(this.maTaiKhoan))
+            {
+                MessageBox.Show(
+                    "❌ Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
+                    "Vui lòng đăng nhập lại.",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                this.Close();
+                return;
+            }
+            
             giaoDichThueBLL = new GiaoDichThueBLL();
 
             LoadData();
@@ -291,57 +310,63 @@ namespace UI.FormUI
         }
 
         private void btnTraXe_Click(object sender, EventArgs e)
-{
-    using (FormTraXe formTraXe = new FormTraXe(dataGiaoDich))
-    {
-        if (formTraXe.ShowDialog() == DialogResult.OK)
         {
-            try
+            // ✅ LẤY LẠI DỮ LIỆU ĐẦY ĐỦ
+            DataTable dtFull = giaoDichThueBLL.GetGiaoDichThueById(maGDThue);
+            
+            if (dtFull.Rows.Count == 0)
             {
-                string errorMessage;
-                // You need to provide values for kmKetThuc, isTraSom, soNgayTraSom
-                // Example placeholders:
-                int kmKetThuc = 0; // TODO: Get actual value from formTraXe or user input
-                bool isTraSom = false; // TODO: Determine if early return
-                int soNgayTraSom = 0; // TODO: Calculate if early return
-
-                bool success = giaoDichThueBLL.XacNhanTraXe(
-                    maGDThue,
-                    maNV,
-                    formTraXe.TinhTrangXe,
-                    formTraXe.ChiPhiPhatSinh,
-                    kmKetThuc,
-                    isTraSom,
-                    soNgayTraSom,
-                    formTraXe.GhiChu,
-                    out errorMessage);
-
-                if (success)
-                {
-                    MessageBox.Show(
-                        $"Tra xe thanh cong!\n\n" +
-                        $"Tien hoan coc: {formTraXe.TienHoanCoc:N0} VND",
-                        "Thanh cong",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show(errorMessage, "Loi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Loi: " + ex.Message, "Loi",
+                MessageBox.Show("Không tìm thấy dữ liệu giao dịch!", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            
+            using (FormTraXe formTraXe = new FormTraXe(dtFull.Rows[0]))
+            {
+                if (formTraXe.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        string errorMessage;
+                        
+                        // ✅ SỬA: TRUYỀN maTaiKhoan THAY VÌ maNV
+                        bool success = giaoDichThueBLL.XacNhanTraXe(
+                            maGDThue,
+                            maTaiKhoan,  // ✅ ĐÃ SỬA: Truyền mã tài khoản
+                            formTraXe.TinhTrangXe,
+                            formTraXe.ChiPhiPhatSinh,
+                            formTraXe.KmKetThuc,
+                            formTraXe.IsTraSom,
+                            formTraXe.SoNgayTraSom,
+                            formTraXe.GhiChu,
+                            out errorMessage);
+
+                        if (success)
+                        {
+                            MessageBox.Show(
+                                $"✓ Trả xe thành công!\n\n" +
+                                $"Tiền hoàn cọc: {formTraXe.TienHoanCoc:N0} VNĐ",
+                                "Thành công",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show(errorMessage, "Lỗi",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
-    }
-}
 
         private void btnClose_Click(object sender, EventArgs e)
         {
