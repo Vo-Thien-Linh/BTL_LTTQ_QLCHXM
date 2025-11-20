@@ -12,7 +12,7 @@ namespace UI.FormUI
     {
         private int maGDThue;
         private string maNV;
-        private string maTaiKhoan;  // ✅ THÊM BIẾN MÃ TÀI KHOẢN
+        private string maTaiKhoan;  //  THÊM BIẾN MÃ TÀI KHOẢN
         private GiaoDichThueBLL giaoDichThueBLL;
         private DataRow dataGiaoDich;
 
@@ -21,11 +21,11 @@ namespace UI.FormUI
             InitializeComponent();
             this.maGDThue = maGD;
             this.maNV = maNhanVien;
-            
-            // ✅ LẤY MÃ TÀI KHOẢN TỪ CurrentUser
+           
+            //  LẤY MÃ TÀI KHOẢN TỪ CurrentUser
             this.maTaiKhoan = CurrentUser.MaTaiKhoan;
             
-            // ✅ KIỂM TRA
+            //  KIỂM TRA
             if (string.IsNullOrWhiteSpace(this.maTaiKhoan))
             {
                 MessageBox.Show(
@@ -152,9 +152,18 @@ namespace UI.FormUI
                     txtTrangThai.BackColor = Color.FromArgb(255, 243, 205);
                     txtTrangThai.ForeColor = Color.FromArgb(255, 152, 0);
                     break;
+                //  THÊM: Highlight cho "Chờ giao xe"
+                case "Chờ giao xe":
+                    txtTrangThai.BackColor = Color.FromArgb(179, 229, 252); // Màu xanh nhạt
+                    txtTrangThai.ForeColor = Color.FromArgb(1, 87, 155);
+                    break;
                 case "Đã thuê":
                     txtTrangThai.BackColor = Color.FromArgb(224, 224, 224);
                     txtTrangThai.ForeColor = Color.FromArgb(97, 97, 97);
+                    break;
+                default:
+                    txtTrangThai.BackColor = Color.White;
+                    txtTrangThai.ForeColor = Color.Black;
                     break;
             }
         }
@@ -177,16 +186,28 @@ namespace UI.FormUI
         {
             string trangThai = dataGiaoDich["TrangThai"].ToString();
             string ttThanhToan = dataGiaoDich["TrangThaiThanhToan"].ToString();
+            string trangThaiDuyet = dataGiaoDich["TrangThaiDuyet"].ToString();
 
-            // Logic enable/disable buttons
+            //  SỬA: Logic enable/disable buttons chính xác hơn
 
             // Button Xác nhận Thanh toán
-            btnXacNhanThanhToan.Enabled = (ttThanhToan == "Chưa thanh toán");
+            // Chỉ cho phép khi: Đã duyệt + Chưa thanh toán + Chưa giao xe
+            btnXacNhanThanhToan.Enabled = (
+                trangThaiDuyet == "Đã duyệt" && 
+                ttThanhToan == "Chưa thanh toán" &&
+                trangThai != "Đang thuê" &&
+                trangThai != "Đã thuê"
+            );
 
             // Button Giao xe
-            btnGiaoXe.Enabled = (ttThanhToan == "Đã thanh toán" && trangThai != "Đang thuê");
+            // Chỉ cho phép khi: Đã thanh toán + TrangThai = "Chờ giao xe"
+            btnGiaoXe.Enabled = (
+                ttThanhToan == "Đã thanh toán" && 
+                trangThai == "Chờ giao xe"
+            );
 
             // Button Trả xe
+            // Chỉ cho phép khi: Đang thuê
             btnTraXe.Enabled = (trangThai == "Đang thuê");
 
             // Màu sắc buttons
@@ -261,7 +282,6 @@ namespace UI.FormUI
 
         private void btnGiaoXe_Click(object sender, EventArgs e)
         {
-            // ✅ Ensure FormGiaoXe is defined in UI.FormHandleUI or the correct namespace
             using (FormGiaoXe formGiaoXe = new FormGiaoXe())
             {
                 if (formGiaoXe.ShowDialog() != DialogResult.OK)
@@ -329,10 +349,10 @@ namespace UI.FormUI
                     {
                         string errorMessage;
                         
-                        // ✅ SỬA: TRUYỀN maTaiKhoan THAY VÌ maNV
+                        //TRUYỀN maTaiKhoan THAY VÌ maNV
                         bool success = giaoDichThueBLL.XacNhanTraXe(
                             maGDThue,
-                            maTaiKhoan,  // ✅ ĐÃ SỬA: Truyền mã tài khoản
+                            maTaiKhoan,  //  Truyền mã tài khoản
                             formTraXe.TinhTrangXe,
                             formTraXe.ChiPhiPhatSinh,
                             formTraXe.KmKetThuc,

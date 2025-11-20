@@ -60,7 +60,7 @@ namespace UI.FormHandleUI
 
         private bool ValidateInput()
         {
-            // 1. Kiểm tra ngày giao
+            //  Kiểm tra ngày giao
             if (dtpNgayGiao.Value.Date > DateTime.Now.Date)
             {
                 MessageBox.Show(
@@ -73,7 +73,7 @@ namespace UI.FormHandleUI
                 return false;
             }
 
-            // 2. Kiểm tra km
+            //  Kiểm tra km
             if (nudKmBatDau.Value < 0)
             {
                 MessageBox.Show(
@@ -98,7 +98,7 @@ namespace UI.FormHandleUI
                 return false;
             }
 
-            // 3. Cảnh báo nếu km lớn bất thường (không chặn)
+            //  Cảnh báo nếu km lớn bất thường (không chặn)
             if (nudKmBatDau.Value > 500000)
             {
                 DialogResult result = MessageBox.Show(
