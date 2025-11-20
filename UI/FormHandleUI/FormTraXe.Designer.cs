@@ -83,7 +83,6 @@
             // 
             // lblTitle
             // 
-            this.lblTitle.AutoSize = false;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location = new System.Drawing.Point(10, 10);
@@ -95,7 +94,6 @@
             // 
             // lblSubtitle
             // 
-            this.lblSubtitle.AutoSize = false;
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.lblSubtitle.ForeColor = System.Drawing.Color.White;
             this.lblSubtitle.Location = new System.Drawing.Point(10, 50);
@@ -132,7 +130,7 @@
             this.lblKmBatDau.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblKmBatDau.Location = new System.Drawing.Point(20, 30);
             this.lblKmBatDau.Name = "lblKmBatDau";
-            this.lblKmBatDau.Size = new System.Drawing.Size(95, 15);
+            this.lblKmBatDau.Size = new System.Drawing.Size(74, 15);
             this.lblKmBatDau.TabIndex = 0;
             this.lblKmBatDau.Text = " Km bắt đầu:";
             // 
@@ -143,7 +141,7 @@
             this.lblKmBatDauValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
             this.lblKmBatDauValue.Location = new System.Drawing.Point(180, 30);
             this.lblKmBatDauValue.Name = "lblKmBatDauValue";
-            this.lblKmBatDauValue.Size = new System.Drawing.Size(40, 15);
+            this.lblKmBatDauValue.Size = new System.Drawing.Size(35, 15);
             this.lblKmBatDauValue.TabIndex = 1;
             this.lblKmBatDauValue.Text = "0 km";
             // 
@@ -153,7 +151,7 @@
             this.lblNgayBatDau.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNgayBatDau.Location = new System.Drawing.Point(20, 55);
             this.lblNgayBatDau.Name = "lblNgayBatDau";
-            this.lblNgayBatDau.Size = new System.Drawing.Size(105, 15);
+            this.lblNgayBatDau.Size = new System.Drawing.Size(84, 15);
             this.lblNgayBatDau.TabIndex = 2;
             this.lblNgayBatDau.Text = " Ngày bắt đầu:";
             // 
@@ -174,7 +172,7 @@
             this.lblNgayKetThuc.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNgayKetThuc.Location = new System.Drawing.Point(20, 80);
             this.lblNgayKetThuc.Name = "lblNgayKetThuc";
-            this.lblNgayKetThuc.Size = new System.Drawing.Size(110, 15);
+            this.lblNgayKetThuc.Size = new System.Drawing.Size(87, 15);
             this.lblNgayKetThuc.TabIndex = 4;
             this.lblNgayKetThuc.Text = " Ngày kết thúc:";
             // 
@@ -195,7 +193,7 @@
             this.lblSoTienCoc.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblSoTienCoc.Location = new System.Drawing.Point(300, 30);
             this.lblSoTienCoc.Name = "lblSoTienCoc";
-            this.lblSoTienCoc.Size = new System.Drawing.Size(78, 15);
+            this.lblSoTienCoc.Size = new System.Drawing.Size(58, 15);
             this.lblSoTienCoc.TabIndex = 6;
             this.lblSoTienCoc.Text = " Tiền cọc:";
             // 
@@ -206,7 +204,7 @@
             this.lblSoTienCocValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(175)))), ((int)(((byte)(80)))));
             this.lblSoTienCocValue.Location = new System.Drawing.Point(420, 30);
             this.lblSoTienCocValue.Name = "lblSoTienCocValue";
-            this.lblSoTienCocValue.Size = new System.Drawing.Size(48, 15);
+            this.lblSoTienCocValue.Size = new System.Drawing.Size(43, 15);
             this.lblSoTienCocValue.TabIndex = 7;
             this.lblSoTienCocValue.Text = "0 VNĐ";
             // 
@@ -216,7 +214,7 @@
             this.lblGiaThueNgay.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblGiaThueNgay.Location = new System.Drawing.Point(300, 55);
             this.lblGiaThueNgay.Name = "lblGiaThueNgay";
-            this.lblGiaThueNgay.Size = new System.Drawing.Size(103, 15);
+            this.lblGiaThueNgay.Size = new System.Drawing.Size(88, 15);
             this.lblGiaThueNgay.TabIndex = 8;
             this.lblGiaThueNgay.Text = " Giá thuê/ngày:";
             // 
@@ -227,7 +225,7 @@
             this.lblGiaThueNgayValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
             this.lblGiaThueNgayValue.Location = new System.Drawing.Point(420, 55);
             this.lblGiaThueNgayValue.Name = "lblGiaThueNgayValue";
-            this.lblGiaThueNgayValue.Size = new System.Drawing.Size(88, 15);
+            this.lblGiaThueNgayValue.Size = new System.Drawing.Size(74, 15);
             this.lblGiaThueNgayValue.TabIndex = 9;
             this.lblGiaThueNgayValue.Text = "0 VNĐ/ngày";
             // 
@@ -264,15 +262,15 @@
             this.lblNgayTra.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblNgayTra.Location = new System.Drawing.Point(20, 30);
             this.lblNgayTra.Name = "lblNgayTra";
-            this.lblNgayTra.Size = new System.Drawing.Size(66, 15);
+            this.lblNgayTra.Size = new System.Drawing.Size(60, 15);
             this.lblNgayTra.TabIndex = 0;
             this.lblNgayTra.Text = " Ngày trả:";
             // 
             // dtpNgayTra
             // 
+            this.dtpNgayTra.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dtpNgayTra.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.dtpNgayTra.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpNgayTra.CustomFormat = "dd/MM/yyyy HH:mm";
             this.dtpNgayTra.Location = new System.Drawing.Point(180, 27);
             this.dtpNgayTra.Name = "dtpNgayTra";
             this.dtpNgayTra.Size = new System.Drawing.Size(180, 23);
@@ -284,7 +282,7 @@
             this.lblKmKetThuc.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblKmKetThuc.Location = new System.Drawing.Point(20, 65);
             this.lblKmKetThuc.Name = "lblKmKetThuc";
-            this.lblKmKetThuc.Size = new System.Drawing.Size(93, 15);
+            this.lblKmKetThuc.Size = new System.Drawing.Size(82, 15);
             this.lblKmKetThuc.TabIndex = 2;
             this.lblKmKetThuc.Text = " Km kết thúc:";
             // 
@@ -292,12 +290,16 @@
             // 
             this.nudKmKetThuc.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.nudKmKetThuc.Location = new System.Drawing.Point(180, 62);
-            this.nudKmKetThuc.Maximum = new decimal(new int[] { 999999, 0, 0, 0 });
+            this.nudKmKetThuc.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
             this.nudKmKetThuc.Name = "nudKmKetThuc";
             this.nudKmKetThuc.Size = new System.Drawing.Size(180, 23);
             this.nudKmKetThuc.TabIndex = 2;
-            this.nudKmKetThuc.ThousandsSeparator = true;
             this.nudKmKetThuc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudKmKetThuc.ThousandsSeparator = true;
             // 
             // lblKmChay
             // 
@@ -306,7 +308,7 @@
             this.lblKmChay.ForeColor = System.Drawing.Color.Gray;
             this.lblKmChay.Location = new System.Drawing.Point(370, 65);
             this.lblKmChay.Name = "lblKmChay";
-            this.lblKmChay.Size = new System.Drawing.Size(60, 15);
+            this.lblKmChay.Size = new System.Drawing.Size(52, 15);
             this.lblKmChay.TabIndex = 4;
             this.lblKmChay.Text = "Đã chạy:";
             // 
@@ -317,7 +319,7 @@
             this.lblKmChayValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
             this.lblKmChayValue.Location = new System.Drawing.Point(440, 65);
             this.lblKmChayValue.Name = "lblKmChayValue";
-            this.lblKmChayValue.Size = new System.Drawing.Size(40, 15);
+            this.lblKmChayValue.Size = new System.Drawing.Size(35, 15);
             this.lblKmChayValue.TabIndex = 5;
             this.lblKmChayValue.Text = "0 km";
             // 
@@ -327,7 +329,7 @@
             this.lblTinhTrang.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblTinhTrang.Location = new System.Drawing.Point(20, 100);
             this.lblTinhTrang.Name = "lblTinhTrang";
-            this.lblTinhTrang.Size = new System.Drawing.Size(85, 15);
+            this.lblTinhTrang.Size = new System.Drawing.Size(70, 15);
             this.lblTinhTrang.TabIndex = 6;
             this.lblTinhTrang.Text = " Tình trạng:";
             // 
@@ -352,7 +354,7 @@
             this.lblChiPhi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblChiPhi.Location = new System.Drawing.Point(20, 135);
             this.lblChiPhi.Name = "lblChiPhi";
-            this.lblChiPhi.Size = new System.Drawing.Size(83, 15);
+            this.lblChiPhi.Size = new System.Drawing.Size(67, 15);
             this.lblChiPhi.TabIndex = 8;
             this.lblChiPhi.Text = " Chi phí PS:";
             // 
@@ -360,12 +362,16 @@
             // 
             this.nudChiPhiPhatSinh.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.nudChiPhiPhatSinh.Location = new System.Drawing.Point(180, 132);
-            this.nudChiPhiPhatSinh.Maximum = new decimal(new int[] { 100000000, 0, 0, 0 });
+            this.nudChiPhiPhatSinh.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
             this.nudChiPhiPhatSinh.Name = "nudChiPhiPhatSinh";
             this.nudChiPhiPhatSinh.Size = new System.Drawing.Size(180, 23);
             this.nudChiPhiPhatSinh.TabIndex = 4;
-            this.nudChiPhiPhatSinh.ThousandsSeparator = true;
             this.nudChiPhiPhatSinh.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudChiPhiPhatSinh.ThousandsSeparator = true;
             // 
             // lblVND1
             // 
@@ -373,7 +379,7 @@
             this.lblVND1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblVND1.Location = new System.Drawing.Point(370, 135);
             this.lblVND1.Name = "lblVND1";
-            this.lblVND1.Size = new System.Drawing.Size(32, 15);
+            this.lblVND1.Size = new System.Drawing.Size(31, 15);
             this.lblVND1.TabIndex = 10;
             this.lblVND1.Text = "VNĐ";
             // 
@@ -383,7 +389,7 @@
             this.chkTraSom.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.chkTraSom.Location = new System.Drawing.Point(20, 170);
             this.chkTraSom.Name = "chkTraSom";
-            this.chkTraSom.Size = new System.Drawing.Size(82, 19);
+            this.chkTraSom.Size = new System.Drawing.Size(73, 19);
             this.chkTraSom.TabIndex = 5;
             this.chkTraSom.Text = " Trả sớm";
             this.chkTraSom.UseVisualStyleBackColor = true;
@@ -393,7 +399,11 @@
             this.nudSoNgayTraSom.Enabled = false;
             this.nudSoNgayTraSom.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.nudSoNgayTraSom.Location = new System.Drawing.Point(180, 167);
-            this.nudSoNgayTraSom.Maximum = new decimal(new int[] { 365, 0, 0, 0 });
+            this.nudSoNgayTraSom.Maximum = new decimal(new int[] {
+            365,
+            0,
+            0,
+            0});
             this.nudSoNgayTraSom.Name = "nudSoNgayTraSom";
             this.nudSoNgayTraSom.Size = new System.Drawing.Size(100, 23);
             this.nudSoNgayTraSom.TabIndex = 6;
@@ -404,7 +414,7 @@
             this.lblNgay.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNgay.Location = new System.Drawing.Point(290, 170);
             this.lblNgay.Name = "lblNgay";
-            this.lblNgay.Size = new System.Drawing.Size(34, 15);
+            this.lblNgay.Size = new System.Drawing.Size(33, 15);
             this.lblNgay.TabIndex = 13;
             this.lblNgay.Text = "ngày";
             // 
@@ -414,7 +424,7 @@
             this.lblGhiChu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblGhiChu.Location = new System.Drawing.Point(20, 205);
             this.lblGhiChu.Name = "lblGhiChu";
-            this.lblGhiChu.Size = new System.Drawing.Size(68, 15);
+            this.lblGhiChu.Size = new System.Drawing.Size(55, 15);
             this.lblGhiChu.TabIndex = 14;
             this.lblGhiChu.Text = " Ghi chú:";
             // 
@@ -454,7 +464,7 @@
             this.lblTienPhat.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTienPhat.Location = new System.Drawing.Point(20, 30);
             this.lblTienPhat.Name = "lblTienPhat";
-            this.lblTienPhat.Size = new System.Drawing.Size(140, 15);
+            this.lblTienPhat.Size = new System.Drawing.Size(123, 15);
             this.lblTienPhat.TabIndex = 0;
             this.lblTienPhat.Text = " Tiền phạt (trả muộn):";
             // 
@@ -476,7 +486,7 @@
             this.lblSoNgayQuaHanValue.ForeColor = System.Drawing.Color.Gray;
             this.lblSoNgayQuaHanValue.Location = new System.Drawing.Point(180, 30);
             this.lblSoNgayQuaHanValue.Name = "lblSoNgayQuaHanValue";
-            this.lblSoNgayQuaHanValue.Size = new System.Drawing.Size(123, 13);
+            this.lblSoNgayQuaHanValue.Size = new System.Drawing.Size(106, 13);
             this.lblSoNgayQuaHanValue.TabIndex = 2;
             this.lblSoNgayQuaHanValue.Text = "(0 ngày × 0 × 150%)";
             this.lblSoNgayQuaHanValue.Visible = false;
@@ -487,7 +497,7 @@
             this.lblTienHoanTraSom.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTienHoanTraSom.Location = new System.Drawing.Point(20, 55);
             this.lblTienHoanTraSom.Name = "lblTienHoanTraSom";
-            this.lblTienHoanTraSom.Size = new System.Drawing.Size(133, 15);
+            this.lblTienHoanTraSom.Size = new System.Drawing.Size(117, 15);
             this.lblTienHoanTraSom.TabIndex = 3;
             this.lblTienHoanTraSom.Text = " Tiền hoàn (trả sớm):";
             // 
@@ -509,7 +519,7 @@
             this.lblSoNgayTraSomDetail.ForeColor = System.Drawing.Color.Gray;
             this.lblSoNgayTraSomDetail.Location = new System.Drawing.Point(180, 55);
             this.lblSoNgayTraSomDetail.Name = "lblSoNgayTraSomDetail";
-            this.lblSoNgayTraSomDetail.Size = new System.Drawing.Size(115, 13);
+            this.lblSoNgayTraSomDetail.Size = new System.Drawing.Size(100, 13);
             this.lblSoNgayTraSomDetail.TabIndex = 5;
             this.lblSoNgayTraSomDetail.Text = "(0 ngày × 0 × 70%)";
             this.lblSoNgayTraSomDetail.Visible = false;
@@ -528,7 +538,7 @@
             this.lblTienHoanCoc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblTienHoanCoc.Location = new System.Drawing.Point(20, 95);
             this.lblTienHoanCoc.Name = "lblTienHoanCoc";
-            this.lblTienHoanCoc.Size = new System.Drawing.Size(189, 19);
+            this.lblTienHoanCoc.Size = new System.Drawing.Size(171, 19);
             this.lblTienHoanCoc.TabIndex = 7;
             this.lblTienHoanCoc.Text = " TỔNG TIỀN HOÀN CỌC:";
             // 
@@ -566,7 +576,7 @@
             this.btnXacNhan.Name = "btnXacNhan";
             this.btnXacNhan.Size = new System.Drawing.Size(270, 45);
             this.btnXacNhan.TabIndex = 8;
-            this.btnXacNhan.Text = "✓ XÁC NHẬN TRẢ XE";
+            this.btnXacNhan.Text = " XÁC NHẬN TRẢ XE";
             this.btnXacNhan.UseVisualStyleBackColor = false;
             this.btnXacNhan.Click += new System.EventHandler(this.BtnXacNhan_Click);
             // 
@@ -582,7 +592,7 @@
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(270, 45);
             this.btnHuy.TabIndex = 9;
-            this.btnHuy.Text = "✗ HỦY";
+            this.btnHuy.Text = " HỦY";
             this.btnHuy.UseVisualStyleBackColor = false;
             this.btnHuy.Click += new System.EventHandler(this.BtnHuy_Click);
             // 
@@ -616,6 +626,7 @@
             this.grpTinhToan.ResumeLayout(false);
             this.grpTinhToan.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         #endregion

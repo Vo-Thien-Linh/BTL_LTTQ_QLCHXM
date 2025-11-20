@@ -49,16 +49,16 @@ namespace DAL
                     nv.HoTenNV AS TenNhanVien,
                     CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
                     xe.BienSo
-                FROM HopDongThue hd
-                INNER JOIN KhachHang kh ON hd.MaKH = kh.MaKH
-                INNER JOIN TaiKhoan tk ON hd.MaTaiKhoan = tk.MaTaiKhoan
-                INNER JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                INNER JOIN XeMay xe ON hd.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                WHERE hd.MaGDThue = @MaGDThue";
+                    FROM HopDongThue hd
+                    INNER JOIN KhachHang kh ON hd.MaKH = kh.MaKH
+                    INNER JOIN TaiKhoan tk ON hd.MaTaiKhoan = tk.MaTaiKhoan
+                    INNER JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                    INNER JOIN XeMay xe ON hd.ID_Xe = xe.ID_Xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    WHERE hd.MaGDThue = @MaGDThue";
 
             SqlParameter[] parameters = { new SqlParameter("@MaGDThue", maGDThue) };
             return DataProvider.ExecuteQuery(query, parameters);

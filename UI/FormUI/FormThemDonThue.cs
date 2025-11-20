@@ -12,8 +12,8 @@ namespace UI.FormUI
         private XeMayBLL xeMayBLL;
         private GiaoDichThueBLL giaoDichThueBLL;
         private string maTaiKhoan;
-        private bool isLoadingData = false;  //  Cờ tránh trigger event lặp
-        private string selectedIDXe = "";    //  Lưu ID xe đã chọn
+        private bool isLoadingData = false;
+        private string selectedIDXe = "";
 
         public FormThemDonThue(string maTK)
         {
@@ -21,7 +21,7 @@ namespace UI.FormUI
             if (string.IsNullOrWhiteSpace(maTK))
             {
                 MessageBox.Show(
-                    "❌ Lỗi: Không xác định được tài khoản!\n" +
+                    " Lỗi: Không xác định được tài khoản!\n" +
                     "Vui lòng đăng nhập lại.",
                     "Lỗi",
                     MessageBoxButtons.OK,
@@ -38,17 +38,28 @@ namespace UI.FormUI
 
             SetDefaultValues();
             LoadKhachHang();
-            SetupEvents();  //  Đổi thứ tự: setup events SAU khi load data
+            SetupEvents();
             LoadXeTheoThoiGian();
         }
 
         private void SetDefaultValues()
         {
-            //  Đặt ngày mặc định: hôm nay → ngày mai
             dtpNgayBatDau.Value = DateTime.Now.Date;
             dtpNgayKetThuc.Value = DateTime.Now.Date.AddDays(1);
+            
+            //  Đặt txtTienCoc thành ReadOnly và màu nền khác để phân biệt
             txtTienCoc.Text = "0";
+            txtTienCoc.ReadOnly = true;
+            txtTienCoc.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+            txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
+            
             nudSoNgay.Value = 1;
+            
+            // : Đặt combobox giấy tờ chưa chọn gì
+            if (cboGiayToGiuLai.Items.Count > 0)
+            {
+                cboGiayToGiuLai.SelectedIndex = -1;
+            }
         }
 
         private void SetupEvents()
@@ -59,9 +70,10 @@ namespace UI.FormUI
             dtpNgayKetThuc.ValueChanged += DateChanged;
             btnLuu.Click += BtnLuu_Click;
             btnHuy.Click += BtnHuy_Click;
-            txtTienCoc.KeyPress += TxtNumber_KeyPress;
             
-            //  Tự động tính tiền khi thay đổi số ngày
+            //  Không cần KeyPress cho txtTienCoc vì đã ReadOnly
+            // txtTienCoc.KeyPress += TxtNumber_KeyPress;
+            
             nudSoNgay.ValueChanged += (s, e) => TinhTienTuDong();
         }
 
@@ -88,7 +100,6 @@ namespace UI.FormUI
             }
         }
 
-        ///  Load xe KHÔNG bị mất dữ liệu khi chọn ngày
         private void LoadXeTheoThoiGian()
         {
             try
@@ -98,7 +109,6 @@ namespace UI.FormUI
                 DateTime ngayBatDau = dtpNgayBatDau.Value.Date;
                 DateTime ngayKetThuc = dtpNgayKetThuc.Value.Date;
 
-                // Validate và tự động sửa ngày bắt đầu nếu < ngày hiện tại
                 if (ngayBatDau < DateTime.Now.Date)
                 {
                     MessageBox.Show(
@@ -111,7 +121,6 @@ namespace UI.FormUI
                     return;
                 }
 
-                // Validate và tự động sửa ngày kết thúc nếu <= ngày bắt đầu
                 if (ngayKetThuc <= ngayBatDau)
                 {
                     MessageBox.Show(
@@ -125,7 +134,6 @@ namespace UI.FormUI
                     return;
                 }
 
-                // ✅Validate ngày kết thúc phải > ngày hiện tại
                 if (ngayKetThuc <= DateTime.Now.Date)
                 {
                     MessageBox.Show(
@@ -139,20 +147,17 @@ namespace UI.FormUI
                     return;
                 }
 
-                //  Lưu ID xe đã chọn (nếu có)
                 string previousSelectedIDXe = "";
                 if (cboXe.SelectedValue != null)
                 {
                     previousSelectedIDXe = cboXe.SelectedValue.ToString();
                 }
 
-                // Lấy xe khả dụng
                 DataTable dt = xeMayBLL.GetXeCoTheThueTheoThoiGian(ngayBatDau, ngayKetThuc);
 
                 cboXe.DataSource = dt;
                 cboXe.DisplayMember = "TenXe";
                 cboXe.ValueMember = "ID_Xe";
-
 
                 if (!string.IsNullOrEmpty(previousSelectedIDXe))
                 {
@@ -168,7 +173,6 @@ namespace UI.FormUI
                         }
                     }
 
-                    // Nếu không tìm thấy, thông báo xe không còn khả dụng
                     if (!found)
                     {
                         MessageBox.Show(
@@ -216,29 +220,51 @@ namespace UI.FormUI
             {
                 txtBienSo.Text = "";
                 txtGiaThueNgay.Text = "";
+                txtTienCoc.Text = "0";
                 return;
             }
 
             DataRowView row = cboXe.SelectedItem as DataRowView;
             if (row != null)
             {
-                //  Lưu ID xe đã chọn
                 selectedIDXe = row["ID_Xe"].ToString();
 
                 txtBienSo.Text = row["BienSo"]?.ToString() ?? "";
                 decimal giaThue = Convert.ToDecimal(row["GiaThueNgay"]);
                 txtGiaThueNgay.Text = giaThue.ToString("N0") + " VNĐ";
 
-                //  Tự động tính tiền khi chọn xe
+                //  Tự động tính tiền cọc dựa trên giá thuê ngày
+                TinhTienCoc(giaThue);
+
                 TinhTienTuDong();
             }
+        }
+
+        //  Tính tiền cọc tự động
+        private void TinhTienCoc(decimal giaThueNgay)
+        {
+            decimal tienCoc;
+            
+            if (giaThueNgay < 500000)
+            {
+                tienCoc = 500000; // 500,000 VNĐ
+            }
+            else
+            {
+                tienCoc = 1000000; // 1,000,000 VNĐ
+            }
+
+            txtTienCoc.Text = tienCoc.ToString("N0");
+            
+            // Highlight để người dùng chú ý
+            txtTienCoc.BackColor = System.Drawing.Color.FromArgb(255, 243, 205);
+            txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(255, 152, 0);
         }
 
         private void DateChanged(object sender, EventArgs e)
         {
             if (isLoadingData) return;
 
-            //  Tính số ngày thuê
             int soNgay = (dtpNgayKetThuc.Value.Date - dtpNgayBatDau.Value.Date).Days;
             
             if (soNgay > 0)
@@ -250,14 +276,10 @@ namespace UI.FormUI
                 nudSoNgay.Value = 1;
             }
 
-            //  Load lại danh sách xe (GIỮ NGUYÊN LỰA CHỌN)
             LoadXeTheoThoiGian();
-            
-            //  Tính lại tiền
             TinhTienTuDong();
         }
 
-        ///  TỰ ĐỘNG TÍNH TIỀN (không cần nhấn button)
         private void TinhTienTuDong()
         {
             if (isLoadingData || cboXe.SelectedIndex == -1)
@@ -286,8 +308,8 @@ namespace UI.FormUI
                 );
 
                 txtTongTien.Text = tongTien.ToString("N0") + " VNĐ";
-                txtTongTien.BackColor = System.Drawing.Color.FromArgb(200, 230, 201);  // Màu xanh nhạt
-                txtTongTien.ForeColor = System.Drawing.Color.FromArgb(56, 142, 60);     // Màu xanh đậm
+                txtTongTien.BackColor = System.Drawing.Color.FromArgb(200, 230, 201);
+                txtTongTien.ForeColor = System.Drawing.Color.FromArgb(56, 142, 60);
             }
             catch (Exception ex)
             {
@@ -305,11 +327,10 @@ namespace UI.FormUI
                 return;
             }
 
-            // ✅ THÊM KIỂM TRA MÃ TÀI KHOẢN
             if (string.IsNullOrWhiteSpace(maTaiKhoan))
             {
                 MessageBox.Show(
-                    "❌ Lỗi hệ thống: Không xác định được tài khoản đang đăng nhập!\n" +
+                    " Lỗi hệ thống: Không xác định được tài khoản đang đăng nhập!\n" +
                     "Vui lòng đăng nhập lại.",
                     "Lỗi",
                     MessageBoxButtons.OK,
@@ -320,7 +341,6 @@ namespace UI.FormUI
 
             try
             {
-                // Lấy thông tin từ form
                 string maKH = cboKhachHang.SelectedValue.ToString();
                 string idXe = cboXe.SelectedValue.ToString();
                 DateTime ngayBatDau = dtpNgayBatDau.Value.Date;
@@ -329,23 +349,19 @@ namespace UI.FormUI
                 DataRowView rowXe = cboXe.SelectedItem as DataRowView;
                 decimal giaThueNgay = Convert.ToDecimal(rowXe["GiaThueNgay"]);
 
-                // Tính tổng tiền
                 decimal tongTien = giaoDichThueBLL.TinhTongGiaThue(
                     ngayBatDau, ngayKetThuc, giaThueNgay);
 
+                // Lấy tiền cọc từ textbox (đã tự động tính)
                 decimal tienCoc = 0;
-                if (!string.IsNullOrWhiteSpace(txtTienCoc.Text))
+                string tienCocText = txtTienCoc.Text.Replace(",", "").Replace(".", "");
+                if (!decimal.TryParse(tienCocText, out tienCoc))
                 {
-                    if (!decimal.TryParse(txtTienCoc.Text, out tienCoc))
-                    {
-                        MessageBox.Show("Tiền cọc không hợp lệ!", "Lỗi",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        txtTienCoc.Focus();
-                        return;
-                    }
+                    MessageBox.Show("Lỗi tính tiền cọc!", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
-                // Kiểm tra lại lần cuối trước khi lưu
                 string errorXe = "";
                 if (giaoDichThueBLL.IsXeDangThue(idXe, ngayBatDau, ngayKetThuc, out errorXe))
                 {
@@ -360,12 +376,11 @@ namespace UI.FormUI
                     return;
                 }
 
-                // ✅ THÊM LOG DEBUG
                 System.Diagnostics.Debug.WriteLine($"MaTaiKhoan: {maTaiKhoan}");
                 System.Diagnostics.Debug.WriteLine($"MaKH: {maKH}");
                 System.Diagnostics.Debug.WriteLine($"ID_Xe: {idXe}");
+                System.Diagnostics.Debug.WriteLine($"TienCoc: {tienCoc:N0}");
 
-                // Tạo DTO
                 GiaoDichThue gd = new GiaoDichThue
                 {
                     MaKH = maKH,
@@ -376,14 +391,13 @@ namespace UI.FormUI
                     TongGia = tongTien,
                     TrangThai = "Chờ xác nhận",
                     TrangThaiThanhToan = "Chưa thanh toán",
-                    SoTienCoc = tienCoc,
+                    SoTienCoc = tienCoc, //  Sử dụng tiền cọc đã tính tự động
                     GiayToGiuLai = cboGiayToGiuLai.SelectedItem?.ToString() ?? "",
-                    MaTaiKhoan = maTaiKhoan,  // ✅ ĐÃ KIỂM TRA Ở TRÊN
+                    MaTaiKhoan = maTaiKhoan,
                     TrangThaiDuyet = "Chờ duyệt",
                     HinhThucThanhToan = null
                 };
 
-                // Lưu vào database
                 string errorMessage = "";
                 bool success = giaoDichThueBLL.InsertGiaoDichThue(gd, out errorMessage);
 
@@ -394,7 +408,9 @@ namespace UI.FormUI
                         $"Khách hàng: {((DataRowView)cboKhachHang.SelectedItem)["HoTenKH"]}\n" +
                         $"Xe: {rowXe["BienSo"]}\n" +
                         $"Thời gian: {ngayBatDau:dd/MM/yyyy} - {ngayKetThuc:dd/MM/yyyy}\n" +
-                        $"Tổng tiền: {tongTien:N0} VNĐ\n\n" +
+                        $"Tổng tiền: {tongTien:N0} VNĐ\n" +
+                        $"Tiền cọc: {tienCoc:N0} VNĐ\n" +
+                        $"Giấy tờ giữ lại: {gd.GiayToGiuLai}\n\n" +
                         $"Trạng thái: Chờ duyệt",
                         "Thành công",
                         MessageBoxButtons.OK,
@@ -445,6 +461,21 @@ namespace UI.FormUI
                 return false;
             }
 
+            //  Kiểm tra bắt buộc chọn giấy tờ
+            if (cboGiayToGiuLai.SelectedIndex == -1 || 
+                string.IsNullOrWhiteSpace(cboGiayToGiuLai.Text))
+            {
+                MessageBox.Show(
+                    "⚠ BẮT BUỘC chọn giấy tờ giữ lại!\n\n" +
+                    "Vui lòng chọn loại giấy tờ mà khách hàng sẽ để lại làm tài sản thế chấp.",
+                    "Thiếu thông tin",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                cboGiayToGiuLai.Focus();
+                return false;
+            }
+
             if (dtpNgayBatDau.Value.Date < DateTime.Now.Date)
             {
                 MessageBox.Show("Ngày bắt đầu không được nhỏ hơn ngày hiện tại!",
@@ -461,7 +492,6 @@ namespace UI.FormUI
                 return false;
             }
 
-            //  Ngày kết thúc phải lớn hơn ngày hiện tại
             if (dtpNgayKetThuc.Value.Date <= DateTime.Now.Date)
             {
                 MessageBox.Show("Ngày kết thúc phải lớn hơn ngày hiện tại!",
@@ -470,7 +500,6 @@ namespace UI.FormUI
                 return false;
             }
 
-            //  Kiểm tra tổng tiền
             if (string.IsNullOrWhiteSpace(txtTongTien.Text) || txtTongTien.Text == "0 VNĐ")
             {
                 MessageBox.Show("Tổng tiền chưa được tính!\nVui lòng kiểm tra lại thông tin.",
@@ -478,15 +507,15 @@ namespace UI.FormUI
                 return false;
             }
 
-            return true;
-        }
-
-        private void TxtNumber_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            //  Kiểm tra tiền cọc đã được tính
+            if (string.IsNullOrWhiteSpace(txtTienCoc.Text) || txtTienCoc.Text == "0")
             {
-                e.Handled = true;
+                MessageBox.Show("Tiền cọc chưa được tính!\nVui lòng chọn xe trước.",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
+
+            return true;
         }
 
         private void BtnHuy_Click(object sender, EventArgs e)

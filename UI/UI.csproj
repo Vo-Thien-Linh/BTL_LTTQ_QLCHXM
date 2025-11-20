@@ -400,11 +400,16 @@
     <EmbeddedResource Include="FormHandleUI\FormThemXe.resx">
       <DependentUpon>FormThemXe.cs</DependentUpon>
     </EmbeddedResource>
+
+    <EmbeddedResource Include="FormHandleUI\FormTraXe.resx">
+      <DependentUpon>FormTraXe.cs</DependentUpon>
+
     <EmbeddedResource Include="FormHandleUI\FormXemXeDashBoard.resx">
       <DependentUpon>FormXemXeDashBoard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormXoaXeDashBoard.resx">
       <DependentUpon>FormXoaXeDashBoard.cs</DependentUpon>
+
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormDuyetDonHang.resx">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>

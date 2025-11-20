@@ -33,16 +33,16 @@ namespace DAL
                     gd.NgayDuyet,
                     gd.GhiChuDuyet,
                     nv.HoTenNV AS TenNhanVien
-                FROM GiaoDichThue gd
-                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
-                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                ORDER BY gd.NgayBatDau DESC";
+                    FROM GiaoDichThue gd
+                    INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                    INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                    LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                    ORDER BY gd.NgayBatDau DESC";
 
             return DataProvider.ExecuteQuery(query);
         }
@@ -99,18 +99,18 @@ namespace DAL
             try
             {
                 string query = @"
-            INSERT INTO GiaoDichThue (
-                ID_Xe, MaKH, NgayBatDau, NgayKetThuc,
-                GiaThueNgay, TongGia, TrangThai, TrangThaiThanhToan,
-                SoTienCoc, GiayToGiuLai, MaTaiKhoan, TrangThaiDuyet,
-                HinhThucThanhToan
-            )
-            VALUES (
-                @ID_Xe, @MaKH, @NgayBatDau, @NgayKetThuc,
-                @GiaThueNgay, @TongGia, @TrangThai, @TrangThaiThanhToan,
-                @SoTienCoc, @GiayToGiuLai, @MaTaiKhoan, @TrangThaiDuyet,
-                @HinhThucThanhToan
-            )";
+                INSERT INTO GiaoDichThue (
+                    ID_Xe, MaKH, NgayBatDau, NgayKetThuc,
+                    GiaThueNgay, TongGia, TrangThai, TrangThaiThanhToan,
+                    SoTienCoc, GiayToGiuLai, MaTaiKhoan, TrangThaiDuyet,
+                    HinhThucThanhToan
+                )
+                VALUES (
+                    @ID_Xe, @MaKH, @NgayBatDau, @NgayKetThuc,
+                    @GiaThueNgay, @TongGia, @TrangThai, @TrangThaiThanhToan,
+                    @SoTienCoc, @GiayToGiuLai, @MaTaiKhoan, @TrangThaiDuyet,
+                    @HinhThucThanhToan
+                )";
 
                 SqlParameter[] parameters = new SqlParameter[]
                 {
@@ -143,13 +143,13 @@ namespace DAL
         public bool ApproveGiaoDichThue(int maGDThue, string nguoiDuyet, string ghiChu)
         {
             string query = @"
-        UPDATE GiaoDichThue 
-        SET TrangThaiDuyet = N'Đã duyệt',
-            NguoiDuyet = @NguoiDuyet, 
-            NgayDuyet = @NgayDuyet,
-            GhiChuDuyet = @GhiChu
-        WHERE MaGDThue = @MaGDThue 
-          AND TrangThaiDuyet = N'Chờ duyệt'"; // Chỉ duyệt đơn đang chờ
+            UPDATE GiaoDichThue 
+            SET TrangThaiDuyet = N'Đã duyệt',
+                NguoiDuyet = @NguoiDuyet, 
+                NgayDuyet = @NgayDuyet,
+                GhiChuDuyet = @GhiChu
+            WHERE MaGDThue = @MaGDThue 
+              AND TrangThaiDuyet = N'Chờ duyệt'"; // Chỉ duyệt đơn đang chờ
 
             SqlParameter[] parameters = new SqlParameter[]
             {

@@ -122,7 +122,7 @@
             this.grpKhachHang.Size = new System.Drawing.Size(420, 150);
             this.grpKhachHang.TabIndex = 1;
             this.grpKhachHang.TabStop = false;
-            this.grpKhachHang.Text = "📋 THÔNG TIN KHÁCH HÀNG";
+            this.grpKhachHang.Text = " THÔNG TIN KHÁCH HÀNG";
             // 
             // lblKhachHang
             // 
@@ -275,7 +275,7 @@
             this.grpThongTinThue.Size = new System.Drawing.Size(860, 180);
             this.grpThongTinThue.TabIndex = 3;
             this.grpThongTinThue.TabStop = false;
-            this.grpThongTinThue.Text = "📅 THÔNG TIN THUÊ";
+            this.grpThongTinThue.Text = " THÔNG TIN THUÊ";
             // 
             // lblNgayBatDau
             // 
@@ -401,7 +401,7 @@
             this.grpThanhToan.Size = new System.Drawing.Size(860, 80);
             this.grpThanhToan.TabIndex = 4;
             this.grpThanhToan.TabStop = false;
-            this.grpThanhToan.Text = "💳 THÔNG TIN BỔ SUNG";
+            this.grpThanhToan.Text = "THÔNG TIN BỔ SUNG";
             // 
             // lblGiayToGiuLai
             // 
@@ -420,11 +420,8 @@
             this.cboGiayToGiuLai.FormattingEnabled = true;
             this.cboGiayToGiuLai.Items.AddRange(new object[] {
             "CMND/CCCD",
-            "Bằng lái xe",
             "Hộ chiếu",
-            "Giấy phép lái xe quốc tế",
-            "Thẻ sinh viên",
-            "Thẻ nhân viên"});
+            "Giấy phép lái xe quốc tế"});
             this.cboGiayToGiuLai.Location = new System.Drawing.Point(120, 30);
             this.cboGiayToGiuLai.Name = "cboGiayToGiuLai";
             this.cboGiayToGiuLai.Size = new System.Drawing.Size(715, 25);
