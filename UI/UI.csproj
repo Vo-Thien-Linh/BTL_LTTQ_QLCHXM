@@ -356,6 +356,12 @@
     <EmbeddedResource Include="FormUI\FormQuanLyBaoTri.resx">
       <DependentUpon>FormQuanLyBaoTri.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormThemDonThue.resx">
+      <DependentUpon>FormThemDonThue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormXemHopDongThue.resx">
+      <DependentUpon>FormXemHopDongThue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>

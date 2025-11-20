@@ -156,9 +156,9 @@
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location = new System.Drawing.Point(20, 15);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(300, 32);
+            this.lblTitle.Size = new System.Drawing.Size(355, 32);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "THONG TIN HOP DONG THUE";
+            this.lblTitle.Text = "THÔNG TIN HỢP ĐỒNG THUÊ";
             // 
             // lblMaGD
             // 
@@ -167,7 +167,7 @@
             this.lblMaGD.ForeColor = System.Drawing.Color.White;
             this.lblMaGD.Location = new System.Drawing.Point(22, 50);
             this.lblMaGD.Name = "lblMaGD";
-            this.lblMaGD.Size = new System.Drawing.Size(100, 20);
+            this.lblMaGD.Size = new System.Drawing.Size(101, 20);
             this.lblMaGD.TabIndex = 1;
             this.lblMaGD.Text = "Ma GD: #000";
             // 
@@ -182,7 +182,7 @@
             this.lblWarning.Padding = new System.Windows.Forms.Padding(10, 5, 10, 5);
             this.lblWarning.Size = new System.Drawing.Size(330, 35);
             this.lblWarning.TabIndex = 2;
-            this.lblWarning.Text = "CANH BAO: Qua han!";
+            this.lblWarning.Text = "CẢNH BÁO: Quá hạn !";
             this.lblWarning.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblWarning.Visible = false;
             // 
@@ -198,7 +198,7 @@
             this.grpThongTinXe.Size = new System.Drawing.Size(470, 110);
             this.grpThongTinXe.TabIndex = 1;
             this.grpThongTinXe.TabStop = false;
-            this.grpThongTinXe.Text = "Thong tin xe";
+            this.grpThongTinXe.Text = "Thông tin xe";
             // 
             // lblTenXe
             // 
@@ -206,9 +206,9 @@
             this.lblTenXe.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTenXe.Location = new System.Drawing.Point(15, 30);
             this.lblTenXe.Name = "lblTenXe";
-            this.lblTenXe.Size = new System.Drawing.Size(50, 15);
+            this.lblTenXe.Size = new System.Drawing.Size(43, 15);
             this.lblTenXe.TabIndex = 0;
-            this.lblTenXe.Text = "Ten xe:";
+            this.lblTenXe.Text = "Tên xe:";
             // 
             // txtTenXe
             // 
@@ -225,9 +225,9 @@
             this.lblBienSo.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblBienSo.Location = new System.Drawing.Point(15, 65);
             this.lblBienSo.Name = "lblBienSo";
-            this.lblBienSo.Size = new System.Drawing.Size(52, 15);
+            this.lblBienSo.Size = new System.Drawing.Size(45, 15);
             this.lblBienSo.TabIndex = 2;
-            this.lblBienSo.Text = "Bien so:";
+            this.lblBienSo.Text = "Biển số";
             // 
             // txtBienSo
             // 
@@ -252,7 +252,7 @@
             this.grpThongTinKhach.Size = new System.Drawing.Size(470, 150);
             this.grpThongTinKhach.TabIndex = 2;
             this.grpThongTinKhach.TabStop = false;
-            this.grpThongTinKhach.Text = "Thong tin khach hang";
+            this.grpThongTinKhach.Text = "Thông tin khách hàng";
             // 
             // lblKhachHang
             // 
@@ -260,9 +260,9 @@
             this.lblKhachHang.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblKhachHang.Location = new System.Drawing.Point(15, 30);
             this.lblKhachHang.Name = "lblKhachHang";
-            this.lblKhachHang.Size = new System.Drawing.Size(81, 15);
+            this.lblKhachHang.Size = new System.Drawing.Size(73, 15);
             this.lblKhachHang.TabIndex = 0;
-            this.lblKhachHang.Text = "Khach hang:";
+            this.lblKhachHang.Text = "Khách hàng:";
             // 
             // txtKhachHang
             // 
@@ -279,9 +279,9 @@
             this.lblSDT.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblSDT.Location = new System.Drawing.Point(15, 65);
             this.lblSDT.Name = "lblSDT";
-            this.lblSDT.Size = new System.Drawing.Size(33, 15);
+            this.lblSDT.Size = new System.Drawing.Size(34, 15);
             this.lblSDT.TabIndex = 2;
-            this.lblSDT.Text = "SDT:";
+            this.lblSDT.Text = "SĐT :";
             // 
             // txtSDT
             // 
@@ -339,7 +339,7 @@
             this.grpThongTinThue.Size = new System.Drawing.Size(470, 380);
             this.grpThongTinThue.TabIndex = 3;
             this.grpThongTinThue.TabStop = false;
-            this.grpThongTinThue.Text = "Thong tin thue";
+            this.grpThongTinThue.Text = "Thông tin thuê";
             // 
             // lblNgayBatDau
             // 
@@ -349,7 +349,7 @@
             this.lblNgayBatDau.Name = "lblNgayBatDau";
             this.lblNgayBatDau.Size = new System.Drawing.Size(84, 15);
             this.lblNgayBatDau.TabIndex = 0;
-            this.lblNgayBatDau.Text = "Ngay bat dau:";
+            this.lblNgayBatDau.Text = "Ngày bắt đầu :";
             // 
             // dtpNgayBatDau
             // 
@@ -367,9 +367,9 @@
             this.lblNgayKetThuc.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblNgayKetThuc.Location = new System.Drawing.Point(15, 60);
             this.lblNgayKetThuc.Name = "lblNgayKetThuc";
-            this.lblNgayKetThuc.Size = new System.Drawing.Size(88, 15);
+            this.lblNgayKetThuc.Size = new System.Drawing.Size(87, 15);
             this.lblNgayKetThuc.TabIndex = 2;
-            this.lblNgayKetThuc.Text = "Ngay ket thuc:";
+            this.lblNgayKetThuc.Text = "Ngày kết thúc :";
             // 
             // dtpNgayKetThuc
             // 
@@ -387,9 +387,9 @@
             this.lblSoNgayThue.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblSoNgayThue.Location = new System.Drawing.Point(15, 90);
             this.lblSoNgayThue.Name = "lblSoNgayThue";
-            this.lblSoNgayThue.Size = new System.Drawing.Size(84, 15);
+            this.lblSoNgayThue.Size = new System.Drawing.Size(79, 15);
             this.lblSoNgayThue.TabIndex = 4;
-            this.lblSoNgayThue.Text = "So ngay thue:";
+            this.lblSoNgayThue.Text = "Số ngày thuê:";
             // 
             // txtSoNgayThue
             // 
@@ -406,9 +406,9 @@
             this.lblGiaThueNgay.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblGiaThueNgay.Location = new System.Drawing.Point(15, 120);
             this.lblGiaThueNgay.Name = "lblGiaThueNgay";
-            this.lblGiaThueNgay.Size = new System.Drawing.Size(89, 15);
+            this.lblGiaThueNgay.Size = new System.Drawing.Size(88, 15);
             this.lblGiaThueNgay.TabIndex = 6;
-            this.lblGiaThueNgay.Text = "Gia thue/ngay:";
+            this.lblGiaThueNgay.Text = "Giá thuê/ ngày:";
             // 
             // txtGiaThueNgay
             // 
@@ -427,7 +427,7 @@
             this.lblTongGia.Name = "lblTongGia";
             this.lblTongGia.Size = new System.Drawing.Size(60, 15);
             this.lblTongGia.TabIndex = 8;
-            this.lblTongGia.Text = "Tong gia:";
+            this.lblTongGia.Text = "Tổng giá :";
             // 
             // txtTongGia
             // 
@@ -445,9 +445,9 @@
             this.lblSoTienCoc.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblSoTienCoc.Location = new System.Drawing.Point(15, 180);
             this.lblSoTienCoc.Name = "lblSoTienCoc";
-            this.lblSoTienCoc.Size = new System.Drawing.Size(72, 15);
+            this.lblSoTienCoc.Size = new System.Drawing.Size(68, 15);
             this.lblSoTienCoc.TabIndex = 10;
-            this.lblSoTienCoc.Text = "So tien coc:";
+            this.lblSoTienCoc.Text = "Số tiền cọc:";
             // 
             // txtSoTienCoc
             // 
@@ -464,9 +464,9 @@
             this.lblGiayToGiuLai.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblGiayToGiuLai.Location = new System.Drawing.Point(15, 210);
             this.lblGiayToGiuLai.Name = "lblGiayToGiuLai";
-            this.lblGiayToGiuLai.Size = new System.Drawing.Size(92, 15);
+            this.lblGiayToGiuLai.Size = new System.Drawing.Size(79, 15);
             this.lblGiayToGiuLai.TabIndex = 12;
-            this.lblGiayToGiuLai.Text = "Giay to giu lai:";
+            this.lblGiayToGiuLai.Text = "Giấy tờ giữ lại";
             // 
             // txtGiayToGiuLai
             // 
@@ -483,9 +483,9 @@
             this.lblTrangThai.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTrangThai.Location = new System.Drawing.Point(15, 250);
             this.lblTrangThai.Name = "lblTrangThai";
-            this.lblTrangThai.Size = new System.Drawing.Size(66, 15);
+            this.lblTrangThai.Size = new System.Drawing.Size(63, 15);
             this.lblTrangThai.TabIndex = 14;
-            this.lblTrangThai.Text = "Trang thai:";
+            this.lblTrangThai.Text = "Trạng thái:";
             // 
             // txtTrangThai
             // 
@@ -502,9 +502,9 @@
             this.lblTrangThaiThanhToan.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTrangThaiThanhToan.Location = new System.Drawing.Point(15, 280);
             this.lblTrangThaiThanhToan.Name = "lblTrangThaiThanhToan";
-            this.lblTrangThaiThanhToan.Size = new System.Drawing.Size(129, 15);
+            this.lblTrangThaiThanhToan.Size = new System.Drawing.Size(127, 15);
             this.lblTrangThaiThanhToan.TabIndex = 16;
-            this.lblTrangThaiThanhToan.Text = "Trang thai thanh toan:";
+            this.lblTrangThaiThanhToan.Text = "Trạng thái thanh toán :";
             // 
             // txtTrangThaiThanhToan
             // 
@@ -521,9 +521,9 @@
             this.lblHinhThucThanhToan.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblHinhThucThanhToan.Location = new System.Drawing.Point(15, 310);
             this.lblHinhThucThanhToan.Name = "lblHinhThucThanhToan";
-            this.lblHinhThucThanhToan.Size = new System.Drawing.Size(128, 15);
+            this.lblHinhThucThanhToan.Size = new System.Drawing.Size(127, 15);
             this.lblHinhThucThanhToan.TabIndex = 18;
-            this.lblHinhThucThanhToan.Text = "Hinh thuc thanh toan:";
+            this.lblHinhThucThanhToan.Text = "Hình thức thanh toán :";
             // 
             // txtHinhThucThanhToan
             // 
@@ -546,7 +546,7 @@
             this.grpTinhToan.Size = new System.Drawing.Size(470, 120);
             this.grpTinhToan.TabIndex = 4;
             this.grpTinhToan.TabStop = false;
-            this.grpTinhToan.Text = "Tinh toan qua han";
+            this.grpTinhToan.Text = "Tính toán quá hạn";
             // 
             // lblSoNgayQuaHan
             // 
@@ -554,9 +554,9 @@
             this.lblSoNgayQuaHan.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblSoNgayQuaHan.Location = new System.Drawing.Point(15, 35);
             this.lblSoNgayQuaHan.Name = "lblSoNgayQuaHan";
-            this.lblSoNgayQuaHan.Size = new System.Drawing.Size(99, 15);
+            this.lblSoNgayQuaHan.Size = new System.Drawing.Size(98, 15);
             this.lblSoNgayQuaHan.TabIndex = 0;
-            this.lblSoNgayQuaHan.Text = "So ngay qua han:";
+            this.lblSoNgayQuaHan.Text = "Số ngày quá hạn:";
             // 
             // txtSoNgayQuaHan
             // 
@@ -573,9 +573,9 @@
             this.lblTienPhat.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblTienPhat.Location = new System.Drawing.Point(15, 70);
             this.lblTienPhat.Name = "lblTienPhat";
-            this.lblTienPhat.Size = new System.Drawing.Size(115, 15);
+            this.lblTienPhat.Size = new System.Drawing.Size(99, 15);
             this.lblTienPhat.TabIndex = 2;
-            this.lblTienPhat.Text = "Tien phat (150%):";
+            this.lblTienPhat.Text = "Tiền phạt (150%):";
             // 
             // txtTienPhat
             // 
@@ -608,9 +608,9 @@
             this.lblHinhThucThanhToanNew.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblHinhThucThanhToanNew.Location = new System.Drawing.Point(20, 23);
             this.lblHinhThucThanhToanNew.Name = "lblHinhThucThanhToanNew";
-            this.lblHinhThucThanhToanNew.Size = new System.Drawing.Size(98, 15);
+            this.lblHinhThucThanhToanNew.Size = new System.Drawing.Size(77, 15);
             this.lblHinhThucThanhToanNew.TabIndex = 0;
-            this.lblHinhThucThanhToanNew.Text = "Hinh thuc TT:";
+            this.lblHinhThucThanhToanNew.Text = "Hình thức TT";
             // 
             // cboHinhThucThanhToan
             // 
@@ -638,7 +638,7 @@
             this.btnXacNhanThanhToan.Name = "btnXacNhanThanhToan";
             this.btnXacNhanThanhToan.Size = new System.Drawing.Size(160, 50);
             this.btnXacNhanThanhToan.TabIndex = 2;
-            this.btnXacNhanThanhToan.Text = "XAC NHAN\r\nTHANH TOAN";
+            this.btnXacNhanThanhToan.Text = "XÁC NHẬN THANH TOÁN";
             this.btnXacNhanThanhToan.UseVisualStyleBackColor = false;
             this.btnXacNhanThanhToan.Click += new System.EventHandler(this.btnXacNhanThanhToan_Click);
             // 
@@ -670,7 +670,7 @@
             this.btnTraXe.Name = "btnTraXe";
             this.btnTraXe.Size = new System.Drawing.Size(160, 50);
             this.btnTraXe.TabIndex = 4;
-            this.btnTraXe.Text = "TRA XE";
+            this.btnTraXe.Text = "TRẢ XE";
             this.btnTraXe.UseVisualStyleBackColor = false;
             this.btnTraXe.Click += new System.EventHandler(this.btnTraXe_Click);
             // 
@@ -686,7 +686,7 @@
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(160, 50);
             this.btnClose.TabIndex = 5;
-            this.btnClose.Text = "DONG";
+            this.btnClose.Text = "ĐÓNG";
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
@@ -721,6 +721,7 @@
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
+
         }
     }
 }

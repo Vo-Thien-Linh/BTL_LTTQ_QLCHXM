@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using BLL;
-
+// FORM NÀY CHỈ ĐỂ TEST CHỨ CHƯA SỬ DỤNG
 namespace UI.UserControlUI
 {
     public partial class ViewMuaThueXe : UserControl

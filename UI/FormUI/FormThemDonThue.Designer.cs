@@ -35,7 +35,6 @@
         private System.Windows.Forms.Label lblGiayToGiuLai;
         private System.Windows.Forms.Button btnLuu;
         private System.Windows.Forms.Button btnHuy;
-        private System.Windows.Forms.Button btnTinhTien;
 
         protected override void Dispose(bool disposing)
         {
@@ -71,7 +70,6 @@
             this.dtpNgayKetThuc = new System.Windows.Forms.DateTimePicker();
             this.lblSoNgay = new System.Windows.Forms.Label();
             this.nudSoNgay = new System.Windows.Forms.NumericUpDown();
-            this.btnTinhTien = new System.Windows.Forms.Button();
             this.lblTongTien = new System.Windows.Forms.Label();
             this.txtTongTien = new System.Windows.Forms.TextBox();
             this.lblTienCoc = new System.Windows.Forms.Label();
@@ -267,7 +265,6 @@
             this.grpThongTinThue.Controls.Add(this.dtpNgayKetThuc);
             this.grpThongTinThue.Controls.Add(this.lblSoNgay);
             this.grpThongTinThue.Controls.Add(this.nudSoNgay);
-            this.grpThongTinThue.Controls.Add(this.btnTinhTien);
             this.grpThongTinThue.Controls.Add(this.lblTongTien);
             this.grpThongTinThue.Controls.Add(this.txtTongTien);
             this.grpThongTinThue.Controls.Add(this.lblTienCoc);
@@ -353,21 +350,6 @@
             0,
             0});
             // 
-            // btnTinhTien
-            // 
-            this.btnTinhTien.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
-            this.btnTinhTien.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTinhTien.FlatAppearance.BorderSize = 0;
-            this.btnTinhTien.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnTinhTien.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnTinhTien.ForeColor = System.Drawing.Color.White;
-            this.btnTinhTien.Location = new System.Drawing.Point(440, 65);
-            this.btnTinhTien.Name = "btnTinhTien";
-            this.btnTinhTien.Size = new System.Drawing.Size(395, 35);
-            this.btnTinhTien.TabIndex = 6;
-            this.btnTinhTien.Text = "🧮 TÍNH TIỀN TỰ ĐỘNG";
-            this.btnTinhTien.UseVisualStyleBackColor = false;
-            // 
             // lblTongTien
             // 
             this.lblTongTien.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -392,7 +374,7 @@
             // lblTienCoc
             // 
             this.lblTienCoc.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblTienCoc.Location = new System.Drawing.Point(440, 110);
+            this.lblTienCoc.Location = new System.Drawing.Point(437, 70);
             this.lblTienCoc.Name = "lblTienCoc";
             this.lblTienCoc.Size = new System.Drawing.Size(100, 23);
             this.lblTienCoc.TabIndex = 9;
@@ -402,7 +384,7 @@
             // txtTienCoc
             // 
             this.txtTienCoc.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtTienCoc.Location = new System.Drawing.Point(555, 110);
+            this.txtTienCoc.Location = new System.Drawing.Point(555, 71);
             this.txtTienCoc.Name = "txtTienCoc";
             this.txtTienCoc.Size = new System.Drawing.Size(280, 23);
             this.txtTienCoc.TabIndex = 10;
@@ -460,7 +442,7 @@
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(140, 45);
             this.btnLuu.TabIndex = 5;
-            this.btnLuu.Text = "💾 LƯU";
+            this.btnLuu.Text = " LƯU";
             this.btnLuu.UseVisualStyleBackColor = false;
             // 
             // btnHuy
@@ -476,7 +458,7 @@
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(140, 45);
             this.btnHuy.TabIndex = 6;
-            this.btnHuy.Text = "❌ HỦY";
+            this.btnHuy.Text = " HỦY";
             this.btnHuy.UseVisualStyleBackColor = false;
             // 
             // FormThemDonThue
@@ -508,7 +490,6 @@
             this.grpThongTinThue.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoNgay)).EndInit();
             this.grpThanhToan.ResumeLayout(false);
-            this.grpThanhToan.PerformLayout();
             this.ResumeLayout(false);
 
         }
