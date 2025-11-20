@@ -947,25 +947,62 @@ namespace BLL
                 return false;
             }
 
-            // Kiểm tra tiền cọc
             if (gd.SoTienCoc.HasValue)
             {
+                // Chỉ kiểm tra tiền cọc không âm
                 if (gd.SoTienCoc.Value < 0)
                 {
                     errorMessage = "Tiền cọc không được âm!";
                     return false;
                 }
 
-                if (gd.SoTienCoc.Value > gd.TongGia)
+                // Lấy tiền cọc quy định của xe
+                decimal tienCocQuyDinh = GetTienCocQuyDinhCuaXe(gd.ID_Xe);
+                
+                // Nếu có quy định tiền cọc, kiểm tra phải đúng bằng quy định
+                if (tienCocQuyDinh > 0)
                 {
-                    errorMessage = "Tiền cọc không được lớn hơn tổng tiền thuê!";
-                    return false;
+                    if (gd.SoTienCoc.Value != tienCocQuyDinh)
+                    {
+                        errorMessage = $"Tiền cọc không đúng!\n" +
+                                     $"Quy định cho xe này: {tienCocQuyDinh:N0}đ\n" +
+                                     $"Tiền cọc nhập vào: {gd.SoTienCoc.Value:N0}đ";
+                        return false;
+                    }
                 }
             }
 
             return true;
         }
 
+        private decimal GetTienCocQuyDinhCuaXe(string idXe)
+        {
+            try
+            {
+                // 
+                string query = @"
+                    SELECT lx.TienCoc 
+                    FROM XeMay xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    WHERE xe.ID_Xe = @ID_Xe";
+        
+                SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+        
+                object result = DataProvider.ExecuteScalar(query, parameters);
+        
+                if (result != null && result != DBNull.Value)
+                {
+                    return Convert.ToDecimal(result);
+                }
+        
+                return 0; // Không có quy định
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi lấy tiền cọc quy định: {ex.Message}");
+                return 0;
+            }
+        }
         #endregion
 
         #region Thống kê
