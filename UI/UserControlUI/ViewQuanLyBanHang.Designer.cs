@@ -41,6 +41,7 @@
             this.btnViewDetail = new System.Windows.Forms.Button();
             this.btnApprove = new System.Windows.Forms.Button();
             this.btnReject = new System.Windows.Forms.Button();
+            this.btnXemHopDong = new System.Windows.Forms.Button();
             this.lblRecordCount = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();

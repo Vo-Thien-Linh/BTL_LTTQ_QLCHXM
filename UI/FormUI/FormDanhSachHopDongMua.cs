@@ -199,20 +199,39 @@ namespace UI.FormUI
 
                 SaveFileDialog saveDialog = new SaveFileDialog
                 {
-                    Filter = "Excel Files|*.xlsx|CSV Files|*.csv",
+                    Filter = "PDF Files|*.pdf",
                     Title = "Xuất danh sách hợp đồng",
-                    FileName = $"DanhSachHopDongMua_{DateTime.Now:yyyyMMdd_HHmmss}"
+                    FileName = $"DanhSachHopDongMua_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
                 };
 
                 if (saveDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // TODO: Implement Excel/CSV export
-                    MessageBox.Show(
-                        "Chức năng xuất file đang được phát triển!\n\n" +
-                        $"File sẽ được lưu tại:\n{saveDialog.FileName}",
-                        "Thông báo",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    try
+                    {
+                        // Lấy dữ liệu từ DataGridView
+                        DataTable dt = hopDongMuaBLL.GetAllHopDongMua();
+
+                        // Xuất PDF
+                        PDFHelper.ExportDanhSachHopDong(dt, saveDialog.FileName);
+
+                        MessageBox.Show(
+                            "Xuất file PDF thành công!\n\n" +
+                            $"File đã được lưu tại:\n{saveDialog.FileName}",
+                            "Thành công",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
+                        // Mở file PDF
+                        System.Diagnostics.Process.Start(saveDialog.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                            "Lỗi khi xuất file PDF:\n" + ex.Message,
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex)

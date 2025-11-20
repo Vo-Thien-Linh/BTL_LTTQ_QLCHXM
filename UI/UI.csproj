@@ -34,6 +34,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
+      <HintPath>..\BTL_LTTQ_QLCHXM\packages\BouncyCastle.Cryptography.2.4.0\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.4, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\BTL_LTTQ_QLCHXM\packages\iTextSharp.5.5.13.4\lib\net461\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="SunnyUI, Version=3.8.9.0, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb, processorArchitecture=MSIL">
       <HintPath>..\BTL_LTTQ_QLCHXM\packages\SunnyUI.3.8.9\lib\net472\SunnyUI.dll</HintPath>
     </Reference>
@@ -224,6 +230,7 @@
     <Compile Include="FormUI\TestThuVien.Designer.cs">
       <DependentUpon>TestThuVien.cs</DependentUpon>
     </Compile>
+    <Compile Include="PDFHelper.cs" />
     <Compile Include="UserControlUI\ViewDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>

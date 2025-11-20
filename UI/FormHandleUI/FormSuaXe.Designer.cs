@@ -93,7 +93,7 @@
             // 
             // btnSuaXe
             // 
-            this.btnSuaXe.Location = new System.Drawing.Point(691, 476);
+            this.btnSuaXe.Location = new System.Drawing.Point(712, 567);
             this.btnSuaXe.Name = "btnSuaXe";
             this.btnSuaXe.Size = new System.Drawing.Size(236, 68);
             this.btnSuaXe.TabIndex = 7;
@@ -216,7 +216,6 @@
             this.txtGiaMua.Name = "txtGiaMua";
             this.txtGiaMua.Size = new System.Drawing.Size(129, 22);
             this.txtGiaMua.TabIndex = 15;
-//this.txtGiaMua.TextChanged += new System.EventHandler(this.txtGiaMua_TextChanged);
             // 
             // txtBienSo
             // 
@@ -245,6 +244,14 @@
             this.dtpNgayHetHanBaoHiem.TabIndex = 9;
             this.dtpNgayHetHanBaoHiem.ValueChanged += new System.EventHandler(this.dtpNgayHetHanBaoHiem_ValueChanged);
             // 
+            // nudKHDaChay
+            // 
+            this.nudKHDaChay.Location = new System.Drawing.Point(200, 37);
+            this.nudKHDaChay.Name = "nudKHDaChay";
+            this.nudKHDaChay.Size = new System.Drawing.Size(194, 22);
+            this.nudKHDaChay.TabIndex = 3;
+            this.nudKHDaChay.ValueChanged += new System.EventHandler(this.nudKHDaChay_ValueChanged);
+            // 
             // cbbMucDichSuDung
             // 
             this.cbbMucDichSuDung.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -259,7 +266,7 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(31, 297);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(116, 16);
+            this.label18.Size = new System.Drawing.Size(110, 16);
             this.label18.TabIndex = 11;
             this.label18.Text = "Mục đích sử dụng";
             // 
@@ -275,7 +282,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(31, 340);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(63, 16);
+            this.label19.Size = new System.Drawing.Size(61, 16);
             this.label19.TabIndex = 13;
             this.label19.Text = "Giá nhập";
             // 
@@ -306,17 +313,9 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(31, 379);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(64, 16);
+            this.label20.Size = new System.Drawing.Size(60, 16);
             this.label20.TabIndex = 15;
             this.label20.Text = "Số lượng";
-            // 
-            // nudKHDaChay
-            // 
-            this.nudKHDaChay.Location = new System.Drawing.Point(200, 37);
-            this.nudKHDaChay.Name = "nudKHDaChay";
-            this.nudKHDaChay.Size = new System.Drawing.Size(194, 22);
-            this.nudKHDaChay.TabIndex = 3;
-            this.nudKHDaChay.ValueChanged += new System.EventHandler(this.nudKHDaChay_ValueChanged);
             // 
             // label15
             // 
@@ -442,7 +441,7 @@
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Location = new System.Drawing.Point(599, 145);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(435, 350);
+            this.groupBox2.Size = new System.Drawing.Size(435, 449);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Thông tin kỹ thuật";
