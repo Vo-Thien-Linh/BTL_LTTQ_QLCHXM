@@ -97,6 +97,54 @@ namespace BLL
             return r2 > 0;
         }
 
+        /// <summary>
+        /// Kiểm tra có thể xóa phụ tùng không
+        /// </summary>
+        public bool CanDeletePhuTung(string maPhuTung, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                if (string.IsNullOrEmpty(maPhuTung))
+                {
+                    errorMessage = "Mã phụ tùng không hợp lệ!";
+                    return false;
+                }
+
+                // 1. Kiểm tra phụ tùng đang được sử dụng trong bảo trì
+                if (dal.IsPhuTungInBaoTri(maPhuTung))
+                {
+                    errorMessage = "Phụ tùng đang được sử dụng trong bảo trì!\n" +
+                                  "Không thể xóa phụ tùng đang có trong danh sách bảo trì.";
+                    return false;
+                }
+
+                // 2. Cảnh báo nếu có tồn kho
+                var phuTung = dal.GetPhuTungById(maPhuTung);
+                if (phuTung != null)
+                {
+                    // Lấy số lượng tồn kho
+                    string queryTonKho = "SELECT SoLuongTon FROM KhoPhuTung WHERE MaPhuTung = @MaPhuTung";
+                    SqlParameter[] parameters = { new SqlParameter("@MaPhuTung", maPhuTung) };
+                    object result = DataProvider.ExecuteScalar(queryTonKho, parameters);
+                    
+                    if (result != null && Convert.ToInt32(result) > 0)
+                    {
+                        errorMessage = $"⚠ Phụ tùng còn {result} sản phẩm trong kho!\n" +
+                                      "Bạn có chắc chắn muốn xóa?";
+                        // Vẫn cho phép xóa nhưng cảnh báo
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Lỗi kiểm tra ràng buộc: {ex.Message}";
+                return false;
+            }
+        }
 
     }
 }

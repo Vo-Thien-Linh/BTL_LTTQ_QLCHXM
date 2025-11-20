@@ -1,3 +1,4 @@
+
 ﻿using DTO;
 using System;
 using System.Collections.Generic;
@@ -614,6 +615,50 @@ namespace DAL
                 conn.Open();
                 return cmd.ExecuteNonQuery() > 0;
             }
+        }
+
+        /// <summary>
+        /// Kiểm tra xe đang được thuê
+        /// </summary>
+        public bool IsXeDangThue(string idXe)
+        {
+            string query = @"SELECT COUNT(*) 
+                            FROM GiaoDichThue 
+                            WHERE ID_Xe = @ID_Xe 
+                            AND TrangThai IN (N'Chờ duyệt', N'Đã thanh toán', N'Đang thuê')";
+            
+            SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+            int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+            return count > 0;
+        }
+
+        /// <summary>
+        /// Kiểm tra xe trong giao dịch bán
+        /// </summary>
+        public bool IsXeInGiaoDichBan(string idXe)
+        {
+            string query = @"SELECT COUNT(*) 
+                            FROM GiaoDichBan 
+                            WHERE ID_Xe = @ID_Xe 
+                            AND TrangThai = N'Chờ duyệt'";
+            
+            SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+            int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+            return count > 0;
+        }
+
+        /// <summary>
+        /// Kiểm tra xe đang bảo trì
+        /// </summary>
+        public bool IsXeDangBaoTri(string idXe)
+        {
+            string query = @"SELECT COUNT(*) 
+                            FROM BaoTri 
+                            WHERE ID_Xe = @ID_Xe";
+            
+            SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+            int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+            return count > 0;
         }
     }
 }

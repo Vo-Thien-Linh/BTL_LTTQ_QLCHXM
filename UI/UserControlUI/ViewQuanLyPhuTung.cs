@@ -21,6 +21,52 @@ namespace UI.UserControlUI
             InitializeTimKiemComboBox();
             LoadData();
         }
+
+        /// <summary>
+        /// Kiểm tra quyền truy cập
+        /// </summary>
+        private bool CheckPermission(string action)
+        {
+            try
+            {
+                if (!SessionManager.IsLoggedIn)
+                {
+                    MessageBox.Show("Bạn chưa đăng nhập!", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                if (SessionManager.IsSessionExpired())
+                {
+                    MessageBox.Show("Phiên làm việc đã hết hạn!\nVui lòng đăng nhập lại.",
+                        "Hết phiên", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    SessionManager.Logout();
+                    return false;
+                }
+
+                SessionManager.UpdateActivity();
+
+                if (!SessionManager.HasPermission("PhuTung", action))
+                {
+                    MessageBox.Show(
+                        $"Bạn không có quyền {action} phụ tùng!\n" +
+                        $"Chức vụ: {SessionManager.CurrentUser?.ChucVu}",
+                        "Không đủ quyền",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi kiểm tra quyền: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
         private void InitializeTimKiemComboBox()
         {
             cbbTimKiemTheo.Items.Clear();
@@ -87,6 +133,9 @@ namespace UI.UserControlUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("ADD"))
+                return;
+
             UI.FormHandleUI.FormThemPhuTung frmThemPhuTung = new UI.FormHandleUI.FormThemPhuTung();
             var result = frmThemPhuTung.ShowDialog();
 
@@ -98,6 +147,9 @@ namespace UI.UserControlUI
 
         private void btnSua_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("EDIT"))
+                return;
+
             if (dgvQuanLyPhuTung.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Vui lòng chọn phụ tùng cần sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -118,6 +170,9 @@ namespace UI.UserControlUI
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("DELETE"))
+                return;
+
             if (dgvQuanLyPhuTung.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Vui lòng chọn phụ tùng cần xóa!", "Thông báo",
@@ -125,7 +180,6 @@ namespace UI.UserControlUI
                 return;
             }
 
-            // Có thể chọn cách lấy cột: bằng name hoặc theo index
             var cell = dgvQuanLyPhuTung.SelectedRows[0].Cells["colMaPhuTung"];
             if (cell == null || cell.Value == null)
             {
@@ -135,15 +189,37 @@ namespace UI.UserControlUI
             }
             string maPT = cell.Value.ToString();
 
-            DialogResult dr =
-                MessageBox.Show($"Bạn có chắc chắn muốn xóa phụ tùng {maPT}?",
-                                "Xác nhận",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question);
-            if (dr != DialogResult.Yes) return;
-
             try
             {
+                // Kiểm tra ràng buộc nghiệp vụ
+                string errorMessage;
+                if (!phuTungBLL.CanDeletePhuTung(maPT, out errorMessage))
+                {
+                    MessageBox.Show(
+                        $"Không thể xóa phụ tùng!\n\n{errorMessage}",
+                        "Cảnh báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
+                DialogResult dr = MessageBox.Show(
+                    $"⚠ XÁC NHẬN XÓA PHỤ TÙNG\n\n" +
+                    $"Mã phụ tùng: {maPT}\n\n" +
+                    (!string.IsNullOrEmpty(errorMessage) ? errorMessage + "\n\n" : "") +
+                    $"Bạn có chắc chắn muốn xóa?\n" +
+                    $"Thao tác này KHÔNG THỂ HOÀN TÁC!",
+                    "Xác nhận",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2
+                );
+                
+                if (dr != DialogResult.Yes) return;
+
+                Cursor = Cursors.WaitCursor;
+
                 if (phuTungBLL.DeletePhuTung(maPT))
                 {
                     MessageBox.Show("Xóa thành công!", "Thông báo",
@@ -160,6 +236,10 @@ namespace UI.UserControlUI
             {
                 MessageBox.Show($"Lỗi khi xóa: {ex.Message}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 

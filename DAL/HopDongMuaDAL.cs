@@ -26,7 +26,7 @@ namespace DAL
                 {
                     new SqlParameter("@MaGDBan", hopDong.MaGDBan),
                     new SqlParameter("@MaKH", hopDong.MaKH),
-                    new SqlParameter("@MaTaiKhoan", hopDong.MaTaiKhoan),
+                    new SqlParameter("@MaTaiKhoan", (object)hopDong.MaTaiKhoan ?? DBNull.Value),
                     new SqlParameter("@ID_Xe", hopDong.ID_Xe),
                     new SqlParameter("@NgayLap", hopDong.NgayLap),
                     new SqlParameter("@GiaBan", hopDong.GiaBan),
@@ -52,32 +52,30 @@ namespace DAL
         public DataTable GetAllHopDongMua()
         {
             string query = @"
-                SELECT 
-                    hdm.MaHDM,
-                    hdm.MaGDBan,
-                    hdm.MaKH,
-                    kh.HoTenKH,
-                    kh.Sdt,
-                    hdm.ID_Xe,
-                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
-                    xe.BienSo,
-                    hdm.NgayLap,
-                    hdm.GiaBan,
-                    hdm.DieuKhoan,
-                    hdm.GhiChu,
-                    hdm.TrangThaiHopDong,
-                    hdm.FileHopDong,
-                    nv.HoTenNV AS TenNhanVien
-                FROM HopDongMua hdm
-                INNER JOIN KhachHang kh ON hdm.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON hdm.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                LEFT JOIN TaiKhoan tk ON hdm.MaTaiKhoan = tk.MaTaiKhoan
-                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                ORDER BY hdm.NgayLap DESC";
+        SELECT 
+            hdm.MaHDM,
+            hdm.MaGDBan,
+            hdm.MaKH,
+            kh.HoTenKH,
+            kh.Sdt,
+            hdm.ID_Xe,
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' ', lx.NamSX) AS TenXe,
+            ISNULL(xe.BienSo, N'Chưa có') AS BienSo,
+            hdm.NgayLap,
+            hdm.GiaBan,
+            hdm.GhiChu,
+            hdm.TrangThaiHopDong,
+            ISNULL(nv.HoTenNV, N'Không xác định') AS TenNhanVien
+        FROM HopDongMua hdm
+        INNER JOIN KhachHang kh ON hdm.MaKH = kh.MaKH
+        INNER JOIN XeMay xe ON hdm.ID_Xe = xe.ID_Xe
+        INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+        INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+        INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+        INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+        LEFT JOIN TaiKhoan tk ON hdm.MaTaiKhoan = tk.MaTaiKhoan
+        LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+        ORDER BY hdm.NgayLap DESC";
 
             return DataProvider.ExecuteQuery(query);
         }
@@ -88,38 +86,43 @@ namespace DAL
         public DataTable GetHopDongByMaGDBan(int maGDBan)
         {
             string query = @"
-                SELECT 
-                    hdm.MaHDM,
-                    hdm.MaGDBan,
-                    hdm.MaKH,
-                    kh.HoTenKH,
-                    kh.Sdt,
-                    kh.DiaChi,
-                    kh.SoCCCD,
-                    hdm.ID_Xe,
-                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
-                    xe.BienSo,
-                    hdm.NgayLap,
-                    hdm.GiaBan,
-                    hdm.DieuKhoan,
-                    hdm.GhiChu,
-                    hdm.TrangThaiHopDong,
-                    hdm.FileHopDong,
-                    nv.HoTenNV AS TenNhanVien
-                FROM HopDongMua hdm
-                INNER JOIN KhachHang kh ON hdm.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON hdm.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                LEFT JOIN TaiKhoan tk ON hdm.MaTaiKhoan = tk.MaTaiKhoan
-                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                WHERE hdm.MaGDBan = @MaGDBan";
+        SELECT 
+            hdm.MaHDM,
+            hdm.MaGDBan,
+            hdm.MaKH,
+            kh.HoTenKH,
+            kh.Sdt,
+            kh.DiaChi,
+            kh.SoCCCD,
+            hdm.ID_Xe,
+            xe.BienSo,
+            hx.TenHang AS TenHangXe,
+            dx.TenDong AS TenDongXe,
+            ms.TenMau AS TenMauSac,
+            lx.NamSX AS NamSanXuat,
+            -- Tên xe đầy đủ (Hãng + Dòng + Màu + Năm)
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' ', lx.NamSX) AS TenXe,
+            hdm.NgayLap,
+            hdm.GiaBan,
+            hdm.DieuKhoan,
+            hdm.GhiChu,
+            hdm.TrangThaiHopDong,
+            hdm.FileHopDong,
+            ISNULL(nv.HoTenNV, N'Không xác định') AS TenNhanVien
+        FROM HopDongMua hdm
+        INNER JOIN KhachHang kh ON hdm.MaKH = kh.MaKH
+        INNER JOIN XeMay xe ON hdm.ID_Xe = xe.ID_Xe
+        INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+        INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+        INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+        INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+        LEFT JOIN TaiKhoan tk ON hdm.MaTaiKhoan = tk.MaTaiKhoan
+        LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+        WHERE hdm.MaGDBan = @MaGDBan";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
-                new SqlParameter("@MaGDBan", maGDBan)
+        new SqlParameter("@MaGDBan", maGDBan)
             };
 
             return DataProvider.ExecuteQuery(query, parameters);

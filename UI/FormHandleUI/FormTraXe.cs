@@ -40,6 +40,7 @@ namespace UI.FormHandleUI
         {
             try
             {
+                // ✅ ĐỌC DỮ LIỆU TỪ DataRow
                 kmBatDau = dataGiaoDich["KmBatDau"] != DBNull.Value
                     ? Convert.ToInt32(dataGiaoDich["KmBatDau"]) : 0;
                 ngayBatDau = Convert.ToDateTime(dataGiaoDich["NgayBatDau"]);
@@ -47,35 +48,55 @@ namespace UI.FormHandleUI
                 giaThueNgay = Convert.ToDecimal(dataGiaoDich["GiaThueNgay"]);
                 soTienCoc = dataGiaoDich["SoTienCoc"] != DBNull.Value
                     ? Convert.ToDecimal(dataGiaoDich["SoTienCoc"]) : 0;
+
+                // ✅ DEBUG: Hiển thị giá trị đọc được
+                System.Diagnostics.Debug.WriteLine($"[FormTraXe] KmBatDau: {kmBatDau}");
+                System.Diagnostics.Debug.WriteLine($"[FormTraXe] NgayBatDau: {ngayBatDau:dd/MM/yyyy}");
+                System.Diagnostics.Debug.WriteLine($"[FormTraXe] NgayKetThuc: {ngayKetThuc:dd/MM/yyyy}");
+                System.Diagnostics.Debug.WriteLine($"[FormTraXe] GiaThueNgay: {giaThueNgay:N0}");
+                System.Diagnostics.Debug.WriteLine($"[FormTraXe] SoTienCoc: {soTienCoc:N0}");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi đọc dữ liệu: {ex.Message}", "Lỗi",
+                MessageBox.Show($"❌ Lỗi đọc dữ liệu: {ex.Message}\n\nStackTrace: {ex.StackTrace}", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SetDefaultValues()
         {
+            // ✅ SỬA: SET INCREMENT = 1 CHO CÁC NumericUpDown
+            nudChiPhiPhatSinh.Increment = 1000;   // Tăng 1,000đ mỗi lần
+            nudKmKetThuc.Increment = 1;           // Tăng 1 km mỗi lần
+            nudSoNgayTraSom.Increment = 1;        // Tăng 1 ngày mỗi lần
+
             // Ngày trả
             dtpNgayTra.Value = DateTime.Now;
+            dtpNgayTra.MinDate = ngayBatDau; // Không cho chọn ngày trả < ngày thuê
 
             // Km kết thúc
             nudKmKetThuc.Minimum = kmBatDau;
             nudKmKetThuc.Value = kmBatDau;
+            nudKmKetThuc.Maximum = 999999;
 
             // Chi phí
             nudChiPhiPhatSinh.Value = 0;
+            nudChiPhiPhatSinh.Minimum = 0;
+            nudChiPhiPhatSinh.Maximum = 999999999;
 
             // Trả sớm
             chkTraSom.Checked = false;
             nudSoNgayTraSom.Enabled = false;
             nudSoNgayTraSom.Value = 0;
+            nudSoNgayTraSom.Minimum = 0;
 
             // Tình trạng
-            cboTinhTrang.SelectedIndex = 0;
+            if (cboTinhTrang.Items.Count > 0)
+            {
+                cboTinhTrang.SelectedIndex = 0;
+            }
 
-            // Hiển thị thông tin ban đầu
+            // ✅ HIỂN THỊ THÔNG TIN BAN ĐẦU (QUAN TRỌNG!)
             lblKmBatDauValue.Text = $"{kmBatDau:N0} km";
             lblNgayBatDauValue.Text = ngayBatDau.ToString("dd/MM/yyyy");
             lblNgayKetThucValue.Text = ngayKetThuc.ToString("dd/MM/yyyy");
@@ -89,6 +110,33 @@ namespace UI.FormHandleUI
             nudChiPhiPhatSinh.ValueChanged += (s, e) => TinhToan();
             chkTraSom.CheckedChanged += ChkTraSom_CheckedChanged;
             nudSoNgayTraSom.ValueChanged += (s, e) => TinhToan();
+            dtpNgayTra.ValueChanged += (s, e) => OnNgayTraChanged();
+        }
+
+        private void OnNgayTraChanged()
+        {
+            // Nếu ngày trả > ngày kết thúc ban đầu => TỰ ĐỘNG BỎ TICK "TRẢ SỚM"
+            if (dtpNgayTra.Value.Date > ngayKetThuc.Date)
+            {
+                if (chkTraSom.Checked)
+                {
+                    chkTraSom.Checked = false;
+                    MessageBox.Show(
+                        "⚠ Ngày trả xe đã QUÁ HẠN so với hợp đồng!\n\n" +
+                        "Đã TỰ ĐỘNG BỎ CHỌN 'Trả sớm' và sẽ tính PHÍ PHẠT trả muộn.",
+                        "Cảnh báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+                chkTraSom.Enabled = false;
+            }
+            else
+            {
+                chkTraSom.Enabled = true;
+            }
+
+            TinhToan();
         }
 
         private void ChkTraSom_CheckedChanged(object sender, EventArgs e)
@@ -101,20 +149,39 @@ namespace UI.FormHandleUI
             }
             else
             {
-                // Tính số ngày tối đa có thể trả sớm
-                int soNgayDaThue = (DateTime.Now.Date - ngayBatDau.Date).Days;
+                DateTime ngayTraThucTe = dtpNgayTra.Value.Date;
+
+                if (ngayTraThucTe > ngayKetThuc.Date)
+                {
+                    MessageBox.Show(
+                        "⚠ KHÔNG THỂ TRẢ SỚM!\n\n" +
+                        $"Ngày trả thực tế: {ngayTraThucTe:dd/MM/yyyy}\n" +
+                        $"Ngày kết thúc hợp đồng: {ngayKetThuc:dd/MM/yyyy}\n\n" +
+                        "Ngày trả xe đã QUÁ HẠN so với hợp đồng!",
+                        "Không thể trả sớm",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    chkTraSom.Checked = false;
+                    return;
+                }
+
+                int soNgayDaThue = (ngayTraThucTe - ngayBatDau.Date).Days;
                 int soNgayThueMax = (ngayKetThuc.Date - ngayBatDau.Date).Days;
                 int soNgayCoTheTraSom = soNgayThueMax - soNgayDaThue;
 
                 if (soNgayCoTheTraSom > 0)
                 {
                     nudSoNgayTraSom.Maximum = soNgayCoTheTraSom;
+                    nudSoNgayTraSom.Value = Math.Min(1, soNgayCoTheTraSom);
                 }
                 else
                 {
                     nudSoNgayTraSom.Maximum = 0;
                     MessageBox.Show(
-                        "Không thể trả sớm vì đã quá ngày kết thúc!",
+                        "⚠ Không thể trả sớm!\n\n" +
+                        $"Ngày trả: {ngayTraThucTe:dd/MM/yyyy}\n" +
+                        $"Ngày kết thúc: {ngayKetThuc:dd/MM/yyyy}",
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
@@ -130,17 +197,16 @@ namespace UI.FormHandleUI
         {
             try
             {
-                //  Tính km đã chạy
+                // 1. Tính km đã chạy
                 int kmChay = (int)nudKmKetThuc.Value - kmBatDau;
-                lblKmChayValue.Text = kmChay >= 0
-                    ? $"{kmChay:N0} km"
-                    : " Lỗi: km < ban đầu";
-                lblKmChayValue.ForeColor = kmChay >= 0
-                    ? Color.FromArgb(33, 150, 243)
+                lblKmChayValue.Text = kmChay >= 0 ? $"{kmChay:N0} km" : "⚠ Lỗi";
+                lblKmChayValue.ForeColor = kmChay >= 0 
+                    ? Color.FromArgb(33, 150, 243) 
                     : Color.Red;
 
-                //  Tính tiền phạt (nếu trả muộn)
-                int soNgayQuaHan = (DateTime.Now.Date - ngayKetThuc.Date).Days;
+                // 2. Tính tiền phạt (nếu trả muộn)
+                DateTime ngayTraThucTe = dtpNgayTra.Value.Date;
+                int soNgayQuaHan = (ngayTraThucTe - ngayKetThuc.Date).Days;
                 decimal tienPhat = 0;
 
                 if (soNgayQuaHan > 0)
@@ -158,7 +224,7 @@ namespace UI.FormHandleUI
                     lblSoNgayQuaHanValue.Visible = false;
                 }
 
-                //  Tính tiền hoàn (nếu trả sớm)
+                // 3. Tính tiền hoàn (nếu trả sớm)
                 decimal tienHoanTraSom = 0;
 
                 if (chkTraSom.Checked && nudSoNgayTraSom.Value > 0)
@@ -176,7 +242,7 @@ namespace UI.FormHandleUI
                     lblSoNgayTraSomDetail.Visible = false;
                 }
 
-                //  Tính tổng tiền hoàn cọc
+                // 4. Tính tổng tiền hoàn cọc
                 decimal chiPhiPhatSinh = nudChiPhiPhatSinh.Value;
                 decimal tienHoanCoc = soTienCoc - chiPhiPhatSinh - tienPhat + tienHoanTraSom;
 
@@ -185,13 +251,13 @@ namespace UI.FormHandleUI
                 if (tienHoanCoc > 0)
                 {
                     lblTienHoanCocValue.ForeColor = Color.FromArgb(76, 175, 80);
-                    lblKetLuan.Text = " Hoàn lại cho khách hàng";
+                    lblKetLuan.Text = "✓ Hoàn lại cho khách hàng";
                     lblKetLuan.ForeColor = Color.FromArgb(76, 175, 80);
                 }
                 else if (tienHoanCoc < 0)
                 {
                     lblTienHoanCocValue.ForeColor = Color.FromArgb(244, 67, 54);
-                    lblKetLuan.Text = $" Khách hàng phải trả thêm: {Math.Abs(tienHoanCoc):N0} VNĐ";
+                    lblKetLuan.Text = $"⚠ Khách hàng phải trả thêm: {Math.Abs(tienHoanCoc):N0} VNĐ";
                     lblKetLuan.ForeColor = Color.FromArgb(244, 67, 54);
                 }
                 else
@@ -208,7 +274,7 @@ namespace UI.FormHandleUI
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Lỗi tính toán: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"❌ Lỗi tính toán: {ex.Message}");
             }
         }
 
@@ -219,7 +285,6 @@ namespace UI.FormHandleUI
                 return;
             }
 
-            // Hiển thị tóm tắt
             string summary = BuildSummary();
 
             DialogResult confirm = MessageBox.Show(
@@ -231,7 +296,6 @@ namespace UI.FormHandleUI
 
             if (confirm == DialogResult.Yes)
             {
-                // Lưu dữ liệu
                 TinhTrangXe = cboTinhTrang.SelectedItem?.ToString() ?? "Không rõ";
                 ChiPhiPhatSinh = nudChiPhiPhatSinh.Value;
                 KmKetThuc = (int)nudKmKetThuc.Value;
@@ -246,32 +310,32 @@ namespace UI.FormHandleUI
 
         private string BuildSummary()
         {
-            string summary = "Xác nhận trả xe với thông tin sau?\n\n";
-            summary += $" Ngày trả: {dtpNgayTra.Value:dd/MM/yyyy HH:mm}\n";
-            summary += $" Km kết thúc: {nudKmKetThuc.Value:N0} km (chạy {(int)nudKmKetThuc.Value - kmBatDau:N0} km)\n";
-            summary += $" Tình trạng: {cboTinhTrang.SelectedItem}\n";
-            summary += $" Chi phí phát sinh: {nudChiPhiPhatSinh.Value:N0} VNĐ\n\n";
+            string summary = "⚠ Xác nhận trả xe với thông tin sau?\n\n";
+            summary += $"📅 Ngày trả: {dtpNgayTra.Value:dd/MM/yyyy HH:mm}\n";
+            summary += $"🛣 Km kết thúc: {nudKmKetThuc.Value:N0} km (chạy {(int)nudKmKetThuc.Value - kmBatDau:N0} km)\n";
+            summary += $"🔧 Tình trạng: {cboTinhTrang.SelectedItem}\n";
+            summary += $"💰 Chi phí phát sinh: {nudChiPhiPhatSinh.Value:N0} VNĐ\n\n";
 
-            summary += " TÍNH TOÁN:\n";
-            summary += $"  Tiền cọc ban đầu: {soTienCoc:N0} VNĐ\n";
-            summary += $"  Chi phí phát sinh: -{nudChiPhiPhatSinh.Value:N0} VNĐ\n";
+            summary += "💵 TÍNH TOÁN:\n";
+            summary += $"  • Tiền cọc ban đầu: {soTienCoc:N0} VNĐ\n";
+            summary += $"  • Chi phí phát sinh: -{nudChiPhiPhatSinh.Value:N0} VNĐ\n";
 
             if (TienPhat > 0)
             {
-                int soNgayQuaHan = (DateTime.Now.Date - ngayKetThuc.Date).Days;
-                summary += $" Tiền phạt trả muộn ({soNgayQuaHan} ngày): -{TienPhat:N0} VNĐ\n";
+                int soNgayQuaHan = (dtpNgayTra.Value.Date - ngayKetThuc.Date).Days;
+                summary += $"  • ⚠ Tiền phạt trả muộn ({soNgayQuaHan} ngày): -{TienPhat:N0} VNĐ\n";
             }
 
             if (TienHoanTraSom > 0)
             {
-                summary += $" Tiền hoàn trả sớm ({SoNgayTraSom} ngày): +{TienHoanTraSom:N0} VNĐ\n";
+                summary += $"  • ✓ Tiền hoàn trả sớm ({SoNgayTraSom} ngày): +{TienHoanTraSom:N0} VNĐ\n";
             }
 
-            summary += $"\n TỔNG TIỀN HOÀN CỌC: {TienHoanCoc:N0} VNĐ\n";
+            summary += $"\n💳 TỔNG TIỀN HOÀN CỌC: {TienHoanCoc:N0} VNĐ\n";
 
             if (TienHoanCoc < 0)
             {
-                summary += $"\n Khách hàng cần trả thêm: {Math.Abs(TienHoanCoc):N0} VNĐ";
+                summary += $"\n⚠ Khách hàng cần trả thêm: {Math.Abs(TienHoanCoc):N0} VNĐ";
             }
 
             return summary;
@@ -279,81 +343,28 @@ namespace UI.FormHandleUI
 
         private bool ValidateInput()
         {
-            // 1. Kiểm tra km kết thúc
             if (nudKmKetThuc.Value < kmBatDau)
             {
                 MessageBox.Show(
-                    $" Km kết thúc không hợp lệ!\n\n" +
-                    $"Km kết thúc ({nudKmKetThuc.Value:N0}) không thể nhỏ hơn km bắt đầu ({kmBatDau:N0})!",
-                    "Lỗi nhập liệu",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                    $"⚠ Km kết thúc ({nudKmKetThuc.Value:N0}) không thể nhỏ hơn km bắt đầu ({kmBatDau:N0})!",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 nudKmKetThuc.Focus();
                 return false;
             }
 
-            // 2. Cảnh báo km chạy quá nhiều
-            int kmChay = (int)nudKmKetThuc.Value - kmBatDau;
-            if (kmChay > 10000)
-            {
-                DialogResult result = MessageBox.Show(
-                    $" CẢNH BÁO: Xe đã chạy {kmChay:N0} km!\n\n" +
-                    $"Đây là một số km bất thường lớn. Bạn có chắc chắn muốn tiếp tục?",
-                    "Cảnh báo",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning
-                );
-
-                if (result == DialogResult.No)
-                {
-                    nudKmKetThuc.Focus();
-                    return false;
-                }
-            }
-
-            // 3. Kiểm tra tình trạng xe
             if (cboTinhTrang.SelectedIndex == -1)
             {
-                MessageBox.Show(
-                    " Vui lòng chọn tình trạng xe!",
-                    "Lỗi nhập liệu",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
+                MessageBox.Show("⚠ Vui lòng chọn tình trạng xe!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cboTinhTrang.Focus();
                 return false;
             }
 
-            // 4. Cảnh báo chi phí phát sinh lớn
-            if (nudChiPhiPhatSinh.Value > 10000000)
-            {
-                DialogResult result = MessageBox.Show(
-                    $" CẢNH BÁO: Chi phí phát sinh rất lớn!\n\n" +
-                    $"Chi phí: {nudChiPhiPhatSinh.Value:N0} VNĐ\n\n" +
-                    $"Bạn có chắc chắn muốn tiếp tục?",
-                    "Cảnh báo",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Warning
-                );
-
-                if (result == DialogResult.No)
-                {
-                    nudChiPhiPhatSinh.Focus();
-                    return false;
-                }
-            }
-
-            // 5. Kiểm tra trả sớm
-            if (chkTraSom.Checked && nudSoNgayTraSom.Value <= 0)
+            if (chkTraSom.Checked && dtpNgayTra.Value.Date > ngayKetThuc.Date)
             {
                 MessageBox.Show(
-                    " Vui lòng nhập số ngày trả sớm!",
-                    "Lỗi nhập liệu",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                nudSoNgayTraSom.Focus();
+                    "⚠ Không thể vừa TRẢ MUỘN vừa TÍNH TIỀN TRẢ SỚM!",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 

@@ -209,6 +209,37 @@ namespace UI.FormHandleUI
                 {
                     dto.ID_Loai = LoaiXeBLL.GetOrCreateIDLoai(dto.MaHang, dto.MaDong, dto.MaMau, dto.NamSX.Value);
                 }
+                if (!System.Text.RegularExpressions.Regex.IsMatch(txtBienSo.Text, @"^\d{2}[A-Z]-\d{4,5}$"))
+                {
+                    MessageBox.Show("Biển số không đúng định dạng! (VD: 29A-12345)",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtBienSo.Focus();
+                    return;
+                }
+
+                // 2. Kiểm tra giá mua
+                if (!decimal.TryParse(txtGiaMua.Text, out decimal giaMua) || giaMua <= 0)
+                {
+                    MessageBox.Show("Giá mua phải > 0!",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtGiaMua.Focus();
+                    return;
+                }
+
+                // 3. Kiểm tra km đã chạy
+                if (nudKHDaChay.Value < 0)
+                {
+                    MessageBox.Show("Km đã chạy phải >= 0!",
+                        "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // 4. Kiểm tra ngày hết hạn
+                if (dtpNgayHetHanDangKy.Value < DateTime.Now)
+                {
+                    MessageBox.Show("Ngày hết hạn đăng ký đã quá hạn!",
+                        "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
 
                 // BLL xử lý - sẽ throw Exception nếu có lỗi với thông báo chi tiết
                 bool success = xeMayBLL.InsertXeMay(dto);

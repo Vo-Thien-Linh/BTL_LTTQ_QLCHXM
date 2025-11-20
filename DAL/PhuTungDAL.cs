@@ -109,6 +109,19 @@ namespace DAL
             return DataProvider.ExecuteNonQuery(query, pars);
         }
 
+        /// <summary>
+        /// Kiểm tra phụ tùng đang được sử dụng trong bảo trì
+        /// </summary>
+        public bool IsPhuTungInBaoTri(string maPhuTung)
+        {
+            string query = @"SELECT COUNT(*) 
+                            FROM ChiTietBaoTri 
+                            WHERE MaPhuTung = @MaPhuTung";
+            
+            SqlParameter[] parameters = { new SqlParameter("@MaPhuTung", maPhuTung) };
+            int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+            return count > 0;
+        }
 
     }
 }

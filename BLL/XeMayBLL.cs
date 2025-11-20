@@ -491,27 +491,35 @@ namespace BLL
             try
             {
                 // Validate thời gian
-                if (ngayBatDau >= ngayKetThuc)
+                if (ngayBatDau.Date >= ngayKetThuc.Date)
                 {
                     throw new Exception("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
                 }
 
-                if (ngayBatDau < DateTime.Now.Date)
+                if (ngayBatDau.Date < DateTime.Now.Date)
                 {
                     throw new Exception("Ngày bắt đầu không được nhỏ hơn ngày hiện tại!");
                 }
 
+                // Gọi DAL để lấy xe khả dụng
                 DataTable dt = xeMayDAL.GetXeCoTheThueTheoThoiGian(ngayBatDau, ngayKetThuc);
-                
+
+                if (dt == null)
+                {
+                    throw new Exception("Lỗi khi lấy danh sách xe!");
+                }
+
                 if (dt.Rows.Count == 0)
                 {
-                    throw new Exception($"Không có xe nào khả dụng từ {ngayBatDau:dd/MM/yyyy} đến {ngayKetThuc:dd/MM/yyyy}!\n\n" +
-                                      "Lý do có thể:\n" +
-                                      "- Tất cả xe đều đã được đặt trong thời gian này\n" +
-                                      "- Không có xe nào trong kho cho thuê\n" +
-                                      "- Vui lòng chọn thời gian khác!");
+                    throw new Exception(
+                        $"Không có xe nào khả dụng từ {ngayBatDau:dd/MM/yyyy} đến {ngayKetThuc:dd/MM/yyyy}!\n\n" +
+                        "Lý do có thể:\n" +
+                        "• Tất cả xe đều đã được đặt trong thời gian này\n" +
+                        "• Không có xe nào trong kho cho thuê\n" +
+                        "• Vui lòng chọn thời gian khác!"
+                    );
                 }
-                
+
                 return dt;
             }
             catch (Exception ex)
@@ -660,6 +668,59 @@ namespace BLL
         public bool CapNhatTrangThaiXe(string idXe, string trangThai)
         {
             return xeMayDAL.CapNhatTrangThaiXe(idXe, trangThai);
+        }
+
+        /// <summary>
+        /// Kiểm tra có thể xóa xe không
+        /// </summary>
+        public bool CanDeleteXe(string idXe, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                if (string.IsNullOrEmpty(idXe))
+                {
+                    errorMessage = "Mã xe không hợp lệ!";
+                    return false;
+                }
+
+                // 1. Kiểm tra xe đang được thuê
+                if (xeMayDAL.IsXeDangThue(idXe))
+                {
+                    errorMessage = "Xe đang được thuê!\nKhông thể xóa xe đang trong giao dịch thuê.";
+                    return false;
+                }
+
+                // 2. Kiểm tra xe trong giao dịch bán
+                if (xeMayDAL.IsXeInGiaoDichBan(idXe))
+                {
+                    errorMessage = "Xe đang trong giao dịch bán!\nKhông thể xóa xe đang có đơn mua.";
+                    return false;
+                }
+
+                // 3. Kiểm tra xe đang bảo trì
+                if (xeMayDAL.IsXeDangBaoTri(idXe))
+                {
+                    errorMessage = "Xe đang bảo trì!\nVui lòng hoàn thành bảo trì trước khi xóa.";
+                    return false;
+                }
+
+                // 4. Cảnh báo nếu có lịch sử
+                if (KiemTraXeCoGiaoDich(idXe))
+                {
+                    errorMessage = "⚠ Xe có lịch sử giao dịch!\n" +
+                                  "Xóa xe sẽ ẢNH HƯỞNG đến dữ liệu thống kê và báo cáo.";
+                    // Vẫn cho phép xóa nhưng cảnh báo
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Lỗi kiểm tra ràng buộc: {ex.Message}";
+                return false;
+            }
         }
 
     }
