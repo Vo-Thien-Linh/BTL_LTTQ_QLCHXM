@@ -670,5 +670,58 @@ namespace BLL
             return xeMayDAL.CapNhatTrangThaiXe(idXe, trangThai);
         }
 
+        /// <summary>
+        /// Kiểm tra có thể xóa xe không
+        /// </summary>
+        public bool CanDeleteXe(string idXe, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                if (string.IsNullOrEmpty(idXe))
+                {
+                    errorMessage = "Mã xe không hợp lệ!";
+                    return false;
+                }
+
+                // 1. Kiểm tra xe đang được thuê
+                if (xeMayDAL.IsXeDangThue(idXe))
+                {
+                    errorMessage = "Xe đang được thuê!\nKhông thể xóa xe đang trong giao dịch thuê.";
+                    return false;
+                }
+
+                // 2. Kiểm tra xe trong giao dịch bán
+                if (xeMayDAL.IsXeInGiaoDichBan(idXe))
+                {
+                    errorMessage = "Xe đang trong giao dịch bán!\nKhông thể xóa xe đang có đơn mua.";
+                    return false;
+                }
+
+                // 3. Kiểm tra xe đang bảo trì
+                if (xeMayDAL.IsXeDangBaoTri(idXe))
+                {
+                    errorMessage = "Xe đang bảo trì!\nVui lòng hoàn thành bảo trì trước khi xóa.";
+                    return false;
+                }
+
+                // 4. Cảnh báo nếu có lịch sử
+                if (KiemTraXeCoGiaoDich(idXe))
+                {
+                    errorMessage = "⚠ Xe có lịch sử giao dịch!\n" +
+                                  "Xóa xe sẽ ẢNH HƯỞNG đến dữ liệu thống kê và báo cáo.";
+                    // Vẫn cho phép xóa nhưng cảnh báo
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Lỗi kiểm tra ràng buộc: {ex.Message}";
+                return false;
+            }
+        }
+
     }
 }

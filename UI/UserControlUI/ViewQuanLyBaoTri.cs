@@ -19,6 +19,52 @@ namespace UI.UserControlUI
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Kiểm tra quyền truy cập
+        /// </summary>
+        private bool CheckPermission(string action)
+        {
+            try
+            {
+                if (!SessionManager.IsLoggedIn)
+                {
+                    MessageBox.Show("Bạn chưa đăng nhập!", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                if (SessionManager.IsSessionExpired())
+                {
+                    MessageBox.Show("Phiên làm việc đã hết hạn!\nVui lòng đăng nhập lại.",
+                        "Hết phiên", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    SessionManager.Logout();
+                    return false;
+                }
+
+                SessionManager.UpdateActivity();
+
+                if (!SessionManager.HasPermission("BaoTri", action))
+                {
+                    MessageBox.Show(
+                        $"Bạn không có quyền {action} bảo trì!\n" +
+                        $"Chức vụ: {SessionManager.CurrentUser?.ChucVu}",
+                        "Không đủ quyền",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi kiểm tra quyền: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
         private void ViewQuanLyBaoTri_Load(object sender, EventArgs e)
         {
             try
@@ -258,6 +304,9 @@ namespace UI.UserControlUI
         // Thêm bảo trì
         private void btnThem_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("ADD"))
+                return;
+
             try
             {
                 // Validate
@@ -297,6 +346,8 @@ namespace UI.UserControlUI
                     chiTietList.Add(chiTiet);
                 }
 
+                Cursor = Cursors.WaitCursor;
+
                 // Thêm vào database
                 if (baoTriBLL.ThemBaoTri(baoTri, chiTietList))
                 {
@@ -312,23 +363,52 @@ namespace UI.UserControlUI
                 MessageBox.Show("Lỗi khi thêm bảo trì: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         // Xóa bảo trì
         private void btnXoa_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("DELETE"))
+                return;
+
+            if (idBaoTriSelected == 0)
+            {
+                MessageBox.Show("Vui lòng chọn bảo trì cần xóa!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
-                if (idBaoTriSelected == 0)
+                // Kiểm tra ràng buộc nghiệp vụ
+                string errorMessage;
+                if (!baoTriBLL.CanDeleteBaoTri(idBaoTriSelected, out errorMessage))
                 {
-                    MessageBox.Show("Vui lòng chọn bảo trì cần xóa!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        $"Không thể xóa bảo trì!\n\n{errorMessage}",
+                        "Cảnh báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                     return;
                 }
 
-                if (MessageBox.Show("Bạn có chắc muốn xóa bảo trì này?\nPhụ tùng sẽ được hoàn trả về kho.",
-                    "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show(
+                    "⚠ XÁC NHẬN XÓA BẢO TRÌ\n\n" +
+                    "Bạn có chắc muốn xóa bảo trì này?\n" +
+                    "Phụ tùng sẽ được hoàn trả về kho.\n\n" +
+                    "Thao tác này KHÔNG THỂ HOÀN TÁC!",
+                    "Xác nhận", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
+                    Cursor = Cursors.WaitCursor;
+
                     if (baoTriBLL.XoaBaoTri(idBaoTriSelected))
                     {
                         MessageBox.Show("Xóa bảo trì thành công!", "Thông báo",
@@ -343,6 +423,10 @@ namespace UI.UserControlUI
             {
                 MessageBox.Show("Lỗi khi xóa bảo trì: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
             }
         }
 

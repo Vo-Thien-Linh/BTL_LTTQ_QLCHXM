@@ -33,6 +33,52 @@ namespace UI.UserControlUI
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
         }
 
+        /// <summary>
+        /// Kiểm tra quyền truy cập
+        /// </summary>
+        private bool CheckPermission(string action)
+        {
+            try
+            {
+                if (!SessionManager.IsLoggedIn)
+                {
+                    MessageBox.Show("Bạn chưa đăng nhập!", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                if (SessionManager.IsSessionExpired())
+                {
+                    MessageBox.Show("Phiên làm việc đã hết hạn!\nVui lòng đăng nhập lại.",
+                        "Hết phiên", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    SessionManager.Logout();
+                    return false;
+                }
+
+                SessionManager.UpdateActivity();
+
+                if (!SessionManager.HasPermission("XeMay", action))
+                {
+                    MessageBox.Show(
+                        $"Bạn không có quyền {action} xe!\n" +
+                        $"Chức vụ: {SessionManager.CurrentUser?.ChucVu}",
+                        "Không đủ quyền",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi kiểm tra quyền: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
         private void OnThemeChanged(object sender, EventArgs e)
         {
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
@@ -696,6 +742,9 @@ namespace UI.UserControlUI
 
         private void btnXoa_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("DELETE"))
+                return;
+
             if (string.IsNullOrEmpty(selectedXeId))
             {
                 MessageBox.Show("Vui lòng chọn xe cần xóa!", "Thông báo", 
@@ -703,14 +752,38 @@ namespace UI.UserControlUI
                 return;
             }
 
-            DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn xóa xe {selectedXeId}?", 
-                "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
-            if (result != DialogResult.Yes)
-                return;
-
             try
             {
+                // Kiểm tra ràng buộc nghiệp vụ
+                string errorMessage;
+                if (!xeMayBLL.CanDeleteXe(selectedXeId, out errorMessage))
+                {
+                    MessageBox.Show(
+                        $"Không thể xóa xe!\n\n{errorMessage}",
+                        "Cảnh báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
+                DialogResult result = MessageBox.Show(
+                    $"⚠ XÁC NHẬN XÓA XE\n\n" +
+                    $"Mã xe: {selectedXeId}\n\n" +
+                    (!string.IsNullOrEmpty(errorMessage) ? errorMessage + "\n\n" : "") +
+                    $"Bạn có chắc chắn muốn xóa?\n" +
+                    $"Thao tác này KHÔNG THỂ HOÀN TÁC!", 
+                    "Xác nhận xóa", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2
+                );
+                
+                if (result != DialogResult.Yes)
+                    return;
+
+                Cursor = Cursors.WaitCursor;
+                
                 bool success = xeMayBLL.DeleteXeMay(selectedXeId);
                 if (success)
                 {
@@ -731,10 +804,17 @@ namespace UI.UserControlUI
                 MessageBox.Show($"Lỗi khi xóa xe: {ex.Message}", "Lỗi", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("EDIT"))
+                return;
+
             if (string.IsNullOrEmpty(selectedXeId))
             {
                 MessageBox.Show("Vui lòng chọn xe cần sửa!", "Thông báo", 
@@ -753,6 +833,9 @@ namespace UI.UserControlUI
 
         private void btnThem_Click(object sender, EventArgs e)
         {
+            if (!CheckPermission("ADD"))
+                return;
+
             // Mở Form thêm xe dạng dialog
             UI.FormHandleUI.FormThemXe frmThemXe = new UI.FormHandleUI.FormThemXe();
             var result = frmThemXe.ShowDialog();

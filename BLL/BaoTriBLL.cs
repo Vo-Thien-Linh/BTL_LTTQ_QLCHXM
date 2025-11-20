@@ -246,5 +246,67 @@ namespace BLL
 
             return null; // Không có lỗi
         }
+
+        /// <summary>
+        /// Kiểm tra có thể xóa bảo trì không
+        /// </summary>
+        public bool CanDeleteBaoTri(int idBaoTri, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                if (idBaoTri <= 0)
+                {
+                    errorMessage = "ID bảo trì không hợp lệ!";
+                    return false;
+                }
+
+                // Kiểm tra trạng thái bảo trì (nếu có field TrangThai)
+                var baoTri = LayBaoTriTheoID(idBaoTri);
+                if (baoTri == null)
+                {
+                    errorMessage = "Không tìm thấy thông tin bảo trì!";
+                    return false;
+                }
+
+                // Có thể thêm kiểm tra trạng thái nếu cần
+                // Ví dụ: Chỉ cho xóa bảo trì chưa hoàn thành
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Lỗi kiểm tra ràng buộc: {ex.Message}";
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Validate xe trước khi bảo trì
+        /// </summary>
+        public bool ValidateXeTruocBaoTri(string idXe, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                if (string.IsNullOrEmpty(idXe))
+                {
+                    errorMessage = "Vui lòng chọn xe!";
+                    return false;
+                }
+
+                // Kiểm tra xe có tồn tại và trạng thái
+                // Cần có method trong XeMayDAL để kiểm tra
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Lỗi validate: {ex.Message}";
+                return false;
+            }
+        }
     }
 }

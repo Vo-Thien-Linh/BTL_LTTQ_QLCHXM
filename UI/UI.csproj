@@ -164,12 +164,6 @@
     <Compile Include="FormUI\FormDuyetDonThue.Designer.cs">
       <DependentUpon>FormDuyetDonThue.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormUI\FormKhachHang.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormUI\FormKhachHang.Designer.cs">
-      <DependentUpon>FormKhachHang.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormUI\FormMuaXe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -416,9 +410,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormDuyetDonThue.resx">
       <DependentUpon>FormDuyetDonThue.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormUI\FormKhachHang.resx">
-      <DependentUpon>FormKhachHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormNhapLyDo.resx">
       <DependentUpon>FormNhapLyDo.cs</DependentUpon>

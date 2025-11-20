@@ -96,6 +96,24 @@ namespace UI.FormHandleUI
                 return;
             }
 
+            // Giá bán phải >= Giá mua
+            if (giaBan < giaMua)
+            {
+                DialogResult result = MessageBox.Show(
+                    $"⚠ Giá bán ({giaBan:N0}) nhỏ hơn giá mua ({giaMua:N0})!\n\n" +
+                    "Bạn có chắc chắn muốn tiếp tục?",
+                    "Cảnh báo",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (result == DialogResult.No)
+                {
+                    txtGiaBan.Focus();
+                    return;
+                }
+            }
+
             string maPT = txtMaPhuTung.Text.Trim();
             string tenPT = txtTenPhuTung.Text.Trim();
             string maHang = cbbHangXeTuongThich.SelectedValue.ToString();

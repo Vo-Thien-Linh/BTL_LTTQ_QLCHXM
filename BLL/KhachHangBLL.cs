@@ -194,5 +194,125 @@ namespace BLL
         {
             return khachHangDAL.GetKhachHangBySdt(sdt);
         }
+
+        /// <summary>
+        /// Kiểm tra có thể xóa khách hàng không
+        /// </summary>
+        public bool CanDeleteKhachHang(string maKH, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+
+            try
+            {
+                // 1. Kiểm tra đang trong giao dịch thuê
+                if (khachHangDAL.IsKhachHangInGiaoDichThue(maKH))
+                {
+                    errorMessage = "Khách hàng đang có giao dịch thuê xe chưa hoàn thành!\n" +
+                                  "(Trạng thái: Chờ duyệt / Đã thanh toán / Đang thuê)";
+                    return false;
+                }
+
+                // 2. Kiểm tra đang có đơn mua chờ duyệt
+                if (khachHangDAL.IsKhachHangInGiaoDichBan(maKH))
+                {
+                    errorMessage = "Khách hàng đang có đơn mua xe chờ duyệt!";
+                    return false;
+                }
+
+                // 3. Cảnh báo nếu có lịch sử giao dịch
+                DataTable dtLichSu = khachHangDAL.GetLichSuGiaoDichKhachHang(maKH);
+                if (dtLichSu.Rows.Count > 0)
+                {
+                    errorMessage = $"⚠ Khách hàng có {dtLichSu.Rows.Count} giao dịch trong lịch sử.\n" +
+                                  "Xóa khách hàng sẽ ẢNH HƯỞNG đến dữ liệu thống kê!";
+                    // Vẫn cho phép xóa nhưng cảnh báo
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Lỗi kiểm tra ràng buộc: {ex.Message}";
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra số điện thoại đã tồn tại (cho thêm mới)
+        /// </summary>
+        /// <param name="sdt">Số điện thoại cần kiểm tra</param>
+        /// <returns>true nếu đã tồn tại, false nếu chưa</returns>
+        public bool IsSDTExists(string sdt)
+        {
+            try
+            {
+                return khachHangDAL.IsSDTExists(sdt);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi kiểm tra số điện thoại: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra số điện thoại đã tồn tại (cho sửa - loại trừ KH hiện tại)
+        /// </summary>
+        /// <param name="sdt">Số điện thoại cần kiểm tra</param>
+        /// <param name="excludeMaKH">Mã KH cần loại trừ</param>
+        /// <returns>true nếu đã tồn tại, false nếu chưa</returns>
+        public bool IsSDTExists(string sdt, string excludeMaKH)
+        {
+            try
+            {
+                return khachHangDAL.IsSDTExists(sdt, excludeMaKH);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi kiểm tra số điện thoại: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra email đã tồn tại (cho thêm mới)
+        /// </summary>
+        /// <param name="email">Email cần kiểm tra</param>
+        /// <returns>true nếu đã tồn tại, false nếu chưa</returns>
+        public bool IsEmailExists(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                    return false;
+
+                return khachHangDAL.IsEmailExists(email);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi kiểm tra email: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra email đã tồn tại (cho sửa - loại trừ KH hiện tại)
+        /// </summary>
+        /// <param name="email">Email cần kiểm tra</param>
+        /// <param name="excludeMaKH">Mã KH cần loại trừ</param>
+        /// <returns>true nếu đã tồn tại, false nếu chưa</returns>
+        public bool IsEmailExists(string email, string excludeMaKH)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                    return false;
+
+                return khachHangDAL.IsEmailExists(email, excludeMaKH);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi kiểm tra email: {ex.Message}");
+            }
+        }
+
+       
     }
 }
