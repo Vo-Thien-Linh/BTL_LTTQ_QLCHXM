@@ -65,7 +65,12 @@ namespace UI.FormHandleUI
             dtpNgayMua.Value = xe.NgayMua ?? DateTime.Now;
             txtGiaMua.Text = xe.GiaMua.HasValue ? xe.GiaMua.Value.ToString() : "";
             txtGiaNhap.Text = xe.GiaNhap.HasValue ? xe.GiaNhap.Value.ToString() : "";
-            nudSoLuong.Value = xe.SoLuong ?? 1;
+            
+            // Xử lý số lượng - cho phép 0
+            int soLuong = xe.SoLuong ?? 0;
+            nudSoLuong.Minimum = 0; // Cho phép giá trị 0
+            nudSoLuong.Value = soLuong;
+            
             dtpNgayDangKy.Value = xe.NgayDangKy ?? DateTime.Now;
             dtpNgayHetHanDangKy.Value = xe.HetHanDangKy ?? DateTime.Now;
             dtpNgayHetHanBaoHiem.Value = xe.HetHanBaoHiem ?? DateTime.Now;

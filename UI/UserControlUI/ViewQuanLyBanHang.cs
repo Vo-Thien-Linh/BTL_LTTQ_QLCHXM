@@ -12,13 +12,13 @@ namespace UI.UserControlUI
     {
         private XeMayBLL xeMayBLL;
         private FlowLayoutPanel flowPanelCards;
-        private string currentMaNV;
+        private string currentMaTaiKhoan;
 
-        public ViewQuanLyBanHang(string maNV)
+        public ViewQuanLyBanHang(string maTaiKhoan)
         {
             InitializeComponent();
             xeMayBLL = new XeMayBLL();
-            currentMaNV = maNV;
+            currentMaTaiKhoan = maTaiKhoan;
 
             InitializeCardView();
             LoadXeBan();
@@ -197,7 +197,7 @@ namespace UI.UserControlUI
             try
             {
                 // Mở form bán xe mới (không phải form cũ trong FormHandleUI)
-                FormMuaXe formBan = new FormMuaXe(currentMaNV);
+                FormMuaXe formBan = new FormMuaXe(currentMaTaiKhoan);
                 if (formBan.ShowDialog() == DialogResult.OK)
                 {
                     MessageBox.Show("Bán xe thành công!", "Thông báo",
