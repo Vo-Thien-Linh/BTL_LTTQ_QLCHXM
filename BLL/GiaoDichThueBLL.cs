@@ -969,8 +969,7 @@ namespace BLL
                                      $"Tiền cọc nhập vào: {gd.SoTienCoc.Value:N0}đ";
                         return false;
                     }
-                }
-            }
+                }}
 
             return true;
         }
