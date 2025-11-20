@@ -85,8 +85,50 @@ namespace UI.FormUI
 
         private void BtnIn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Chức năng in hợp đồng đang được phát triển!",
-                "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "PDF Files|*.pdf",
+                    Title = "Xuất hợp đồng",
+                    FileName = $"HopDongMua_{txtMaHDM.Text}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Lấy dữ liệu hợp đồng
+                    DataTable dt = hopDongMuaBLL.GetHopDongByMaGDBan(maGDBan);
+                    
+                    if (dt.Rows.Count > 0)
+                    {
+                        // Xuất PDF
+                        PDFHelper.ExportChiTietHopDong(dt.Rows[0], saveDialog.FileName);
+                        
+                        MessageBox.Show(
+                            "Xuất file PDF thành công!\n\n" +
+                            $"File đã được lưu tại:\n{saveDialog.FileName}",
+                            "Thành công",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        
+                        // Mở file PDF
+                        System.Diagnostics.Process.Start(saveDialog.FileName);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy dữ liệu hợp đồng!",
+                            "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi khi xuất file PDF:\n" + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

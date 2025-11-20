@@ -491,27 +491,35 @@ namespace BLL
             try
             {
                 // Validate thời gian
-                if (ngayBatDau >= ngayKetThuc)
+                if (ngayBatDau.Date >= ngayKetThuc.Date)
                 {
                     throw new Exception("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
                 }
 
-                if (ngayBatDau < DateTime.Now.Date)
+                if (ngayBatDau.Date < DateTime.Now.Date)
                 {
                     throw new Exception("Ngày bắt đầu không được nhỏ hơn ngày hiện tại!");
                 }
 
+                // Gọi DAL để lấy xe khả dụng
                 DataTable dt = xeMayDAL.GetXeCoTheThueTheoThoiGian(ngayBatDau, ngayKetThuc);
-                
+
+                if (dt == null)
+                {
+                    throw new Exception("Lỗi khi lấy danh sách xe!");
+                }
+
                 if (dt.Rows.Count == 0)
                 {
-                    throw new Exception($"Không có xe nào khả dụng từ {ngayBatDau:dd/MM/yyyy} đến {ngayKetThuc:dd/MM/yyyy}!\n\n" +
-                                      "Lý do có thể:\n" +
-                                      "- Tất cả xe đều đã được đặt trong thời gian này\n" +
-                                      "- Không có xe nào trong kho cho thuê\n" +
-                                      "- Vui lòng chọn thời gian khác!");
+                    throw new Exception(
+                        $"Không có xe nào khả dụng từ {ngayBatDau:dd/MM/yyyy} đến {ngayKetThuc:dd/MM/yyyy}!\n\n" +
+                        "Lý do có thể:\n" +
+                        "• Tất cả xe đều đã được đặt trong thời gian này\n" +
+                        "• Không có xe nào trong kho cho thuê\n" +
+                        "• Vui lòng chọn thời gian khác!"
+                    );
                 }
-                
+
                 return dt;
             }
             catch (Exception ex)

@@ -18,6 +18,18 @@ namespace UI.FormUI
         public FormThemDonThue(string maTK)
         {
             InitializeComponent();
+            if (string.IsNullOrWhiteSpace(maTK))
+            {
+                MessageBox.Show(
+                    "❌ Lỗi: Không xác định được tài khoản!\n" +
+                    "Vui lòng đăng nhập lại.",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                this.Close();
+                return;
+            }
             this.maTaiKhoan = maTK;
 
             khachHangBLL = new KhachHangBLL();
@@ -293,6 +305,19 @@ namespace UI.FormUI
                 return;
             }
 
+            // ✅ THÊM KIỂM TRA MÃ TÀI KHOẢN
+            if (string.IsNullOrWhiteSpace(maTaiKhoan))
+            {
+                MessageBox.Show(
+                    "❌ Lỗi hệ thống: Không xác định được tài khoản đang đăng nhập!\n" +
+                    "Vui lòng đăng nhập lại.",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return;
+            }
+
             try
             {
                 // Lấy thông tin từ form
@@ -311,23 +336,34 @@ namespace UI.FormUI
                 decimal tienCoc = 0;
                 if (!string.IsNullOrWhiteSpace(txtTienCoc.Text))
                 {
-                    decimal.TryParse(txtTienCoc.Text, out tienCoc);
+                    if (!decimal.TryParse(txtTienCoc.Text, out tienCoc))
+                    {
+                        MessageBox.Show("Tiền cọc không hợp lệ!", "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtTienCoc.Focus();
+                        return;
+                    }
                 }
 
-                //  Kiểm tra lại lần cuối trước khi lưu
+                // Kiểm tra lại lần cuối trước khi lưu
                 string errorXe = "";
                 if (giaoDichThueBLL.IsXeDangThue(idXe, ngayBatDau, ngayKetThuc, out errorXe))
                 {
                     MessageBox.Show(
                         errorXe + "\n\nXe vừa bị đặt bởi người khác!\n" +
-                        "Vui lòng chọn xe khác hoặc thời gian khác.", 
+                        "Vui lòng chọn xe khác hoặc thời gian khác.",
                         "Cảnh báo",
-                        MessageBoxButtons.OK, 
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Warning
                     );
-                    LoadXeTheoThoiGian();  // Reload lại danh sách xe
+                    LoadXeTheoThoiGian();
                     return;
                 }
+
+                // ✅ THÊM LOG DEBUG
+                System.Diagnostics.Debug.WriteLine($"MaTaiKhoan: {maTaiKhoan}");
+                System.Diagnostics.Debug.WriteLine($"MaKH: {maKH}");
+                System.Diagnostics.Debug.WriteLine($"ID_Xe: {idXe}");
 
                 // Tạo DTO
                 GiaoDichThue gd = new GiaoDichThue
@@ -342,8 +378,9 @@ namespace UI.FormUI
                     TrangThaiThanhToan = "Chưa thanh toán",
                     SoTienCoc = tienCoc,
                     GiayToGiuLai = cboGiayToGiuLai.SelectedItem?.ToString() ?? "",
-                    MaTaiKhoan = maTaiKhoan,
-                    TrangThaiDuyet = "Chờ duyệt"
+                    MaTaiKhoan = maTaiKhoan,  // ✅ ĐÃ KIỂM TRA Ở TRÊN
+                    TrangThaiDuyet = "Chờ duyệt",
+                    HinhThucThanhToan = null
                 };
 
                 // Lưu vào database
@@ -370,7 +407,7 @@ namespace UI.FormUI
                 else
                 {
                     MessageBox.Show(
-                        "Không thể tạo đơn thuê!\n\n" + errorMessage,
+                        "❌ Không thể tạo đơn thuê!\n\n" + errorMessage,
                         "Lỗi",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
@@ -380,11 +417,13 @@ namespace UI.FormUI
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Lỗi khi lưu đơn thuê: " + ex.Message,
+                    "❌ Lỗi khi lưu đơn thuê:\n\n" + ex.Message,
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
+
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
             }
         }
 

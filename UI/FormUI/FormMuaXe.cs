@@ -23,6 +23,19 @@ namespace UI.FormUI
             InitializeComponent();
             this.maTaiKhoan = maTK;
 
+            // Kiểm tra đăng nhập
+            if (string.IsNullOrWhiteSpace(maTaiKhoan))
+            {
+                MessageBox.Show(
+                    "Vui lòng đăng nhập để thực hiện chức năng bán xe!",
+                    "Yêu cầu đăng nhập",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
+                return;
+            }
+
             khachHangBLL = new KhachHangBLL();
             xeMayBLL = new XeMayBLL();
             giaoDichBanBLL = new GiaoDichBanBLL();
@@ -186,6 +199,17 @@ namespace UI.FormUI
 
         private void BtnLuu_Click(object sender, EventArgs e)
         {
+            // Kiểm tra đăng nhập
+            if (string.IsNullOrWhiteSpace(maTaiKhoan))
+            {
+                MessageBox.Show(
+                    "Vui lòng đăng nhập để thực hiện chức năng bán xe!",
+                    "Yêu cầu đăng nhập",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             if (!ValidateInput())
             {
                 return;

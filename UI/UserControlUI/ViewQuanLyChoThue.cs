@@ -14,12 +14,30 @@ namespace UI.UserControlUI
         private GiaoDichThueBLL giaoDichThueBLL;
         private FlowLayoutPanel flpDonThue;
         private string currentFilter = "";// "Đang thuê", "Chờ xác nhận", etc.
-        private string maNhanVien; 
+        private string maNhanVien;  // ✅ THÊM: Lưu mã nhân viên
+        private string maTaiKhoan;  // ✅ THÊM: Lưu mã tài khoản
 
         public ViewQuanLyChoThue(string maNV)
         {
             InitializeComponent();
-            this.maNhanVien = maNV; // Lưu lại
+            this.maNhanVien = maNV;
+            
+            // LẤY MÃ TÀI KHOẢN TỪ CurrentUser
+            this.maTaiKhoan = CurrentUser.MaTaiKhoan;
+            
+            //  KIỂM TRA NGAY TỪ ĐẦU
+            if (string.IsNullOrWhiteSpace(this.maTaiKhoan))
+            {
+                MessageBox.Show(
+                    "❌ Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
+                    "Vui lòng đăng nhập lại.",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return;
+            }
+            
             giaoDichThueBLL = new GiaoDichThueBLL();
 
             InitializeFlowLayoutPanel();
@@ -31,6 +49,7 @@ namespace UI.UserControlUI
             cboFilter.SelectedIndexChanged += CboFilter_SelectedIndexChanged;
             txtSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) BtnSearch_Click(s, e); };
         }
+        
         // Constructor mặc định (để Designer không lỗi)
         public ViewQuanLyChoThue() : this(DTO.CurrentUser.MaNV ?? "")
         {
@@ -457,7 +476,20 @@ namespace UI.UserControlUI
 
         private void btnThemDon_Click(object sender, EventArgs e)
         {
-            using (FormThemDonThue form = new FormThemDonThue(maNhanVien))
+            //  TRUYỀN MÃ TÀI KHOẢN THAY VÌ MÃ NHÂN VIÊN
+            if (string.IsNullOrWhiteSpace(maTaiKhoan))
+            {
+                MessageBox.Show(
+                    "❌ Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
+                    "Vui lòng đăng nhập lại.",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return;
+            }
+
+            using (FormThemDonThue form = new FormThemDonThue(maTaiKhoan))  //  ĐÃ SỬA
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -471,6 +503,6 @@ namespace UI.UserControlUI
                     LoadData();
                 }
             }
-        }
+        } 
     }
 }
