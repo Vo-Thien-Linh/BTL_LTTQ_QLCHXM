@@ -947,20 +947,32 @@ namespace BLL
                 return false;
             }
 
-            // Kiểm tra tiền cọc
+            // ✅ KIỂM TRA TIỀN CỌC (ĐÃ BỎ ĐIỀU KIỆN SO SÁNH VỚI TỔNG TIỀN THUÊ)
             if (gd.SoTienCoc.HasValue)
             {
+                // Chỉ kiểm tra tiền cọc không âm
                 if (gd.SoTienCoc.Value < 0)
                 {
                     errorMessage = "Tiền cọc không được âm!";
                     return false;
                 }
 
-                if (gd.SoTienCoc.Value > gd.TongGia)
+                // Lấy tiền cọc quy định của xe
+                decimal tienCocQuyDinh = GetTienCocQuyDinhCuaXe(gd.ID_Xe);
+                
+                // Nếu có quy định tiền cọc, kiểm tra phải đúng bằng quy định
+                if (tienCocQuyDinh > 0)
                 {
-                    errorMessage = "Tiền cọc không được lớn hơn tổng tiền thuê!";
-                    return false;
+                    if (gd.SoTienCoc.Value != tienCocQuyDinh)
+                    {
+                        errorMessage = $"Tiền cọc không đúng!\n" +
+                                     $"Quy định cho xe này: {tienCocQuyDinh:N0}đ\n" +
+                                     $"Tiền cọc nhập vào: {gd.SoTienCoc.Value:N0}đ";
+                        return false;
+                    }
                 }
+                // ✅ BỎ PHẦN KIỂM TRA: if (gd.SoTienCoc.Value > gd.TongGia)
+                // Vì đã có quy định tiền cọc cho từng xe, không cần so sánh với tổng tiền thuê nữa
             }
 
             return true;
@@ -1005,5 +1017,27 @@ namespace BLL
         }
 
         #endregion
+
+        /// <summary>
+        /// Lấy tiền cọc quy định của xe từ bảng XeMay
+        /// </summary>
+        private decimal GetTienCocQuyDinhCuaXe(string idXe)
+        {
+            try
+            {
+                string query = "SELECT ISNULL(TienCoc, 0) FROM XeMay WHERE ID_Xe = @ID_Xe";
+                SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+                object result = DataProvider.ExecuteScalar(query, parameters);
+                if (result != null && result != DBNull.Value)
+                {
+                    return Convert.ToDecimal(result);
+                }
+                return 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
