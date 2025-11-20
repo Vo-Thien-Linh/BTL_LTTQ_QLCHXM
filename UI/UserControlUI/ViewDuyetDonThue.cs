@@ -113,7 +113,7 @@ namespace UI.FormUI
             
             Label lblIcon = new Label
             {
-                Text = "🔒",
+                Text = "",
                 Font = new Font("Segoe UI", 72F),
                 ForeColor = Color.FromArgb(244, 67, 54),
                 AutoSize = true,
@@ -140,7 +140,7 @@ namespace UI.FormUI
             
             Button btnBack = new Button
             {
-                Text = "← Quay lại",
+                Text = " Quay lại",
                 Font = new Font("Segoe UI", 11F, FontStyle.Bold),
                 Width = 150,
                 Height = 45,
@@ -406,7 +406,7 @@ namespace UI.FormUI
             // Biển số
             Label lblBienSo = new Label
             {
-                Text = $"🏍 Biển số: {row["BienSo"]}",
+                Text = $" Biển số: {row["BienSo"]}",
                 Font = new Font("Segoe UI", 9F),
                 ForeColor = Color.Gray,
                 Location = new Point(15, yPos),
@@ -521,7 +521,7 @@ namespace UI.FormUI
             // Button Xem chi tiết - AI CŨNG XEM ĐƯỢC
             Button btnXemChiTiet = new Button
             {
-                Text = "📄 CHI TIẾT",
+                Text = " CHI TIẾT",
                 Width = 160,
                 Height = 35,
                 Location = new Point(185, yPos),

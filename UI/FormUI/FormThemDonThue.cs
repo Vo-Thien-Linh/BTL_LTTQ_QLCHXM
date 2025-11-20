@@ -82,21 +82,11 @@ namespace UI.FormUI
             try
             {
                 isLoadingData = true;
-                
+
                 DateTime ngayBatDau = dtpNgayBatDau.Value.Date;
                 DateTime ngayKetThuc = dtpNgayKetThuc.Value.Date;
 
-                // Validate ngày
-                if (ngayBatDau >= ngayKetThuc)
-                {
-                    // KHÔNG xóa cboXe.DataSource, chỉ clear selection
-                    cboXe.SelectedIndex = -1;
-                    txtBienSo.Text = "";
-                    txtGiaThueNgay.Text = "";
-                    txtTongTien.Text = "0 VNĐ";
-                    return;
-                }
-
+                // Validate và tự động sửa ngày bắt đầu nếu < ngày hiện tại
                 if (ngayBatDau < DateTime.Now.Date)
                 {
                     MessageBox.Show(
@@ -109,7 +99,35 @@ namespace UI.FormUI
                     return;
                 }
 
-                // ✅ Lưu ID xe đã chọn (nếu có)
+                // Validate và tự động sửa ngày kết thúc nếu <= ngày bắt đầu
+                if (ngayKetThuc <= ngayBatDau)
+                {
+                    MessageBox.Show(
+                        "Ngày kết thúc phải lớn hơn ngày bắt đầu!\n" +
+                        "Đã tự động điều chỉnh ngày kết thúc.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    dtpNgayKetThuc.Value = ngayBatDau.AddDays(1);
+                    return;
+                }
+
+                // ✅Validate ngày kết thúc phải > ngày hiện tại
+                if (ngayKetThuc <= DateTime.Now.Date)
+                {
+                    MessageBox.Show(
+                        "Ngày kết thúc phải lớn hơn ngày hiện tại!\n" +
+                        "Đã tự động điều chỉnh ngày kết thúc.",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    dtpNgayKetThuc.Value = DateTime.Now.Date.AddDays(1);
+                    return;
+                }
+
+                //  Lưu ID xe đã chọn (nếu có)
                 string previousSelectedIDXe = "";
                 if (cboXe.SelectedValue != null)
                 {
@@ -118,12 +136,12 @@ namespace UI.FormUI
 
                 // Lấy xe khả dụng
                 DataTable dt = xeMayBLL.GetXeCoTheThueTheoThoiGian(ngayBatDau, ngayKetThuc);
-                
+
                 cboXe.DataSource = dt;
                 cboXe.DisplayMember = "TenXe";
                 cboXe.ValueMember = "ID_Xe";
 
-                
+
                 if (!string.IsNullOrEmpty(previousSelectedIDXe))
                 {
                     bool found = false;
@@ -158,7 +176,7 @@ namespace UI.FormUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Thông báo", 
+                MessageBox.Show(ex.Message, "Thông báo",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 cboXe.SelectedIndex = -1;
             }
@@ -399,6 +417,15 @@ namespace UI.FormUI
             if (dtpNgayKetThuc.Value <= dtpNgayBatDau.Value)
             {
                 MessageBox.Show("Ngày kết thúc phải lớn hơn ngày bắt đầu!",
+                    "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dtpNgayKetThuc.Focus();
+                return false;
+            }
+
+            //  Ngày kết thúc phải lớn hơn ngày hiện tại
+            if (dtpNgayKetThuc.Value.Date <= DateTime.Now.Date)
+            {
+                MessageBox.Show("Ngày kết thúc phải lớn hơn ngày hiện tại!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 dtpNgayKetThuc.Focus();
                 return false;

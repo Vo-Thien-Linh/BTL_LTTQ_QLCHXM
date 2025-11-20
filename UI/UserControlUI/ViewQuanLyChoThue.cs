@@ -69,7 +69,7 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Loi tai du lieu: " + ex.Message, "Loi",
+                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -82,7 +82,7 @@ namespace UI.UserControlUI
             {
                 Label lblNoData = new Label
                 {
-                    Text = "Khong tim thay don thue nao!",
+                    Text = "Không tìm thấy đơn thuê nào!",
                     Font = new Font("Segoe UI", 14F, FontStyle.Italic),
                     ForeColor = Color.Gray,
                     AutoSize = true,
@@ -144,7 +144,7 @@ namespace UI.UserControlUI
 
                 Label lblWarning = new Label
                 {
-                    Text = $"QUA HAN {soNgayQuaHan} NGAY!",
+                    Text = $"QUÁ HẠN {soNgayQuaHan} NGÀY!",
                     Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                     ForeColor = Color.White,
                     AutoSize = false,
@@ -301,7 +301,7 @@ namespace UI.UserControlUI
             // Button xem hợp đồng
             Button btnXemHopDong = new Button
             {
-                Text = "XEM HOP DONG",
+                Text = "XEM HỢP ĐỒNG",
                 Width = 320,
                 Height = 40,
                 Location = new Point(15, yPos),
@@ -391,7 +391,7 @@ namespace UI.UserControlUI
             string keyword = txtSearch.Text.Trim();
 
             if (string.IsNullOrEmpty(keyword) ||
-                keyword == "Tim kiem theo ma GD, ten khach, bien so...")
+                keyword == "Tim kiem ...")
             {
                 LoadData();
                 return;
@@ -413,14 +413,14 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Loi tim kiem: " + ex.Message, "Loi",
+                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void BtnRefresh_Click(object sender, EventArgs e)
         {
-            txtSearch.Text = "Tim kiem theo ma GD, ten khach, bien so...";
+            txtSearch.Text = "Tim kiem ...";
             txtSearch.ForeColor = Color.Gray;
             cboFilter.SelectedIndex = 0;
             currentFilter = "";
@@ -436,7 +436,7 @@ namespace UI.UserControlUI
 
         private void UpdateRecordCount(int count)
         {
-            lblCount.Text = $"Tim thay {count} don thue";
+            lblCount.Text = $"Tìm thấy {count} đơn thuê";
 
             // Hiển thị số đơn quá hạn
             try

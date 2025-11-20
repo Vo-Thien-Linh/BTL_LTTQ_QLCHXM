@@ -60,9 +60,9 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
             this.lblTitle.Location = new System.Drawing.Point(20, 20);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(274, 37);
+            this.lblTitle.Size = new System.Drawing.Size(276, 37);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "QUAN LY CHO THUE";
+            this.lblTitle.Text = "QUẢN LÝ CHO THUÊ";
             // 
             // cboFilter
             // 
@@ -87,7 +87,7 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(450, 27);
             this.txtSearch.TabIndex = 2;
-            this.txtSearch.Text = "Tim kiem theo ma GD, ten khach, bien so...";
+            this.txtSearch.Text = "Tìm kiếm ...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
             this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
@@ -103,7 +103,7 @@
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(120, 32);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "Tim kiem";
+            this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = false;
             // 
             // btnRefresh
@@ -118,7 +118,7 @@
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(120, 32);
             this.btnRefresh.TabIndex = 4;
-            this.btnRefresh.Text = "Lam moi";
+            this.btnRefresh.Text = "Làm mới";
             this.btnRefresh.UseVisualStyleBackColor = false;
             // 
             // lblCount
@@ -130,7 +130,7 @@
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(280, 28);
             this.lblCount.TabIndex = 5;
-            this.lblCount.Text = "Tim thay 0 don thue";
+            this.lblCount.Text = "Tìm thấy 0 đơn thuê";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnThemDon

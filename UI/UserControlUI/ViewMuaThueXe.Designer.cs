@@ -57,9 +57,9 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
             this.lblTitle.Location = new System.Drawing.Point(20, 20);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(350, 37);
+            this.lblTitle.Size = new System.Drawing.Size(283, 37);
             this.lblTitle.TabIndex = 0;
-            this.lblTitle.Text = "MUA & THUE XE MAY";
+            this.lblTitle.Text = "MUA / THUÊ XE MÁY";
             // 
             // cboFilter
             // 
@@ -83,7 +83,7 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(400, 27);
             this.txtSearch.TabIndex = 2;
-            this.txtSearch.Text = "Tìm kiếm theo hãng, dòng, màu, loại xe...";
+            this.txtSearch.Text = "Tìm kiếm ...";
             this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
             this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
@@ -99,7 +99,7 @@
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(120, 32);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "Tim kiem";
+            this.btnSearch.Text = "Tìm kiếm";
             this.btnSearch.UseVisualStyleBackColor = false;
             // 
             // btnRefresh
@@ -114,7 +114,7 @@
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(120, 32);
             this.btnRefresh.TabIndex = 4;
-            this.btnRefresh.Text = "Lam moi";
+            this.btnRefresh.Text = "Làm mới";
             this.btnRefresh.UseVisualStyleBackColor = false;
             // 
             // lblCount
@@ -126,7 +126,7 @@
             this.lblCount.Name = "lblCount";
             this.lblCount.Size = new System.Drawing.Size(280, 28);
             this.lblCount.TabIndex = 5;
-            this.lblCount.Text = "Tim thay 0 xe";
+            this.lblCount.Text = "Tìm thấy 0 xe";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // panelContent
@@ -150,6 +150,7 @@
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.ResumeLayout(false);
+
         }
 
         private void txtSearch_Enter(object sender, System.EventArgs e)
