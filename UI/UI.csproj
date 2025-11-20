@@ -403,7 +403,7 @@
 
     <EmbeddedResource Include="FormHandleUI\FormTraXe.resx">
       <DependentUpon>FormTraXe.cs</DependentUpon>
-
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormXemXeDashBoard.resx">
       <DependentUpon>FormXemXeDashBoard.cs</DependentUpon>
     </EmbeddedResource>
