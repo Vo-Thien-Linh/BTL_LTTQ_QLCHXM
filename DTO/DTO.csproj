@@ -53,6 +53,7 @@
     <Compile Include="BaoTriDTO.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CurrentUser.cs" />
+    <Compile Include="DashboardDTO.cs" />
     <Compile Include="DongXeDTO.cs" />
     <Compile Include="GiaoDichBanDTO.cs" />
     <Compile Include="GiaoDichThueDTO.cs" />

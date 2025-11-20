@@ -53,6 +53,7 @@
     <Compile Include="BaoTriBLL.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="DangKyBLL.cs" />
+    <Compile Include="DashboardBLL.cs" />
     <Compile Include="DongXeBLL.cs" />
     <Compile Include="EmailHelper.cs" />
     <Compile Include="GiaoDichBanBLL.cs" />

@@ -436,7 +436,7 @@ namespace UI.FormUI
 
         private void btnDashBoard_Click(object sender, EventArgs e)
         {
-
+            LoadControl(new UserControlUI.ViewDashboard());
         }
 
         private void btnDangxuat_Click(object sender, EventArgs e)
