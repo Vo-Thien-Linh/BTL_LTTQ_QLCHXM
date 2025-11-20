@@ -97,10 +97,46 @@ namespace BLL
 
         public DataTable GetGiaoDichThueById(int maGDThue)
         {
-            DataTable dt = GetAllGiaoDichThue();
-            DataView dv = dt.DefaultView;
-            dv.RowFilter = $"MaGDThue = {maGDThue}";
-            return dv.ToTable();
+            // ✅ SỬA: LẤY TRỰC TIẾP TỪ DATABASE, KHÔNG QUA CACHE
+            string query = @"
+                SELECT 
+                    gd.MaGDThue, 
+                    gd.MaKH, 
+                    kh.HoTenKH, 
+                    kh.Sdt AS SdtKhachHang,
+                    gd.ID_Xe, 
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
+                    xe.BienSo,
+                    gd.NgayBatDau, 
+                    gd.NgayKetThuc,
+                    DATEDIFF(DAY, gd.NgayBatDau, gd.NgayKetThuc) AS SoNgayThue,
+                    gd.GiaThueNgay,
+                    gd.TongGia, 
+                    gd.TrangThai,
+                    gd.TrangThaiThanhToan, 
+                    gd.HinhThucThanhToan,
+                    gd.SoTienCoc,
+                    gd.GiayToGiuLai,
+                    gd.TrangThaiDuyet,
+                    gd.NguoiDuyet,
+                    gd.NgayDuyet,
+                    gd.GhiChuDuyet,
+                    gd.NgayGiaoXeThucTe,
+                    gd.KmBatDau,
+                    nv.HoTenNV AS TenNhanVien
+                FROM GiaoDichThue gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                WHERE gd.MaGDThue = @MaGDThue";
+
+            SqlParameter[] parameters = { new SqlParameter("@MaGDThue", maGDThue) };
+            return DataProvider.ExecuteQuery(query, parameters);
         }
 
 
@@ -110,37 +146,82 @@ namespace BLL
         {
             errorMessage = "";
 
-            //  Validate dữ liệu đầu vào
-            if (!ValidateGiaoDichThue(gd, out errorMessage))
-            {
-                return false;
-            }
-
-            //  Kiểm tra trạng thái xe
-            if (!ValidateTrangThaiXe(gd.ID_Xe, out errorMessage))
-            {
-                return false;
-            }
-
-            // Kiểm tra xe có trùng lịch không
-            if (IsXeDangThue(gd.ID_Xe, gd.NgayBatDau, gd.NgayKetThuc, out errorMessage))
-            {
-                return false;
-            }
-
-            // Kiểm tra thông tin khách hàng
-            if (!ValidateKhachHang(gd.MaKH, out errorMessage))
-            {
-                return false;
-            }
-
             try
             {
-                return giaoDichThueDAL.InsertGiaoDichThue(gd);
+                // 1. Validate dữ liệu đầu vào
+                if (!ValidateGiaoDichThue(gd, out errorMessage))
+                {
+                    return false;
+                }
+
+                // 2. Kiểm tra khách hàng tồn tại
+                if (!ValidateKhachHang(gd.MaKH, out errorMessage))
+                {
+                    return false;
+                }
+
+                // 3. Kiểm tra trạng thái xe
+                if (!ValidateTrangThaiXe(gd.ID_Xe, out errorMessage))
+                {
+                    return false;
+                }
+
+                // 4. Kiểm tra xe có trùng lịch không
+                if (IsXeDangThue(gd.ID_Xe, gd.NgayBatDau, gd.NgayKetThuc, out errorMessage))
+                {
+                    return false;
+                }
+
+                // 5. Đảm bảo các trường mặc định
+                if (string.IsNullOrWhiteSpace(gd.TrangThai))
+                {
+                    gd.TrangThai = "Chờ xác nhận";
+                }
+
+                if (string.IsNullOrWhiteSpace(gd.TrangThaiThanhToan))
+                {
+                    gd.TrangThaiThanhToan = "Chưa thanh toán";
+                }
+
+                if (string.IsNullOrWhiteSpace(gd.TrangThaiDuyet))
+                {
+                    gd.TrangThaiDuyet = "Chờ duyệt";
+                }
+
+                // 6. Gọi DAL để insert
+                bool success = giaoDichThueDAL.InsertGiaoDichThue(gd);
+
+                if (!success)
+                {
+                    errorMessage = "Không thể tạo đơn thuê! Vui lòng kiểm tra lại thông tin.";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (SqlException sqlEx)
+            {
+                // Xử lý lỗi SQL cụ thể
+                if (sqlEx.Message.Contains("FK_"))
+                {
+                    errorMessage = "Lỗi ràng buộc dữ liệu: Khách hàng hoặc xe không tồn tại!";
+                }
+                else if (sqlEx.Message.Contains("UNIQUE"))
+                {
+                    errorMessage = "Lỗi: Dữ liệu bị trùng lặp!";
+                }
+                else
+                {
+                    errorMessage = "Lỗi cơ sở dữ liệu: " + sqlEx.Message;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"SQL Error: {sqlEx.Message}");
+                return false;
             }
             catch (Exception ex)
             {
-                errorMessage = "Lỗi khi thêm giao dịch thuê: " + ex.Message;
+                errorMessage = "Lỗi khi tạo đơn thuê: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}\nStackTrace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -230,9 +311,15 @@ namespace BLL
                 
                 if (!hopDongSuccess)
                 {
-                    // Cảnh báo nhưng không rollback việc duyệt
+                    // ❌ SỬA: THÔNG BÁO CHO USER THAY VÌ CHỈ LOG
+                    errorMessage = $"Duyệt đơn thành công NHƯNG không tạo được hợp đồng!\n\n" +
+                   $"Lý do: {hopDongError}\n\n" +
+                   $"Vui lòng kiểm tra lại hoặc tạo hợp đồng thủ công.";
+    
                     System.Diagnostics.Debug.WriteLine($"Cảnh báo: Không tạo được hợp đồng - {hopDongError}");
-                    // Bạn có thể log lỗi này vào database để theo dõi
+    
+                    // VẪN RETURN TRUE VÌ DUYỆT ĐÃ THÀNH CÔNG
+                    return true;
                 }
 
                 return true;

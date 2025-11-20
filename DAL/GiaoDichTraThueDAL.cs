@@ -11,26 +11,30 @@ namespace DAL
         public bool InsertGiaoDichTraXe(GiaoDichTraThue gdTra)
         {
             string query = @"
-                INSERT INTO GiaoDichTraThue 
-                (MaGDThue, NgayTraXe, TinhTrangXe, ChiPhiPhatSinh, TienHoanCoc, 
-                 TienPhat, KmKetThuc, SoNgayTraSom, TienHoanTraSom, GhiChu, MaTaiKhoan)
-                VALUES 
-                (@MaGDThue, @NgayTraXe, @TinhTrangXe, @ChiPhiPhatSinh, @TienHoanCoc,
-                 @TienPhat, @KmKetThuc, @SoNgayTraSom, @TienHoanTraSom, @GhiChu, @MaTaiKhoan)";
+                INSERT INTO GiaoDichTraThue (
+                    MaGDThue, NgayTraXe, TinhTrangXe, ChiPhiPhatSinh, 
+                    TienHoanCoc, TienPhat, KmKetThuc, 
+                    SoNgayTraSom, TienHoanTraSom, GhiChu, MaTaiKhoan
+                )
+                VALUES (
+                    @MaGDThue, @NgayTraXe, @TinhTrangXe, @ChiPhiPhatSinh,
+                    @TienHoanCoc, @TienPhat, @KmKetThuc,
+                    @SoNgayTraSom, @TienHoanTraSom, @GhiChu, @MaTaiKhoan
+                )";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@MaGDThue", gdTra.MaGDThue),
                 new SqlParameter("@NgayTraXe", gdTra.NgayTraXe),
-                new SqlParameter("@TinhTrangXe", gdTra.TinhTrangXe),
+                new SqlParameter("@TinhTrangXe", gdTra.TinhTrangXe ?? ""),
                 new SqlParameter("@ChiPhiPhatSinh", (object)gdTra.ChiPhiPhatSinh ?? DBNull.Value),
                 new SqlParameter("@TienHoanCoc", (object)gdTra.TienHoanCoc ?? DBNull.Value),
                 new SqlParameter("@TienPhat", (object)gdTra.TienPhat ?? DBNull.Value),
                 new SqlParameter("@KmKetThuc", (object)gdTra.KmKetThuc ?? DBNull.Value),
-                new SqlParameter("@SoNgayTraSom", (object)gdTra.SoNgayTraSom ?? 0),
-                new SqlParameter("@TienHoanTraSom", (object)gdTra.TienHoanTraSom ?? 0),
+                new SqlParameter("@SoNgayTraSom", (object)gdTra.SoNgayTraSom ?? DBNull.Value),
+                new SqlParameter("@TienHoanTraSom", (object)gdTra.TienHoanTraSom ?? DBNull.Value),
                 new SqlParameter("@GhiChu", (object)gdTra.GhiChu ?? DBNull.Value),
-                new SqlParameter("@MaTaiKhoan", (object)gdTra.MaTaiKhoan ?? DBNull.Value)
+                new SqlParameter("@MaTaiKhoan", gdTra.MaTaiKhoan)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
