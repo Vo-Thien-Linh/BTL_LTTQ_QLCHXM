@@ -21,7 +21,7 @@ namespace UI.FormUI
             if (string.IsNullOrWhiteSpace(maTK))
             {
                 MessageBox.Show(
-                    " Lỗi: Không xác định được tài khoản!\n" +
+                    "Lỗi: Không xác định được tài khoản!\n" +
                     "Vui lòng đăng nhập lại.",
                     "Lỗi",
                     MessageBoxButtons.OK,
@@ -47,15 +47,16 @@ namespace UI.FormUI
             dtpNgayBatDau.Value = DateTime.Now.Date;
             dtpNgayKetThuc.Value = DateTime.Now.Date.AddDays(1);
             
-            //  Đặt txtTienCoc thành ReadOnly và màu nền khác để phân biệt
             txtTienCoc.Text = "0";
             txtTienCoc.ReadOnly = true;
             txtTienCoc.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
             txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
             
             nudSoNgay.Value = 1;
+            nudSoNgay.ReadOnly = true;
+            nudSoNgay.Enabled = false;
+            nudSoNgay.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
             
-            // : Đặt combobox giấy tờ chưa chọn gì
             if (cboGiayToGiuLai.Items.Count > 0)
             {
                 cboGiayToGiuLai.SelectedIndex = -1;
@@ -66,15 +67,12 @@ namespace UI.FormUI
         {
             cboKhachHang.SelectedIndexChanged += CboKhachHang_SelectedIndexChanged;
             cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
+            
             dtpNgayBatDau.ValueChanged += DateChanged;
             dtpNgayKetThuc.ValueChanged += DateChanged;
+            
             btnLuu.Click += BtnLuu_Click;
             btnHuy.Click += BtnHuy_Click;
-            
-            //  Không cần KeyPress cho txtTienCoc vì đã ReadOnly
-            // txtTienCoc.KeyPress += TxtNumber_KeyPress;
-            
-            nudSoNgay.ValueChanged += (s, e) => TinhTienTuDong();
         }
 
         private void LoadKhachHang()
@@ -221,6 +219,8 @@ namespace UI.FormUI
                 txtBienSo.Text = "";
                 txtGiaThueNgay.Text = "";
                 txtTienCoc.Text = "0";
+                txtTienCoc.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+                txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
                 return;
             }
 
@@ -233,30 +233,25 @@ namespace UI.FormUI
                 decimal giaThue = Convert.ToDecimal(row["GiaThueNgay"]);
                 txtGiaThueNgay.Text = giaThue.ToString("N0") + " VNĐ";
 
-                //  Tự động tính tiền cọc dựa trên giá thuê ngày
                 TinhTienCoc(giaThue);
-
                 TinhTienTuDong();
             }
         }
 
-        //  Tính tiền cọc tự động
         private void TinhTienCoc(decimal giaThueNgay)
         {
             decimal tienCoc;
             
             if (giaThueNgay < 500000)
             {
-                tienCoc = 500000; // 500,000 VNĐ
+                tienCoc = 500000;
             }
             else
             {
-                tienCoc = 1000000; // 1,000,000 VNĐ
+                tienCoc = 1000000;
             }
 
             txtTienCoc.Text = tienCoc.ToString("N0");
-            
-            // Highlight để người dùng chú ý
             txtTienCoc.BackColor = System.Drawing.Color.FromArgb(255, 243, 205);
             txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(255, 152, 0);
         }
@@ -276,7 +271,30 @@ namespace UI.FormUI
                 nudSoNgay.Value = 1;
             }
 
+            // LƯU LẠI GIÁ THUÊ HIỆN TẠI TRƯỚC KHI RELOAD XE
+            decimal giaThueHienTai = 0;
+            if (cboXe.SelectedIndex != -1)
+            {
+                DataRowView currentRow = cboXe.SelectedItem as DataRowView;
+                if (currentRow != null)
+                {
+                    giaThueHienTai = Convert.ToDecimal(currentRow["GiaThueNgay"]);
+                }
+            }
+
             LoadXeTheoThoiGian();
+            
+            // SAU KHI RELOAD, NẾU VẪN CÒN XE ĐÃ CHỌN THÌ TÍNH LẠI TIỀN CỌC
+            if (cboXe.SelectedIndex != -1 && giaThueHienTai > 0)
+            {
+                DataRowView newRow = cboXe.SelectedItem as DataRowView;
+                if (newRow != null)
+                {
+                    decimal giaThue = Convert.ToDecimal(newRow["GiaThueNgay"]);
+                    TinhTienCoc(giaThue);
+                }
+            }
+            
             TinhTienTuDong();
         }
 
@@ -330,7 +348,7 @@ namespace UI.FormUI
             if (string.IsNullOrWhiteSpace(maTaiKhoan))
             {
                 MessageBox.Show(
-                    " Lỗi hệ thống: Không xác định được tài khoản đang đăng nhập!\n" +
+                    "Lỗi hệ thống: Không xác định được tài khoản đang đăng nhập!\n" +
                     "Vui lòng đăng nhập lại.",
                     "Lỗi",
                     MessageBoxButtons.OK,
@@ -352,7 +370,6 @@ namespace UI.FormUI
                 decimal tongTien = giaoDichThueBLL.TinhTongGiaThue(
                     ngayBatDau, ngayKetThuc, giaThueNgay);
 
-                // Lấy tiền cọc từ textbox (đã tự động tính)
                 decimal tienCoc = 0;
                 string tienCocText = txtTienCoc.Text.Replace(",", "").Replace(".", "");
                 if (!decimal.TryParse(tienCocText, out tienCoc))
@@ -391,7 +408,7 @@ namespace UI.FormUI
                     TongGia = tongTien,
                     TrangThai = "Chờ xác nhận",
                     TrangThaiThanhToan = "Chưa thanh toán",
-                    SoTienCoc = tienCoc, //  Sử dụng tiền cọc đã tính tự động
+                    SoTienCoc = tienCoc,
                     GiayToGiuLai = cboGiayToGiuLai.SelectedItem?.ToString() ?? "",
                     MaTaiKhoan = maTaiKhoan,
                     TrangThaiDuyet = "Chờ duyệt",
@@ -404,7 +421,7 @@ namespace UI.FormUI
                 if (success)
                 {
                     MessageBox.Show(
-                        $"✓ Tạo đơn thuê thành công!\n\n" +
+                        $"Tạo đơn thuê thành công!\n\n" +
                         $"Khách hàng: {((DataRowView)cboKhachHang.SelectedItem)["HoTenKH"]}\n" +
                         $"Xe: {rowXe["BienSo"]}\n" +
                         $"Thời gian: {ngayBatDau:dd/MM/yyyy} - {ngayKetThuc:dd/MM/yyyy}\n" +
@@ -423,7 +440,7 @@ namespace UI.FormUI
                 else
                 {
                     MessageBox.Show(
-                        "❌ Không thể tạo đơn thuê!\n\n" + errorMessage,
+                        "Không thể tạo đơn thuê!\n\n" + errorMessage,
                         "Lỗi",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
@@ -433,7 +450,7 @@ namespace UI.FormUI
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "❌ Lỗi khi lưu đơn thuê:\n\n" + ex.Message,
+                    "Lỗi khi lưu đơn thuê:\n\n" + ex.Message,
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
@@ -461,12 +478,11 @@ namespace UI.FormUI
                 return false;
             }
 
-            //  Kiểm tra bắt buộc chọn giấy tờ
             if (cboGiayToGiuLai.SelectedIndex == -1 || 
                 string.IsNullOrWhiteSpace(cboGiayToGiuLai.Text))
             {
                 MessageBox.Show(
-                    "⚠ BẮT BUỘC chọn giấy tờ giữ lại!\n\n" +
+                    "BẮT BUỘC chọn giấy tờ giữ lại!\n\n" +
                     "Vui lòng chọn loại giấy tờ mà khách hàng sẽ để lại làm tài sản thế chấp.",
                     "Thiếu thông tin",
                     MessageBoxButtons.OK,
@@ -507,7 +523,6 @@ namespace UI.FormUI
                 return false;
             }
 
-            //  Kiểm tra tiền cọc đã được tính
             if (string.IsNullOrWhiteSpace(txtTienCoc.Text) || txtTienCoc.Text == "0")
             {
                 MessageBox.Show("Tiền cọc chưa được tính!\nVui lòng chọn xe trước.",
