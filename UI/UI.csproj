@@ -56,6 +56,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormHandleUI\FormChinhSuaThongTinXeDashBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormChinhSuaThongTinXeDashBoard.Designer.cs">
+      <DependentUpon>FormChinhSuaThongTinXeDashBoard.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHandleUI\FormDienGmailQuenMK.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,18 @@
     </Compile>
     <Compile Include="FormHandleUI\FormTraXe.Designer.cs">
       <DependentUpon>FormTraXe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormXemXeDashBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormXemXeDashBoard.Designer.cs">
+      <DependentUpon>FormXemXeDashBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHandleUI\FormXoaXeDashBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormXoaXeDashBoard.Designer.cs">
+      <DependentUpon>FormXoaXeDashBoard.cs</DependentUpon>
     </Compile>
     <Compile Include="FormUI\FormDanhSachHopDongMua.cs">
       <SubType>Form</SubType>
@@ -348,6 +366,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormHandleUI\FormChinhSuaThongTinXeDashBoard.resx">
+      <DependentUpon>FormChinhSuaThongTinXeDashBoard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormDienGmailQuenMK.resx">
       <DependentUpon>FormDienGmailQuenMK.cs</DependentUpon>
     </EmbeddedResource>
@@ -371,6 +392,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormThemXe.resx">
       <DependentUpon>FormThemXe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormXemXeDashBoard.resx">
+      <DependentUpon>FormXemXeDashBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHandleUI\FormXoaXeDashBoard.resx">
+      <DependentUpon>FormXoaXeDashBoard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormDuyetDonHang.resx">
       <DependentUpon>FormDuyetDonHang.cs</DependentUpon>
