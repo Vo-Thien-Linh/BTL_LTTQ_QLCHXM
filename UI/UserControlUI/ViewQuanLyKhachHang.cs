@@ -12,6 +12,8 @@ namespace UI.UserControlUI
     {
         private KhachHangBLL khachHangBLL;
         private DataGridView dgvKhachHang;
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+
 
         public ViewQuanLyKhachHang()
         {
@@ -36,7 +38,35 @@ namespace UI.UserControlUI
             {
                 if (e.RowIndex >= 0) Btn_EditCustomer_Click(s, e);
             };
+
+            // Đăng ký cập nhật ngôn ngữ động
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
+            ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            lblTitle.Text = langMgr.GetString("CustomerTitle");
+            lblSearchBy.Text = langMgr.GetString("SearchBy");
+            lblSearch.Text = langMgr.GetString("Keyword");
+            btnSearch.Text = langMgr.GetString("SearchBtn");
+            btn_AddCustomer.Text = langMgr.GetString("AddBtn");
+            btn_EditCustomer.Text = langMgr.GetString("EditBtn");
+            btn_DeleteCustomer.Text = langMgr.GetString("DeleteBtn");
+            btn_RefreshCustomer.Text = langMgr.GetString("RefreshBtn");
+
+            // Cập nhật combobox tìm kiếm (cập nhật giá trị phù hợp cấu hình combobox)
+            if (cboSearchBy.Items.Count > 0)
+            {
+                cboSearchBy.Items[0] = langMgr.GetString("CustomerID");
+                cboSearchBy.Items[1] = langMgr.GetString("FullName");
+                cboSearchBy.Items[2] = langMgr.GetString("Phone");
+                // ... nếu còn ...
+            }
+            UpdateRecordCount(dgvKhachHang.RowCount);
+            FormatDataGridView();
+        }
+
 
         private void InitializeDataGrid()
         {
@@ -101,36 +131,33 @@ namespace UI.UserControlUI
         {
             if (dgvKhachHang.Columns.Count == 0) return;
 
-            // Đổi tên cột hiển thị
             if (dgvKhachHang.Columns.Contains("MaKH"))
-                dgvKhachHang.Columns["MaKH"].HeaderText = "Mã KH";
+                dgvKhachHang.Columns["MaKH"].HeaderText = langMgr.GetString("CustomerID");
             if (dgvKhachHang.Columns.Contains("HoTenKH"))
-                dgvKhachHang.Columns["HoTenKH"].HeaderText = "Họ Tên";
+                dgvKhachHang.Columns["HoTenKH"].HeaderText = langMgr.GetString("FullName");
             if (dgvKhachHang.Columns.Contains("NgaySinh"))
             {
-                dgvKhachHang.Columns["NgaySinh"].HeaderText = "Ngày Sinh";
+                dgvKhachHang.Columns["NgaySinh"].HeaderText = langMgr.GetString("BirthDate");
                 dgvKhachHang.Columns["NgaySinh"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
             if (dgvKhachHang.Columns.Contains("GioiTinh"))
-                dgvKhachHang.Columns["GioiTinh"].HeaderText = "Giới Tính";
+                dgvKhachHang.Columns["GioiTinh"].HeaderText = langMgr.GetString("Gender");
             if (dgvKhachHang.Columns.Contains("Sdt"))
-                dgvKhachHang.Columns["Sdt"].HeaderText = "SĐT";
+                dgvKhachHang.Columns["Sdt"].HeaderText = langMgr.GetString("Phone");
             if (dgvKhachHang.Columns.Contains("Email"))
-                dgvKhachHang.Columns["Email"].HeaderText = "Email";
+                dgvKhachHang.Columns["Email"].HeaderText = langMgr.GetString("Email");
             if (dgvKhachHang.Columns.Contains("DiaChi"))
-                dgvKhachHang.Columns["DiaChi"].HeaderText = "Địa Chỉ";
+                dgvKhachHang.Columns["DiaChi"].HeaderText = langMgr.GetString("Address");
             if (dgvKhachHang.Columns.Contains("NgayTao"))
             {
-                dgvKhachHang.Columns["NgayTao"].HeaderText = "Ngày Tạo";
+                dgvKhachHang.Columns["NgayTao"].HeaderText = langMgr.GetString("CreatedDate");
                 dgvKhachHang.Columns["NgayTao"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             }
             if (dgvKhachHang.Columns.Contains("NgayCapNhat"))
             {
-                dgvKhachHang.Columns["NgayCapNhat"].HeaderText = "Cập Nhật";
+                dgvKhachHang.Columns["NgayCapNhat"].HeaderText = langMgr.GetString("UpdatedDate");
                 dgvKhachHang.Columns["NgayCapNhat"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             }
-
-            // Set column width
             dgvKhachHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -266,6 +293,41 @@ namespace UI.UserControlUI
         {
             lblRecordCount.Text = $"Tổng số bản ghi: {count}";
             lblRecordCount.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
+        }
+
+        private void lblTitle_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblSearchBy_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_AddCustomer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelSearch_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelDataGrid_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

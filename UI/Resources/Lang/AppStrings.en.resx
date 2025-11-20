@@ -117,8 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddBtn" xml:space="preserve">
+    <value>+ Add new</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
   <data name="Animations" xml:space="preserve">
     <value>Enable animations</value>
+  </data>
+  <data name="BirthDate" xml:space="preserve">
+    <value>Date of Birth</value>
   </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
@@ -132,11 +141,38 @@
   <data name="CancelConfirm" xml:space="preserve">
     <value>Changes canceled!</value>
   </data>
+  <data name="Cashier" xml:space="preserve">
+    <value>Cashier</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Created Date</value>
+  </data>
+  <data name="CustomerID" xml:space="preserve">
+    <value>Customer ID</value>
+  </data>
+  <data name="CustomerTitle" xml:space="preserve">
+    <value>CUSTOMER MANAGEMENT</value>
+  </data>
   <data name="DaysBefore" xml:space="preserve">
     <value>Days before notification:</value>
+  </data>
+  <data name="DeleteBtn" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="EditBtn" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmployeeTitle" xml:space="preserve">
+    <value>EMPLOYEE MANAGEMENT</value>
+  </data>
+  <data name="Engineer" xml:space="preserve">
+    <value>Engineer</value>
   </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
@@ -147,14 +183,32 @@
   <data name="FontSize" xml:space="preserve">
     <value>Font size:</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="Interface" xml:space="preserve">
     <value>Interface</value>
+  </data>
+  <data name="Keyword" xml:space="preserve">
+    <value>Keyword:</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
   <data name="LoadError" xml:space="preserve">
     <value>Error loading settings:</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Manager</value>
   </data>
   <data name="MenuCustomer" xml:space="preserve">
     <value>Customer Manager</value>
@@ -183,6 +237,12 @@
   <data name="MenuSettings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="NoCustomerData" xml:space="preserve">
+    <value>No customer data</value>
+  </data>
+  <data name="NoEmployeeData" xml:space="preserve">
+    <value>No employee data</value>
+  </data>
   <data name="Notifications" xml:space="preserve">
     <value>Notifications</value>
   </data>
@@ -197,6 +257,15 @@
   </data>
   <data name="NotifyRental" xml:space="preserve">
     <value>Notify when customer rental is expiring</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="RecordCount" xml:space="preserve">
+    <value>Total records: {0}</value>
+  </data>
+  <data name="RefreshBtn" xml:space="preserve">
+    <value>Refresh</value>
   </data>
   <data name="RestoreConfirm" xml:space="preserve">
     <value>Are you sure you want to restore default settings?</value>
@@ -213,6 +282,12 @@
   <data name="SaveSuccessTitle" xml:space="preserve">
     <value>Success</value>
   </data>
+  <data name="SearchBtn" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchBy" xml:space="preserve">
+    <value>Search by:</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -228,10 +303,19 @@
   <data name="ThemeLight" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="Trial" xml:space="preserve">
+    <value>Trial</value>
+  </data>
+  <data name="UpdatedDate" xml:space="preserve">
+    <value>Updated Date</value>
+  </data>
   <data name="Vietnamese" xml:space="preserve">
     <value>Vietnamese</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="Working" xml:space="preserve">
+    <value>Working</value>
   </data>
 </root>

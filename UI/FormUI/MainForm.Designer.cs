@@ -103,16 +103,16 @@ namespace UI.FormUI
             this.pnlMenuBar.Location = new System.Drawing.Point(0, 162);
             this.pnlMenuBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlMenuBar.Name = "pnlMenuBar";
-            this.pnlMenuBar.Size = new System.Drawing.Size(356, 893);
+            this.pnlMenuBar.Size = new System.Drawing.Size(356, 1013);
             this.pnlMenuBar.TabIndex = 1;
             this.pnlMenuBar.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMenuBar_Paint);
             // 
             // btnCaiDat
             // 
-            this.btnCaiDat.Location = new System.Drawing.Point(0, 837);
-            this.btnCaiDat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCaiDat.Location = new System.Drawing.Point(0, 675);
+            this.btnCaiDat.Margin = new System.Windows.Forms.Padding(4);
             this.btnCaiDat.Name = "btnCaiDat";
-            this.btnCaiDat.Size = new System.Drawing.Size(356, 122);
+            this.btnCaiDat.Size = new System.Drawing.Size(267, 122);
             this.btnCaiDat.TabIndex = 8;
             this.btnCaiDat.Text = "Cài đặt";
             this.btnCaiDat.UseVisualStyleBackColor = true;
@@ -131,7 +131,7 @@ namespace UI.FormUI
             // 
             // btnDangXuat
             // 
-            this.btnDangXuat.Location = new System.Drawing.Point(52, 997);
+            this.btnDangXuat.Location = new System.Drawing.Point(36, 833);
             this.btnDangXuat.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnDangXuat.Name = "btnDangXuat";
             this.btnDangXuat.Size = new System.Drawing.Size(181, 59);
@@ -214,7 +214,7 @@ namespace UI.FormUI
             this.panel1.Location = new System.Drawing.Point(356, 162);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1029, 893);
+            this.panel1.Size = new System.Drawing.Size(1029, 1013);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -224,7 +224,7 @@ namespace UI.FormUI
             this.pnlContent.Location = new System.Drawing.Point(0, 0);
             this.pnlContent.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1029, 893);
+            this.pnlContent.Size = new System.Drawing.Size(1029, 1013);
             this.pnlContent.TabIndex = 0;
             this.pnlContent.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContent_Paint);
             // 
@@ -233,7 +233,7 @@ namespace UI.FormUI
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1385, 1055);
+            this.ClientSize = new System.Drawing.Size(1385, 1175);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlMenuBar);
             this.Controls.Add(this.pnlHeader);

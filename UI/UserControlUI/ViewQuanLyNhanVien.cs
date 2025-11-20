@@ -18,6 +18,7 @@ namespace UI.UserControlUI
         private Panel panelEmployeeDetail;
         private DataTable currentData;
         private string selectedEmployeeId = null;
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
 
         public ViewQuanLyNhanVien()
         {
@@ -36,7 +37,12 @@ namespace UI.UserControlUI
 
             ThemeManager.Instance.ThemeChanged += OnThemeChanged;
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
+
+            // Đăng ký cập nhật ngôn ngữ động
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
+            ApplyLanguage();
         }
+
 
         private void OnThemeChanged(object sender, EventArgs e)
         {
@@ -58,6 +64,44 @@ namespace UI.UserControlUI
                 // đổi màu cho child controls...
             }
         }
+
+        private void ApplyLanguage()
+        {
+            // Gán lại text từ resource cho tất cả controls
+            lblTieuDe.Text = langMgr.GetString("EmployeeTitle");
+            btnThemNhanVien.Text = langMgr.GetString("AddBtn");
+            btnSuaNhanVien.Text = langMgr.GetString("EditBtn");
+            btnXoaNhanVien.Text = langMgr.GetString("DeleteBtn");
+            btnLamMoi.Text = langMgr.GetString("RefreshBtn");
+            btnTimKiem.Text = langMgr.GetString("SearchBtn");
+
+            lblTimKiem.Text = langMgr.GetString("SearchBy");
+            lblTuKhoa.Text = langMgr.GetString("Keyword");
+
+            // ComboBox tìm kiếm
+            var searchOptions = new[]
+            {
+                langMgr.GetString("EmployeeID"),
+                langMgr.GetString("FullName"),
+                langMgr.GetString("Position"),
+                langMgr.GetString("Phone"),
+                langMgr.GetString("Email")
+                // ...thêm các trường khác nếu có...
+            };
+            if (cboTimKiem.Items.Count != searchOptions.Length)
+            {
+                cboTimKiem.Items.Clear();
+                cboTimKiem.Items.AddRange(searchOptions);
+                cboTimKiem.SelectedIndex = 0;
+            }
+            else
+            {
+                for (int i = 0; i < searchOptions.Length; i++)
+                    cboTimKiem.Items[i] = searchOptions[i];
+            }
+            UpdateRecordCount(currentData?.Rows.Count ?? 0);
+        }
+
         private void InitializeCardView()
         {
             // FlowLayoutPanel để chứa các card nhân viên
@@ -651,6 +695,11 @@ namespace UI.UserControlUI
         }
 
         private void panelDataGrid_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void ViewQuanLyNhanVien_Load_1(object sender, EventArgs e)
         {
 
         }
