@@ -40,9 +40,9 @@ namespace UI.UserControlUI
             btnRefresh.Text = langMgr.GetString("RefreshBtn");
             btnXemHopDong.Text = langMgr.GetString("ViewContractBtn");
 
-            btnViewDetail.Text = langMgr.GetString("ViewDetailBtn");
-            btnApprove.Text = langMgr.GetString("ApproveBtn");
-            btnReject.Text = langMgr.GetString("RejectBtn");
+            //btnViewDetail.Text = langMgr.GetString("ViewDetailBtn");
+            //btnApprove.Text = langMgr.GetString("ApproveBtn");
+            //btnReject.Text = langMgr.GetString("RejectBtn");
         }
 
 

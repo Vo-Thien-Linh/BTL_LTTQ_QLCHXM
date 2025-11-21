@@ -130,19 +130,30 @@ namespace UI.UserControlUI
             dgvChiTietBaoTri.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        // Load ComboBox Xe
+        // Load ComboBox Xe (CHỈNH SỬA)
         private void LoadComboBoxXe()
         {
             try
             {
                 DataTable dt = baoTriBLL.LayDanhSachXe();
+                
+                // ✅ Thêm logging
+                System.Diagnostics.Debug.WriteLine($"[LoadComboBoxXe] Đã load {dt.Rows.Count} xe");
+                
                 cboXe.DataSource = dt;
-                cboXe.DisplayMember = "BienSo";
+                cboXe.DisplayMember = "DisplayText";  // ✅ Hiển thị đầy đủ thông tin
                 cboXe.ValueMember = "ID_Xe";
                 cboXe.SelectedIndex = -1;
+                
+                // ✅ Log các xe đã load
+                foreach (DataRow row in dt.Rows)
+                {
+                    System.Diagnostics.Debug.WriteLine($"  - {row["ID_Xe"]}: {row["DisplayText"]}");
+                }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[LoadComboBoxXe ERROR] {ex.Message}");
                 throw new Exception("Lỗi khi load danh sách xe: " + ex.Message);
             }
         }
@@ -388,6 +399,7 @@ namespace UI.UserControlUI
         }
 
         // Chọn bảo trì để xem chi tiết
+        // Chọn bảo trì để xem chi tiết
         private void dgvDanhSachBaoTri_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -397,23 +409,96 @@ namespace UI.UserControlUI
                     DataGridViewRow row = dgvDanhSachBaoTri.Rows[e.RowIndex];
                     idBaoTriSelected = Convert.ToInt32(row.Cells["ID_BaoTri"].Value);
 
+                    // ✅ Thêm logging để debug
+                    System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Đã chọn ID_BaoTri = {idBaoTriSelected}");
+
                     // Load thông tin bảo trì
                     BaoTriDTO baoTri = baoTriBLL.LayBaoTriTheoID(idBaoTriSelected);
                     if (baoTri != null)
                     {
-                        cboXe.SelectedValue = baoTri.ID_Xe;
+                        // ✅ Log thông tin bảo trì
+                        System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] ID_Xe = {baoTri.ID_Xe}");
+                        System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] MaTaiKhoan = {baoTri.MaTaiKhoan ?? "NULL"}");
+                        System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] GhiChuBaoTri = {baoTri.GhiChuBaoTri ?? "NULL"}");
+
+                        // ✅ Set giá trị ComboBox với kiểm tra tồn tại
+                        if (!string.IsNullOrEmpty(baoTri.ID_Xe))
+                        {
+                            // Kiểm tra ID_Xe có tồn tại trong ComboBox không
+                            bool found = false;
+                            foreach (DataRowView item in cboXe.Items)
+                            {
+                                if (item["ID_Xe"].ToString() == baoTri.ID_Xe)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if (found)
+                            {
+                                cboXe.SelectedValue = baoTri.ID_Xe;
+                                System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Đã set cboXe = {baoTri.ID_Xe}");
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Không tìm thấy ID_Xe = {baoTri.ID_Xe} trong ComboBox");
+                                cboXe.SelectedIndex = -1;
+                            }
+                        }
+                        else
+                        {
+                            cboXe.SelectedIndex = -1;
+                        }
+
+                        // ✅ Set giá trị nhân viên với kiểm tra
                         if (!string.IsNullOrEmpty(baoTri.MaTaiKhoan))
-                            cboNhanVien.SelectedValue = baoTri.MaTaiKhoan;
+                        {
+                            bool found = false;
+                            foreach (DataRowView item in cboNhanVien.Items)
+                            {
+                                if (item["MaTaiKhoan"].ToString() == baoTri.MaTaiKhoan)
+                                {
+                                    found = true;
+                                    break;
+                                }
+                            }
 
-                        txtGhiChu.Text = baoTri.GhiChuBaoTri;
+                            if (found)
+                            {
+                                cboNhanVien.SelectedValue = baoTri.MaTaiKhoan;
+                                System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Đã set cboNhanVien = {baoTri.MaTaiKhoan}");
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Không tìm thấy MaTaiKhoan = {baoTri.MaTaiKhoan} trong ComboBox");
+                                cboNhanVien.SelectedIndex = -1;
+                            }
+                        }
+                        else
+                        {
+                            cboNhanVien.SelectedIndex = -1;
+                        }
 
-                        // Load chi tiết
+                        // ✅ Set ghi chú
+                        txtGhiChu.Text = baoTri.GhiChuBaoTri ?? "";
+
+                        // ✅ Load chi tiết với logging
                         LoadChiTietBaoTri(idBaoTriSelected);
+                        System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Đã load chi tiết bảo trì");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri] Không tìm thấy bảo trì với ID = {idBaoTriSelected}");
+                        MessageBox.Show("Không tìm thấy thông tin bảo trì!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri ERROR] {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[ViewQuanLyBaoTri STACK] {ex.StackTrace}");
                 MessageBox.Show("Lỗi khi load thông tin: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -491,6 +576,16 @@ namespace UI.UserControlUI
         }
 
         private void grpChiTiet_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblSoLuong_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nudSoLuong_ValueChanged(object sender, EventArgs e)
         {
 
         }

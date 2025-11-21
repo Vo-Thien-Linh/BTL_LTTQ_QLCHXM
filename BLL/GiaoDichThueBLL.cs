@@ -82,15 +82,15 @@ namespace BLL
                     LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
                     WHERE gd.TrangThaiDuyet IN (N'Chờ duyệt', N'Đã duyệt')
                     ORDER BY 
-                    CASE gd.TrangThaiDuyet
-                        WHEN N'Chờ duyệt' THEN 0
-                        ELSE 1
-                    END,
                     CASE 
                         WHEN gd.NgayKetThuc < GETDATE() AND gd.TrangThai = N'Đang thuê' THEN 0 
                         ELSE 1 
                     END,
-                    gd.NgayBatDau DESC";
+                    CASE gd.TrangThaiDuyet
+                        WHEN N'Chờ duyệt' THEN 0
+                        ELSE 1
+                    END,
+                    gd.MaGDThue DESC";
 
             return DataProvider.ExecuteQuery(query);
         }
@@ -287,7 +287,7 @@ namespace BLL
 
                 //  duyet don
                 bool approveSuccess = giaoDichThueDAL.ApproveGiaoDichThue(maGDThue, nguoiDuyet, ghiChu);
-                
+
                 if (!approveSuccess)
                 {
                     errorMessage = "Lỗi khi duyệt giao dịch!";
@@ -297,11 +297,11 @@ namespace BLL
                 //  TẠO HỢP ĐỒNG TỰ ĐỘNG (SAU KHI DUYỆT THÀNH CÔNG)
                 string hopDongError;
                 bool hopDongSuccess = hopDongThueBLL.TaoHopDongThue(
-                    maGDThue, 
+                    maGDThue,
                     nguoiDuyet,  //  Truyền đúng MaTaiKhoan
                     out hopDongError
                 );
-                
+
                 if (!hopDongSuccess)
                 {
                     //  Đơn đã duyệt NHƯNG chưa có hợp đồng
@@ -310,7 +310,7 @@ namespace BLL
                                   $"→ Vui lòng kiểm tra và tạo hợp đồng thủ công!";
 
                     System.Diagnostics.Debug.WriteLine($"[CẢNH BÁO] Duyệt GD #{maGDThue} OK nhưng không tạo được hợp đồng: {hopDongError}");
-                    
+
                     //  VẪN RETURN TRUE vì duyệt đơn đã thành công
                     return true;
                 }
@@ -959,7 +959,7 @@ namespace BLL
 
                 // Lấy tiền cọc quy định của xe
                 decimal tienCocQuyDinh = GetTienCocQuyDinhCuaXe(gd.ID_Xe);
-                
+
                 // Nếu có quy định tiền cọc, kiểm tra phải đúng bằng quy định
                 if (tienCocQuyDinh > 0)
                 {

@@ -162,7 +162,7 @@
             this.cboXe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboXe.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.cboXe.FormattingEnabled = true;
-            this.cboXe.Location = new System.Drawing.Point(150, 32);
+            this.cboXe.Location = new System.Drawing.Point(174, 33);
             this.cboXe.Name = "cboXe";
             this.cboXe.Size = new System.Drawing.Size(500, 31);
             this.cboXe.TabIndex = 1;
@@ -182,7 +182,7 @@
             this.cboNhanVien.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboNhanVien.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.cboNhanVien.FormattingEnabled = true;
-            this.cboNhanVien.Location = new System.Drawing.Point(150, 72);
+            this.cboNhanVien.Location = new System.Drawing.Point(174, 72);
             this.cboNhanVien.Name = "cboNhanVien";
             this.cboNhanVien.Size = new System.Drawing.Size(500, 31);
             this.cboNhanVien.TabIndex = 3;
@@ -200,7 +200,7 @@
             // txtGhiChu
             // 
             this.txtGhiChu.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtGhiChu.Location = new System.Drawing.Point(150, 112);
+            this.txtGhiChu.Location = new System.Drawing.Point(174, 112);
             this.txtGhiChu.Multiline = true;
             this.txtGhiChu.Name = "txtGhiChu";
             this.txtGhiChu.Size = new System.Drawing.Size(500, 50);
@@ -247,16 +247,17 @@
             // 
             this.lblSoLuong.AutoSize = true;
             this.lblSoLuong.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSoLuong.Location = new System.Drawing.Point(490, 35);
+            this.lblSoLuong.Location = new System.Drawing.Point(489, 34);
             this.lblSoLuong.Name = "lblSoLuong";
             this.lblSoLuong.Size = new System.Drawing.Size(31, 23);
             this.lblSoLuong.TabIndex = 2;
             this.lblSoLuong.Text = "SL:";
+            this.lblSoLuong.Click += new System.EventHandler(this.lblSoLuong_Click);
             // 
             // nudSoLuong
             // 
             this.nudSoLuong.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.nudSoLuong.Location = new System.Drawing.Point(530, 32);
+            this.nudSoLuong.Location = new System.Drawing.Point(550, 33);
             this.nudSoLuong.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -275,6 +276,7 @@
             0,
             0,
             0});
+            this.nudSoLuong.ValueChanged += new System.EventHandler(this.nudSoLuong_ValueChanged);
             // 
             // lblGhiChuPhuTung
             // 

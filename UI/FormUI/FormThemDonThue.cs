@@ -46,17 +46,17 @@ namespace UI.FormUI
         {
             dtpNgayBatDau.Value = DateTime.Now.Date;
             dtpNgayKetThuc.Value = DateTime.Now.Date.AddDays(1);
-            
+
             txtTienCoc.Text = "0";
             txtTienCoc.ReadOnly = true;
             txtTienCoc.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
             txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
-            
+
             nudSoNgay.Value = 1;
             nudSoNgay.ReadOnly = true;
             nudSoNgay.Enabled = false;
             nudSoNgay.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
-            
+
             if (cboGiayToGiuLai.Items.Count > 0)
             {
                 cboGiayToGiuLai.SelectedIndex = -1;
@@ -67,10 +67,10 @@ namespace UI.FormUI
         {
             cboKhachHang.SelectedIndexChanged += CboKhachHang_SelectedIndexChanged;
             cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
-            
+
             dtpNgayBatDau.ValueChanged += DateChanged;
             dtpNgayKetThuc.ValueChanged += DateChanged;
-            
+
             btnLuu.Click += BtnLuu_Click;
             btnHuy.Click += BtnHuy_Click;
         }
@@ -241,7 +241,7 @@ namespace UI.FormUI
         private void TinhTienCoc(decimal giaThueNgay)
         {
             decimal tienCoc;
-            
+
             if (giaThueNgay < 500000)
             {
                 tienCoc = 500000;
@@ -261,7 +261,7 @@ namespace UI.FormUI
             if (isLoadingData) return;
 
             int soNgay = (dtpNgayKetThuc.Value.Date - dtpNgayBatDau.Value.Date).Days;
-            
+
             if (soNgay > 0)
             {
                 nudSoNgay.Value = soNgay;
@@ -271,30 +271,71 @@ namespace UI.FormUI
                 nudSoNgay.Value = 1;
             }
 
-            // LƯU LẠI GIÁ THUÊ HIỆN TẠI TRƯỚC KHI RELOAD XE
-            decimal giaThueHienTai = 0;
+            string previousIDXe = "";
+            string previousBienSo = "";
+            decimal previousGiaThue = 0;
+            decimal previousTienCoc = 0;
+
             if (cboXe.SelectedIndex != -1)
             {
                 DataRowView currentRow = cboXe.SelectedItem as DataRowView;
                 if (currentRow != null)
                 {
-                    giaThueHienTai = Convert.ToDecimal(currentRow["GiaThueNgay"]);
+                    previousIDXe = currentRow["ID_Xe"].ToString();
+                    previousBienSo = currentRow["BienSo"]?.ToString() ?? "";
+                    previousGiaThue = Convert.ToDecimal(currentRow["GiaThueNgay"]);
+
+                    // Lấy tiền cọc hiện tại
+                    string tienCocText = txtTienCoc.Text.Replace(",", "").Replace(".", "").Replace(" VNĐ", "");
+                    decimal.TryParse(tienCocText, out previousTienCoc);
                 }
             }
 
             LoadXeTheoThoiGian();
-            
-            // SAU KHI RELOAD, NẾU VẪN CÒN XE ĐÃ CHỌN THÌ TÍNH LẠI TIỀN CỌC
-            if (cboXe.SelectedIndex != -1 && giaThueHienTai > 0)
+
+            if (!string.IsNullOrEmpty(previousIDXe))
             {
-                DataRowView newRow = cboXe.SelectedItem as DataRowView;
-                if (newRow != null)
+                bool found = false;
+
+                for (int i = 0; i < cboXe.Items.Count; i++)
                 {
-                    decimal giaThue = Convert.ToDecimal(newRow["GiaThueNgay"]);
-                    TinhTienCoc(giaThue);
+                    DataRowView row = (DataRowView)cboXe.Items[i];
+                    if (row["ID_Xe"].ToString() == previousIDXe)
+                    {
+                        isLoadingData = true;
+                        cboXe.SelectedIndex = i;
+                        isLoadingData = false;
+
+                        txtBienSo.Text = previousBienSo;
+                        txtGiaThueNgay.Text = previousGiaThue.ToString("N0") + " VNĐ";
+
+                        if (previousTienCoc > 0)
+                        {
+                            txtTienCoc.Text = previousTienCoc.ToString("N0");
+                            txtTienCoc.BackColor = System.Drawing.Color.FromArgb(255, 243, 205);
+                            txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(255, 152, 0);
+                        }
+                        else
+                        {
+                            // Tính lại tiền cọc nếu chưa có
+                            TinhTienCoc(previousGiaThue);
+                        }
+
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    txtBienSo.Text = "";
+                    txtGiaThueNgay.Text = "";
+                    txtTienCoc.Text = "0";
+                    txtTienCoc.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+                    txtTienCoc.ForeColor = System.Drawing.Color.FromArgb(100, 100, 100);
                 }
             }
-            
+
             TinhTienTuDong();
         }
 
@@ -309,7 +350,7 @@ namespace UI.FormUI
             try
             {
                 DataRowView row = cboXe.SelectedItem as DataRowView;
-                if (row == null) 
+                if (row == null)
                 {
                     txtTongTien.Text = "0 VNĐ";
                     return;
@@ -478,7 +519,7 @@ namespace UI.FormUI
                 return false;
             }
 
-            if (cboGiayToGiuLai.SelectedIndex == -1 || 
+            if (cboGiayToGiuLai.SelectedIndex == -1 ||
                 string.IsNullOrWhiteSpace(cboGiayToGiuLai.Text))
             {
                 MessageBox.Show(

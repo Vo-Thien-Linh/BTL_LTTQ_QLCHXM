@@ -16,29 +16,28 @@ namespace UI.FormUI
 {
     public partial class MainForm : Form
     {
-        // Màu sắc chủ đạo
         private Color primaryColor = Color.FromArgb(41, 128, 185);
         private Color hoverColor = Color.FromArgb(52, 152, 219);
         private Color sidebarColor = Color.FromArgb(44, 62, 80);
         private Color contentBgColor = Color.FromArgb(236, 240, 241);
         private Color buttonNormalColor = Color.FromArgb(52, 73, 94);
 
-        private Color logoutNormalColor = Color.FromArgb(192, 57, 43); 
-        private Color logoutHoverColor = Color.FromArgb(231, 76, 60); 
-        private Color logoutClickColor = Color.FromArgb(169, 50, 38);   
+        private Color logoutNormalColor = Color.FromArgb(192, 57, 43);
+        private Color logoutHoverColor = Color.FromArgb(231, 76, 60);
+        private Color logoutClickColor = Color.FromArgb(169, 50, 38);
 
-        // Lưu màu và font gốc của button
         private Dictionary<Button, Color> originalColors = new Dictionary<Button, Color>();
         private Dictionary<Button, Font> originalFonts = new Dictionary<Button, Font>();
 
-        // Kích thước panel menu
         private int expandedWidth = 210;
         private int collapsedWidth = 60;
         private bool isExpanded = true;
 
-        // Timer cho animation
         private Timer slideTimer;
         private int targetWidth;
+
+        private Button currentSelectedButton = null;
+        private List<Button> sidebarButtons;
 
         public MainForm()
         {
@@ -50,6 +49,20 @@ namespace UI.FormUI
             ThemeManager.Instance.ThemeChanged += OnThemeChanged;
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
         }
+
+        // --- SỬA ĐÂY: Hàm chọn nút ---
+        private void SelectSidebarButton(Button btn)
+        {
+            foreach (var b in sidebarButtons)
+            {
+                b.BackColor = buttonNormalColor;
+                b.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
+            }
+            btn.BackColor = primaryColor;
+            btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            currentSelectedButton = btn;
+        }
+
         private void OnThemeChanged(object sender, EventArgs e)
         {
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
@@ -61,16 +74,13 @@ namespace UI.FormUI
             {
                 this.BackColor = Color.FromArgb(45, 45, 48);
                 this.ForeColor = Color.White;
-                // đổi màu cho child controls...
             }
             else
             {
                 this.BackColor = Color.White;
                 this.ForeColor = Color.Black;
-                // đổi màu cho child controls...
             }
         }
-
 
         private void OnLanguageChanged_Menu(object sender, EventArgs e)
         {
@@ -87,7 +97,6 @@ namespace UI.FormUI
         private void UpdateMenuLanguage()
         {
             var langMgr = LanguageManagerBLL.Instance;
-
             btnThongKe.Text = "🏠 " + langMgr.GetString("MenuDashboard");
             btnQuanLyNhanVien.Text = "👥 " + langMgr.GetString("MenuEmployee");
             btnQuanLyKhachHang.Text = "👤 " + langMgr.GetString("MenuCustomer");
@@ -98,10 +107,10 @@ namespace UI.FormUI
             btnCaiDat.Text = "🛠️ " + langMgr.GetString("MenuSettings");
             btnDangXuat.Text = "🚪 " + langMgr.GetString("MenuLogout");
         }
+
         private void SlideTimer_Tick(object sender, EventArgs e)
         {
             int step = 150;
-
             if (isExpanded)
             {
                 if (pnlMenuBar.Width < targetWidth)
@@ -136,8 +145,6 @@ namespace UI.FormUI
                 }
             }
         }
-
-
 
         private void ShowButtonText(bool show)
         {
@@ -205,13 +212,11 @@ namespace UI.FormUI
                 btnCaiDat.Padding = new Padding(10, 0, 0, 0);
             }
         }
+
         private void CustomizeForm()
         {
             this.BackColor = contentBgColor;
-
             pnlMenuBar.Width = expandedWidth;
-
-            AddMouseEventToControlAndChildren(pnlMenuBar);
 
             CustomizeButton(btnThongKe, "🏠 Dashboard");
             CustomizeButton(btnQuanLyNhanVien, "👥 Quản Lý Nhân Viên");
@@ -221,38 +226,20 @@ namespace UI.FormUI
             CustomizeButton(btnQuanLyChoThue, "🏢 Quản Lý Cho Thuê");
             CustomizeButton(btnQuanLyXuLy, "⚙️ Quản Lý Xử Lý");
             CustomizeButton(btnCaiDat, "🛠️ Cài Đặt");
-
             CustomizeLogoutButton(btnDangXuat, "🚪 Đăng Xuất");
-        }
 
-        private void AddMouseEventToControlAndChildren(Control control)
-        {
-            control.MouseEnter += PnlMenuBar_MouseEnter;
-            control.MouseLeave += PnlMenuBar_MouseLeave;
-
-            foreach (Control child in control.Controls)
+            sidebarButtons = new List<Button>
             {
-                AddMouseEventToControlAndChildren(child);
-            }
-        }
-
-        private void PnlMenuBar_MouseEnter(object sender, EventArgs e)
-        {
-            isExpanded = true;
-            targetWidth = expandedWidth;
-            slideTimer.Start();
-        }
-
-        private void PnlMenuBar_MouseLeave(object sender, EventArgs e)
-        {
-            if (!pnlMenuBar.ClientRectangle.Contains(pnlMenuBar.PointToClient(Control.MousePosition)))
-            {
-                isExpanded = false;
-                targetWidth = collapsedWidth;
-                ShowButtonText(false);
-                btnDangXuat.Visible = false;
-                slideTimer.Start();
-            }
+                btnThongKe,
+                btnQuanLyNhanVien,
+                btnQuanLyKhachHang,
+                btnQuanLySanPham,
+                btnQuanLyBanHang,
+                btnQuanLyChoThue,
+                btnQuanLyXuLy,
+                btnCaiDat
+                // KHÔNG thêm btnDangXuat ở đây!
+            };
         }
 
         private void CustomizeButton(Button btn, string text)
@@ -283,7 +270,7 @@ namespace UI.FormUI
 
             btn.Text = text;
             btn.FlatStyle = FlatStyle.Flat;
-            btn.BackColor = logoutNormalColor; 
+            btn.BackColor = logoutNormalColor;
             btn.ForeColor = Color.White;
             btn.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
             btn.TextAlign = ContentAlignment.MiddleLeft;
@@ -300,35 +287,47 @@ namespace UI.FormUI
         private void Button_MouseEnter(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = primaryColor;
-            btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            if (btn != currentSelectedButton)
+            {
+                btn.BackColor = hoverColor;
+                btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            }
             btn.Width += 5;
         }
 
         private void Button_MouseLeave(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = buttonNormalColor;
-            btn.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
+            if (btn != currentSelectedButton)
+            {
+                btn.BackColor = buttonNormalColor;
+                btn.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
+            }
             btn.Width -= 5;
         }
 
         private void Button_MouseDown(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = hoverColor;
+            if (btn != currentSelectedButton)
+            {
+                btn.BackColor = hoverColor;
+            }
         }
 
         private void Button_MouseUp(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = primaryColor;
+            if (btn != currentSelectedButton)
+            {
+                btn.BackColor = hoverColor; // hoặc primaryColor tuỳ bạn muốn
+            }
         }
 
         private void LogoutButton_MouseEnter(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutHoverColor; 
+            btn.BackColor = logoutHoverColor;
             btn.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
             btn.Width += 5;
         }
@@ -336,7 +335,7 @@ namespace UI.FormUI
         private void LogoutButton_MouseLeave(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutNormalColor; 
+            btn.BackColor = logoutNormalColor;
             btn.Font = new Font("Segoe UI", 11F, FontStyle.Regular);
             btn.Width -= 5;
         }
@@ -344,54 +343,71 @@ namespace UI.FormUI
         private void LogoutButton_MouseDown(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutClickColor; 
+            btn.BackColor = logoutClickColor;
         }
 
         private void LogoutButton_MouseUp(object sender, MouseEventArgs e)
         {
             Button btn = (Button)sender;
-            btn.BackColor = logoutHoverColor;  
+            btn.BackColor = logoutHoverColor;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            ShowWelcomeMessage();
             UpdateMenuLanguage();
+            SelectSidebarButton(btnThongKe); // Chọn nút mặc định
         }
 
-        private void ShowWelcomeMessage()
+        
+
+        // --- Các sự kiện click nút sidebar ---
+        private void btnThongKe_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                "Chào mừng đến với Hệ Thống Quản Lý Bán Hàng!",
-                "Chào Mừng",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            SelectSidebarButton(btnThongKe);
+            LoadControl(new UserControlUI.ViewDashboard());
         }
 
         private void btnQuanLyNhanVien_Click(object sender, EventArgs e)
         {
+            SelectSidebarButton(btnQuanLyNhanVien);
             LoadControl(new UserControlUI.ViewQuanLyNhanVien());
         }
 
         private void btnQuanLyKhachHang_Click(object sender, EventArgs e)
         {
+            SelectSidebarButton(btnQuanLyKhachHang);
             LoadControl(new UserControlUI.ViewQuanLyKhachHang());
         }
 
         private void btnQuanLySanPham_Click(object sender, EventArgs e)
         {
+            SelectSidebarButton(btnQuanLySanPham);
             LoadControl(new UserControlUI.ViewQuanLySanPham());
         }
 
         private void btnQuanLyBanHang_Click(object sender, EventArgs e)
         {
+            SelectSidebarButton(btnQuanLyBanHang);
             LoadControl(new UserControlUI.ViewQuanLyBanHang(CurrentUser.MaTaiKhoan));
         }
 
         private void btnQuanLyChoThue_Click(object sender, EventArgs e)
         {
+            SelectSidebarButton(btnQuanLyChoThue);
             LoadQuanLyChoThueWithTabs();
+        }
+
+        private void pnlContent_Paint(object sender, PaintEventArgs e)
+        {
+            // Không cần code gì cũng được
+        }
+        private void pnlMenuBar_Paint(object sender, PaintEventArgs e)
+        {
+            // Không cần code gì cũng được
+        }
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+            // Không cần code gì cũng được
         }
 
         private void LoadQuanLyChoThueWithTabs()
@@ -408,23 +424,23 @@ namespace UI.FormUI
                 SizeMode = TabSizeMode.Fixed
             };
 
-            // Tab 1: Duyệt đơn thuê (CHỈ ADMIN/QUẢN LÝ)
-            if (CurrentUser.LoaiTaiKhoan == "QuanLy")
+            // Tab 1: Duyệt đơn thuê (chỉ hiển thị với tài khoản quản lý)
+            if (CurrentUser.LoaiTaiKhoan == "QuanLy") // điều kiện bạn tùy chỉnh theo kiểu tài khoản
             {
                 TabPage tabDuyetDon = new TabPage(" " + langMgr.GetString("TabApproveRental"));
                 ViewDuyetDonThue viewDuyetDon = new ViewDuyetDonThue();
-                viewDuyetDon.SetMaNhanVien(CurrentUser.MaNV);
+                viewDuyetDon.SetMaNhanVien(CurrentUser.MaNV); // hoặc mã/nội dung theo business của bạn
                 viewDuyetDon.Dock = DockStyle.Fill;
                 tabDuyetDon.Controls.Add(viewDuyetDon);
                 tabControl.TabPages.Add(tabDuyetDon);
             }
 
-            // Tab 2: Quản lý cho thuê (TẤT CẢ)
-            TabPage tabQuanLy = new TabPage(" " + langMgr.GetString("TabManageRental"));
-            ViewQuanLyChoThue viewQuanLy = new ViewQuanLyChoThue(CurrentUser.MaNV);
-            viewQuanLy.Dock = DockStyle.Fill;
-            tabQuanLy.Controls.Add(viewQuanLy);
-            tabControl.TabPages.Add(tabQuanLy);
+            // Tab 2: Quản lý cho thuê (ai login cũng có)
+            TabPage tabQuanLyChoThue = new TabPage(" " + langMgr.GetString("TabManageRental"));
+            ViewQuanLyChoThue viewQuanLyChoThue = new ViewQuanLyChoThue(CurrentUser.MaNV); // hoặc dữ liệu bạn cần truyền
+            viewQuanLyChoThue.Dock = DockStyle.Fill;
+            tabQuanLyChoThue.Controls.Add(viewQuanLyChoThue);
+            tabControl.TabPages.Add(tabQuanLyChoThue);
 
             pnlContent.Controls.Add(tabControl);
             tabControl.BringToFront();
@@ -433,12 +449,14 @@ namespace UI.FormUI
 
         private void btnQuanLyXuLy_Click(object sender, EventArgs e)
         {
+            SelectSidebarButton(btnQuanLyXuLy);
             LoadControl(new UserControlUI.ViewQuanLyBaoTri());
         }
 
-        private void btnDashBoard_Click(object sender, EventArgs e)
+        private void btnCaiDat_Click(object sender, EventArgs e)
         {
-            LoadControl(new UserControlUI.ViewDashboard());
+            SelectSidebarButton(btnCaiDat);
+            LoadControl(new ViewCaiDat());
         }
 
         private void btnDangxuat_Click(object sender, EventArgs e)
@@ -467,20 +485,7 @@ namespace UI.FormUI
             }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pnlMenuBar_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pnlContent_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        // Các hàm hỗ trợ khác giữ nguyên...
 
         private void LoadControl(UserControl control)
         {
@@ -490,9 +495,21 @@ namespace UI.FormUI
             control.BringToFront();
         }
 
-        private void btnCaiDat_Click(object sender, EventArgs e)
+        private void btnList_Click(object sender, EventArgs e)
         {
-            LoadControl(new ViewCaiDat());
+            if (isExpanded)
+            {
+                isExpanded = false;
+                targetWidth = collapsedWidth;
+                ShowButtonText(false);
+                btnDangXuat.Visible = false;
+            }
+            else
+            {
+                isExpanded = true;
+                targetWidth = expandedWidth;
+            }
+            slideTimer.Start();
         }
     }
 }

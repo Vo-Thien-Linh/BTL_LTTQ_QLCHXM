@@ -21,10 +21,10 @@ namespace UI.UserControlUI
         {
             InitializeComponent();
             this.maNhanVien = maNV;
-            
+
             // LẤY MÃ TÀI KHOẢN TỪ CurrentUser
             this.maTaiKhoan = CurrentUser.MaTaiKhoan;
-            
+
             //  KIỂM TRA NGAY TỪ ĐẦU
             if (string.IsNullOrWhiteSpace(this.maTaiKhoan))
             {
@@ -37,7 +37,7 @@ namespace UI.UserControlUI
                 );
                 return;
             }
-            
+
             giaoDichThueBLL = new GiaoDichThueBLL();
 
             InitializeFlowLayoutPanel();
@@ -49,7 +49,7 @@ namespace UI.UserControlUI
             cboFilter.SelectedIndexChanged += CboFilter_SelectedIndexChanged;
             txtSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) BtnSearch_Click(s, e); };
         }
-        
+
         // Constructor mặc định (để Designer không lỗi)
         public ViewQuanLyChoThue() : this(DTO.CurrentUser.MaNV ?? "")
         {
@@ -513,6 +513,17 @@ namespace UI.UserControlUI
         private void panelContent_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (this.Visible)
+            {
+                // Reload dữ liệu mỗi khi tab được hiển thị
+                LoadData();
+            }
         }
     }
 }
