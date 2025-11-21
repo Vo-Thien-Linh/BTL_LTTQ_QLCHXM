@@ -29,7 +29,6 @@ namespace UI.FormHandleUI
         {
             InitializeComponent();
             txtMaXe.Validating += txtMaXe_Validating;
-            txtBienSo.Validating += txtBienSo_Validating;
             txtGiaMua.Validating += txtGiaMua_Validating;
             txtGiaNhap.Validating += txtGiaNhap_Validating;
         }
@@ -189,18 +188,7 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtMaXe, "");
             }
         }
-        private void txtBienSo_Validating(object sender, CancelEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtBienSo.Text))
-            {
-                errorProvider1.SetError(txtBienSo, "Biển số không được để trống!");
-                e.Cancel = true;
-            }
-            else
-            {
-                errorProvider1.SetError(txtBienSo, "");
-            }
-        }
+        
         private void txtGiaMua_Validating(object sender, CancelEventArgs e)
         {
             if (!decimal.TryParse(txtGiaMua.Text, out decimal giaMua) || giaMua < 0)
@@ -232,7 +220,6 @@ namespace UI.FormHandleUI
             {
                 // Kiểm tra nhập hợp lệ trước khi thêm
                 if (string.IsNullOrWhiteSpace(txtMaXe.Text)
-                    || string.IsNullOrWhiteSpace(txtBienSo.Text)
                     || cbbNhaCungCap.SelectedValue == null
                     || string.IsNullOrWhiteSpace(txtGiaMua.Text)
                     || string.IsNullOrWhiteSpace(txtGiaNhap.Text)
