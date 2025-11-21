@@ -269,24 +269,37 @@ namespace DAL
             }
         }
 
-        // Lấy danh sách xe có thể bảo trì
+        // Lấy danh sách xe có thể bảo trì (CHỈNH SỬA - lấy từ quản lý sản phẩm)
         public DataTable LayDanhSachXe()
         {
             DataTable dt = new DataTable();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
+                // ✅ SỬA: Lấy tất cả xe từ quản lý sản phẩm (không chỉ "Sẵn sàng")
+                // Bao gồm cả xe đang bảo trì, xe sẵn sàng, xe đang thuê
                 string query = @"
                     SELECT 
                         xm.ID_Xe,
                         xm.BienSo,
                         hx.TenHang + ' ' + dx.TenDong + ' ' + ms.TenMau AS TenXe,
-                        xm.TrangThai
+                        hx.TenHang,
+                        dx.TenDong,
+                        ms.TenMau,
+                        lx.NamSX,
+                        dx.PhanKhoi,
+                        xm.TrangThai,
+                        xm.MucDichSuDung,
+                        xm.KmDaChay,
+                        xm.BienSo + ' - ' + hx.TenHang + ' ' + dx.TenDong + ' (' + xm.TrangThai + ')' AS DisplayText
                     FROM XeMay xm
                     LEFT JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
                     LEFT JOIN HangXe hx ON lx.MaHang = hx.MaHang
                     LEFT JOIN DongXe dx ON lx.MaDong = dx.MaDong
                     LEFT JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                    ORDER BY xm.BienSo";
+                    WHERE xm.BienSo IS NOT NULL 
+                      AND xm.BienSo <> ''
+                      AND xm.TrangThai IN (N'Sẵn sàng', N'Đang thuê', N'Đang bảo trì')
+                    ORDER BY xm.TrangThai, xm.BienSo";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
                 da.Fill(dt);

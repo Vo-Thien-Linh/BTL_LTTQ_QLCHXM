@@ -37,25 +37,90 @@ namespace UI.UserControlUI
 
         private void LoadDashboardData()
         {
-            // 1) Lấy số liệu thống kê
-            var stats = _bll.GetStats() ?? new DashboardDTO();
-            SetStats(stats.XeSanSang, stats.GiaoDichBanHomNay, stats.ThueDangHoatDong, stats.DoanhThuThangNay);
+            try
+            {
+                // ✅ 1) Lấy số liệu thống kê
+                var stats = _bll.GetStats();
 
-            // 2) Lấy danh sách xe mới nhập (Top 8)
-            var dt = _bll.LayXeMoiNhap(8);
-            LoadXeMoiNhap(dt);
+                if (stats == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("[WARNING] GetStats() trả về null!");
+                    stats = new DashboardDTO(); // Khởi tạo mặc định
+                }
 
-            // 3) Badge màu theo trạng thái
-            dgvXeMoiNhap.CellFormatting -= dgvXeMoiNhap_CellFormatting;
-            dgvXeMoiNhap.CellFormatting += dgvXeMoiNhap_CellFormatting;
+                // ✅ DEBUG: Log để kiểm tra
+                System.Diagnostics.Debug.WriteLine($"[UI] Xe sẵn sàng: {stats.XeSanSang}");
+                System.Diagnostics.Debug.WriteLine($"[UI] GD bán hôm nay: {stats.GiaoDichBanHomNay}");
+                System.Diagnostics.Debug.WriteLine($"[UI] Thuê hoạt động: {stats.ThueDangHoatDong}");
+                System.Diagnostics.Debug.WriteLine($"[UI] Doanh thu tháng: {stats.DoanhThuThangNay:N0}");
+
+                SetStats(stats.XeSanSang, stats.GiaoDichBanHomNay, stats.ThueDangHoatDong, stats.DoanhThuThangNay);
+
+                // ✅ 2) Lấy danh sách xe mới nhập (Top 8)
+                var dt = _bll.LayXeMoiNhap(8);
+
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("[WARNING] Không có xe mới nhập!");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[UI] Đã load {dt.Rows.Count} xe mới nhập");
+                }
+
+                LoadXeMoiNhap(dt);
+
+                // ✅ 3) Badge màu theo trạng thái
+                dgvXeMoiNhap.CellFormatting -= dgvXeMoiNhap_CellFormatting;
+                dgvXeMoiNhap.CellFormatting += dgvXeMoiNhap_CellFormatting;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Lỗi LoadDashboardData] {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"[StackTrace] {ex.StackTrace}");
+
+                UIMessageBox.Show(
+                    "Lỗi tải dữ liệu Dashboard!\n\n" + ex.Message,
+                    "Lỗi",
+                    UIStyle.Red,
+                    UIMessageBoxButtons.OK
+                );
+            }
         }
 
         private void SetStats(int xeSanSang, int giaoDichBanHomNay, int thueDangHoatDong, decimal doanhThuThangNay)
         {
-            lblStat1.Text = xeSanSang.ToString("N0");
-            lblStat2.Text = giaoDichBanHomNay.ToString("N0");
-            lblStat3.Text = thueDangHoatDong.ToString("N0");
-            lblStat4.Text = doanhThuThangNay.ToString("#,0") + "đ";
+            try
+            {
+                // ✅ Hiển thị với format rõ ràng
+                lblStat1.Text = xeSanSang.ToString("N0");
+                lblStat2.Text = giaoDichBanHomNay.ToString("N0");
+                lblStat3.Text = thueDangHoatDong.ToString("N0");
+
+                // ✅ Format doanh thu với đơn vị VNĐ
+                if (doanhThuThangNay >= 1000000000) // >= 1 tỷ
+                {
+                    lblStat4.Text = (doanhThuThangNay / 1000000000).ToString("N2") + " tỷ";
+                }
+                else if (doanhThuThangNay >= 1000000) // >= 1 triệu
+                {
+                    lblStat4.Text = (doanhThuThangNay / 1000000).ToString("N0") + " triệu";
+                }
+                else
+                {
+                    lblStat4.Text = doanhThuThangNay.ToString("N0") + "đ";
+                }
+
+                // ✅ DEBUG: Kiểm tra label có nhận được giá trị không
+                System.Diagnostics.Debug.WriteLine($"[SetStats] lblStat1.Text = {lblStat1.Text}");
+                System.Diagnostics.Debug.WriteLine($"[SetStats] lblStat2.Text = {lblStat2.Text}");
+                System.Diagnostics.Debug.WriteLine($"[SetStats] lblStat3.Text = {lblStat3.Text}");
+                System.Diagnostics.Debug.WriteLine($"[SetStats] lblStat4.Text = {lblStat4.Text}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Lỗi SetStats] {ex.Message}");
+            }
         }
 
         private void LoadXeMoiNhap(DataTable dt)
@@ -72,7 +137,7 @@ namespace UI.UserControlUI
             SetHeaderIfExists("BienSo", "Biển số");
             SetHeaderIfExists("PhanLoai", "Phân loại");
             SetHeaderIfExists("Gia", "Giá");
-            SetHeaderIfExists("TrangThai", "Trạng thái");
+            SetHeaderIfExists("TrangThai", "Trang thái");
 
             // Ẩn cột NgayMua nếu có
             if (dgvXeMoiNhap.Columns["NgayMua"] != null)

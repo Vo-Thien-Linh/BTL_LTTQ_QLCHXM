@@ -54,7 +54,7 @@ namespace UI.FormUI
         private void InitializeCustomComponents()
         {
             this.Text = isEditMode ? "Sửa Thông Tin Khách Hàng" : "Thêm Khách Hàng Mới";
-            this.Size = new Size(800, 700);
+            this.Size = new Size(800, 800);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;

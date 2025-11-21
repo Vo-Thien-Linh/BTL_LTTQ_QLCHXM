@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using BLL;
 using DTO;
-using UI.FormHandleUI; 
+using UI.FormHandleUI;
 
 namespace UI.FormUI
 {
@@ -21,10 +21,10 @@ namespace UI.FormUI
             InitializeComponent();
             this.maGDThue = maGD;
             this.maNV = maNhanVien;
-           
+
             //  LẤY MÃ TÀI KHOẢN TỪ CurrentUser
             this.maTaiKhoan = CurrentUser.MaTaiKhoan;
-            
+
             //  KIỂM TRA
             if (string.IsNullOrWhiteSpace(this.maTaiKhoan))
             {
@@ -38,7 +38,7 @@ namespace UI.FormUI
                 this.Close();
                 return;
             }
-            
+
             giaoDichThueBLL = new GiaoDichThueBLL();
 
             LoadData();
@@ -193,7 +193,7 @@ namespace UI.FormUI
             // Button Xác nhận Thanh toán
             // Chỉ cho phép khi: Đã duyệt + Chưa thanh toán + Chưa giao xe
             btnXacNhanThanhToan.Enabled = (
-                trangThaiDuyet == "Đã duyệt" && 
+                trangThaiDuyet == "Đã duyệt" &&
                 ttThanhToan == "Chưa thanh toán" &&
                 trangThai != "Đang thuê" &&
                 trangThai != "Đã thuê"
@@ -202,7 +202,7 @@ namespace UI.FormUI
             // Button Giao xe
             // Chỉ cho phép khi: Đã thanh toán + TrangThai = "Chờ giao xe"
             btnGiaoXe.Enabled = (
-                ttThanhToan == "Đã thanh toán" && 
+                ttThanhToan == "Đã thanh toán" &&
                 trangThai == "Chờ giao xe"
             );
 
@@ -218,18 +218,18 @@ namespace UI.FormUI
 
         private void SetButtonStyle(Button btn, bool enabled)
         {
-        if (enabled)
-        {
-            btn.Cursor = Cursors.Hand;
-            btn.ForeColor = Color.White;
+            if (enabled)
+            {
+                btn.Cursor = Cursors.Hand;
+                btn.ForeColor = Color.White;
+            }
+            else
+            {
+                btn.BackColor = Color.FromArgb(189, 189, 189);
+                btn.Cursor = Cursors.No;
+                btn.ForeColor = Color.FromArgb(117, 117, 117);
+            }
         }
-        else
-        {
-            btn.BackColor = Color.FromArgb(189, 189, 189);
-            btn.Cursor = Cursors.No;
-            btn.ForeColor = Color.FromArgb(117, 117, 117);
-        }
-    }
 
         private void btnXacNhanThanhToan_Click(object sender, EventArgs e)
         {
@@ -262,6 +262,9 @@ namespace UI.FormUI
                     {
                         MessageBox.Show("Xac nhan thanh toan thanh cong!", "Thanh cong",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // ✅ THÊM: Set DialogResult để trigger refresh ở View cha
+                        this.DialogResult = DialogResult.OK;
 
                         LoadData();
                         ConfigureButtons();
@@ -311,6 +314,8 @@ namespace UI.FormUI
                             MessageBox.Show("Giao xe thanh cong!", "Thanh cong",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                            this.DialogResult = DialogResult.OK;
+
                             LoadData();
                             ConfigureButtons();
                         }
@@ -333,14 +338,14 @@ namespace UI.FormUI
         {
             // ✅ LẤY LẠI DỮ LIỆU ĐẦY ĐỦ
             DataTable dtFull = giaoDichThueBLL.GetGiaoDichThueById(maGDThue);
-            
+
             if (dtFull.Rows.Count == 0)
             {
                 MessageBox.Show("Không tìm thấy dữ liệu giao dịch!", "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
+
             using (FormTraXe formTraXe = new FormTraXe(dtFull.Rows[0]))
             {
                 if (formTraXe.ShowDialog() == DialogResult.OK)
@@ -348,7 +353,7 @@ namespace UI.FormUI
                     try
                     {
                         string errorMessage;
-                        
+
                         //TRUYỀN maTaiKhoan THAY VÌ maNV
                         bool success = giaoDichThueBLL.XacNhanTraXe(
                             maGDThue,

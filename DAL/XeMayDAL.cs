@@ -270,7 +270,7 @@ namespace DAL
                 {
                     try
                     {
-                        // ✅ B1: Xóa thông tin giá trước (Foreign Key)
+                        
                         string deleteGiaQuery = "DELETE FROM ThongTinGiaXe WHERE ID_Xe = @ID_Xe";
                         using (SqlCommand cmd = new SqlCommand(deleteGiaQuery, conn, trans))
                         {
@@ -278,7 +278,6 @@ namespace DAL
                             cmd.ExecuteNonQuery();
                         }
 
-                        // ✅ B2: Xóa xe
                         string deleteXeQuery = "DELETE FROM XeMay WHERE ID_Xe = @ID_Xe";
                         using (SqlCommand cmd = new SqlCommand(deleteXeQuery, conn, trans))
                         {

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.chkGhiNhoMatKhau = new System.Windows.Forms.CheckBox();
             this.btnDangNhap = new System.Windows.Forms.Button();
             this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.txtSoDienThoai = new System.Windows.Forms.TextBox();
@@ -45,7 +44,6 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.chkGhiNhoMatKhau);
             this.panel1.Controls.Add(this.btnDangNhap);
             this.panel1.Controls.Add(this.txtMatKhau);
             this.panel1.Controls.Add(this.txtSoDienThoai);
@@ -57,16 +55,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(459, 426);
             this.panel1.TabIndex = 0;
-            // 
-            // chkGhiNhoMatKhau
-            // 
-            this.chkGhiNhoMatKhau.AutoSize = true;
-            this.chkGhiNhoMatKhau.Location = new System.Drawing.Point(40, 230);
-            this.chkGhiNhoMatKhau.Name = "chkGhiNhoMatKhau";
-            this.chkGhiNhoMatKhau.Size = new System.Drawing.Size(131, 20);
-            this.chkGhiNhoMatKhau.TabIndex = 9;
-            this.chkGhiNhoMatKhau.Text = "Ghi nhớ mật khẩu";
-            this.chkGhiNhoMatKhau.UseVisualStyleBackColor = true;
             // 
             // btnDangNhap
             // 
@@ -163,7 +151,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox chkGhiNhoMatKhau;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
