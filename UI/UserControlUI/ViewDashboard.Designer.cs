@@ -220,7 +220,7 @@
             this.lblStat2.Name = "lblStat2";
             this.lblStat2.Size = new System.Drawing.Size(40, 46);
             this.lblStat2.TabIndex = 1;
-            this.lblStat2.Text = "0";
+            this.lblStat2.Text = "3";
             this.lblStat2.Click += new System.EventHandler(this.lblStat2_Click);
             // 
             // lblDesc2
@@ -281,9 +281,9 @@
             this.lblStat3.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblStat3.Location = new System.Drawing.Point(69, 24);
             this.lblStat3.Name = "lblStat3";
-            this.lblStat3.Size = new System.Drawing.Size(40, 46);
+            this.lblStat3.Size = new System.Drawing.Size(60, 46);
             this.lblStat3.TabIndex = 1;
-            this.lblStat3.Text = "0";
+            this.lblStat3.Text = "25";
             this.lblStat3.Click += new System.EventHandler(this.lblStat3_Click);
             // 
             // lblDesc3
@@ -344,9 +344,9 @@
             this.lblStat4.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblStat4.Location = new System.Drawing.Point(90, 20);
             this.lblStat4.Name = "lblStat4";
-            this.lblStat4.Size = new System.Drawing.Size(62, 46);
+            this.lblStat4.Size = new System.Drawing.Size(222, 46);
             this.lblStat4.TabIndex = 1;
-            this.lblStat4.Text = "0đ";
+            this.lblStat4.Text = "255000000đ";
             // 
             // lblDesc4
             // 
