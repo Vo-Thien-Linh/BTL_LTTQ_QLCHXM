@@ -15,6 +15,7 @@ namespace UI.FormHandleUI
 {
     public partial class FormSuaXe : Form
     {
+        private ErrorProvider errorProvider1 = new ErrorProvider();
         private string idXe;
         private XeMayDTO currentXe; // Lưu trữ thông tin xe hiện tại
         private XeMayBLL xeMayBLL = new XeMayBLL();
@@ -28,8 +29,65 @@ namespace UI.FormHandleUI
         {
             InitializeComponent();
             this.idXe = idXe;
+
+            // Ràng buộc validation cho các trường bắt buộc
+            txtMaXe.Validating += txtMaXe_Validating;
+            txtBienSo.Validating += txtBienSo_Validating;
+            txtGiaMua.Validating += txtGiaMua_Validating;
+            txtGiaNhap.Validating += txtGiaNhap_Validating;
         }
-        
+
+
+
+        private void txtMaXe_Validating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtMaXe.Text))
+            {
+                errorProvider1.SetError(txtMaXe, "Mã xe không được để trống!");
+                e.Cancel = true;
+            }
+            else
+            {
+                errorProvider1.SetError(txtMaXe, "");
+            }
+        }
+        private void txtBienSo_Validating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtBienSo.Text))
+            {
+                errorProvider1.SetError(txtBienSo, "Biển số không được để trống!");
+                e.Cancel = true;
+            }
+            else
+            {
+                errorProvider1.SetError(txtBienSo, "");
+            }
+        }
+        private void txtGiaMua_Validating(object sender, CancelEventArgs e)
+        {
+            if (!decimal.TryParse(txtGiaMua.Text, out decimal giaMua) || giaMua < 0)
+            {
+                errorProvider1.SetError(txtGiaMua, "Giá mua phải là số dương!");
+                e.Cancel = true;
+            }
+            else
+            {
+                errorProvider1.SetError(txtGiaMua, "");
+            }
+        }
+        private void txtGiaNhap_Validating(object sender, CancelEventArgs e)
+        {
+            if (!decimal.TryParse(txtGiaNhap.Text, out decimal giaNhap) || giaNhap < 0)
+            {
+                errorProvider1.SetError(txtGiaNhap, "Giá nhập phải là số dương!");
+                e.Cancel = true;
+            }
+            else
+            {
+                errorProvider1.SetError(txtGiaNhap, "");
+            }
+        }
+
         private void FormSuaXe_Load(object sender, EventArgs e)
         {
             // Đổ dữ liệu vào Combobox
@@ -262,6 +320,28 @@ namespace UI.FormHandleUI
         {
             try
             {
+                // Kiểm tra nhập hợp lệ trước khi sửa
+                if (string.IsNullOrWhiteSpace(txtMaXe.Text)
+                    || string.IsNullOrWhiteSpace(txtBienSo.Text)
+                    || cbbNhaCungCap.SelectedValue == null
+                    || string.IsNullOrWhiteSpace(txtGiaMua.Text)
+                    || string.IsNullOrWhiteSpace(txtGiaNhap.Text)
+                    || cbbHangXe.SelectedValue == null
+                    || cbbDongXe.SelectedValue == null
+                    || cbbMauSac.SelectedValue == null
+                    || cbbNamSanXuat.SelectedItem == null
+                    || cbbLoaiXe.SelectedValue == null)
+                {
+                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                // Gọi ValidateChildren để kiểm tra ErrorProvider
+                if (!this.ValidateChildren())
+                {
+                    MessageBox.Show("Vui lòng nhập đúng và hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 // Tạo DTO cập nhật
                 var xeDTO = new XeMayDTO
                 {
@@ -272,33 +352,29 @@ namespace UI.FormHandleUI
                     GiaMua = decimal.TryParse(txtGiaMua.Text, out var gia) ? gia : (decimal?)null,
                     GiaNhap = decimal.TryParse(txtGiaNhap.Text, out var giaNhap) ? giaNhap : (decimal?)null,
                     SoLuong = (int?)nudSoLuong.Value,
-                    SoLuongBanRa = currentXe?.SoLuongBanRa ?? 0, // Giữ nguyên từ DB
+                    SoLuongBanRa = currentXe?.SoLuongBanRa ?? 0,
                     NgayDangKy = dtpNgayDangKy.Value,
                     HetHanDangKy = dtpNgayHetHanDangKy.Value,
                     HetHanBaoHiem = dtpNgayHetHanBaoHiem.Value,
                     KmDaChay = (int)nudKHDaChay.Value,
                     ThongTinXang = txtThongTinXang.Text.Trim(),
-                    AnhXe = anhXeBytes, // Sử dụng byte[] thay vì file path
+                    AnhXe = anhXeBytes,
                     TrangThai = cbbTrangThai.SelectedItem?.ToString(),
                     MucDichSuDung = cbbMucDichSuDung.SelectedItem?.ToString(),
-                    
-                    // Thông tin cho việc build ID_Loai
                     MaHang = cbbHangXe.SelectedValue?.ToString(),
                     MaDong = cbbDongXe.SelectedValue?.ToString(),
                     MaMau = cbbMauSac.SelectedValue?.ToString(),
                     NamSX = cbbNamSanXuat.SelectedItem != null ? (int?)Convert.ToInt32(cbbNamSanXuat.SelectedItem) : null
                 };
 
-                // Tìm hoặc tạo ID_Loai từ MaHang, MaDong, MaMau, NamSX
-                if (!string.IsNullOrEmpty(xeDTO.MaHang) && !string.IsNullOrEmpty(xeDTO.MaDong) && 
+                // Build lại ID_Loai nếu người dùng đổi thông tin về xe
+                if (!string.IsNullOrEmpty(xeDTO.MaHang) && !string.IsNullOrEmpty(xeDTO.MaDong) &&
                     !string.IsNullOrEmpty(xeDTO.MaMau) && xeDTO.NamSX.HasValue)
                 {
                     xeDTO.ID_Loai = loaiXeBLL.GetOrCreateIDLoai(xeDTO.MaHang, xeDTO.MaDong, xeDTO.MaMau, xeDTO.NamSX.Value);
                 }
 
-                // BLL xử lý - sẽ throw Exception nếu có lỗi với thông báo chi tiết
                 bool success = xeMayBLL.UpdateXeMay(xeDTO);
-                
                 if (success)
                 {
                     MessageBox.Show("Sửa xe thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -312,17 +388,14 @@ namespace UI.FormHandleUI
             }
             catch (Exception ex)
             {
-                // Hiển thị lỗi chi tiết từ BLL
                 MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
         private void txtGiaMua_TextChanged(object sender, EventArgs e)
         {
-            // Tự động tính GiaNhap = 85% GiaMua nếu chưa có giá nhập
             if (decimal.TryParse(txtGiaMua.Text, out decimal giaMua))
             {
-                // Chỉ tự động tính nếu txtGiaNhap rỗng hoặc bằng 85% giá mửa cũ
                 if (string.IsNullOrWhiteSpace(txtGiaNhap.Text) ||
                     (currentXe != null && currentXe.GiaMua.HasValue && currentXe.GiaNhap.HasValue &&
                      Math.Abs(currentXe.GiaNhap.Value - currentXe.GiaMua.Value * 0.85m) < 0.01m))
@@ -330,6 +403,11 @@ namespace UI.FormHandleUI
                     txtGiaNhap.Text = (giaMua * 0.85m).ToString("0.##");
                 }
             }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
