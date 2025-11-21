@@ -78,7 +78,7 @@ namespace DAL
         {
             string query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
                             ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                            AnhNhanVien, NgayVaoLam 
+                            AnhNhanVien, NgayVaoLam, Password
                             FROM NhanVien 
                             WHERE MaNV = @MaNV";
             SqlParameter[] parameters = new SqlParameter[]
@@ -88,18 +88,62 @@ namespace DAL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-        
+
         /// Thêm nhân viên mới
-        
+
 
         public bool InsertNhanVien(NhanVien nv)
         {
-            string query = @"INSERT INTO NhanVien (MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, 
-                            DiaChi, ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                            AnhNhanVien, NgayVaoLam)
-                            VALUES (@MaNV, @HoTenNV, @NgaySinh, @GioiTinh, @Sdt, @Email, 
-                            @DiaChi, @ChucVu, @LuongCoBan, @TinhTrangLamViec, @CCCD, @TrinhDoHocVan, 
-                            @AnhNhanVien, @NgayVaoLam)";
+            string query = @"INSERT INTO NhanVien 
+                    (MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, 
+                    DiaChi, ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
+                    AnhNhanVien, NgayVaoLam)
+                    VALUES 
+                    (@MaNV, @HoTenNV, @NgaySinh, @GioiTinh, @Sdt, @Email, 
+                    @DiaChi, @ChucVu, @LuongCoBan, @TinhTrangLamViec, @CCCD, @TrinhDoHocVan, 
+                    @AnhNhanVien, @NgayVaoLam)";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+        new SqlParameter("@MaNV", nv.MaNV),
+        new SqlParameter("@HoTenNV", nv.HoTenNV),
+        new SqlParameter("@NgaySinh", nv.NgaySinh),
+        new SqlParameter("@GioiTinh", nv.GioiTinh),
+        new SqlParameter("@Sdt", (object)nv.Sdt ?? DBNull.Value),
+        new SqlParameter("@Email", (object)nv.Email ?? DBNull.Value),
+        new SqlParameter("@DiaChi", (object)nv.DiaChi ?? DBNull.Value),
+        new SqlParameter("@ChucVu", (object)nv.ChucVu ?? DBNull.Value),
+        new SqlParameter("@LuongCoBan", (object)nv.LuongCoBan ?? DBNull.Value),
+        new SqlParameter("@TinhTrangLamViec", nv.TinhTrangLamViec),
+        new SqlParameter("@CCCD", (object)nv.CCCD ?? DBNull.Value),
+        new SqlParameter("@TrinhDoHocVan", (object)nv.TrinhDoHocVan ?? DBNull.Value),
+        new SqlParameter("@AnhNhanVien", (object)nv.AnhNhanVien ?? DBNull.Value),
+        new SqlParameter("@NgayVaoLam", (object)nv.NgayVaoLam ?? DateTime.Now)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+
+        /// Cập nhật thông tin nhân viên
+
+        public bool UpdateNhanVien(NhanVien nv)
+        {
+            string query = @"UPDATE NhanVien 
+                            SET HoTenNV = @HoTenNV, 
+                                NgaySinh = @NgaySinh, 
+                                GioiTinh = @GioiTinh, 
+                                Sdt = @Sdt, 
+                                Email = @Email, 
+                                DiaChi = @DiaChi, 
+                                ChucVu = @ChucVu, 
+                                LuongCoBan = @LuongCoBan, 
+                                TinhTrangLamViec = @TinhTrangLamViec, 
+                                CCCD = @CCCD, 
+                                TrinhDoHocVan = @TrinhDoHocVan, 
+                                AnhNhanVien = @AnhNhanVien
+                                password = @Password
+                            WHERE MaNV = @MaNV";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -116,47 +160,7 @@ namespace DAL
                 new SqlParameter("@CCCD", (object)nv.CCCD ?? DBNull.Value),
                 new SqlParameter("@TrinhDoHocVan", (object)nv.TrinhDoHocVan ?? DBNull.Value),
                 new SqlParameter("@AnhNhanVien", (object)nv.AnhNhanVien ?? DBNull.Value),
-                new SqlParameter("@NgayVaoLam", (object)nv.NgayVaoLam ?? DateTime.Now)
-            };
-
-            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
-        }
-
-        
-        /// Cập nhật thông tin nhân viên
-       
-        public bool UpdateNhanVien(NhanVien nv)
-        {
-            string query = @"UPDATE NhanVien 
-                            SET HoTenNV = @HoTenNV, 
-                                NgaySinh = @NgaySinh, 
-                                GioiTinh = @GioiTinh, 
-                                Sdt = @Sdt, 
-                                Email = @Email, 
-                                DiaChi = @DiaChi, 
-                                ChucVu = @ChucVu, 
-                                LuongCoBan = @LuongCoBan, 
-                                TinhTrangLamViec = @TinhTrangLamViec, 
-                                CCCD = @CCCD, 
-                                TrinhDoHocVan = @TrinhDoHocVan, 
-                                AnhNhanVien = @AnhNhanVien
-                            WHERE MaNV = @MaNV";
-
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@MaNV", nv.MaNV),
-                new SqlParameter("@HoTenNV", nv.HoTenNV),
-                new SqlParameter("@NgaySinh", nv.NgaySinh),
-                new SqlParameter("@GioiTinh", nv.GioiTinh),
-                new SqlParameter("@Sdt", (object)nv.Sdt ?? DBNull.Value),
-                new SqlParameter("@Email", (object)nv.Email ?? DBNull.Value),
-                new SqlParameter("@DiaChi", (object)nv.DiaChi ?? DBNull.Value),
-                new SqlParameter("@ChucVu", (object)nv.ChucVu ?? DBNull.Value),
-                new SqlParameter("@LuongCoBan", (object)nv.LuongCoBan ?? DBNull.Value),
-                new SqlParameter("@TinhTrangLamViec", nv.TinhTrangLamViec),
-                new SqlParameter("@CCCD", (object)nv.CCCD ?? DBNull.Value),
-                new SqlParameter("@TrinhDoHocVan", (object)nv.TrinhDoHocVan ?? DBNull.Value),
-                new SqlParameter("@AnhNhanVien", (object)nv.AnhNhanVien ?? DBNull.Value)
+                new SqlParameter("@Password", nv.Password)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
