@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace UI.FormUI
@@ -15,6 +16,8 @@ namespace UI.FormUI
         private string maNhanVien;
         private FlowLayoutPanel flpDonChoDuyet;
         private bool hasPermission = false; //  Thêm flag kiểm tra quyền
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+
 
         public ViewDuyetDonThue()
         {
@@ -24,7 +27,135 @@ namespace UI.FormUI
             InitializeFlowLayoutPanel();
             
             btnLamMoi.Click += BtnLamMoi_Click;
+
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
+            ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            // Tiêu đề
+            if (lblTieuDe != null)
+                lblTieuDe.Text = langMgr.GetString("ApproveRentalTitle");
+
+            // Nút làm mới (nếu có)
+            if (btnLamMoi != null)
+                btnLamMoi.Text = langMgr.GetString("RefreshBtn");
+
+            // Label tổng số đơn (Nếu đang hiển thị)
+            if (lblTongSoDon != null && flpDonChoDuyet != null)
+            {
+                // Giữ nguyên số đã hiển thị nếu có, hoặc mặc định {0} = 0
+                int count = 0;
+                if (flpDonChoDuyet.Controls.Count > 0)
+                {
+                    count = flpDonChoDuyet.Controls.OfType<Panel>().Count() + flpDonChoDuyet.Controls.OfType<Label>().Count();
+                }
+                lblTongSoDon.Text = string.Format(langMgr.GetString("TotalWaitApprove"), count);
+            }
+
+            // Nếu đang ở trang không có quyền (access denied)
+            foreach (Control c in flpDonChoDuyet.Controls)
+            {
+                if (c is Panel p)
+                {
+                    // Label thông báo (lblMessage)
+                    foreach (Control sub in p.Controls)
+                    {
+                        if (sub is Label lblMsg && lblMsg.ForeColor == Color.FromArgb(66, 66, 66))
+                        {
+                            lblMsg.Text = langMgr.GetString("AccessDenied");
+                        }
+                        if (sub is Button btn && btn.Text.Trim().Contains("Quay lại"))
+                        {
+                            btn.Text = langMgr.GetString("GoBackBtn");
+                        }
+                    }
+                }
+            }
+
+            // Đối với từng card, update badge, button text, cảnh báo, label...
+            foreach (Control ctrl in flpDonChoDuyet.Controls)
+            {
+                if (ctrl is Panel card)
+                {
+                    foreach (Control sub in card.Controls)
+                    {
+                        // Badge "CHỜ DUYỆT"
+                        if (sub is Panel badgePanel)
+                        {
+                            foreach (Control badgeLbl in badgePanel.Controls)
+                            {
+                                if (badgeLbl is Label lblBadge)
+                                    lblBadge.Text = langMgr.GetString("BadgeWaitApprove");
+                            }
+                        }
+
+                        // Button Duyệt
+                        if (sub is Button btn)
+                        {
+                            if (btn.Text.Trim().ToUpper().Contains("DUYỆT"))
+                                btn.Text = hasPermission ? langMgr.GetString("ApproveBtn") : langMgr.GetString("NoPermissionBtn");
+                            if (btn.Text.Trim().ToUpper().Contains("TỪ CHỐI") || btn.Text.Trim().ToUpper().Contains("REJECT"))
+                                btn.Text = hasPermission ? langMgr.GetString("RejectBtn") : "";
+                            if (btn.Text.Trim().ToUpper().Contains("CHI TIẾT") || btn.Text.Trim().ToUpper().Contains("DETAIL"))
+                                btn.Text = langMgr.GetString("DetailBtn");
+                        }
+
+                        // Badge cảnh báo
+                        if (sub is Panel warnPanel)
+                        {
+                            foreach (Control lblWarn in warnPanel.Controls)
+                            {
+                                if (lblWarn is Label labelW)
+                                {
+                                    if (labelW.Text.Contains("QUÁ HẠN"))
+                                        labelW.Text = langMgr.GetString("WarningOverdue");
+                                    else if (labelW.Text.Contains("TRÙNG") || labelW.Text.Contains("CONFLICT"))
+                                        labelW.Text = langMgr.GetString("WarningConflict");
+                                }
+                            }
+                        }
+
+                        // Label Đơn #
+                        if (sub is Label lblOrder && lblOrder.Text.Trim().StartsWith("Đơn #"))
+                        {
+                            int orderId = 0;
+                            if (int.TryParse(lblOrder.Text.Replace("Đơn #", "").Replace("Order #", "").Trim(), out orderId))
+                                lblOrder.Text = string.Format(langMgr.GetString("OrderLabel"), orderId);
+                        }
+
+                        // Label Biển số
+                        if (sub is Label lblPlate && lblPlate.Text.Trim().StartsWith("Biển số"))
+                        {
+                            string[] arr = lblPlate.Text.Split(':');
+                            if (arr.Length > 1)
+                                lblPlate.Text = string.Format(langMgr.GetString("PlateLabel"), arr[1].Trim());
+                        }
+
+                        // Số ngày
+                        if (sub is Label lblDay && lblDay.Text.Trim().EndsWith("ngày)"))
+                        {
+                            string[] arr = lblDay.Text.Trim('(', ')').Split(' ');
+                            if (arr.Length > 0 && int.TryParse(arr[0], out int _days))
+                                lblDay.Text = string.Format(langMgr.GetString("DaysLabel"), _days);
+                        }
+
+                        // No-data
+                        if (sub is Label lblNoData && lblNoData.Font.Bold && (lblNoData.Text.Contains("không có") || lblNoData.Text.Contains("no ")))
+                        {
+                            lblNoData.Text = " " + langMgr.GetString("NoDataWaitApprove");
+                        }
+                    }
+                }
+                // Nếu là label không chứa card (ví dụ, dòng "Không có đơn nào chờ duyệt!")
+                if (ctrl is Label lblEmpty && lblEmpty.Font.Bold)
+                {
+                    lblEmpty.Text = " " + langMgr.GetString("NoDataWaitApprove");
+                }
+            }
+        }
+
 
         public ViewDuyetDonThue(string maNV) : this()
         {
@@ -766,5 +897,10 @@ namespace UI.FormUI
         private void BtnDuyetDon_Click(object sender, EventArgs e) { }
         private void BtnTuChoiDon_Click(object sender, EventArgs e) { }
         private void ClearDetailInfo() { }
+
+        private void dgvDanhSachDonChoDuyet_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

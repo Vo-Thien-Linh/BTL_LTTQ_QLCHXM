@@ -30,12 +30,12 @@
         {
             this.panel3 = new System.Windows.Forms.Panel();
             this.cbbTrangThai = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblTrangThai = new System.Windows.Forms.Label();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.txtTuKhoa = new System.Windows.Forms.TextBox();
             this.cbbTimKiemTheo = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblTuKhoa = new System.Windows.Forms.Label();
+            this.lblTimKiemTheo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dgvQuanLyXe = new System.Windows.Forms.DataGridView();
             this.btnLamMoi = new System.Windows.Forms.Button();
@@ -51,12 +51,12 @@
             // 
             this.panel3.BackColor = System.Drawing.Color.White;
             this.panel3.Controls.Add(this.cbbTrangThai);
-            this.panel3.Controls.Add(this.label3);
+            this.panel3.Controls.Add(this.lblTrangThai);
             this.panel3.Controls.Add(this.btnTimKiem);
             this.panel3.Controls.Add(this.txtTuKhoa);
             this.panel3.Controls.Add(this.cbbTimKiemTheo);
-            this.panel3.Controls.Add(this.label2);
-            this.panel3.Controls.Add(this.label1);
+            this.panel3.Controls.Add(this.lblTuKhoa);
+            this.panel3.Controls.Add(this.lblTimKiemTheo);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
@@ -73,14 +73,14 @@
             this.cbbTrangThai.TabIndex = 5;
             this.cbbTrangThai.SelectedIndexChanged += new System.EventHandler(this.cbbTrangThai_SelectedIndexChanged);
             // 
-            // label3
+            // lblTrangThai
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(504, 37);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(73, 16);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Trạng Thái";
+            this.lblTrangThai.AutoSize = true;
+            this.lblTrangThai.Location = new System.Drawing.Point(504, 37);
+            this.lblTrangThai.Name = "lblTrangThai";
+            this.lblTrangThai.Size = new System.Drawing.Size(73, 16);
+            this.lblTrangThai.TabIndex = 4;
+            this.lblTrangThai.Text = "Trạng Thái";
             // 
             // btnTimKiem
             // 
@@ -112,25 +112,25 @@
             this.cbbTimKiemTheo.TabIndex = 1;
             this.cbbTimKiemTheo.SelectedIndexChanged += new System.EventHandler(this.cbbTimKiemTheo_SelectedIndexChanged);
             // 
-            // label2
+            // lblTuKhoa
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(962, 37);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 16);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Từ khóa";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
+            this.lblTuKhoa.AutoSize = true;
+            this.lblTuKhoa.Location = new System.Drawing.Point(962, 37);
+            this.lblTuKhoa.Name = "lblTuKhoa";
+            this.lblTuKhoa.Size = new System.Drawing.Size(56, 16);
+            this.lblTuKhoa.TabIndex = 0;
+            this.lblTuKhoa.Text = "Từ khóa";
+            this.lblTuKhoa.Click += new System.EventHandler(this.label2_Click);
             // 
-            // label1
+            // lblTimKiemTheo
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(66, 37);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Tìm kiếm theo";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.lblTimKiemTheo.AutoSize = true;
+            this.lblTimKiemTheo.Location = new System.Drawing.Point(66, 37);
+            this.lblTimKiemTheo.Name = "lblTimKiemTheo";
+            this.lblTimKiemTheo.Size = new System.Drawing.Size(91, 16);
+            this.lblTimKiemTheo.TabIndex = 0;
+            this.lblTimKiemTheo.Text = "Tìm kiếm theo";
+            this.lblTimKiemTheo.Click += new System.EventHandler(this.label1_Click);
             // 
             // panel1
             // 
@@ -244,8 +244,8 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TextBox txtTuKhoa;
         private System.Windows.Forms.ComboBox cbbTimKiemTheo;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblTuKhoa;
+        private System.Windows.Forms.Label lblTimKiemTheo;
         private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnLamMoi;
@@ -253,7 +253,7 @@
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.DataGridView dgvQuanLyXe;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblTrangThai;
         private System.Windows.Forms.ComboBox cbbTrangThai;
     }
 }

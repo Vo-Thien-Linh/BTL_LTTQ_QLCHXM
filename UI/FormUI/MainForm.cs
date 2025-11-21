@@ -398,7 +398,8 @@ namespace UI.FormUI
         {
             pnlContent.Controls.Clear();
 
-            // Tạo TabControl
+            var langMgr = LanguageManagerBLL.Instance;
+
             TabControl tabControl = new TabControl
             {
                 Dock = DockStyle.Fill,
@@ -407,19 +408,19 @@ namespace UI.FormUI
                 SizeMode = TabSizeMode.Fixed
             };
 
-            //// Tab 1: Duyệt đơn thuê (CHỈ ADMIN/QUẢN LÝ)
+            // Tab 1: Duyệt đơn thuê (CHỈ ADMIN/QUẢN LÝ)
             if (CurrentUser.LoaiTaiKhoan == "QuanLy")
             {
-                TabPage tabDuyetDon = new TabPage(" Duyệt Đơn Thuê");
+                TabPage tabDuyetDon = new TabPage(" " + langMgr.GetString("TabApproveRental"));
                 ViewDuyetDonThue viewDuyetDon = new ViewDuyetDonThue();
-                viewDuyetDon.SetMaNhanVien(CurrentUser.MaNV); // ✅ QUAN TRỌNG
+                viewDuyetDon.SetMaNhanVien(CurrentUser.MaNV);
                 viewDuyetDon.Dock = DockStyle.Fill;
                 tabDuyetDon.Controls.Add(viewDuyetDon);
                 tabControl.TabPages.Add(tabDuyetDon);
             }
 
             // Tab 2: Quản lý cho thuê (TẤT CẢ)
-            TabPage tabQuanLy = new TabPage(" Quản Lý Cho Thuê");
+            TabPage tabQuanLy = new TabPage(" " + langMgr.GetString("TabManageRental"));
             ViewQuanLyChoThue viewQuanLy = new ViewQuanLyChoThue(CurrentUser.MaNV);
             viewQuanLy.Dock = DockStyle.Fill;
             tabQuanLy.Controls.Add(viewQuanLy);
@@ -428,6 +429,7 @@ namespace UI.FormUI
             pnlContent.Controls.Add(tabControl);
             tabControl.BringToFront();
         }
+
 
         private void btnQuanLyXuLy_Click(object sender, EventArgs e)
         {

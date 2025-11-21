@@ -14,10 +14,49 @@ namespace UI
         private List<ChiTietBaoTriDTO> danhSachChiTiet = new List<ChiTietBaoTriDTO>();
         private int idBaoTriSelected = 0;
 
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+
+
         public frmQuanLyBaoTri()
         {
             InitializeComponent();
+
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); };
+            ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            lblTitle.Text = langMgr.GetString("MaintenanceTitle");
+            grpThongTinBaoTri.Text = langMgr.GetString("InfoTitle");
+            lblXe.Text = langMgr.GetString("VehicleLabel");
+            lblNhanVien.Text = langMgr.GetString("TechnicianLabel");
+            lblGhiChu.Text = langMgr.GetString("NoteLabel");
+            grpThemPhuTung.Text = langMgr.GetString("AddPartTitle");
+            lblPhuTung.Text = langMgr.GetString("PartLabel");
+            lblSoLuong.Text = langMgr.GetString("QuantityLabel");
+            btnThemPhuTung.Text = langMgr.GetString("AddBtn");
+            grpChiTiet.Text = langMgr.GetString("DetailTitle");
+            lblTongTienText.Text = langMgr.GetString("TotalCost");
+            btnThem.Text = langMgr.GetString("CreateBtn");
+            btnXoa.Text = langMgr.GetString("DeleteBtn");
+            btnLamMoi.Text = langMgr.GetString("ResetBtn");
+            grpDanhSach.Text = langMgr.GetString("MaintenanceListTitle");
+
+            if (dgvChiTietBaoTri.Columns.Count > 0)
+            {
+                dgvChiTietBaoTri.Columns["MaPhuTung"].HeaderText = langMgr.GetString("PartCodeColumn");
+                dgvChiTietBaoTri.Columns["TenPhuTung"].HeaderText = langMgr.GetString("PartNameColumn");
+                dgvChiTietBaoTri.Columns["DonViTinh"].HeaderText = langMgr.GetString("UnitColumn");
+                dgvChiTietBaoTri.Columns["SoLuong"].HeaderText = langMgr.GetString("QtyColumn");
+                dgvChiTietBaoTri.Columns["GiaSuDung"].HeaderText = langMgr.GetString("UsagePriceColumn");
+                dgvChiTietBaoTri.Columns["ThanhTien"].HeaderText = langMgr.GetString("AmountColumn");
+                dgvChiTietBaoTri.Columns["GhiChu"].HeaderText = langMgr.GetString("PartNoteColumn");
+                dgvChiTietBaoTri.Columns["btnXoa"].HeaderText = langMgr.GetString("RemoveBtnColumn");
+            }
+        }
+
+
 
         private void frmQuanLyBaoTri_Load(object sender, EventArgs e)
         {
@@ -448,6 +487,16 @@ namespace UI
         {
             ResetForm();
             LoadDanhSachBaoTri();
+        }
+
+        private void grpChiTiet_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblTongTienText_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

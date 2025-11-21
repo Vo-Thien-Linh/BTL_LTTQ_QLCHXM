@@ -14,12 +14,29 @@ namespace UI.UserControlUI
     public partial class ViewQuanLyPhuTung : UserControl
     {
         private PhuTungBLL phuTungBLL = new PhuTungBLL();
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
         public ViewQuanLyPhuTung()
         {
             InitializeComponent();
             SetupDataGridView();
             InitializeTimKiemComboBox();
             LoadData();
+
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
+            ApplyLanguage();
+        }
+
+        private void ApplyLanguage()
+        {
+            btnThem.Text = langMgr.GetString("AddBtn");
+            btnSua.Text = langMgr.GetString("EditBtn");
+            btnXoa.Text = langMgr.GetString("DeleteBtn");
+            btnLamMoi.Text = langMgr.GetString("RefreshBtn");
+            btnTimKiem.Text = langMgr.GetString("SearchBtn");
+
+            lblTimKiemTheo.Text = langMgr.GetString("SearchBy");
+            
+            lblTuKhoa.Text = langMgr.GetString("Keyword");
         }
         private void InitializeTimKiemComboBox()
         {

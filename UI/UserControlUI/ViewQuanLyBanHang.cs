@@ -13,7 +13,7 @@ namespace UI.UserControlUI
         private XeMayBLL xeMayBLL;
         private FlowLayoutPanel flowPanelCards;
         private string currentMaTaiKhoan;
-
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
         public ViewQuanLyBanHang(string maTaiKhoan)
         {
             InitializeComponent();
@@ -28,7 +28,23 @@ namespace UI.UserControlUI
             btnSearch.Click += BtnSearch_Click;
             btnRefresh.Click += BtnRefresh_Click;
             btnXemHopDong.Click += BtnXemHopDong_Click;
+
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadXeBan(); };
+            ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            lblTitle.Text = langMgr.GetString("SaleTitle");
+            btnSearch.Text = langMgr.GetString("SearchBtn");
+            btnRefresh.Text = langMgr.GetString("RefreshBtn");
+            btnXemHopDong.Text = langMgr.GetString("ViewContractBtn");
+
+            btnViewDetail.Text = langMgr.GetString("ViewDetailBtn");
+            btnApprove.Text = langMgr.GetString("ApproveBtn");
+            btnReject.Text = langMgr.GetString("RejectBtn");
+        }
+
 
         private void InitializeCardView()
         {
@@ -262,6 +278,11 @@ namespace UI.UserControlUI
         private void panelTop_Paint(object sender, PaintEventArgs e)
         {
             // Empty
+        }
+
+        private void panelDataGrid_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

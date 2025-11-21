@@ -58,7 +58,7 @@
             this.panelTop.Controls.Add(this.btnRefresh);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(4);
             this.panelTop.Name = "panelTop";
             this.panelTop.Padding = new System.Windows.Forms.Padding(20, 18, 20, 18);
             this.panelTop.Size = new System.Drawing.Size(1333, 148);
@@ -86,7 +86,7 @@
             "Giao Dịch Bán",
             "Giao Dịch Thuê"});
             this.cboLoaiGiaoDich.Location = new System.Drawing.Point(27, 80);
-            this.cboLoaiGiaoDich.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboLoaiGiaoDich.Margin = new System.Windows.Forms.Padding(4);
             this.cboLoaiGiaoDich.Name = "cboLoaiGiaoDich";
             this.cboLoaiGiaoDich.Size = new System.Drawing.Size(212, 31);
             this.cboLoaiGiaoDich.TabIndex = 1;
@@ -102,7 +102,7 @@
             "Đã duyệt",
             "Từ chối"});
             this.cboTrangThai.Location = new System.Drawing.Point(253, 80);
-            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboTrangThai.Margin = new System.Windows.Forms.Padding(4);
             this.cboTrangThai.Name = "cboTrangThai";
             this.cboTrangThai.Size = new System.Drawing.Size(199, 31);
             this.cboTrangThai.TabIndex = 2;
@@ -111,7 +111,7 @@
             // 
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.txtSearch.Location = new System.Drawing.Point(467, 80);
-            this.txtSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(4);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(399, 30);
             this.txtSearch.TabIndex = 3;
@@ -123,7 +123,7 @@
             this.btnSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSearch.ForeColor = System.Drawing.Color.White;
             this.btnSearch.Location = new System.Drawing.Point(880, 78);
-            this.btnSearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSearch.Margin = new System.Windows.Forms.Padding(4);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(133, 37);
             this.btnSearch.TabIndex = 4;
@@ -137,7 +137,7 @@
             this.btnRefresh.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnRefresh.ForeColor = System.Drawing.Color.White;
             this.btnRefresh.Location = new System.Drawing.Point(1027, 78);
-            this.btnRefresh.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(160, 37);
             this.btnRefresh.TabIndex = 5;
@@ -148,11 +148,12 @@
             // 
             this.panelDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelDataGrid.Location = new System.Drawing.Point(0, 148);
-            this.panelDataGrid.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelDataGrid.Margin = new System.Windows.Forms.Padding(4);
             this.panelDataGrid.Name = "panelDataGrid";
             this.panelDataGrid.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
             this.panelDataGrid.Size = new System.Drawing.Size(1333, 591);
             this.panelDataGrid.TabIndex = 1;
+            this.panelDataGrid.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDataGrid_Paint);
             // 
             // panelBottom
             // 
@@ -164,7 +165,7 @@
             this.panelBottom.Controls.Add(this.lblRecordCount);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 739);
-            this.panelBottom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelBottom.Margin = new System.Windows.Forms.Padding(4);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Padding = new System.Windows.Forms.Padding(20, 18, 20, 18);
             this.panelBottom.Size = new System.Drawing.Size(1333, 86);
@@ -177,7 +178,7 @@
             this.btnViewDetail.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnViewDetail.ForeColor = System.Drawing.Color.White;
             this.btnViewDetail.Location = new System.Drawing.Point(27, 25);
-            this.btnViewDetail.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnViewDetail.Margin = new System.Windows.Forms.Padding(4);
             this.btnViewDetail.Name = "btnViewDetail";
             this.btnViewDetail.Size = new System.Drawing.Size(200, 43);
             this.btnViewDetail.TabIndex = 0;
@@ -191,7 +192,7 @@
             this.btnApprove.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnApprove.ForeColor = System.Drawing.Color.White;
             this.btnApprove.Location = new System.Drawing.Point(240, 25);
-            this.btnApprove.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnApprove.Margin = new System.Windows.Forms.Padding(4);
             this.btnApprove.Name = "btnApprove";
             this.btnApprove.Size = new System.Drawing.Size(173, 43);
             this.btnApprove.TabIndex = 1;
@@ -205,7 +206,7 @@
             this.btnReject.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnReject.ForeColor = System.Drawing.Color.White;
             this.btnReject.Location = new System.Drawing.Point(427, 25);
-            this.btnReject.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnReject.Margin = new System.Windows.Forms.Padding(4);
             this.btnReject.Name = "btnReject";
             this.btnReject.Size = new System.Drawing.Size(173, 43);
             this.btnReject.TabIndex = 2;
@@ -219,7 +220,7 @@
             this.btnXemHopDong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXemHopDong.ForeColor = System.Drawing.Color.White;
             this.btnXemHopDong.Location = new System.Drawing.Point(614, 25);
-            this.btnXemHopDong.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnXemHopDong.Margin = new System.Windows.Forms.Padding(4);
             this.btnXemHopDong.Name = "btnXemHopDong";
             this.btnXemHopDong.Size = new System.Drawing.Size(200, 43);
             this.btnXemHopDong.TabIndex = 4;
@@ -247,7 +248,7 @@
             this.Controls.Add(this.panelDataGrid);
             this.Controls.Add(this.panelBottom);
             this.Controls.Add(this.panelTop);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ViewQuanLyBanHang";
             this.Size = new System.Drawing.Size(1333, 825);
             this.panelTop.ResumeLayout(false);
