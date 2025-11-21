@@ -39,7 +39,7 @@ namespace BLL
                 throw new Exception("Lỗi khi lấy danh sách xe: " + ex.Message);
             }
         }
-      
+
 
         // Tìm kiếm xe
         public DataTable SearchXeMay(string keyword, string trangThai)
@@ -151,7 +151,7 @@ namespace BLL
 
                 //  Thêm xe vào bảng XeMay
                 bool insertXeSuccess = xeMayDAL.InsertXeMay(xe);
-                
+
                 if (!insertXeSuccess)
                 {
                     throw new Exception("Không thể thêm xe vào hệ thống!");
@@ -166,8 +166,8 @@ namespace BLL
                         decimal giaThueNgay = (xe.GiaMua ?? 0) * 0.01m;
 
                         bool insertGiaSuccess = xeMayDAL.InsertThongTinGiaXe(
-                            xe.ID_Xe, 
-                            "Thuê", 
+                            xe.ID_Xe,
+                            "Thuê",
                             giaThueNgay,
                             null  // Không có giá bán
                         );
@@ -188,10 +188,10 @@ namespace BLL
                     {
                         // Giá bán = Giá mua + 10% lãi
                         decimal giaBan = (xe.GiaMua ?? 0) * 1.1m;
-                
+
                         bool insertGiaSuccess = xeMayDAL.InsertThongTinGiaXe(
-                            xe.ID_Xe, 
-                            "Bán", 
+                            xe.ID_Xe,
+                            "Bán",
                             null,    // Không có giá thuê
                             giaBan
                         );
@@ -213,7 +213,7 @@ namespace BLL
                 {
                     // Log lỗi nhưng không throw (xe đã thêm thành công)
                     System.Diagnostics.Debug.WriteLine($"Lỗi thêm giá: {exGia.Message}");
-            
+
                     MessageBox.Show(
                         "Xe đã được thêm thành công!\n\n" +
                         "Tuy nhiên, có lỗi khi tạo giá tự động:\n" +
@@ -328,10 +328,25 @@ namespace BLL
                     throw new Exception("Mã xe không được để trống!");
                 }
 
-                // Có thể thêm logic kiểm tra ràng buộc trước khi xóa
-                // Ví dụ: kiểm tra xe có đang trong hợp đồng thuê không
+                if (KiemTraXeCoGiaoDich(idXe))
+                {
+                    throw new Exception(
+                        "Không thể xóa xe này!\n\n" +
+                        "Xe đã có giao dịch bán/thuê trong hệ thống.\n" +
+                        "Bạn chỉ có thể chuyển trạng thái xe sang 'Đã xóa' thay vì xóa hẳn."
+                    );
+                }
 
-                return xeMayDAL.DeleteXeMay(idXe);
+                bool deletedGia = XoaThongTinGiaXe(idXe);
+
+                bool deletedXe = xeMayDAL.DeleteXeMay(idXe);
+
+                if (!deletedXe)
+                {
+                    throw new Exception("Không thể xóa xe khỏi hệ thống!");
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -339,7 +354,23 @@ namespace BLL
             }
         }
 
-        
+        private bool XoaThongTinGiaXe(string idXe)
+        {
+            try
+            {
+                string query = "DELETE FROM ThongTinGiaXe WHERE ID_Xe = @ID_Xe";
+                SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+
+                int result = DAL.DataProvider.ExecuteNonQuery(query, parameters);
+                return true; // Không có lỗi là OK (có thể không có record)
+            }
+            catch
+            {
+                return true; // Bỏ qua nếu không xóa được (có thể không có record)
+            }
+        }
+
+
 
 
         // Cập nhật trạng thái
@@ -396,7 +427,7 @@ namespace BLL
 
                 // Tăng số lượng đã bán
                 xe.SoLuongBanRa = (xe.SoLuongBanRa ?? 0) + soLuongBan;
-                
+
                 // Giảm số lượng tồn kho
                 xe.SoLuong = (xe.SoLuong ?? 1) - soLuongBan;
                 if (xe.SoLuong < 0) xe.SoLuong = 0;
@@ -436,7 +467,7 @@ namespace BLL
                     INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
                     WHERE xm.SoLuongBanRa > 0
                     ORDER BY xm.SoLuongBanRa DESC, DoanhThu DESC";
-                
+
                 return DAL.DataProvider.ExecuteQuery(query);
             }
             catch (Exception ex)
@@ -451,12 +482,12 @@ namespace BLL
             try
             {
                 DataTable dt = xeMayDAL.GetXeCoTheBan();
-                
+
                 if (dt.Rows.Count == 0)
                 {
                     throw new Exception("Hiện tại không có xe nào có thể bán!\nVui lòng kiểm tra lại kho xe.");
                 }
-                
+
                 return dt;
             }
             catch (Exception ex)
@@ -471,12 +502,12 @@ namespace BLL
             try
             {
                 DataTable dt = xeMayDAL.GetXeCoTheThue();
-                
+
                 if (dt.Rows.Count == 0)
                 {
                     throw new Exception("Hiện tại không có xe nào có thể cho thuê!\nVui lòng kiểm tra lại kho xe.");
                 }
-                
+
                 return dt;
             }
             catch (Exception ex)
@@ -532,7 +563,7 @@ namespace BLL
         public bool KiemTraXeKhaDungTheoThoiGian(string idXe, DateTime ngayBatDau, DateTime ngayKetThuc, out string errorMessage)
         {
             errorMessage = "";
-            
+
             try
             {
                 // Kiểm tra xe tồn tại và trạng thái
