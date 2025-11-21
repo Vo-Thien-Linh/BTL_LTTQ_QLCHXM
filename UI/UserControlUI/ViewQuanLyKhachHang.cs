@@ -1,10 +1,11 @@
-﻿using System;
+﻿using BLL;
+using DTO;
+using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using BLL;
-using DTO;
 using UI.FormHandleUI;
+using UI.FormUI;
 
 namespace UI.UserControlUI
 {
@@ -197,13 +198,13 @@ namespace UI.UserControlUI
         {
             try
             {
-                // Sử dụng constructor không tham số - chế độ THÊM
-                using (FormQuanLyKhachHang form = new FormQuanLyKhachHang())
+                // DÙNG FORM MỚI: FormThemKhachHang (không tham số = chế độ thêm mới)
+                using (var form = new FormThemKhachHang())
                 {
                     if (form.ShowDialog() == DialogResult.OK)
                     {
-                        LoadData();
-                        MessageBox.Show("Thêm khách hàng thành công!", "Thông báo",
+                        LoadData(); // Refresh danh sách sau khi thêm thành công
+                        MessageBox.Show("Thêm khách hàng thành công!", "Thành công",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
@@ -215,8 +216,11 @@ namespace UI.UserControlUI
             }
         }
 
+        // === THAY ĐỔI HÀM NÀY ===
         private void Btn_EditCustomer_Click(object sender, EventArgs e)
         {
+            
+
             if (dgvKhachHang.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Vui lòng chọn một khách hàng để sửa!", "Thông báo",
@@ -228,13 +232,37 @@ namespace UI.UserControlUI
             {
                 string maKH = dgvKhachHang.SelectedRows[0].Cells["MaKH"].Value.ToString();
 
-                // Sử dụng constructor có tham số - chế độ SỬA
-                using (FormQuanLyKhachHang form = new FormQuanLyKhachHang(maKH))
+                // Lấy dữ liệu khách hàng hiện tại từ database để truyền vào form
+                DataTable dt = khachHangBLL.GetKhachHangByMaKH(maKH);
+                if (dt.Rows.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy khách hàng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                DataRow row = dt.Rows[0];
+
+                KhachHangDTO kh = new KhachHangDTO
+                {
+                    MaKH = row["MaKH"].ToString(),
+                    HoTenKH = row["HoTenKH"].ToString(),
+                    NgaySinh = row["NgaySinh"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(row["NgaySinh"]),
+                    GioiTinh = row["GioiTinh"].ToString(),
+                    Sdt = row["Sdt"].ToString(),
+                    Email = row["Email"] == DBNull.Value ? null : row["Email"].ToString(),
+                    DiaChi = row["DiaChi"] == DBNull.Value ? null : row["DiaChi"].ToString(),
+                    SoCCCD = row["SoCCCD"] == DBNull.Value ? null : row["SoCCCD"].ToString(),
+                    LoaiGiayTo = row["LoaiGiayTo"] == DBNull.Value ? null : row["LoaiGiayTo"].ToString(),
+                    AnhGiayTo = row["AnhGiayTo"] == DBNull.Value ? null : (byte[])row["AnhGiayTo"]
+                };
+
+                // DÙNG FORM MỚI: truyền vào đối tượng KhachHangDTO = chế độ sửa
+                using (var form = new FormThemKhachHang(kh))
                 {
                     if (form.ShowDialog() == DialogResult.OK)
                     {
-                        LoadData();
-                        MessageBox.Show("Cập nhật khách hàng thành công!", "Thông báo",
+                        LoadData(); // Refresh lại danh sách
+                        MessageBox.Show("Cập nhật khách hàng thành công!", "Thành công",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }

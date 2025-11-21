@@ -51,6 +51,8 @@
             this.panelFooter = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
+            this.lblMatKhau = new System.Windows.Forms.Label();
+            this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.panelHeader.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -146,9 +148,11 @@
             this.groupBox1.Controls.Add(this.cboChucVu);
             this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.txtDiaChi);
+            this.groupBox1.Controls.Add(this.lblMatKhau);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.txtEmail);
             this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.txtMatKhau);
             this.groupBox1.Controls.Add(this.txtSdt);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.cboGioiTinh);
@@ -450,6 +454,25 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click_1);
             // 
+            // lblMatKhau
+            // 
+            this.lblMatKhau.AutoSize = true;
+            this.lblMatKhau.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblMatKhau.Location = new System.Drawing.Point(20, 368);
+            this.lblMatKhau.Name = "lblMatKhau";
+            this.lblMatKhau.Size = new System.Drawing.Size(86, 23);
+            this.lblMatKhau.TabIndex = 12;
+            this.lblMatKhau.Text = "Mật khẩu:";
+            // 
+            // txtMatKhau
+            // 
+            this.txtMatKhau.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtMatKhau.Location = new System.Drawing.Point(130, 361);
+            this.txtMatKhau.MaxLength = 10;
+            this.txtMatKhau.Name = "txtMatKhau";
+            this.txtMatKhau.Size = new System.Drawing.Size(200, 30);
+            this.txtMatKhau.TabIndex = 9;
+            // 
             // FormQuanLiNV
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -512,6 +535,8 @@
         private System.Windows.Forms.Panel panelFooter;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label lblMatKhau;
+        private System.Windows.Forms.TextBox txtMatKhau;
     }
 }
 

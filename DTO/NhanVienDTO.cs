@@ -19,13 +19,15 @@ namespace DTO
         public byte[] AnhNhanVien { get; set; }
         public DateTime? NgayVaoLam { get; set; }
 
+        public string Password { get; set; }
+
         public NhanVien()
         {
         }
 
         public NhanVien(string maNV, string hoTenNV, DateTime ngaySinh, string gioiTinh,
             string sdt, string email, string diaChi, string chucVu, decimal? luongCoBan,
-            string tinhTrangLamViec, string cccd, string trinhDoHocVan, byte[] anhNhanVien, DateTime? ngayVaoLam)
+            string tinhTrangLamViec, string cccd, string trinhDoHocVan, byte[] anhNhanVien, DateTime? ngayVaoLam, string password)
         {
             MaNV = maNV;
             HoTenNV = hoTenNV;
@@ -41,6 +43,7 @@ namespace DTO
             TrinhDoHocVan = trinhDoHocVan;
             AnhNhanVien = anhNhanVien;
             NgayVaoLam = ngayVaoLam;
+            password = password;
         }
     }
 }

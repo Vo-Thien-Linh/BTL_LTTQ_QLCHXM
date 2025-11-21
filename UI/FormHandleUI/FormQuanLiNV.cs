@@ -175,6 +175,16 @@ namespace UI.FormUI
                 return false;
             }
 
+            // ✅ BẮT BUỘC PHẢI CÓ SỐ ĐIỆN THOẠI ĐỂ TẠO TÀI KHOẢN
+            if (string.IsNullOrWhiteSpace(txtSdt.Text))
+            {
+                MessageBox.Show("Vui lòng nhập số điện thoại!\n\nSố điện thoại là bắt buộc để tạo tài khoản đăng nhập.",
+                    "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtSdt.Focus();
+                return false;
+            }
+
             if (cboGioiTinh.SelectedIndex < 0)
             {
                 MessageBox.Show("Vui lòng chọn giới tính!", "Thông báo",
@@ -229,21 +239,61 @@ namespace UI.FormUI
                 if (isEditMode)
                 {
                     result = nhanVienBLL.UpdateNhanVien(nv, out errorMessage);
+
+                    if (result)
+                    {
+                        MessageBox.Show("Cập nhật nhân viên thành công!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(errorMessage, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
                     result = nhanVienBLL.InsertNhanVien(nv, out errorMessage);
-                }
 
-                if (result)
-                {
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show(errorMessage, "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (result)
+                    {
+                        // ✅ HIỂN THỊ THÔNG TIN TÀI KHOẢN ĐÃ TẠO
+                        if (!string.IsNullOrEmpty(nv.Sdt))
+                        {
+                            string message = "✅ THÊM NHÂN VIÊN THÀNH CÔNG!\n\n" +
+                                           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                                           "📱 THÔNG TIN TÀI KHOẢN:\n" +
+                                           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
+                                           $"👤 Tên đăng nhập:  {nv.Sdt}\n" +
+                                           $"🔑 Mật khẩu:            {nv.Sdt}\n\n" +
+                                           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                                           "⚠️  LƯU Ý QUAN TRỌNG:\n" +
+                                           "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
+                                           "🔸 Vui lòng đổi mật khẩu sau lần\n" +
+                                           "   đăng nhập đầu tiên!\n" +
+                                           "🔸 Không chia sẻ thông tin tài khoản\n" +
+                                           "   cho người khác!";
+
+                            MessageBox.Show(message, "🎉 Tạo tài khoản thành công",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Thêm nhân viên thành công!\n\n⚠️ Không tạo được tài khoản do thiếu số điện thoại.",
+                                "Thông báo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show(errorMessage, "Lỗi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex)
