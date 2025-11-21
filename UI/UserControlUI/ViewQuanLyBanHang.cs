@@ -152,15 +152,15 @@ namespace UI.UserControlUI
             card.Controls.Add(lblThongTin);
 
             // Số lượng
-            Label lblSoLuong = new Label
-            {
-                Text = $"Còn: {soLuong} xe",
-                Location = new Point(10, 85),
-                Width = 250,
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                ForeColor = soLuong > 5 ? Color.FromArgb(76, 175, 80) : Color.FromArgb(255, 152, 0)
-            };
-            card.Controls.Add(lblSoLuong);
+            //Label lblSoLuong = new Label
+            //{
+            //    Text = $"Còn: {soLuong} xe",
+            //    Location = new Point(10, 85),
+            //    Width = 250,
+            //    Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+            //    ForeColor = soLuong > 5 ? Color.FromArgb(76, 175, 80) : Color.FromArgb(255, 152, 0)
+            //};
+            //card.Controls.Add(lblSoLuong);
 
             // Đường kẻ
             Panel divider = new Panel

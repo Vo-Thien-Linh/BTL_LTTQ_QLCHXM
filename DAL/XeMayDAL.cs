@@ -1,5 +1,6 @@
 
-﻿using DTO;
+
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -259,16 +260,50 @@ namespace DAL
             return result > 0;
         }
 
-        // Xóa xe
+        // Xóa xe (Cascade delete ThongTinGiaXe trước)
         public bool DeleteXeMay(string idXe)
         {
-            string query = "DELETE FROM XeMay WHERE ID_Xe = @ID_Xe";
-            SqlParameter[] parameters = {
-                new SqlParameter("@ID_Xe", idXe)
-            };
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                conn.Open();
+                using (SqlTransaction trans = conn.BeginTransaction())
+                {
+                    try
+                    {
+                        // ✅ B1: Xóa thông tin giá trước (Foreign Key)
+                        string deleteGiaQuery = "DELETE FROM ThongTinGiaXe WHERE ID_Xe = @ID_Xe";
+                        using (SqlCommand cmd = new SqlCommand(deleteGiaQuery, conn, trans))
+                        {
+                            cmd.Parameters.AddWithValue("@ID_Xe", idXe);
+                            cmd.ExecuteNonQuery();
+                        }
 
-            int result = DataProvider.ExecuteNonQuery(query, parameters);
-            return result > 0;
+                        // ✅ B2: Xóa xe
+                        string deleteXeQuery = "DELETE FROM XeMay WHERE ID_Xe = @ID_Xe";
+                        using (SqlCommand cmd = new SqlCommand(deleteXeQuery, conn, trans))
+                        {
+                            cmd.Parameters.AddWithValue("@ID_Xe", idXe);
+                            int result = cmd.ExecuteNonQuery();
+
+                            if (result > 0)
+                            {
+                                trans.Commit();
+                                return true;
+                            }
+                            else
+                            {
+                                trans.Rollback();
+                                return false;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        throw new Exception("Lỗi khi xóa xe: " + ex.Message);
+                    }
+                }
+            }
         }
 
         // Cập nhật trạng thái xe
