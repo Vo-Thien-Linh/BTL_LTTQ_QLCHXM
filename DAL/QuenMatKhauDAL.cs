@@ -26,14 +26,14 @@ namespace DAL
         {
             string query = @"
                 UPDATE TaiKhoan 
-                SET MatKhau = @matkhau 
+                SET Password = @Password 
                 FROM TaiKhoan tk
                 INNER JOIN NhanVien nv ON tk.MaNV = nv.MaNV
                 WHERE nv.Email = @email";
 
             var parameters = new SqlParameter[] {
                 new SqlParameter("@email", dto.Email),
-                new SqlParameter("@matkhau", dto.MatKhauMoi)
+                new SqlParameter("@Password", dto.MatKhauMoi)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;

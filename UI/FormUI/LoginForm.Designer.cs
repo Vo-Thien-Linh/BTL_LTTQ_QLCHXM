@@ -33,7 +33,6 @@
             this.btnDangNhap = new System.Windows.Forms.Button();
             this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.txtSoDienThoai = new System.Windows.Forms.TextBox();
-            this.lnkDangKy = new System.Windows.Forms.LinkLabel();
             this.lnkQuenMatKhau = new System.Windows.Forms.LinkLabel();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,7 +49,6 @@
             this.panel1.Controls.Add(this.btnDangNhap);
             this.panel1.Controls.Add(this.txtMatKhau);
             this.panel1.Controls.Add(this.txtSoDienThoai);
-            this.panel1.Controls.Add(this.lnkDangKy);
             this.panel1.Controls.Add(this.lnkQuenMatKhau);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label2);
@@ -96,27 +94,13 @@
             this.txtSoDienThoai.TabIndex = 6;
             this.txtSoDienThoai.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
-            // lnkDangKy
-            // 
-            this.lnkDangKy.AutoSize = true;
-            this.lnkDangKy.ForeColor = System.Drawing.Color.Transparent;
-            this.lnkDangKy.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.lnkDangKy.LinkColor = System.Drawing.Color.Blue;
-            this.lnkDangKy.Location = new System.Drawing.Point(354, 335);
-            this.lnkDangKy.Name = "lnkDangKy";
-            this.lnkDangKy.Size = new System.Drawing.Size(56, 16);
-            this.lnkDangKy.TabIndex = 4;
-            this.lnkDangKy.TabStop = true;
-            this.lnkDangKy.Text = "Đăng ký";
-            this.lnkDangKy.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkDangKy_LinkClicked);
-            // 
             // lnkQuenMatKhau
             // 
             this.lnkQuenMatKhau.AutoSize = true;
             this.lnkQuenMatKhau.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lnkQuenMatKhau.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.lnkQuenMatKhau.LinkColor = System.Drawing.Color.Blue;
-            this.lnkQuenMatKhau.Location = new System.Drawing.Point(37, 335);
+            this.lnkQuenMatKhau.Location = new System.Drawing.Point(169, 382);
             this.lnkQuenMatKhau.Name = "lnkQuenMatKhau";
             this.lnkQuenMatKhau.Size = new System.Drawing.Size(96, 16);
             this.lnkQuenMatKhau.TabIndex = 3;
@@ -175,7 +159,6 @@
         private System.Windows.Forms.Button btnDangNhap;
         private System.Windows.Forms.TextBox txtMatKhau;
         private System.Windows.Forms.TextBox txtSoDienThoai;
-        private System.Windows.Forms.LinkLabel lnkDangKy;
         private System.Windows.Forms.LinkLabel lnkQuenMatKhau;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;

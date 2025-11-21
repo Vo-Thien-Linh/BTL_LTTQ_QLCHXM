@@ -13,11 +13,21 @@ namespace UI.UserControlUI
 {
     public partial class ViewQuanLySanPham : UserControl
     {
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
         public ViewQuanLySanPham()
         {
             InitializeComponent();
             ThemeManager.Instance.ThemeChanged += OnThemeChanged;
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
+            langMgr.LanguageChanged += (s, e) => ApplyLanguage();
+            ApplyLanguage();
+        }
+
+        private void ApplyLanguage()
+        {
+            lblTitle.Text = langMgr.GetString("ProductTitle");
+            btnQuanLyXe.Text = langMgr.GetString("ManageVehicleBtn");
+            btnQuanLyPhuTung.Text = langMgr.GetString("ManagePhuTungBtn");
         }
 
         private void OnThemeChanged(object sender, EventArgs e)
@@ -43,7 +53,7 @@ namespace UI.UserControlUI
 
         private void ViewQuanLySanPham_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void lblTitle_Click(object sender, EventArgs e)

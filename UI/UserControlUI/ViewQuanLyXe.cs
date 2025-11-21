@@ -21,7 +21,9 @@ namespace UI.UserControlUI
         private Panel panelXeDetail;
         private DataTable currentData;
         private string selectedXeId = null;
-        
+
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+
         public ViewQuanLyXe()
         {
             InitializeComponent();
@@ -31,7 +33,37 @@ namespace UI.UserControlUI
             LoadData();
             ThemeManager.Instance.ThemeChanged += OnThemeChanged;
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
+
+            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
+            ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            btnThem.Text = langMgr.GetString("AddBtn");
+            btnSua.Text = langMgr.GetString("EditBtn");
+            btnXoa.Text = langMgr.GetString("DeleteBtn");
+            btnLamMoi.Text = langMgr.GetString("RefreshBtn");
+            btnTimKiem.Text = langMgr.GetString("SearchBtn");
+
+            lblTimKiemTheo.Text = langMgr.GetString("SearchBy");
+            lblTrangThai.Text = langMgr.GetString("Status");
+            lblTuKhoa.Text = langMgr.GetString("Keyword");
+
+            cbbTrangThai.Items[0] = langMgr.GetString("AllStatus");
+            cbbTrangThai.Items[1] = langMgr.GetString("ReadyStatus");
+            cbbTrangThai.Items[2] = langMgr.GetString("RentedStatus");
+            cbbTrangThai.Items[3] = langMgr.GetString("SoldStatus");
+            cbbTrangThai.Items[4] = langMgr.GetString("MaintenanceStatus");
+
+            cbbTimKiemTheo.Items[0] = langMgr.GetString("AllStatus");
+            cbbTimKiemTheo.Items[1] = langMgr.GetString("VehicleID");
+            cbbTimKiemTheo.Items[2] = langMgr.GetString("PlateNumber");
+            cbbTimKiemTheo.Items[3] = langMgr.GetString("Brand");
+            cbbTimKiemTheo.Items[4] = langMgr.GetString("Model");
+        }
+
+
 
         private void OnThemeChanged(object sender, EventArgs e)
         {

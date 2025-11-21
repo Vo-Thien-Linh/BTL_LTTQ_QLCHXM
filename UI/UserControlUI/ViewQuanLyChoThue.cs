@@ -503,6 +503,16 @@ namespace UI.UserControlUI
                     LoadData();
                 }
             }
-        } 
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelContent_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

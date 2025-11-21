@@ -7,20 +7,22 @@ namespace DAL
 {
     public class NhanVienDAL
     {
-        
+        /// <summary>
         /// Lấy tất cả nhân viên
+        /// </summary>
         public DataTable GetAllNhanVien()
         {
             string query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
                      ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                     AnhNhanVien, NgayVaoLam  -- Đảm bảo có AnhNhanVien
+                     AnhNhanVien, NgayVaoLam
                      FROM NhanVien 
                      ORDER BY MaNV";
             return DataProvider.ExecuteQuery(query);
         }
 
-        
+        /// <summary>
         /// Tìm kiếm nhân viên theo nhiều tiêu chí
+        /// </summary>
         public DataTable SearchNhanVien(string searchBy, string keyword)
         {
             string query = "";
@@ -72,13 +74,15 @@ namespace DAL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-        
+        /// <summary>
         /// Lấy thông tin nhân viên theo mã
+        /// </summary>
         public DataTable GetNhanVienByMaNV(string maNV)
         {
+            // ✅ BỎ CỘT Password VÌ KHÔNG TỒN TẠI TRONG BẢNG NhanVien
             string query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
                             ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                            AnhNhanVien, NgayVaoLam, Password
+                            AnhNhanVien, NgayVaoLam
                             FROM NhanVien 
                             WHERE MaNV = @MaNV";
             SqlParameter[] parameters = new SqlParameter[]
@@ -88,10 +92,9 @@ namespace DAL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-
+        /// <summary>
         /// Thêm nhân viên mới
-
-
+        /// </summary>
         public bool InsertNhanVien(NhanVien nv)
         {
             string query = @"INSERT INTO NhanVien 
@@ -102,48 +105,6 @@ namespace DAL
                     (@MaNV, @HoTenNV, @NgaySinh, @GioiTinh, @Sdt, @Email, 
                     @DiaChi, @ChucVu, @LuongCoBan, @TinhTrangLamViec, @CCCD, @TrinhDoHocVan, 
                     @AnhNhanVien, @NgayVaoLam)";
-
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-        new SqlParameter("@MaNV", nv.MaNV),
-        new SqlParameter("@HoTenNV", nv.HoTenNV),
-        new SqlParameter("@NgaySinh", nv.NgaySinh),
-        new SqlParameter("@GioiTinh", nv.GioiTinh),
-        new SqlParameter("@Sdt", (object)nv.Sdt ?? DBNull.Value),
-        new SqlParameter("@Email", (object)nv.Email ?? DBNull.Value),
-        new SqlParameter("@DiaChi", (object)nv.DiaChi ?? DBNull.Value),
-        new SqlParameter("@ChucVu", (object)nv.ChucVu ?? DBNull.Value),
-        new SqlParameter("@LuongCoBan", (object)nv.LuongCoBan ?? DBNull.Value),
-        new SqlParameter("@TinhTrangLamViec", nv.TinhTrangLamViec),
-        new SqlParameter("@CCCD", (object)nv.CCCD ?? DBNull.Value),
-        new SqlParameter("@TrinhDoHocVan", (object)nv.TrinhDoHocVan ?? DBNull.Value),
-        new SqlParameter("@AnhNhanVien", (object)nv.AnhNhanVien ?? DBNull.Value),
-        new SqlParameter("@NgayVaoLam", (object)nv.NgayVaoLam ?? DateTime.Now)
-            };
-
-            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
-        }
-
-
-        /// Cập nhật thông tin nhân viên
-
-        public bool UpdateNhanVien(NhanVien nv)
-        {
-            string query = @"UPDATE NhanVien 
-                            SET HoTenNV = @HoTenNV, 
-                                NgaySinh = @NgaySinh, 
-                                GioiTinh = @GioiTinh, 
-                                Sdt = @Sdt, 
-                                Email = @Email, 
-                                DiaChi = @DiaChi, 
-                                ChucVu = @ChucVu, 
-                                LuongCoBan = @LuongCoBan, 
-                                TinhTrangLamViec = @TinhTrangLamViec, 
-                                CCCD = @CCCD, 
-                                TrinhDoHocVan = @TrinhDoHocVan, 
-                                AnhNhanVien = @AnhNhanVien
-                                password = @Password
-                            WHERE MaNV = @MaNV";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -160,14 +121,57 @@ namespace DAL
                 new SqlParameter("@CCCD", (object)nv.CCCD ?? DBNull.Value),
                 new SqlParameter("@TrinhDoHocVan", (object)nv.TrinhDoHocVan ?? DBNull.Value),
                 new SqlParameter("@AnhNhanVien", (object)nv.AnhNhanVien ?? DBNull.Value),
-                new SqlParameter("@Password", nv.Password)
+                new SqlParameter("@NgayVaoLam", (object)nv.NgayVaoLam ?? DateTime.Now)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        
+        /// <summary>
+        /// Cập nhật thông tin nhân viên
+        /// </summary>
+        public bool UpdateNhanVien(NhanVien nv)
+        {
+            // ✅ BỎ DÒNG password = @Password VÌ KHÔNG CÓ CỘT NÀY
+            string query = @"UPDATE NhanVien 
+                            SET HoTenNV = @HoTenNV, 
+                                NgaySinh = @NgaySinh, 
+                                GioiTinh = @GioiTinh, 
+                                Sdt = @Sdt, 
+                                Email = @Email, 
+                                DiaChi = @DiaChi, 
+                                ChucVu = @ChucVu, 
+                                LuongCoBan = @LuongCoBan, 
+                                TinhTrangLamViec = @TinhTrangLamViec, 
+                                CCCD = @CCCD, 
+                                TrinhDoHocVan = @TrinhDoHocVan, 
+                                AnhNhanVien = @AnhNhanVien
+                            WHERE MaNV = @MaNV";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaNV", nv.MaNV),
+                new SqlParameter("@HoTenNV", nv.HoTenNV),
+                new SqlParameter("@NgaySinh", nv.NgaySinh),
+                new SqlParameter("@GioiTinh", nv.GioiTinh),
+                new SqlParameter("@Sdt", (object)nv.Sdt ?? DBNull.Value),
+                new SqlParameter("@Email", (object)nv.Email ?? DBNull.Value),
+                new SqlParameter("@DiaChi", (object)nv.DiaChi ?? DBNull.Value),
+                new SqlParameter("@ChucVu", (object)nv.ChucVu ?? DBNull.Value),
+                new SqlParameter("@LuongCoBan", (object)nv.LuongCoBan ?? DBNull.Value),
+                new SqlParameter("@TinhTrangLamViec", nv.TinhTrangLamViec),
+                new SqlParameter("@CCCD", (object)nv.CCCD ?? DBNull.Value),
+                new SqlParameter("@TrinhDoHocVan", (object)nv.TrinhDoHocVan ?? DBNull.Value),
+                new SqlParameter("@AnhNhanVien", (object)nv.AnhNhanVien ?? DBNull.Value)
+                // ✅ BỎ @Password VÌ KHÔNG CÓ CỘT NÀY TRONG BẢNG NhanVien
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        /// <summary>
         /// Xóa nhân viên
+        /// </summary>
         public bool DeleteNhanVien(string maNV)
         {
             string query = "DELETE FROM NhanVien WHERE MaNV = @MaNV";
@@ -178,8 +182,9 @@ namespace DAL
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
-        
+        /// <summary>
         /// Kiểm tra mã nhân viên đã tồn tại
+        /// </summary>
         public bool CheckMaNVExists(string maNV)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE MaNV = @MaNV";
@@ -191,8 +196,9 @@ namespace DAL
             return count > 0;
         }
 
-        
+        /// <summary>
         /// Kiểm tra số điện thoại đã tồn tại
+        /// </summary>
         public bool CheckSdtExists(string sdt, string maNV = null)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE Sdt = @Sdt";
@@ -230,13 +236,15 @@ namespace DAL
             string query = "SELECT COUNT(*) FROM KhachHang WHERE Sdt = @Sdt";
             SqlParameter[] parameters = new SqlParameter[]
             {
-        new SqlParameter("@Sdt", sdt)
+                new SqlParameter("@Sdt", sdt)
             };
             int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
             return count > 0;
         }
 
+        /// <summary>
         /// Kiểm tra email đã tồn tại
+        /// </summary>
         public bool CheckEmailExists(string email, string maNV = null)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE Email = @Email";
@@ -266,9 +274,9 @@ namespace DAL
             return count > 0;
         }
 
-        
+        /// <summary>
         /// Kiểm tra CCCD đã tồn tại
-       
+        /// </summary>
         public bool CheckCCCDExists(string cccd, string maNV = null)
         {
             string query = "SELECT COUNT(*) FROM NhanVien WHERE CCCD = @CCCD";
@@ -298,8 +306,9 @@ namespace DAL
             return count > 0;
         }
 
-        
+        /// <summary>
         /// Tự động tạo mã nhân viên mới
+        /// </summary>
         public string GenerateMaNV()
         {
             string query = "SELECT TOP 1 MaNV FROM NhanVien ORDER BY MaNV DESC";
@@ -317,4 +326,3 @@ namespace DAL
         }
     }
 }
-

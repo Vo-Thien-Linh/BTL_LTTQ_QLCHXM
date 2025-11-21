@@ -117,14 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ActionBuy" xml:space="preserve">
+    <value>BUY NOW</value>
+  </data>
+  <data name="ActionRent" xml:space="preserve">
+    <value>RENT NOW</value>
+  </data>
   <data name="AddBtn" xml:space="preserve">
     <value>+ Add new</value>
+  </data>
+  <data name="AddPartTitle" xml:space="preserve">
+    <value>Add part</value>
   </data>
   <data name="Address" xml:space="preserve">
     <value>Address</value>
   </data>
+  <data name="AllStatus" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="AmountColumn" xml:space="preserve">
+    <value>Amount</value>
+  </data>
   <data name="Animations" xml:space="preserve">
     <value>Enable animations</value>
+  </data>
+  <data name="ApproveBtn" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="ApproveRentalTitle" xml:space="preserve">
+    <value>APPROVE RENTAL</value>
+  </data>
+  <data name="BadgeWaitApprove" xml:space="preserve">
+    <value>WAITING</value>
   </data>
   <data name="BirthDate" xml:space="preserve">
     <value>Date of Birth</value>
@@ -138,6 +162,9 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="BuyBtn" xml:space="preserve">
+    <value>BUY</value>
+  </data>
   <data name="CancelConfirm" xml:space="preserve">
     <value>Changes canceled!</value>
   </data>
@@ -146,6 +173,9 @@
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="CreateBtn" xml:space="preserve">
+    <value>Create maintenance slip</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Created Date</value>
@@ -159,8 +189,17 @@
   <data name="DaysBefore" xml:space="preserve">
     <value>Days before notification:</value>
   </data>
+  <data name="DaysLabel" xml:space="preserve">
+    <value>({0} days)</value>
+  </data>
   <data name="DeleteBtn" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="DetailBtn" xml:space="preserve">
+    <value>DETAILS</value>
+  </data>
+  <data name="DetailTitle" xml:space="preserve">
+    <value>Part details</value>
   </data>
   <data name="EditBtn" xml:space="preserve">
     <value>Edit</value>
@@ -192,6 +231,9 @@
   <data name="Info" xml:space="preserve">
     <value>Info</value>
   </data>
+  <data name="InfoTitle" xml:space="preserve">
+    <value>Maintenance info</value>
+  </data>
   <data name="Interface" xml:space="preserve">
     <value>Interface</value>
   </data>
@@ -207,8 +249,23 @@
   <data name="LoadError" xml:space="preserve">
     <value>Error loading settings:</value>
   </data>
+  <data name="MaintenanceListTitle" xml:space="preserve">
+    <value>Maintenance list</value>
+  </data>
+  <data name="MaintenanceStatus" xml:space="preserve">
+    <value>Maintenance</value>
+  </data>
+  <data name="MaintenanceTitle" xml:space="preserve">
+    <value>MAINTENANCE MANAGEMENT</value>
+  </data>
+  <data name="ManagePhuTungBtn" xml:space="preserve">
+    <value>Parts Management</value>
+  </data>
   <data name="Manager" xml:space="preserve">
     <value>Manager</value>
+  </data>
+  <data name="ManageVehicleBtn" xml:space="preserve">
+    <value>Vehicle Management</value>
   </data>
   <data name="MenuCustomer" xml:space="preserve">
     <value>Customer Manager</value>
@@ -240,8 +297,20 @@
   <data name="NoCustomerData" xml:space="preserve">
     <value>No customer data</value>
   </data>
+  <data name="NoDataWaitApprove" xml:space="preserve">
+    <value>No rentals to approve!</value>
+  </data>
   <data name="NoEmployeeData" xml:space="preserve">
     <value>No employee data</value>
+  </data>
+  <data name="NoPermissionBtn" xml:space="preserve">
+    <value>NO PERMISSION</value>
+  </data>
+  <data name="NoSaleData" xml:space="preserve">
+    <value>No ready-to-sell vehicles</value>
+  </data>
+  <data name="NoteLabel" xml:space="preserve">
+    <value>Note:</value>
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>Notifications</value>
@@ -258,8 +327,41 @@
   <data name="NotifyRental" xml:space="preserve">
     <value>Notify when customer rental is expiring</value>
   </data>
+  <data name="OrderLabel" xml:space="preserve">
+    <value>Order #{0}</value>
+  </data>
+  <data name="PartCodeColumn" xml:space="preserve">
+    <value>Part Code</value>
+  </data>
+  <data name="PartLabel" xml:space="preserve">
+    <value>Part:</value>
+  </data>
+  <data name="PartNameColumn" xml:space="preserve">
+    <value>Part Name</value>
+  </data>
+  <data name="PartNoteColumn" xml:space="preserve">
+    <value>Note</value>
+  </data>
   <data name="Phone" xml:space="preserve">
     <value>Phone</value>
+  </data>
+  <data name="PlateLabel" xml:space="preserve">
+    <value> Plate: {0}</value>
+  </data>
+  <data name="PriceContact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="ProductTitle" xml:space="preserve">
+    <value>PRODUCT MANAGEMENT</value>
+  </data>
+  <data name="QtyColumn" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="QuantityLabel" xml:space="preserve">
+    <value>Left: {0} vehicles</value>
+  </data>
+  <data name="ReadyStatus" xml:space="preserve">
+    <value>Ready</value>
   </data>
   <data name="RecordCount" xml:space="preserve">
     <value>Total records: {0}</value>
@@ -267,11 +369,23 @@
   <data name="RefreshBtn" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="RejectBtn" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="RemoveBtnColumn" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="RentedStatus" xml:space="preserve">
+    <value>Rented</value>
+  </data>
   <data name="RestoreConfirm" xml:space="preserve">
     <value>Are you sure you want to restore default settings?</value>
   </data>
   <data name="RestoreSuccess" xml:space="preserve">
     <value>Default settings restored!</value>
+  </data>
+  <data name="SaleTitle" xml:space="preserve">
+    <value>SALE MANAGEMENT</value>
   </data>
   <data name="SaveError" xml:space="preserve">
     <value>Error saving settings:</value>
@@ -291,6 +405,21 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="SoldStatus" xml:space="preserve">
+    <value>Sold</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="TabApproveRental" xml:space="preserve">
+    <value>Approve Rental</value>
+  </data>
+  <data name="TabManageRental" xml:space="preserve">
+    <value>Rental Management</value>
+  </data>
+  <data name="TechnicianLabel" xml:space="preserve">
+    <value>Technician:</value>
+  </data>
   <data name="Theme" xml:space="preserve">
     <value>Select theme:</value>
   </data>
@@ -303,17 +432,50 @@
   <data name="ThemeLight" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="TotalCost" xml:space="preserve">
+    <value>TOTAL COST:</value>
+  </data>
+  <data name="TotalWaitApprove" xml:space="preserve">
+    <value>Total: {0} pending</value>
+  </data>
   <data name="Trial" xml:space="preserve">
     <value>Trial</value>
+  </data>
+  <data name="UnitColumn" xml:space="preserve">
+    <value>Unit</value>
   </data>
   <data name="UpdatedDate" xml:space="preserve">
     <value>Updated Date</value>
   </data>
+  <data name="UsagePriceColumn" xml:space="preserve">
+    <value>Unit Price</value>
+  </data>
+  <data name="VehicleDetailTitle" xml:space="preserve">
+    <value>VEHICLE DETAILS</value>
+  </data>
+  <data name="VehicleLabel" xml:space="preserve">
+    <value>Vehicle:</value>
+  </data>
+  <data name="VehicleTitle" xml:space="preserve">
+    <value>VEHICLE MANAGEMENT</value>
+  </data>
   <data name="Vietnamese" xml:space="preserve">
     <value>Vietnamese</value>
   </data>
+  <data name="ViewContractBtn" xml:space="preserve">
+    <value>View Contract</value>
+  </data>
+  <data name="ViewDetailBtn" xml:space="preserve">
+    <value>View Details</value>
+  </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
+  </data>
+  <data name="WarningConflict" xml:space="preserve">
+    <value>SCHEDULE CONFLICT!</value>
+  </data>
+  <data name="WarningOverdue" xml:space="preserve">
+    <value>OVERDUE!</value>
   </data>
   <data name="Working" xml:space="preserve">
     <value>Working</value>
