@@ -1,6 +1,7 @@
 ﻿using BLL;
 using DTO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -19,6 +20,9 @@ namespace UI.UserControlUI
         private DataTable currentData;
         private string selectedEmployeeId = null;
         private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+        private Dictionary<string, string> searchFieldMap;
+
+        
 
         public ViewQuanLyNhanVien()
         {
@@ -41,6 +45,20 @@ namespace UI.UserControlUI
             // Đăng ký cập nhật ngôn ngữ động
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
             ApplyLanguage();
+
+            InitSearchFieldMap();
+        }
+
+        private void InitSearchFieldMap()   
+        {
+            searchFieldMap = new Dictionary<string, string>
+    {
+        { langMgr.GetString("Mã nhân viên"), "MaNV" },
+        { langMgr.GetString("FullName"), "HoTenNV" },
+        { langMgr.GetString("Phone"), "Sdt" },
+        { langMgr.GetString("Email"), "Email" },
+        { langMgr.GetString("vai trò"), "ChucVu" }
+    };
         }
 
 
@@ -65,6 +83,8 @@ namespace UI.UserControlUI
             }
         }
 
+
+
         private void ApplyLanguage()
         {
             // Gán lại text từ resource cho tất cả controls
@@ -81,12 +101,11 @@ namespace UI.UserControlUI
             // ComboBox tìm kiếm
             var searchOptions = new[]
             {
-                langMgr.GetString("EmployeeID"),
+                langMgr.GetString("Mã nhân viên"),
                 langMgr.GetString("FullName"),
-                langMgr.GetString("Position"),
+                langMgr.GetString("vai trò"),
                 langMgr.GetString("Phone"),
                 langMgr.GetString("Email")
-                // ...thêm các trường khác nếu có...
             };
             if (cboTimKiem.Items.Count != searchOptions.Length)
             {
@@ -552,8 +571,15 @@ namespace UI.UserControlUI
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            string searchBy = cboTimKiem.SelectedItem?.ToString() ?? "Mã nhân viên";
+            string displayField = cboTimKiem.SelectedItem?.ToString() ?? langMgr.GetString("EmployeeID");
             string keyword = txtTuKhoa.Text.Trim();
+
+            // Map sang tên trường database
+            string searchField;
+            if (!searchFieldMap.TryGetValue(displayField, out searchField))
+            {
+                searchField = "MaNV"; // default nếu không thấy
+            }
 
             if (string.IsNullOrEmpty(keyword))
             {
@@ -563,7 +589,7 @@ namespace UI.UserControlUI
 
             try
             {
-                DataTable dt = nhanVienBLL.SearchNhanVien(searchBy, keyword);
+                DataTable dt = nhanVienBLL.SearchNhanVien(searchField, keyword);
                 currentData = dt;
                 DisplayEmployeeCards(dt);
                 UpdateRecordCount(dt.Rows.Count);

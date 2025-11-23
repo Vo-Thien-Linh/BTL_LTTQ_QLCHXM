@@ -42,17 +42,7 @@ namespace BLL
 
 
         // Tìm kiếm xe
-        public DataTable SearchXeMay(string keyword, string trangThai)
-        {
-            try
-            {
-                return xeMayDAL.SearchXeMay(keyword, trangThai);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Lỗi khi tìm kiếm xe: " + ex.Message);
-            }
-        }
+        
 
         // Lấy thông tin xe theo ID
         public XeMayDTO GetXeMayById(string idXe)
@@ -231,6 +221,11 @@ namespace BLL
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public DataTable SearchXeMay(string searchField, string searchKeyword, string trangThai)
+        {
+            return xeMayDAL.SearchXeMay(searchField, searchKeyword, trangThai);
         }
 
         // Cập nhật thông tin xe

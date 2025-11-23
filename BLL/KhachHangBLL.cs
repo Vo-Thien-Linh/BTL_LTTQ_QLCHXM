@@ -174,7 +174,7 @@ namespace BLL
                     return false;
                 }
             }
-
+                
             if (!string.IsNullOrEmpty(kh.Email))
             {
                 if (!Regex.IsMatch(kh.Email, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"))

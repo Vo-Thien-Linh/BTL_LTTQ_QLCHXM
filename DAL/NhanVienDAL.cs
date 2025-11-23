@@ -1,7 +1,8 @@
-﻿using System;
+﻿using DTO;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using DTO;
+using System.Linq;
 
 namespace DAL
 {
@@ -25,54 +26,23 @@ namespace DAL
         /// </summary>
         public DataTable SearchNhanVien(string searchBy, string keyword)
         {
-            string query = "";
-            SqlParameter[] parameters = null;
+            // Chỉ cho phép search các trường hợp lệ
+            string[] VALID_FIELDS = { "MaNV", "HoTenNV", "Sdt", "Email", "ChucVu" };
+            if (!VALID_FIELDS.Contains(searchBy))
+                return GetAllNhanVien();
 
-            switch (searchBy)
-            {
-                case "Mã nhân viên":
-                    query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                             AnhNhanVien, NgayVaoLam 
-                             FROM NhanVien 
-                             WHERE MaNV LIKE @keyword 
-                             ORDER BY MaNV";
-                    break;
-                case "Họ và tên":
-                    query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                             AnhNhanVien, NgayVaoLam 
-                             FROM NhanVien 
-                             WHERE HoTenNV LIKE @keyword 
-                             ORDER BY MaNV";
-                    break;
-                case "Số điện thoại":
-                    query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                             AnhNhanVien, NgayVaoLam 
-                             FROM NhanVien 
-                             WHERE Sdt LIKE @keyword 
-                             ORDER BY MaNV";
-                    break;
-                case "Email":
-                    query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
-                             AnhNhanVien, NgayVaoLam 
-                             FROM NhanVien 
-                             WHERE Email LIKE @keyword 
-                             ORDER BY MaNV";
-                    break;
-                default:
-                    return GetAllNhanVien();
-            }
-
-            parameters = new SqlParameter[]
-            {
-                new SqlParameter("@keyword", "%" + keyword + "%")
-            };
-
+            string query = $@"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
+                    ChucVu, LuongCoBan, TinhTrangLamViec, CCCD, TrinhDoHocVan, 
+                    AnhNhanVien, NgayVaoLam
+             FROM NhanVien 
+             WHERE {searchBy} LIKE @keyword
+             ORDER BY MaNV";
+            SqlParameter[] parameters = new SqlParameter[] {
+        new SqlParameter("@keyword", "%" + keyword + "%")
+    };
             return DataProvider.ExecuteQuery(query, parameters);
         }
+
 
         /// <summary>
         /// Lấy thông tin nhân viên theo mã

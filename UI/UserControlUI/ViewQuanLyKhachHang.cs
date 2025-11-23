@@ -1,11 +1,13 @@
 ﻿using BLL;
 using DTO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using UI.FormHandleUI;
 using UI.FormUI;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace UI.UserControlUI
 {
@@ -14,6 +16,8 @@ namespace UI.UserControlUI
         private KhachHangBLL khachHangBLL;
         private DataGridView dgvKhachHang;
         private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+        private Dictionary<string, string> searchFieldMap;
+
 
 
         public ViewQuanLyKhachHang()
@@ -43,7 +47,22 @@ namespace UI.UserControlUI
             // Đăng ký cập nhật ngôn ngữ động
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
             ApplyLanguage();
+            InitSearchFieldMap();
+            cboSearchBy.SelectedIndex = 0;
+
+
         }
+        private void InitSearchFieldMap()
+        {
+            searchFieldMap = new Dictionary<string, string>
+            {
+                { langMgr.GetString("CustomerID"), "MaKH" },
+                { langMgr.GetString("FullName"), "HoTenKH" },
+                { langMgr.GetString("Phone"), "Sdt" },
+                { langMgr.GetString("Email"), "Email"}
+            };
+        }
+
 
         private void ApplyLanguage()
         {
@@ -66,6 +85,8 @@ namespace UI.UserControlUI
             }
             UpdateRecordCount(dgvKhachHang.RowCount);
             FormatDataGridView();
+
+
         }
 
 
@@ -164,8 +185,12 @@ namespace UI.UserControlUI
 
         private void BtnSearch_Click(object sender, EventArgs e)
         {
-            string searchBy = cboSearchBy.SelectedItem?.ToString() ?? "Mã khách hàng";
+            string displayField = cboSearchBy.SelectedItem?.ToString() ?? langMgr.GetString("CustomerID");
             string keyword = txtSearch.Text.Trim();
+
+            string searchField;
+            if (!searchFieldMap.TryGetValue(displayField, out searchField))
+                searchField = "MaKH"; // Default field nếu không khớp
 
             if (string.IsNullOrEmpty(keyword))
             {
@@ -175,7 +200,7 @@ namespace UI.UserControlUI
 
             try
             {
-                DataTable dt = khachHangBLL.SearchKhachHang(searchBy, keyword);
+                DataTable dt = khachHangBLL.SearchKhachHang(searchField, keyword);
                 dgvKhachHang.DataSource = dt;
                 UpdateRecordCount(dt.Rows.Count);
                 FormatDataGridView();
@@ -354,6 +379,11 @@ namespace UI.UserControlUI
         }
 
         private void panelDataGrid_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void cboSearchBy_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

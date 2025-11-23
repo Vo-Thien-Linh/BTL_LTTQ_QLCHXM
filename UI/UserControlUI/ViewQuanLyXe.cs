@@ -24,6 +24,9 @@ namespace UI.UserControlUI
 
         private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
 
+        private Dictionary<string, string> searchFieldMap;
+
+
         public ViewQuanLyXe()
         {
             InitializeComponent();
@@ -36,7 +39,22 @@ namespace UI.UserControlUI
 
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
             ApplyLanguage();
+            
+            InitSearchFieldMap();
+
         }
+
+        private void InitSearchFieldMap()
+        {
+            searchFieldMap = new Dictionary<string, string>
+    {
+        { langMgr.GetString("Biển số"), "BienSo" },
+        { langMgr.GetString("Hãng"), "TenHang" },
+        { langMgr.GetString("Dòng"), "TenDong" },
+        // Có thể có thêm field khác nếu cần thiết
+    };
+        }
+
 
         private void ApplyLanguage()
         {
@@ -641,35 +659,35 @@ namespace UI.UserControlUI
         }
 
         // Load dữ liệu
-        private void LoadData(string searchKeyword = null, string trangThai = null)
+        private void LoadData(string searchField = null, string searchKeyword = null, string trangThai = null)
         {
             try
             {
                 DataTable dt;
 
                 if (string.IsNullOrEmpty(searchKeyword) &&
-                    (string.IsNullOrEmpty(trangThai) || trangThai == "Tất cả"))
+                    (string.IsNullOrEmpty(trangThai) || trangThai == "Tất cả") &&
+                    string.IsNullOrEmpty(searchField))
                 {
                     dt = xeMayBLL.GetAllXeMay();
                 }
                 else
                 {
-                    dt = xeMayBLL.SearchXeMay(searchKeyword, trangThai);
+                    dt = xeMayBLL.SearchXeMay(searchField, searchKeyword, trangThai);
                 }
 
                 currentData = dt;
-                
-                // Debug: Kiểm tra số lượng xe
+
                 if (dt == null || dt.Rows.Count == 0)
                 {
-                    MessageBox.Show("Database chưa có xe nào!\nVui lòng thêm xe mới.", 
+                    MessageBox.Show("Database chưa có xe nào!\nVui lòng thêm xe mới.",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     flowPanelXe.Controls.Clear();
                     return;
                 }
-                
+
                 DisplayXeCards(dt);
-                
+
                 // Cập nhật số lượng
                 Label lblCount = this.Controls.Find("lblRecordCount", true).FirstOrDefault() as Label;
                 if (lblCount != null)
@@ -682,6 +700,10 @@ namespace UI.UserControlUI
                 MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message + "\n\n" + ex.StackTrace, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            cbbTrangThai.DropDownStyle = ComboBoxStyle.DropDownList;
+            cbbTimKiemTheo.DropDownStyle = ComboBoxStyle.DropDownList;
+
         }
 
 
@@ -699,9 +721,28 @@ namespace UI.UserControlUI
 
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
-            string searchKeyword = txtTuKhoa.Text.Trim();
+            string keyword = txtTuKhoa.Text.Trim();
             string trangThai = cbbTrangThai.SelectedItem?.ToString();
-            LoadData(searchKeyword, trangThai);
+
+            // Xử lý field theo ánh xạ
+            string displayField = cbbTimKiemTheo.SelectedItem?.ToString() ?? langMgr.GetString("VehicleID");
+            string searchField;
+            if (!searchFieldMap.TryGetValue(displayField, out searchField))
+                searchField = null;
+
+            // Nếu chọn "Tất cả" hoặc không có searchField thì tìm theo tất cả hoặc chỉ trạng thái
+            if (string.IsNullOrEmpty(keyword) || string.IsNullOrEmpty(searchField) || displayField == langMgr.GetString("AllStatus"))
+            {
+                LoadData(null, trangThai);
+                return;
+            }
+            else
+            {
+                // Truyền field name, keyword & trạng thái (nếu có) xuống BLL
+                DataTable dt = xeMayBLL.SearchXeMay(searchField, keyword, trangThai);
+                currentData = dt;
+                DisplayXeCards(dt);
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

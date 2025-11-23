@@ -1,7 +1,8 @@
-﻿using System;
+﻿using DTO;
+using System;
 using System.Data;
 using System.Data.SqlClient;
-using DTO;
+using System.Linq;
 
 namespace DAL
 {
@@ -24,48 +25,15 @@ namespace DAL
         /// </summary>
         public DataTable SearchKhachHang(string searchBy, string keyword)
         {
-            string query = "";
-            SqlParameter[] parameters = null;
+            string[] VALID_FIELDS = { "MaKH", "HoTenKH", "Sdt", "Email" };
 
-            switch (searchBy)
-            {
-                case "Mã khách hàng":
-                    query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
-                             FROM KhachHang 
-                             WHERE MaKH LIKE @keyword 
-                             ORDER BY MaKH DESC";
-                    break;
-                case "Họ và tên":
-                    query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
-                             FROM KhachHang 
-                             WHERE HoTenKH LIKE @keyword 
-                             ORDER BY MaKH DESC";
-                    break;
-                case "Số điện thoại":
-                    query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
-                             FROM KhachHang 
-                             WHERE Sdt LIKE @keyword 
-                             ORDER BY MaKH DESC";
-                    break;
-                case "Email":
-                    query = @"SELECT MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
-                             NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo 
-                             FROM KhachHang 
-                             WHERE Email LIKE @keyword 
-                             ORDER BY MaKH DESC";
-                    break;
-                default:
-                    return GetAllKhachHang();
-            }
+            if (!VALID_FIELDS.Contains(searchBy))
+                return GetAllKhachHang();
 
-            parameters = new SqlParameter[]
-            {
-                new SqlParameter("@keyword", "%" + keyword + "%")
-            };
-
+            string query = $@"SELECT * FROM KhachHang WHERE {searchBy} LIKE @keyword ORDER BY MaKH";
+            SqlParameter[] parameters = new SqlParameter[] {
+        new SqlParameter("@keyword", "%" + keyword + "%")
+    };
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
