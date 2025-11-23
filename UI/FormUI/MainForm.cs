@@ -399,15 +399,12 @@ namespace UI.FormUI
 
         private void pnlContent_Paint(object sender, PaintEventArgs e)
         {
-            // Không cần code gì cũng được
         }
         private void pnlMenuBar_Paint(object sender, PaintEventArgs e)
         {
-            // Không cần code gì cũng được
         }
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-            // Không cần code gì cũng được
         }
 
         private void LoadQuanLyChoThueWithTabs()

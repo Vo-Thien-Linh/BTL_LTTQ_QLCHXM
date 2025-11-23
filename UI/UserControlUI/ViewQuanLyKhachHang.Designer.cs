@@ -137,6 +137,7 @@ partial class ViewQuanLyKhachHang
             this.cboSearchBy.Name = "cboSearchBy";
             this.cboSearchBy.Size = new System.Drawing.Size(180, 31);
             this.cboSearchBy.TabIndex = 1;
+            this.cboSearchBy.SelectedIndexChanged += new System.EventHandler(this.cboSearchBy_SelectedIndexChanged);
             // 
             // lblSearchBy
             // 

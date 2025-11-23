@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.panel3 = new System.Windows.Forms.Panel();
-            this.cbbTrangThai = new System.Windows.Forms.ComboBox();
-            this.lblTrangThai = new System.Windows.Forms.Label();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.txtTuKhoa = new System.Windows.Forms.TextBox();
             this.cbbTimKiemTheo = new System.Windows.Forms.ComboBox();
@@ -42,6 +40,8 @@
             this.btnXoa = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.btnThem = new System.Windows.Forms.Button();
+            this.lblTrangThai = new System.Windows.Forms.Label();
+            this.cbbTrangThai = new System.Windows.Forms.ComboBox();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuanLyXe)).BeginInit();
@@ -63,24 +63,6 @@
             this.panel3.Size = new System.Drawing.Size(1934, 134);
             this.panel3.TabIndex = 3;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
-            // 
-            // cbbTrangThai
-            // 
-            this.cbbTrangThai.FormattingEnabled = true;
-            this.cbbTrangThai.Location = new System.Drawing.Point(507, 73);
-            this.cbbTrangThai.Name = "cbbTrangThai";
-            this.cbbTrangThai.Size = new System.Drawing.Size(369, 24);
-            this.cbbTrangThai.TabIndex = 5;
-            this.cbbTrangThai.SelectedIndexChanged += new System.EventHandler(this.cbbTrangThai_SelectedIndexChanged);
-            // 
-            // lblTrangThai
-            // 
-            this.lblTrangThai.AutoSize = true;
-            this.lblTrangThai.Location = new System.Drawing.Point(504, 37);
-            this.lblTrangThai.Name = "lblTrangThai";
-            this.lblTrangThai.Size = new System.Drawing.Size(73, 16);
-            this.lblTrangThai.TabIndex = 4;
-            this.lblTrangThai.Text = "Trạng Thái";
             // 
             // btnTimKiem
             // 
@@ -223,6 +205,24 @@
             this.btnThem.UseVisualStyleBackColor = false;
             this.btnThem.Click += new System.EventHandler(this.btnThem_Click);
             // 
+            // lblTrangThai
+            // 
+            this.lblTrangThai.AutoSize = true;
+            this.lblTrangThai.Location = new System.Drawing.Point(504, 37);
+            this.lblTrangThai.Name = "lblTrangThai";
+            this.lblTrangThai.Size = new System.Drawing.Size(73, 16);
+            this.lblTrangThai.TabIndex = 4;
+            this.lblTrangThai.Text = "Trạng Thái";
+            // 
+            // cbbTrangThai
+            // 
+            this.cbbTrangThai.FormattingEnabled = true;
+            this.cbbTrangThai.Location = new System.Drawing.Point(507, 73);
+            this.cbbTrangThai.Name = "cbbTrangThai";
+            this.cbbTrangThai.Size = new System.Drawing.Size(369, 24);
+            this.cbbTrangThai.TabIndex = 5;
+            this.cbbTrangThai.SelectedIndexChanged += new System.EventHandler(this.cbbTrangThai_SelectedIndexChanged);
+            // 
             // ViewQuanLyXe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -253,7 +253,7 @@
         private System.Windows.Forms.Button btnSua;
         private System.Windows.Forms.Button btnThem;
         private System.Windows.Forms.DataGridView dgvQuanLyXe;
-        private System.Windows.Forms.Label lblTrangThai;
         private System.Windows.Forms.ComboBox cbbTrangThai;
+        private System.Windows.Forms.Label lblTrangThai;
     }
 }
