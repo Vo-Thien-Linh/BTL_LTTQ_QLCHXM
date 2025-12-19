@@ -242,7 +242,7 @@ namespace UI.FormHandleUI
                 XeMayDTO dto = new XeMayDTO
                 {
                     ID_Xe = txtMaXe.Text.Trim(),
-                    BienSo = txtBienSo.Text.Trim(),
+                    BienSo = string.IsNullOrWhiteSpace(txtBienSo.Text) ? null : txtBienSo.Text.Trim(),
                     MaNCC = cbbNhaCungCap.SelectedValue?.ToString(),
                     NgayMua = dtpNgayMua.Value,
                     GiaMua = string.IsNullOrWhiteSpace(txtGiaMua.Text) ? (decimal?)null : decimal.Parse(txtGiaMua.Text),
@@ -284,6 +284,9 @@ namespace UI.FormHandleUI
             }
             catch (Exception ex)
             {
+                // Log chi tiết lỗi để debug
+                string detailError = $"Lỗi: {ex.Message}\n\nChi tiết:\n{ex.ToString()}";
+                System.Diagnostics.Debug.WriteLine(detailError);
                 MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

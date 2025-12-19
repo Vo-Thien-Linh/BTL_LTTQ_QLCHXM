@@ -124,28 +124,75 @@ namespace DAL
         }
 
         /// <summary>
+        /// Tạo mật khẩu ngẫu nhiên 8 ký tự (chữ hoa, chữ thường, số)
+        /// </summary>
+        private string GenerateRandomPassword()
+        {
+            const string chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+            Random random = new Random();
+            char[] password = new char[8];
+            
+            for (int i = 0; i < 8; i++)
+            {
+                password[i] = chars[random.Next(chars.Length)];
+            }
+            
+            return new string(password);
+        }
+
+        /// <summary>
         /// Tự động tạo mã tài khoản mới
         /// </summary>
         public string GenerateMaTaiKhoan()
         {
-            string query = "SELECT TOP 1 MaTaiKhoan FROM TaiKhoan ORDER BY MaTaiKhoan DESC";
-            object result = DataProvider.ExecuteScalar(query);
-
-            if (result == null || result == DBNull.Value)
+            try
             {
+                string query = "SELECT TOP 1 MaTaiKhoan FROM TaiKhoan ORDER BY MaTaiKhoan DESC";
+                object result = DataProvider.ExecuteScalar(query);
+
+                System.Console.WriteLine($"=== GenerateMaTaiKhoan ===");
+                System.Console.WriteLine($"Query result: {result}");
+
+                if (result == null || result == DBNull.Value)
+                {
+                    System.Console.WriteLine("Bảng TaiKhoan rỗng, tạo mã đầu tiên: TK00000001");
+                    return "TK00000001";
+                }
+
+                string lastMaTK = result.ToString().Trim(); // Trim khoảng trắng
+                System.Console.WriteLine($"Mã TK cuối cùng: [{lastMaTK}]");
+
+                if (lastMaTK.Length < 3 || !lastMaTK.StartsWith("TK"))
+                {
+                    System.Console.WriteLine($"⚠️ Mã không hợp lệ, tạo mã mới: TK00000001");
+                    return "TK00000001";
+                }
+
+                string numberPart = lastMaTK.Substring(2).Trim();
+                System.Console.WriteLine($"Phần số: [{numberPart}]");
+
+                if (!int.TryParse(numberPart, out int number))
+                {
+                    System.Console.WriteLine($"❌ Không parse được số từ: [{numberPart}]");
+                    return "TK00000001";
+                }
+
+                number++;
+                string newMaTK = "TK" + number.ToString("D8");
+                System.Console.WriteLine($"✅ Mã TK mới: {newMaTK}");
+                return newMaTK;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"❌ Lỗi GenerateMaTaiKhoan: {ex.Message}");
                 return "TK00000001";
             }
-
-            string lastMaTK = result.ToString();
-            int number = int.Parse(lastMaTK.Substring(2));
-            number++;
-            return "TK" + number.ToString("D8");
         }
 
         /// <summary>
-        /// Tạo tài khoản cho nhân viên mới
+        /// Tạo tài khoản với mật khẩu do admin nhập
         /// </summary>
-        public bool CreateAccountForEmployee(string maNV, string sdt, out string errorMessage)
+        public bool CreateAccountForEmployeeWithPassword(string maNV, string email, string password, string chucVu, out string errorMessage)
         {
             errorMessage = "";
 
@@ -154,11 +201,24 @@ namespace DAL
                 // Tạo mã tài khoản tự động
                 string maTaiKhoan = GenerateMaTaiKhoan();
 
-                // Tên đăng nhập = số điện thoại
-                string tenDangNhap = sdt;
+                // Tên đăng nhập = email
+                string tenDangNhap = email;
 
-                // Mật khẩu mặc định = số điện thoại
-                string matKhau = sdt;
+                // Mật khẩu = admin nhập
+                string matKhau = password;
+
+                // ✅ Xác định loại tài khoản dựa trên chức vụ
+                string chucVuNormalized = chucVu?.Trim().ToLower() ?? "";
+                string loaiTaiKhoan = "NhanVien"; // Mặc định
+                
+                if (chucVuNormalized == "quản lý" || chucVuNormalized == "quan ly")
+                    loaiTaiKhoan = "QuanLy";
+                else if (chucVuNormalized == "thu ngân" || chucVuNormalized == "thu ngan")
+                    loaiTaiKhoan = "ThuNgan";
+                else if (chucVuNormalized == "kỹ thuật" || chucVuNormalized == "ky thuat")
+                    loaiTaiKhoan = "KyThuat";
+                else if (chucVuNormalized == "bán hàng" || chucVuNormalized == "ban hang")
+                    loaiTaiKhoan = "BanHang";
 
                 // ✅ QUAN TRỌNG: Query phải đúng
                 string query = @"INSERT INTO TaiKhoan 
@@ -170,7 +230,82 @@ namespace DAL
                 {
             new SqlParameter("@MaTaiKhoan", maTaiKhoan),
             new SqlParameter("@TenDangNhap", tenDangNhap),
-            new SqlParameter("@Password", matKhau),  // ✅ ĐÂY LÀ PARAMETER BỊ THIẾU
+            new SqlParameter("@Password", matKhau),  // Lưu mật khẩu vào cột Password
+            new SqlParameter("@LoaiTaiKhoan", loaiTaiKhoan),  // "QuanLy" hoặc "NhanVien"
+            new SqlParameter("@TrangThaiTaiKhoan", "Hoạt động"),
+            new SqlParameter("@MaNV", maNV),
+            new SqlParameter("@NgayTao", DateTime.Now),
+            new SqlParameter("@NgayCapNhat", DateTime.Now)
+                };
+
+                System.Diagnostics.Debug.WriteLine("=== Tạo tài khoản nhân viên ===");
+                System.Diagnostics.Debug.WriteLine($"MaTaiKhoan: {maTaiKhoan}");
+                System.Diagnostics.Debug.WriteLine($"TenDangNhap: {tenDangNhap}");
+                System.Diagnostics.Debug.WriteLine($"Password: {matKhau}");
+                System.Diagnostics.Debug.WriteLine($"MaNV: {maNV}");
+                System.Diagnostics.Debug.WriteLine($"ChucVu: {chucVu}");
+                System.Diagnostics.Debug.WriteLine($"LoaiTaiKhoan: {loaiTaiKhoan}");
+
+                System.Console.WriteLine("=== BẮT ĐẦU TẠO TÀI KHOẢN ===");
+                System.Console.WriteLine($"Mã NV: {maNV} | Email: {email}");
+
+                int result = DataProvider.ExecuteNonQuery(query, parameters);
+
+                if (result > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Tạo tài khoản thành công!");
+                    System.Console.WriteLine($"✅ INSERT thành công! Rows affected: {result}");
+                    return true;
+                }
+                else
+                {
+                    errorMessage = "Không thể thêm tài khoản vào database! (ExecuteNonQuery trả về 0)";
+                    System.Console.WriteLine($"❌ INSERT thất bại! Result: {result}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi tạo tài khoản: " + ex.Message;
+                System.Diagnostics.Debug.WriteLine($"❌ Lỗi: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                System.Console.WriteLine($"❌ EXCEPTION khi tạo tài khoản: {ex.Message}");
+                System.Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Tạo tài khoản cho nhân viên mới - TenDangNhap = Email, Password = Random
+        /// </summary>
+        public bool CreateAccountForEmployee(string maNV, string email, string sdt, out string errorMessage, out string generatedPassword)
+        {
+            errorMessage = "";
+            generatedPassword = "";
+
+            try
+            {
+                // Tạo mã tài khoản tự động
+                string maTaiKhoan = GenerateMaTaiKhoan();
+
+                // Tên đăng nhập = email
+                string tenDangNhap = email;
+
+                // Mật khẩu ngẫu nhiên
+                string matKhau = GenerateRandomPassword();
+                generatedPassword = matKhau; // Trả về mật khẩu đã tạo để hiển thị
+
+                // ✅ QUAN TRỌNG: Query phải đúng
+                string query = @"INSERT INTO TaiKhoan 
+                        (MaTaiKhoan, TenDangNhap, Password, LoaiTaiKhoan, TrangThaiTaiKhoan, MaNV, NgayTao, NgayCapNhat)
+                        VALUES 
+                        (@MaTaiKhoan, @TenDangNhap, @Password, @LoaiTaiKhoan, @TrangThaiTaiKhoan, @MaNV, @NgayTao, @NgayCapNhat)";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+            new SqlParameter("@MaTaiKhoan", maTaiKhoan),
+            new SqlParameter("@TenDangNhap", tenDangNhap),
+            new SqlParameter("@Password", matKhau),  // Lưu mật khẩu vào cột Password
             new SqlParameter("@LoaiTaiKhoan", "NhanVien"),
             new SqlParameter("@TrangThaiTaiKhoan", "Hoạt động"),
             new SqlParameter("@MaNV", maNV),
@@ -184,16 +319,21 @@ namespace DAL
                 System.Diagnostics.Debug.WriteLine($"Password: {matKhau}");
                 System.Diagnostics.Debug.WriteLine($"MaNV: {maNV}");
 
+                System.Console.WriteLine("=== BẮT ĐẦU TẠO TÀI KHOẢN ===");
+                System.Console.WriteLine($"Mã NV: {maNV} | Email: {email} | SĐT: {sdt}");
+
                 int result = DataProvider.ExecuteNonQuery(query, parameters);
 
                 if (result > 0)
                 {
                     System.Diagnostics.Debug.WriteLine("✅ Tạo tài khoản thành công!");
+                    System.Console.WriteLine($"✅ INSERT thành công! Rows affected: {result}");
                     return true;
                 }
                 else
                 {
-                    errorMessage = "Không thể thêm tài khoản vào database!";
+                    errorMessage = "Không thể thêm tài khoản vào database! (ExecuteNonQuery trả về 0)";
+                    System.Console.WriteLine($"❌ INSERT thất bại! Result: {result}");
                     return false;
                 }
             }
@@ -202,6 +342,8 @@ namespace DAL
                 errorMessage = "Lỗi tạo tài khoản: " + ex.Message;
                 System.Diagnostics.Debug.WriteLine($"❌ Lỗi: {ex.Message}");
                 System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                System.Console.WriteLine($"❌ EXCEPTION khi tạo tài khoản: {ex.Message}");
+                System.Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
                 return false;
             }
         }
