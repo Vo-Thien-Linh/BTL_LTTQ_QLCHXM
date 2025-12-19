@@ -73,6 +73,8 @@
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(399, 30);
             this.txtSearch.TabIndex = 3;
+            this.txtSearch.Text = "Tìm kiếm theo tên";
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // btnSearch
             // 

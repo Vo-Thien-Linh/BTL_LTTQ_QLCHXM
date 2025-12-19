@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using BLL;
 using DTO;
@@ -22,6 +23,9 @@ namespace UI.UserControlUI
 
             InitializeCardView();
             LoadXeBan();
+
+            // Thiết lập placeholder cho txtSearch
+            SetupSearchPlaceholder();
 
             // Gán sự kiện
             this.Load += ViewQuanLyBanHang_Load;
@@ -46,6 +50,30 @@ namespace UI.UserControlUI
         }
 
 
+        private void SetupSearchPlaceholder()
+        {
+            txtSearch.ForeColor = Color.Gray;
+            txtSearch.Text = "Tìm kiếm theo tên";
+
+            txtSearch.Enter += (s, e) =>
+            {
+                if (txtSearch.Text == "Tìm kiếm theo tên" && txtSearch.ForeColor == Color.Gray)
+                {
+                    txtSearch.Text = "";
+                    txtSearch.ForeColor = Color.Black;
+                }
+            };
+
+            txtSearch.Leave += (s, e) =>
+            {
+                if (string.IsNullOrWhiteSpace(txtSearch.Text))
+                {
+                    txtSearch.Text = "Tìm kiếm theo tên";
+                    txtSearch.ForeColor = Color.Gray;
+                }
+            };
+        }
+
         private void InitializeCardView()
         {
             flowPanelCards = new FlowLayoutPanel
@@ -57,6 +85,17 @@ namespace UI.UserControlUI
             };
 
             panelDataGrid.Controls.Add(flowPanelCards);
+        }
+
+        private GraphicsPath GetRoundedRectangle(Rectangle rect, int radius)
+        {
+            GraphicsPath path = new GraphicsPath();
+            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+            path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+            path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+            path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+            path.CloseFigure();
+            return path;
         }
 
         private void ViewQuanLyBanHang_Load(object sender, EventArgs e)
@@ -106,7 +145,9 @@ namespace UI.UserControlUI
 
         private Panel CreateXeCard(DataRow row)
         {
+            string idXe = row["ID_Xe"].ToString();
             string idLoai = row["ID_Loai"].ToString();
+            string bienSo = row["BienSo"] != DBNull.Value ? row["BienSo"].ToString() : "Chưa có";
             string tenHang = row["TenHang"].ToString();
             string tenDong = row["TenDong"].ToString();
             string tenMau = row["TenMau"].ToString();
@@ -116,38 +157,82 @@ namespace UI.UserControlUI
             decimal giaBan = row["GiaBanGanNhat"] != DBNull.Value ? Convert.ToDecimal(row["GiaBanGanNhat"]) : 0;
             int phanKhoi = row["PhanKhoi"] != DBNull.Value ? Convert.ToInt32(row["PhanKhoi"]) : 0;
 
-            // Panel chính của card
+            // Panel chính của card với bo góc
             Panel card = new Panel
             {
-                Width = 280,
-                Height = 220,
-                BackColor = Color.White,
-                BorderStyle = BorderStyle.FixedSingle,
+                Size = new Size(260, 350),
                 Margin = new Padding(10),
-                Padding = new Padding(15)
+                BackColor = Color.White,
+                Cursor = Cursors.Hand
             };
 
-            // Tên xe
+            // Bo góc và shadow
+            card.Paint += (s, e) =>
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                Rectangle rect = new Rectangle(0, 0, card.Width - 1, card.Height - 1);
+                using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectangle(rect, 8))
+                {
+                    card.Region = new Region(path);
+                    using (Pen pen = new Pen(Color.FromArgb(230, 230, 230), 1))
+                    {
+                        e.Graphics.DrawPath(pen, path);
+                    }
+                }
+            };
+
+            // Panel ảnh xe
+            Panel imagePanel = new Panel
+            {
+                Size = new Size(260, 160),
+                Location = new Point(0, 0),
+                BackColor = Color.FromArgb(255, 240, 245)
+            };
+
+            // Vẽ ảnh xe hoặc placeholder
+            imagePanel.Paint += (s, e) =>
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                
+                if (row["AnhXe"] != DBNull.Value)
+                {
+                    try
+                    {
+                        byte[] imageBytes = (byte[])row["AnhXe"];
+                        if (imageBytes != null && imageBytes.Length > 0)
+                        {
+                            using (System.IO.MemoryStream ms = new System.IO.MemoryStream(imageBytes))
+                            using (Image img = Image.FromStream(ms))  
+                            {
+                                e.Graphics.DrawImage(img, 0, 0, imagePanel.Width, imagePanel.Height);
+                            }
+                        }
+                    }
+                    catch { }
+                }
+            };
+
+            card.Controls.Add(imagePanel);
+
+            // Tên xe (Hãng + Dòng)
             Label lblTenXe = new Label
             {
-                Text = tenXe,
-                Location = new Point(10, 10),
-                Width = 250,
-                Height = 45,
-                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(33, 150, 243),
-                TextAlign = ContentAlignment.TopLeft
+                Text = $"{tenHang} {tenDong}",
+                Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                Location = new Point(10, 170),
+                Size = new Size(240, 26),
+                ForeColor = Color.FromArgb(33, 33, 33)
             };
             card.Controls.Add(lblTenXe);
 
-            // Thông tin phân khối và năm
+            // Thông tin chi tiết (bao gồm biển số)
             Label lblThongTin = new Label
             {
-                Text = $"{phanKhoi}cc - Năm {namSX}",
-                Location = new Point(10, 60),
-                Width = 250,
-                Font = new Font("Segoe UI", 9F),
-                ForeColor = Color.Gray
+                Text = $"Màu: {tenMau} | Năm: {namSX} | {phanKhoi}cc | BSX: {bienSo}",
+                Font = new Font("Segoe UI", 8F),
+                Location = new Point(10, 198),
+                Size = new Size(240, 18),
+                ForeColor = Color.FromArgb(120, 120, 120)
             };
             card.Controls.Add(lblThongTin);
 
@@ -162,43 +247,32 @@ namespace UI.UserControlUI
             //};
             //card.Controls.Add(lblSoLuong);
 
-            // Đường kẻ
-            Panel divider = new Panel
-            {
-                Location = new Point(10, 115),
-                Width = 250,
-                Height = 1,
-                BackColor = Color.FromArgb(224, 224, 224)
-            };
-            card.Controls.Add(divider);
-
-            // Giá bán
+            // Giá (lớn và nổi bật)
             Label lblGia = new Label
             {
-                Text = giaBan > 0 ? $"{giaBan:N0} VNĐ" : "Liên hệ",
-                Location = new Point(10, 125),
-                Width = 250,
-                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                ForeColor = Color.FromArgb(244, 67, 54),
+                Text = giaBan > 0 ? string.Format("{0:N0} VNĐ", giaBan) : "Liên hệ",
+                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
+                Location = new Point(10, 222),
+                Size = new Size(240, 28),
+                ForeColor = Color.FromArgb(211, 47, 47),
                 TextAlign = ContentAlignment.MiddleLeft
             };
             card.Controls.Add(lblGia);
 
-            // Nút MUA
+            // Nút MUA NGAY
             Button btnMua = new Button
             {
-                Text = "MUA",
-                Location = new Point(10, 165),
-                Width = 250,
-                Height = 40,
+                Text = "MUA NGAY",
+                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                Location = new Point(10, 260),
+                Size = new Size(240, 38),
                 BackColor = Color.FromArgb(76, 175, 80),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Font = new Font("Segoe UI", 11F, FontStyle.Bold),
                 Cursor = Cursors.Hand
             };
             btnMua.FlatAppearance.BorderSize = 0;
-            btnMua.Click += (s, e) => BtnMua_Click(s, e, idLoai);
+            btnMua.Click += (s, e) => BtnMua_Click(s, e, idXe);
             card.Controls.Add(btnMua);
 
             // Hover effect
@@ -208,12 +282,12 @@ namespace UI.UserControlUI
             return card;
         }
 
-        private void BtnMua_Click(object sender, EventArgs e, string idLoai)
+        private void BtnMua_Click(object sender, EventArgs e, string idXe)
         {
             try
             {
-                // Mở form bán xe mới (không phải form cũ trong FormHandleUI)
-                FormMuaXe formBan = new FormMuaXe(currentMaTaiKhoan);
+                // Mở form bán xe với thông tin xe đã chọn
+                FormMuaXe formBan = new FormMuaXe(currentMaTaiKhoan, idXe);
                 if (formBan.ShowDialog() == DialogResult.OK)
                 {
                     MessageBox.Show("Bán xe thành công!", "Thông báo",
@@ -232,7 +306,8 @@ namespace UI.UserControlUI
         {
             string keyword = txtSearch.Text.Trim();
 
-            if (string.IsNullOrEmpty(keyword))
+            // Bỏ qua nếu là placeholder hoặc rỗng
+            if (string.IsNullOrEmpty(keyword) || keyword == "Tìm kiếm theo tên")
             {
                 LoadXeBan();
                 return;
@@ -281,6 +356,11 @@ namespace UI.UserControlUI
         }
 
         private void panelDataGrid_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
         {
 
         }

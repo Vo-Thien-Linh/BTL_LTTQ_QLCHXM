@@ -418,6 +418,9 @@
     <EmbeddedResource Include="FormUI\FormKhachHang.resx">
       <DependentUpon>FormKhachHang.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormMuaXe.resx">
+      <DependentUpon>FormMuaXe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormNhapLyDo.resx">
       <DependentUpon>FormNhapLyDo.cs</DependentUpon>
     </EmbeddedResource>

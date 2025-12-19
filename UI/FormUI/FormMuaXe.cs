@@ -15,6 +15,8 @@ namespace UI.FormUI
         private string maTaiKhoan;
         private bool isLoadingData = false;
         private KhachHangDTO khachHangHienTai = null;
+        private string idXeDaChon = null;
+        private DataRowView xeHienTai = null; // Lưu thông tin xe hiện tại
         
         public int MaGDBanVuaTao { get; private set; } = 0;
 
@@ -22,6 +24,7 @@ namespace UI.FormUI
         {
             InitializeComponent();
             this.maTaiKhoan = maTK;
+            this.idXeDaChon = null;
 
             // Kiểm tra đăng nhập
             if (string.IsNullOrWhiteSpace(maTaiKhoan))
@@ -46,6 +49,18 @@ namespace UI.FormUI
             LoadXeBan();
         }
 
+        // Constructor mới: nhận mã tài khoản và ID xe cụ thể
+        public FormMuaXe(string maTK, string idXe) : this(maTK)
+        {
+            this.idXeDaChon = idXe;
+            
+            // Load thông tin xe cụ thể
+            if (!string.IsNullOrEmpty(idXe))
+            {
+                LoadThongTinXeChiDinh(idXe);
+            }
+        }
+
         private void SetDefaultValues()
         {
             dtpNgayBan.Value = DateTime.Now.Date;
@@ -65,7 +80,6 @@ namespace UI.FormUI
         {
             txtSdtKH.KeyDown += TxtSdtKH_KeyDown;
             btnTimKH.Click += BtnTimKH_Click;
-            cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
             btnLuu.Click += BtnLuu_Click;
             btnHuy.Click += BtnHuy_Click;
             btnThemKH.Click += BtnThemKH_Click;
@@ -147,53 +161,62 @@ namespace UI.FormUI
 
         private void LoadXeBan()
         {
+            // Không cần load danh sách xe nữa vì dùng TextBox
+            // Form này chỉ được mở khi đã chọn xe cụ thể
+        }
+
+        private void LoadThongTinXeChiDinh(string idXe)
+        {
             try
             {
-                isLoadingData = true;
-
-                // Lấy xe có SoLuong > 0 và TrangThai = "Sẵn sàng"
+                // Lấy tất cả xe có thể bán
                 DataTable dt = xeMayBLL.GetXeCoTheBan();
-
-                cboXe.DataSource = dt;
-                cboXe.DisplayMember = "TenXe";
-                cboXe.ValueMember = "ID_Xe";
-                cboXe.SelectedIndex = -1;
+                
+                // Tìm xe theo ID
+                bool found = false;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row["ID_Xe"].ToString() == idXe)
+                    {
+                        // Tạo DataRowView để lưu thông tin xe
+                        DataView dv = dt.DefaultView;
+                        dv.RowFilter = $"ID_Xe = '{idXe}'";
+                        if (dv.Count > 0)
+                        {
+                            xeHienTai = dv[0];
+                            
+                            // Hiển thị thông tin xe
+                            txtTenXe.Text = row["TenXe"]?.ToString() ?? "";
+                            txtBienSo.Text = row["BienSo"]?.ToString() ?? "Chưa có";
+                            txtSoLuongTon.Text = row["SoLuong"]?.ToString() ?? "0";
+                            
+                            decimal giaBan = row["GiaBan"] != DBNull.Value ? Convert.ToDecimal(row["GiaBan"]) : 0;
+                            txtGiaBan.Text = giaBan.ToString("N0") + " VNĐ";
+                            
+                            found = true;
+                        }
+                        break;
+                    }
+                }
+                
+                if (!found)
+                {
+                    MessageBox.Show(
+                        "Không tìm thấy thông tin xe hoặc xe không còn sẵn sàng để bán!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    this.Close();
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                cboXe.SelectedIndex = -1;
-            }
-            finally
-            {
-                isLoadingData = false;
-            }
-        }
-
-        private void CboXe_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (isLoadingData || cboXe.SelectedIndex == -1)
-            {
-                txtBienSo.Text = "";
-                txtGiaBan.Text = "";
-                txtSoLuongTon.Text = "";
-                return;
-            }
-
-            DataRowView row = cboXe.SelectedItem as DataRowView;
-            if (row != null)
-            {
-                // Hiển thị thông tin xe
-                string bienSo = row["BienSo"]?.ToString() ?? "Chưa có";
-                txtBienSo.Text = bienSo;
-                
-                string soLuong = row["SoLuong"]?.ToString() ?? "0";
-                txtSoLuongTon.Text = soLuong;
-                
-                // Lấy giá bán từ database
-                decimal giaBan = row["GiaBan"] != DBNull.Value ? Convert.ToDecimal(row["GiaBan"]) : 0;
-                txtGiaBan.Text = giaBan.ToString("N0") + " VNĐ";
+                MessageBox.Show(
+                    "Lỗi khi tải thông tin xe: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                this.Close();
             }
         }
 
@@ -219,11 +242,10 @@ namespace UI.FormUI
             {
                 // Lấy thông tin từ form
                 string maKH = khachHangHienTai.MaKH;
-                string idXe = cboXe.SelectedValue.ToString();
+                string idXe = xeHienTai["ID_Xe"].ToString();
                 DateTime ngayBan = dtpNgayBan.Value.Date;
 
-                DataRowView rowXe = cboXe.SelectedItem as DataRowView;
-                decimal giaBan = rowXe["GiaBan"] != DBNull.Value ? Convert.ToDecimal(rowXe["GiaBan"]) : 0;
+                decimal giaBan = xeHienTai["GiaBan"] != DBNull.Value ? Convert.ToDecimal(xeHienTai["GiaBan"]) : 0;
 
                 // Tạo DTO
                 GiaoDichBan gd = new GiaoDichBan
@@ -264,8 +286,8 @@ namespace UI.FormUI
                     
                     string message = $"✓ Bán xe thành công!\n\n" +
                         $"Khách hàng: {khachHangHienTai.HoTenKH}\n" +
-                        $"Xe: {rowXe["TenXe"]}\n" +
-                        $"Biển số: {rowXe["BienSo"]}\n" +
+                        $"Xe: {xeHienTai["TenXe"]}\n" +
+                        $"Biển số: {xeHienTai["BienSo"]}\n" +
                         $"Giá bán: {giaBan:N0} VNĐ\n" +
                         $"Ngày bán: {ngayBan:dd/MM/yyyy}\n\n";
                     
@@ -325,11 +347,10 @@ namespace UI.FormUI
                 return false;
             }
 
-            if (cboXe.SelectedIndex == -1)
+            if (xeHienTai == null || string.IsNullOrEmpty(txtTenXe.Text))
             {
-                MessageBox.Show("Vui lòng chọn xe!",
+                MessageBox.Show("Không có thông tin xe!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboXe.Focus();
                 return false;
             }
 

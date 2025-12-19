@@ -35,9 +35,11 @@
             this.cboChucVu = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.txtDiaChi = new System.Windows.Forms.TextBox();
+            this.lblMatKhau = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.txtSdt = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.cboGioiTinh = new System.Windows.Forms.ComboBox();
@@ -51,8 +53,6 @@
             this.panelFooter = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.lblMatKhau = new System.Windows.Forms.Label();
-            this.txtMatKhau = new System.Windows.Forms.TextBox();
             this.panelHeader.SuspendLayout();
             this.panelMain.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -93,7 +93,7 @@
             this.panelMain.Location = new System.Drawing.Point(0, 70);
             this.panelMain.Name = "panelMain";
             this.panelMain.Padding = new System.Windows.Forms.Padding(20);
-            this.panelMain.Size = new System.Drawing.Size(1000, 580);
+            this.panelMain.Size = new System.Drawing.Size(1000, 599);
             this.panelMain.TabIndex = 1;
             // 
             // groupBox2
@@ -166,7 +166,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.groupBox1.Location = new System.Drawing.Point(20, 20);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(700, 540);
+            this.groupBox1.Size = new System.Drawing.Size(700, 556);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông Tin Nhân Viên";
@@ -176,7 +176,7 @@
             this.cboTrinhDo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTrinhDo.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.cboTrinhDo.FormattingEnabled = true;
-            this.cboTrinhDo.Location = new System.Drawing.Point(480, 470);
+            this.cboTrinhDo.Location = new System.Drawing.Point(480, 504);
             this.cboTrinhDo.Name = "cboTrinhDo";
             this.cboTrinhDo.Size = new System.Drawing.Size(200, 31);
             this.cboTrinhDo.TabIndex = 23;
@@ -185,7 +185,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label12.Location = new System.Drawing.Point(350, 473);
+            this.label12.Location = new System.Drawing.Point(350, 507);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(77, 23);
             this.label12.TabIndex = 22;
@@ -194,7 +194,7 @@
             // txtCCCD
             // 
             this.txtCCCD.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtCCCD.Location = new System.Drawing.Point(130, 470);
+            this.txtCCCD.Location = new System.Drawing.Point(130, 504);
             this.txtCCCD.MaxLength = 12;
             this.txtCCCD.Name = "txtCCCD";
             this.txtCCCD.Size = new System.Drawing.Size(200, 30);
@@ -204,7 +204,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label11.Location = new System.Drawing.Point(20, 473);
+            this.label11.Location = new System.Drawing.Point(20, 507);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 23);
             this.label11.TabIndex = 20;
@@ -215,7 +215,7 @@
             this.cboTinhTrang.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTinhTrang.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.cboTinhTrang.FormattingEnabled = true;
-            this.cboTinhTrang.Location = new System.Drawing.Point(480, 415);
+            this.cboTinhTrang.Location = new System.Drawing.Point(480, 444);
             this.cboTinhTrang.Name = "cboTinhTrang";
             this.cboTinhTrang.Size = new System.Drawing.Size(200, 31);
             this.cboTinhTrang.TabIndex = 19;
@@ -224,7 +224,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label10.Location = new System.Drawing.Point(350, 418);
+            this.label10.Location = new System.Drawing.Point(350, 447);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(93, 23);
             this.label10.TabIndex = 18;
@@ -238,7 +238,7 @@
             0,
             0,
             0});
-            this.numLuong.Location = new System.Drawing.Point(130, 415);
+            this.numLuong.Location = new System.Drawing.Point(130, 444);
             this.numLuong.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -253,7 +253,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label9.Location = new System.Drawing.Point(20, 418);
+            this.label9.Location = new System.Drawing.Point(20, 447);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(119, 23);
             this.label9.TabIndex = 16;
@@ -264,7 +264,7 @@
             this.cboChucVu.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboChucVu.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.cboChucVu.FormattingEnabled = true;
-            this.cboChucVu.Location = new System.Drawing.Point(480, 360);
+            this.cboChucVu.Location = new System.Drawing.Point(480, 379);
             this.cboChucVu.Name = "cboChucVu";
             this.cboChucVu.Size = new System.Drawing.Size(200, 31);
             this.cboChucVu.TabIndex = 15;
@@ -273,7 +273,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.label8.Location = new System.Drawing.Point(350, 363);
+            this.label8.Location = new System.Drawing.Point(350, 382);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(76, 23);
             this.label8.TabIndex = 14;
@@ -285,8 +285,18 @@
             this.txtDiaChi.Location = new System.Drawing.Point(130, 305);
             this.txtDiaChi.Multiline = true;
             this.txtDiaChi.Name = "txtDiaChi";
-            this.txtDiaChi.Size = new System.Drawing.Size(550, 40);
+            this.txtDiaChi.Size = new System.Drawing.Size(550, 46);
             this.txtDiaChi.TabIndex = 13;
+            // 
+            // lblMatKhau
+            // 
+            this.lblMatKhau.AutoSize = true;
+            this.lblMatKhau.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblMatKhau.Location = new System.Drawing.Point(20, 387);
+            this.lblMatKhau.Name = "lblMatKhau";
+            this.lblMatKhau.Size = new System.Drawing.Size(86, 23);
+            this.lblMatKhau.TabIndex = 12;
+            this.lblMatKhau.Text = "Mật khẩu:";
             // 
             // label7
             // 
@@ -315,6 +325,15 @@
             this.label6.Size = new System.Drawing.Size(55, 23);
             this.label6.TabIndex = 10;
             this.label6.Text = "Email:";
+            // 
+            // txtMatKhau
+            // 
+            this.txtMatKhau.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtMatKhau.Location = new System.Drawing.Point(130, 380);
+            this.txtMatKhau.MaxLength = 10;
+            this.txtMatKhau.Name = "txtMatKhau";
+            this.txtMatKhau.Size = new System.Drawing.Size(200, 30);
+            this.txtMatKhau.TabIndex = 9;
             // 
             // txtSdt
             // 
@@ -417,7 +436,7 @@
             this.panelFooter.Controls.Add(this.btnCancel);
             this.panelFooter.Controls.Add(this.btnSave);
             this.panelFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFooter.Location = new System.Drawing.Point(0, 650);
+            this.panelFooter.Location = new System.Drawing.Point(0, 669);
             this.panelFooter.Name = "panelFooter";
             this.panelFooter.Size = new System.Drawing.Size(1000, 70);
             this.panelFooter.TabIndex = 2;
@@ -454,30 +473,11 @@
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click_1);
             // 
-            // lblMatKhau
-            // 
-            this.lblMatKhau.AutoSize = true;
-            this.lblMatKhau.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblMatKhau.Location = new System.Drawing.Point(20, 368);
-            this.lblMatKhau.Name = "lblMatKhau";
-            this.lblMatKhau.Size = new System.Drawing.Size(86, 23);
-            this.lblMatKhau.TabIndex = 12;
-            this.lblMatKhau.Text = "Mật khẩu:";
-            // 
-            // txtMatKhau
-            // 
-            this.txtMatKhau.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtMatKhau.Location = new System.Drawing.Point(130, 361);
-            this.txtMatKhau.MaxLength = 10;
-            this.txtMatKhau.Name = "txtMatKhau";
-            this.txtMatKhau.Size = new System.Drawing.Size(200, 30);
-            this.txtMatKhau.TabIndex = 9;
-            // 
             // FormQuanLiNV
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 720);
+            this.ClientSize = new System.Drawing.Size(1000, 739);
             this.Controls.Add(this.panelMain);
             this.Controls.Add(this.panelFooter);
             this.Controls.Add(this.panelHeader);

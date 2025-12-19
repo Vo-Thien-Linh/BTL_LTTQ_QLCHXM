@@ -532,14 +532,17 @@ namespace DAL
             {
                 string query = @"
                     SELECT 
+                        xe.ID_Xe,
                         xe.ID_Loai,
+                        xe.BienSo,
+                        xe.AnhXe,
                         hx.TenHang,
                         dx.TenDong,
                         ms.TenMau,
                         lx.NamSX,
                         dx.PhanKhoi,
-                        COUNT(xe.ID_Xe) AS SoLuong,
-                        MAX(ISNULL(xe.GiaMua, xe.GiaNhap)) AS GiaBanGanNhat
+                        1 AS SoLuong,
+                        ISNULL(xe.GiaMua, xe.GiaNhap) AS GiaBanGanNhat
                     FROM XeMay xe
                     INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
                     INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
@@ -548,9 +551,7 @@ namespace DAL
                     WHERE xe.MucDichSuDung = N'Bán' 
                       AND xe.TrangThai = N'Sẵn sàng'
                       AND (xe.SoLuong IS NULL OR xe.SoLuong > 0)
-                    GROUP BY xe.ID_Loai, hx.TenHang, dx.TenDong, ms.TenMau, lx.NamSX, dx.PhanKhoi
-                    HAVING COUNT(xe.ID_Xe) > 0
-                    ORDER BY hx.TenHang, dx.TenDong";
+                    ORDER BY hx.TenHang, dx.TenDong, xe.BienSo";
 
                 return DataProvider.ExecuteQuery(query);
             }

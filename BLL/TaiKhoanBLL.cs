@@ -71,15 +71,23 @@ namespace BLL
         }
 
         /// <summary>
-        /// Tạo tài khoản cho nhân viên mới
+        /// Tạo tài khoản cho nhân viên mới - TenDangNhap = Email, Password = SĐT
         /// </summary>
-        public bool CreateAccountForEmployee(string maNV, string sdt, out string errorMessage)
+        public bool CreateAccountForEmployee(string maNV, string email, string sdt, out string errorMessage)
         {
             errorMessage = "";
 
+            if (string.IsNullOrEmpty(email))
+            {
+                errorMessage = "Email không được để trống để tạo tài khoản!";
+                System.Console.WriteLine($"❌ Không có Email cho nhân viên {maNV}");
+                return false;
+            }
+
             if (string.IsNullOrEmpty(sdt))
             {
-                errorMessage = "Số điện thoại không được để trống để tạo tài khoản!";
+                errorMessage = "Số điện thoại không được để trống để tạo mật khẩu!";
+                System.Console.WriteLine($"❌ Không có SĐT cho nhân viên {maNV}");
                 return false;
             }
 
@@ -87,17 +95,101 @@ namespace BLL
             if (taiKhoanDAL.CheckEmployeeHasAccount(maNV))
             {
                 errorMessage = "Nhân viên này đã có tài khoản!";
+                System.Console.WriteLine($"❌ Nhân viên {maNV} đã có tài khoản rồi!");
                 return false;
             }
 
-            // Kiểm tra tên đăng nhập đã tồn tại chưa
-            if (taiKhoanDAL.CheckTenDangNhapExists(sdt))
+            // Kiểm tra tên đăng nhập đã tồn tại chưa (kiểm tra Email)
+            if (taiKhoanDAL.CheckTenDangNhapExists(email))
             {
-                errorMessage = "Số điện thoại này đã được dùng làm tài khoản!";
+                errorMessage = "Email này đã được dùng làm tài khoản!";
+                System.Console.WriteLine($"❌ Email {email} đã được sử dụng làm tài khoản!");
                 return false;
             }
 
-            return taiKhoanDAL.CreateAccountForEmployee(maNV, sdt, out errorMessage);
+            string generatedPassword;
+            return taiKhoanDAL.CreateAccountForEmployee(maNV, email, sdt, out errorMessage, out generatedPassword);
+        }
+
+        /// <summary>
+        /// Tạo tài khoản với mật khẩu nhập từ admin
+        /// </summary>
+        public bool CreateAccountForEmployeeWithPassword(string maNV, string email, string sdt, string password, string chucVu, out string errorMessage)
+        {
+            errorMessage = "";
+
+            if (string.IsNullOrEmpty(email))
+            {
+                errorMessage = "Email không được để trống để tạo tài khoản!";
+                System.Console.WriteLine($"❌ Không có Email cho nhân viên {maNV}");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(password) || password.Length < 6)
+            {
+                errorMessage = "Mật khẩu phải có ít nhất 6 ký tự!";
+                System.Console.WriteLine($"❌ Mật khẩu không hợp lệ cho nhân viên {maNV}");
+                return false;
+            }
+
+            // Kiểm tra nhân viên đã có tài khoản chưa
+            if (taiKhoanDAL.CheckEmployeeHasAccount(maNV))
+            {
+                errorMessage = "Nhân viên này đã có tài khoản!";
+                System.Console.WriteLine($"❌ Nhân viên {maNV} đã có tài khoản rồi!");
+                return false;
+            }
+
+            // Kiểm tra tên đăng nhập đã tồn tại chưa (kiểm tra Email)
+            if (taiKhoanDAL.CheckTenDangNhapExists(email))
+            {
+                errorMessage = "Email này đã được dùng làm tài khoản!";
+                System.Console.WriteLine($"❌ Email {email} đã được sử dụng làm tài khoản!");
+                return false;
+            }
+
+            return taiKhoanDAL.CreateAccountForEmployeeWithPassword(maNV, email, password, chucVu, out errorMessage);
+        }
+
+        /// <summary>
+        /// Tạo tài khoản với password trả về
+        /// </summary>
+        public bool CreateAccountForEmployee(string maNV, string email, string sdt, out string errorMessage, out string generatedPassword)
+        {
+            errorMessage = "";
+            generatedPassword = "";
+
+            if (string.IsNullOrEmpty(email))
+            {
+                errorMessage = "Email không được để trống để tạo tài khoản!";
+                System.Console.WriteLine($"❌ Không có Email cho nhân viên {maNV}");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(sdt))
+            {
+                errorMessage = "Số điện thoại không được để trống!";
+                System.Console.WriteLine($"❌ Không có SĐT cho nhân viên {maNV}");
+                return false;
+            }
+
+            // Kiểm tra nhân viên đã có tài khoản chưa
+            if (taiKhoanDAL.CheckEmployeeHasAccount(maNV))
+            {
+                errorMessage = "Nhân viên này đã có tài khoản!";
+                System.Console.WriteLine($"❌ Nhân viên {maNV} đã có tài khoản rồi!");
+                return false;
+            }
+
+            // Kiểm tra tên đăng nhập đã tồn tại chưa (kiểm tra Email)
+            if (taiKhoanDAL.CheckTenDangNhapExists(email))
+            {
+                errorMessage = "Email này đã được dùng làm tài khoản!";
+                System.Console.WriteLine($"❌ Email {email} đã được sử dụng làm tài khoản!");
+                return false;
+            }
+
+            return taiKhoanDAL.CreateAccountForEmployee(maNV, email, sdt, out errorMessage, out generatedPassword);
         }
 
         /// <summary>

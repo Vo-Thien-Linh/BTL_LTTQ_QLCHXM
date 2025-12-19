@@ -70,29 +70,39 @@ namespace BLL
             }
 
             // ✅ 2. SAU ĐÓ MỚI TẠO TÀI KHOẢN
-            if (!string.IsNullOrEmpty(nv.Sdt))
+            if (!string.IsNullOrEmpty(nv.Email) && !string.IsNullOrEmpty(nv.Sdt) && !string.IsNullOrEmpty(nv.Password))
             {
                 try
                 {
                     TaiKhoanBLL taiKhoanBLL = new TaiKhoanBLL();
                     string taiKhoanError;
-                    bool taiKhoanSuccess = taiKhoanBLL.CreateAccountForEmployee(nv.MaNV, nv.Sdt, out taiKhoanError);
+                    bool taiKhoanSuccess = taiKhoanBLL.CreateAccountForEmployeeWithPassword(nv.MaNV, nv.Email, nv.Sdt, nv.Password, nv.ChucVu, out taiKhoanError);
 
                     if (!taiKhoanSuccess)
                     {
                         // ⚠️ Đã thêm nhân viên nhưng không tạo được tài khoản
                         System.Diagnostics.Debug.WriteLine($"⚠️ Cảnh báo: Không tạo được tài khoản - {taiKhoanError}");
+                        System.Console.WriteLine($"⚠️ CẢNH BÁO: Không tạo được tài khoản cho nhân viên {nv.MaNV}");
+                        System.Console.WriteLine($"⚠️ Lý do: {taiKhoanError}");
 
                         // Có thể rollback nhân viên hoặc để user tạo tài khoản sau
                         // nhanVienDAL.DeleteNhanVien(nv.MaNV); // Nếu muốn rollback
 
-                        errorMessage = $"Đã thêm nhân viên thành công nhưng không tạo được tài khoản.\n\nLý do: {taiKhoanError}\n\nBạn có thể tạo tài khoản sau.";
+                        errorMessage = $"Đã thêm nhân viên thành công nhưng không tạo được tài khoản.\n\nLý do: {taiKhoanError}\n\nVui lòng kiểm tra lại thông tin hoặc tạo tài khoản thủ công sau.";
+                        // ⚠️ Vẫn return true vì nhân viên đã được thêm
+                        return true;
+                    }
+                    else
+                    {
+                        System.Console.WriteLine($"✅ Tạo tài khoản thành công cho nhân viên {nv.MaNV}");
                     }
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine($"❌ Lỗi tạo tài khoản: {ex.Message}");
+                    System.Console.WriteLine($"❌ LỖI: {ex.Message}");
                     errorMessage = $"Đã thêm nhân viên thành công nhưng lỗi khi tạo tài khoản: {ex.Message}";
+                    return true; // Vẫn return true vì nhân viên đã được thêm
                 }
             }
 
@@ -119,6 +129,26 @@ namespace BLL
             // Cập nhật thông tin nhân viên
             if (!nhanVienDAL.UpdateNhanVien(nv))
             { errorMessage = "Cập nhật thất bại!"; return false; }
+
+            // ✅ Cập nhật LoaiTaiKhoan dựa trên ChucVu
+            string chucVuNormalized = nv.ChucVu?.Trim().ToLower() ?? "";
+            string loaiTaiKhoan = "NhanVien"; // Mặc định
+            
+            if (chucVuNormalized == "quản lý" || chucVuNormalized == "quan ly")
+                loaiTaiKhoan = "QuanLy";
+            else if (chucVuNormalized == "thu ngân" || chucVuNormalized == "thu ngan")
+                loaiTaiKhoan = "ThuNgan";
+            else if (chucVuNormalized == "kỹ thuật" || chucVuNormalized == "ky thuat")
+                loaiTaiKhoan = "KyThuat";
+            else if (chucVuNormalized == "bán hàng" || chucVuNormalized == "ban hang")
+                loaiTaiKhoan = "BanHang";
+            
+            string queryUpdateLoaiTK = "UPDATE TaiKhoan SET LoaiTaiKhoan = @LoaiTaiKhoan WHERE MaNV = @MaNV";
+            SqlParameter[] parsLoaiTK = {
+                new SqlParameter("@LoaiTaiKhoan", loaiTaiKhoan),
+                new SqlParameter("@MaNV", nv.MaNV)
+            };
+            DataProvider.ExecuteNonQuery(queryUpdateLoaiTK, parsLoaiTK);
 
             // Nếu có nhập mật khẩu mới → đổi mật khẩu
             if (!string.IsNullOrEmpty(nv.Password))
