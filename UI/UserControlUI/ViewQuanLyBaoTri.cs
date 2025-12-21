@@ -22,7 +22,41 @@ namespace UI.UserControlUI
 
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); };
             ApplyLanguage();
+            
+            // Thêm event để clear chi tiết khi đổi xe
+            cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
 
+        }
+        
+        // Xử lý khi đổi xe
+        private void CboXe_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Nếu đang có phụ tùng trong danh sách và đổi xe
+            if (dgvChiTietBaoTri.Rows.Count > 0 && cboXe.SelectedIndex != -1)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Bạn đang thay đổi xe!\n\n" +
+                    "Danh sách phụ tùng hiện tại sẽ bị xóa.\n" +
+                    "Bạn có muốn tiếp tục?",
+                    "Xác nhận đổi xe",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+                
+                if (result == DialogResult.Yes)
+                {
+                    // Clear danh sách chi tiết phụ tùng
+                    dgvChiTietBaoTri.Rows.Clear();
+                    lblTongTien.Text = "0 VNĐ";
+                    System.Diagnostics.Debug.WriteLine($"[CboXe_SelectedIndexChanged] Đã clear danh sách chi tiết do đổi xe");
+                }
+                else
+                {
+                    // Giữ nguyên xe cũ (không đổi)
+                    cboXe.SelectedIndexChanged -= CboXe_SelectedIndexChanged;
+                    // Không làm gì, giữ nguyên selection
+                    cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
+                }
+            }
         }
 
         private void ApplyLanguage()
@@ -34,13 +68,13 @@ namespace UI.UserControlUI
             lblGhiChu.Text = langMgr.GetString("NoteLabel");
             grpThemPhuTung.Text = langMgr.GetString("AddPartTitle");
             lblPhuTung.Text = langMgr.GetString("PartLabel");
-            lblSoLuong.Text = langMgr.GetString("QuantityLabel");
+            lblSoLuong.Text = "SL:";  // Cố định text để tránh lỗi hiển thị
             btnThemPhuTung.Text = langMgr.GetString("AddBtn");
             grpChiTiet.Text = langMgr.GetString("DetailTitle");
             lblTongTienText.Text = langMgr.GetString("TotalCost");
             btnThem.Text = langMgr.GetString("CreateBtn");
             btnXoa.Text = langMgr.GetString("DeleteBtn");
-            btnLamMoi.Text = langMgr.GetString("ResetBtn");
+            btnLamMoi.Text = "Làm mới";  // Cố định text để tránh lỗi hiển thị
             grpDanhSach.Text = langMgr.GetString("MaintenanceListTitle");
 
             // DataGridView columns
@@ -108,6 +142,7 @@ namespace UI.UserControlUI
         private void SetupDataGridView()
         {
             dgvChiTietBaoTri.Columns.Clear();
+            dgvChiTietBaoTri.Columns.Add("TenXe", "Tên Xe");
             dgvChiTietBaoTri.Columns.Add("MaPhuTung", "Mã PT");
             dgvChiTietBaoTri.Columns.Add("TenPhuTung", "Tên Phụ Tùng");
             dgvChiTietBaoTri.Columns.Add("DonViTinh", "ĐVT");
@@ -140,15 +175,24 @@ namespace UI.UserControlUI
                 // ✅ Thêm logging
                 System.Diagnostics.Debug.WriteLine($"[LoadComboBoxXe] Đã load {dt.Rows.Count} xe");
                 
-                cboXe.DataSource = dt;
-                cboXe.DisplayMember = "DisplayText";  // ✅ Hiển thị đầy đủ thông tin
-                cboXe.ValueMember = "ID_Xe";
-                cboXe.SelectedIndex = -1;
-                
-                // ✅ Log các xe đã load
-                foreach (DataRow row in dt.Rows)
+                if (dt.Rows.Count > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine($"  - {row["ID_Xe"]}: {row["DisplayText"]}");
+                    cboXe.DataSource = dt;
+                    cboXe.DisplayMember = "DisplayText";  // ✅ Hiển thị đầy đủ thông tin
+                    cboXe.ValueMember = "ID_Xe";
+                    cboXe.SelectedIndex = -1;
+                    
+                    // ✅ Log các xe đã load
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  - {row["ID_Xe"]}: {row["DisplayText"]}");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Không có xe nào có thể bảo trì!\nVui lòng thêm xe vào hệ thống.", 
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cboXe.DataSource = null;
                 }
             }
             catch (Exception ex)
@@ -164,10 +208,20 @@ namespace UI.UserControlUI
             try
             {
                 DataTable dt = baoTriBLL.LayDanhSachNhanVienKyThuat();
-                cboNhanVien.DataSource = dt;
-                cboNhanVien.DisplayMember = "HoTenNV";
-                cboNhanVien.ValueMember = "MaTaiKhoan";
-                cboNhanVien.SelectedIndex = -1;
+                
+                if (dt.Rows.Count > 0)
+                {
+                    cboNhanVien.DataSource = dt;
+                    cboNhanVien.DisplayMember = "HoTenNV";
+                    cboNhanVien.ValueMember = "MaTaiKhoan";
+                    cboNhanVien.SelectedIndex = -1;
+                }
+                else
+                {
+                    MessageBox.Show("Không có nhân viên kỹ thuật nào!\nVui lòng thêm nhân viên kỹ thuật vào hệ thống.", 
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboNhanVien.DataSource = null;
+                }
             }
             catch (Exception ex)
             {
@@ -181,10 +235,20 @@ namespace UI.UserControlUI
             try
             {
                 DataTable dt = baoTriBLL.LayDanhSachPhuTung();
-                cboPhuTung.DataSource = dt;
-                cboPhuTung.DisplayMember = "TenPhuTung";
-                cboPhuTung.ValueMember = "MaPhuTung";
-                cboPhuTung.SelectedIndex = -1;
+                
+                if (dt.Rows.Count > 0)
+                {
+                    cboPhuTung.DataSource = dt;
+                    cboPhuTung.DisplayMember = "TenPhuTung";
+                    cboPhuTung.ValueMember = "MaPhuTung";
+                    cboPhuTung.SelectedIndex = -1;
+                }
+                else
+                {
+                    MessageBox.Show("Không có phụ tùng nào trong kho!\nVui lòng nhập phụ tùng vào kho.", 
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboPhuTung.DataSource = null;
+                }
             }
             catch (Exception ex)
             {
@@ -197,6 +261,24 @@ namespace UI.UserControlUI
         {
             try
             {
+                // Kiểm tra đã chọn xe chưa
+                if (cboXe.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Vui lòng chọn xe trước khi thêm phụ tùng!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboXe.Focus();
+                    return;
+                }
+                
+                // Kiểm tra đã chọn nhân viên chưa
+                if (cboNhanVien.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Vui lòng chọn nhân viên kỹ thuật thực hiện bảo trì!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboNhanVien.Focus();
+                    return;
+                }
+                
                 if (cboPhuTung.SelectedIndex == -1)
                 {
                     MessageBox.Show("Vui lòng chọn phụ tùng!", "Thông báo",
@@ -210,6 +292,9 @@ namespace UI.UserControlUI
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                // Lấy tên xe
+                string tenXe = cboXe.Text;
 
                 // Lấy thông tin phụ tùng
                 DataRowView row = (DataRowView)cboPhuTung.SelectedItem;
@@ -244,8 +329,9 @@ namespace UI.UserControlUI
 
                 if (!daTonTai)
                 {
-                    // Thêm vào DataGridView
+                    // Thêm vào DataGridView với tên xe
                     dgvChiTietBaoTri.Rows.Add(
+                        tenXe,           // Tên Xe
                         maPhuTung,
                         tenPhuTung,
                         donViTinh,
@@ -317,6 +403,7 @@ namespace UI.UserControlUI
                 {
                     MessageBox.Show("Vui lòng chọn xe cần bảo trì!", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboXe.Focus();
                     return;
                 }
 
@@ -327,6 +414,22 @@ namespace UI.UserControlUI
                     return;
                 }
 
+                // Xác nhận trước khi tạo
+                string tenXe = cboXe.Text;
+                int soLuongPhuTung = dgvChiTietBaoTri.Rows.Count;
+                
+                DialogResult result = MessageBox.Show(
+                    $"Bạn có chắc muốn tạo phiếu bảo trì mới?\n\n" +
+                    $"Xe: {tenXe}\n" +
+                    $"Số lượng phụ tùng: {soLuongPhuTung}\n" +
+                    $"Tổng chi phí: {lblTongTien.Text}",
+                    "Xác nhận tạo phiếu bảo trì",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                
+                if (result != DialogResult.Yes)
+                    return;
+
                 // Tạo đối tượng bảo trì
                 BaoTriDTO baoTri = new BaoTriDTO
                 {
@@ -335,7 +438,7 @@ namespace UI.UserControlUI
                     GhiChuBaoTri = txtGhiChu.Text
                 };
 
-                // Tạo danh sách chi tiết
+                // Tạo danh sách chi tiết - COPY dữ liệu để tránh reference
                 List<ChiTietBaoTriDTO> chiTietList = new List<ChiTietBaoTriDTO>();
                 foreach (DataGridViewRow row in dgvChiTietBaoTri.Rows)
                 {
@@ -349,20 +452,39 @@ namespace UI.UserControlUI
                     chiTietList.Add(chiTiet);
                 }
 
+                System.Diagnostics.Debug.WriteLine($"[btnThem_Click] Tạo phiếu bảo trì cho xe {tenXe} với {chiTietList.Count} phụ tùng");
+
                 // Thêm vào database
                 if (baoTriBLL.ThemBaoTri(baoTri, chiTietList))
                 {
-                    MessageBox.Show("Thêm bảo trì thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"✓ Tạo phiếu bảo trì thành công!\n\n" +
+                        $"Xe: {tenXe}\n" +
+                        $"Số phụ tùng: {chiTietList.Count}\n" +
+                        $"Tổng chi phí: {lblTongTien.Text}\n\n" +
+                        $"Phiếu bảo trì mới đã được tạo riêng biệt.",
+                        "Thành công",
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Information);
+                    
+                    System.Diagnostics.Debug.WriteLine($"[btnThem_Click] Đã lưu thành công, bắt đầu reset form");
+                    
+                    // Đảm bảo reset form HOÀN TOÀN trước khi load lại dữ liệu
+                    ResetForm();
+                    
+                    System.Diagnostics.Debug.WriteLine($"[btnThem_Click] Đã reset form, bắt đầu load lại dữ liệu");
+                    
                     LoadDanhSachBaoTri();
                     LoadComboBoxPhuTung(); // Cập nhật tồn kho
-                    ResetForm();
+                    LoadComboBoxXe(); // Cập nhật danh sách xe
+                    
+                    System.Diagnostics.Debug.WriteLine($"[btnThem_Click] Hoàn tất - sẵn sàng tạo phiếu tiếp theo");
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi khi thêm bảo trì: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Diagnostics.Debug.WriteLine($"[btnThem_Click ERROR] {ex.Message}");
             }
         }
 
@@ -510,11 +632,17 @@ namespace UI.UserControlUI
             try
             {
                 dgvChiTietBaoTri.Rows.Clear();
+                
+                // Lấy thông tin bảo trì để lấy tên xe
+                BaoTriDTO baoTri = baoTriBLL.LayBaoTriTheoID(idBaoTri);
+                string tenXe = cboXe.Text; // Lấy từ ComboBox đang được chọn
+                
                 List<ChiTietBaoTriDTO> chiTietList = baoTriBLL.LayChiTietBaoTri(idBaoTri);
 
                 foreach (var chiTiet in chiTietList)
                 {
                     dgvChiTietBaoTri.Rows.Add(
+                        tenXe,                  // Tên Xe
                         chiTiet.MaPhuTung,
                         chiTiet.TenPhuTung,
                         chiTiet.DonViTinh,
@@ -559,14 +687,29 @@ namespace UI.UserControlUI
         private void ResetForm()
         {
             idBaoTriSelected = 0;
-            cboXe.SelectedIndex = -1;
-            cboNhanVien.SelectedIndex = -1;
-            cboPhuTung.SelectedIndex = -1;
-            txtGhiChu.Text = "";
-            txtGhiChuPhuTung.Text = "";
+            
+            // Clear tất cả ComboBox
+            if (cboXe.DataSource != null)
+                cboXe.SelectedIndex = -1;
+            if (cboNhanVien.DataSource != null)
+                cboNhanVien.SelectedIndex = -1;
+            if (cboPhuTung.DataSource != null)
+                cboPhuTung.SelectedIndex = -1;
+            
+            // Clear text boxes
+            txtGhiChu.Clear();
+            txtGhiChuPhuTung.Clear();
+            
+            // Reset numeric
             nudSoLuong.Value = 1;
+            
+            // Clear DataGridView hoàn toàn
             dgvChiTietBaoTri.Rows.Clear();
+            
+            // Reset tổng tiền
             lblTongTien.Text = "0 VNĐ";
+            
+            System.Diagnostics.Debug.WriteLine("[ResetForm] Form đã được reset hoàn toàn");
         }
 
         private void btnLamMoi_Click(object sender, EventArgs e)

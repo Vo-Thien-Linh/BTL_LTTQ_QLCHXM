@@ -134,10 +134,20 @@ namespace UI
             try
             {
                 DataTable dt = baoTriBLL.LayDanhSachXe();
-                cboXe.DataSource = dt;
-                cboXe.DisplayMember = "BienSo";
-                cboXe.ValueMember = "ID_Xe";
-                cboXe.SelectedIndex = -1;
+                
+                if (dt.Rows.Count > 0)
+                {
+                    cboXe.DataSource = dt;
+                    cboXe.DisplayMember = "DisplayText";  // Hiển thị đầy đủ thông tin
+                    cboXe.ValueMember = "ID_Xe";
+                    cboXe.SelectedIndex = -1;
+                }
+                else
+                {
+                    MessageBox.Show("Không có xe nào có thể bảo trì!\nVui lòng thêm xe vào hệ thống.", 
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cboXe.DataSource = null;
+                }
             }
             catch (Exception ex)
             {
@@ -151,10 +161,20 @@ namespace UI
             try
             {
                 DataTable dt = baoTriBLL.LayDanhSachNhanVienKyThuat();
-                cboNhanVien.DataSource = dt;
-                cboNhanVien.DisplayMember = "HoTenNV";
-                cboNhanVien.ValueMember = "MaTaiKhoan";
-                cboNhanVien.SelectedIndex = -1;
+                
+                if (dt.Rows.Count > 0)
+                {
+                    cboNhanVien.DataSource = dt;
+                    cboNhanVien.DisplayMember = "HoTenNV";
+                    cboNhanVien.ValueMember = "MaTaiKhoan";
+                    cboNhanVien.SelectedIndex = -1;
+                }
+                else
+                {
+                    MessageBox.Show("Không có nhân viên kỹ thuật nào!\nVui lòng thêm nhân viên kỹ thuật vào hệ thống.", 
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboNhanVien.DataSource = null;
+                }
             }
             catch (Exception ex)
             {
@@ -168,10 +188,20 @@ namespace UI
             try
             {
                 DataTable dt = baoTriBLL.LayDanhSachPhuTung();
-                cboPhuTung.DataSource = dt;
-                cboPhuTung.DisplayMember = "TenPhuTung";
-                cboPhuTung.ValueMember = "MaPhuTung";
-                cboPhuTung.SelectedIndex = -1;
+                
+                if (dt.Rows.Count > 0)
+                {
+                    cboPhuTung.DataSource = dt;
+                    cboPhuTung.DisplayMember = "TenPhuTung";
+                    cboPhuTung.ValueMember = "MaPhuTung";
+                    cboPhuTung.SelectedIndex = -1;
+                }
+                else
+                {
+                    MessageBox.Show("Không có phụ tùng nào trong kho!\nVui lòng nhập phụ tùng vào kho.", 
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cboPhuTung.DataSource = null;
+                }
             }
             catch (Exception ex)
             {
@@ -339,11 +369,15 @@ namespace UI
                 // Thêm vào database
                 if (baoTriBLL.ThemBaoTri(baoTri, chiTietList))
                 {
-                    MessageBox.Show("Thêm bảo trì thành công!", "Thông báo",
+                    MessageBox.Show("Thêm bảo trì thành công!\n" +
+                        "Phiếu bảo trì mới đã được tạo riêng biệt.", "Thông báo",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    
+                    // Đảm bảo reset form trước khi load lại dữ liệu
+                    ResetForm();
                     LoadDanhSachBaoTri();
                     LoadComboBoxPhuTung(); // Cập nhật tồn kho
-                    ResetForm();
+                    LoadComboBoxXe(); // Cập nhật danh sách xe
                 }
             }
             catch (Exception ex)
@@ -473,13 +507,26 @@ namespace UI
         private void ResetForm()
         {
             idBaoTriSelected = 0;
-            cboXe.SelectedIndex = -1;
-            cboNhanVien.SelectedIndex = -1;
-            cboPhuTung.SelectedIndex = -1;
-            txtGhiChu.Text = "";
-            txtGhiChuPhuTung.Text = "";
+            
+            // Clear tất cả ComboBox
+            if (cboXe.DataSource != null)
+                cboXe.SelectedIndex = -1;
+            if (cboNhanVien.DataSource != null)
+                cboNhanVien.SelectedIndex = -1;
+            if (cboPhuTung.DataSource != null)
+                cboPhuTung.SelectedIndex = -1;
+            
+            // Clear text boxes
+            txtGhiChu.Clear();
+            txtGhiChuPhuTung.Clear();
+            
+            // Reset numeric
             nudSoLuong.Value = 1;
+            
+            // Clear DataGridView hoàn toàn
             dgvChiTietBaoTri.Rows.Clear();
+            
+            // Reset tổng tiền
             lblTongTien.Text = "0 VNĐ";
         }
 

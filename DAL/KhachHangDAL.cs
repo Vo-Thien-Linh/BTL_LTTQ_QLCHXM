@@ -59,9 +59,9 @@ namespace DAL
         public bool InsertKhachHang(KhachHangDTO kh)
         {
             string query = @"INSERT INTO KhachHang (MaKH, HoTenKH, NgaySinh, GioiTinh, Sdt, 
-                            Email, DiaChi, NgayTao, NgayCapNhat, SoCCCD, LoaiGiayTo, AnhGiayTo)
+                            Email, DiaChi, NgayTao, NgayCapNhat, SoCCCD)
                             VALUES (@MaKH, @HoTenKH, @NgaySinh, @GioiTinh, @Sdt, 
-                            @Email, @DiaChi, GETDATE(), GETDATE(), @SoCCCD, @LoaiGiayTo, @AnhGiayTo)";
+                            @Email, @DiaChi, GETDATE(), GETDATE(), @SoCCCD)";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
@@ -72,9 +72,7 @@ namespace DAL
                 new SqlParameter("@Sdt", (object)kh.Sdt ?? DBNull.Value),
                 new SqlParameter("@Email", (object)kh.Email ?? DBNull.Value),
                 new SqlParameter("@DiaChi", (object)kh.DiaChi ?? DBNull.Value),
-                new SqlParameter("@SoCCCD", (object)kh.SoCCCD ?? DBNull.Value),
-                new SqlParameter("@LoaiGiayTo", (object)kh.LoaiGiayTo ?? DBNull.Value),
-                new SqlParameter("@AnhGiayTo", (object)kh.AnhGiayTo ?? DBNull.Value)
+                new SqlParameter("@SoCCCD", (object)kh.SoCCCD ?? DBNull.Value)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
@@ -93,8 +91,6 @@ namespace DAL
                                 Email = @Email, 
                                 DiaChi = @DiaChi, 
                                 SoCCCD = @SoCCCD,
-                                LoaiGiayTo = @LoaiGiayTo,
-                                AnhGiayTo = @AnhGiayTo,
                                 NgayCapNhat = GETDATE()
                             WHERE MaKH = @MaKH";
 
@@ -107,9 +103,7 @@ namespace DAL
                 new SqlParameter("@Sdt", (object)kh.Sdt ?? DBNull.Value),
                 new SqlParameter("@Email", (object)kh.Email ?? DBNull.Value),
                 new SqlParameter("@DiaChi", (object)kh.DiaChi ?? DBNull.Value),
-                new SqlParameter("@SoCCCD", (object)kh.SoCCCD ?? DBNull.Value),
-                new SqlParameter("@LoaiGiayTo", (object)kh.LoaiGiayTo ?? DBNull.Value),
-                new SqlParameter("@AnhGiayTo", (object)kh.AnhGiayTo ?? DBNull.Value)
+                new SqlParameter("@SoCCCD", (object)kh.SoCCCD ?? DBNull.Value)
             };
 
             return DataProvider.ExecuteNonQuery(query, parameters) > 0;
@@ -216,13 +210,26 @@ namespace DAL
 
             if (result == null || result == DBNull.Value)
             {
-                return "KH00000001";
+                return "KH0001";
             }
 
-            string lastMaKH = result.ToString();
-            int number = int.Parse(lastMaKH.Substring(2));
-            number++;
-            return "KH" + number.ToString("D8");
+            string lastMaKH = result.ToString().Trim();
+            
+            // Xử lý cả trường hợp mã có thể không chuẩn
+            string numberPart = lastMaKH.Substring(2); // Bỏ "KH"
+            int number;
+            
+            // Parse số, bỏ qua các số 0 đằng trước
+            if (int.TryParse(numberPart, out number))
+            {
+                number++;
+                return "KH" + number.ToString("D4"); // Chỉ còn 4 chữ số
+            }
+            else
+            {
+                // Nếu parse thất bại, trả về mã mặc định
+                return "KH0001";
+            }
         }
 
         /// <summary>

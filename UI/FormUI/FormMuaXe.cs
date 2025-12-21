@@ -44,6 +44,9 @@ namespace UI.FormUI
             giaoDichBanBLL = new GiaoDichBanBLL();
             hopDongMuaBLL = new HopDongMuaBLL();
 
+            // Ẩn các control liên quan đến giấy tờ
+            HideGiayToControls();
+
             SetDefaultValues();
             SetupEvents();
             LoadXeBan();
@@ -59,6 +62,16 @@ namespace UI.FormUI
             {
                 LoadThongTinXeChiDinh(idXe);
             }
+        }
+
+        private void HideGiayToControls()
+        {
+            // Ẩn các control liên quan đến loại giấy tờ và ảnh giấy tờ
+            if (lblLoaiGiayTo != null) lblLoaiGiayTo.Visible = false;
+            if (cboLoaiGiayTo != null) cboLoaiGiayTo.Visible = false;
+            if (lblAnhGiayTo != null) lblAnhGiayTo.Visible = false;
+            if (picAnhGiayTo != null) picAnhGiayTo.Visible = false;
+            if (btnXemAnhGiayTo != null) btnXemAnhGiayTo.Visible = false;
         }
 
         private void SetDefaultValues()
