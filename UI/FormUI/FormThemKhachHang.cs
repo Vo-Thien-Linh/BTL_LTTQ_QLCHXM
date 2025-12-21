@@ -244,6 +244,30 @@ namespace UI.FormUI
             btnHuy.FlatAppearance.BorderSize = 0;
             btnHuy.Click += BtnHuy_Click;
             mainPanel.Controls.Add(btnHuy);
+
+            // Ẩn các control liên quan đến giấy tờ
+            HideGiayToControls();
+        }
+
+        private void HideGiayToControls()
+        {
+            // Ẩn label (chỉ ẩn Loại Giấy Tờ và Ảnh Giấy Tờ, giữ lại Số CCCD)
+            foreach (Control ctrl in this.Controls[0].Controls)
+            {
+                if (ctrl is Label lbl)
+                {
+                    if (lbl.Text == "Loại Giấy Tờ:" || lbl.Text == "Ảnh Giấy Tờ:")
+                    {
+                        lbl.Visible = false;
+                    }
+                }
+            }
+
+            // Ẩn các control input (không ẩn txtSoCCCD)
+            if (cboLoaiGiayTo != null) cboLoaiGiayTo.Visible = false;
+            if (picAnhGiayTo != null && picAnhGiayTo.Parent != null) picAnhGiayTo.Parent.Visible = false; // Ẩn cả panel chứa ảnh
+            if (btnChonAnh != null) btnChonAnh.Visible = false;
+            if (btnXoaAnh != null) btnXoaAnh.Visible = false;
         }
 
         private void AddLabel(Panel parent, string text, int yPos, int xPos = 20)
@@ -372,9 +396,9 @@ namespace UI.FormUI
                     Sdt = txtSDT.Text.Trim(),
                     Email = txtEmail.Text.Trim(),
                     DiaChi = txtDiaChi.Text.Trim(),
-                    SoCCCD = txtSoCCCD.Text.Trim(),
-                    LoaiGiayTo = cboLoaiGiayTo.Text,
-                    AnhGiayTo = imageData
+                    SoCCCD = txtSoCCCD.Text.Trim(),  // Giữ lại trường Số CCCD
+                    LoaiGiayTo = null,  // Không sử dụng trường này nữa
+                    AnhGiayTo = null  // Không sử dụng trường này nữa
                 };
 
                 string errorMessage;

@@ -180,9 +180,16 @@ namespace UI.UserControlUI
                 dgvKhachHang.Columns["NgayCapNhat"].HeaderText = langMgr.GetString("UpdatedDate");
                 dgvKhachHang.Columns["NgayCapNhat"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
             }
+
+            // Ẩn các cột không cần hiển thị
+            if (dgvKhachHang.Columns.Contains("LoaiGiayTo"))
+                dgvKhachHang.Columns["LoaiGiayTo"].Visible = false;
+            if (dgvKhachHang.Columns.Contains("AnhGiayTo"))
+                dgvKhachHang.Columns["AnhGiayTo"].Visible = false;
+
             dgvKhachHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
-
+        
         private void BtnSearch_Click(object sender, EventArgs e)
         {
             string displayField = cboSearchBy.SelectedItem?.ToString() ?? langMgr.GetString("CustomerID");

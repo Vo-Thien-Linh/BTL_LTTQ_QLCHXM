@@ -22,11 +22,11 @@ namespace DAL
                     SELECT 
                         bt.ID_BaoTri,
                         bt.ID_Xe,
-                        xm.BienSo,
-                        hx.TenHang + ' ' + dx.TenDong + ' ' + ms.TenMau AS TenXe,
+                        ISNULL(xm.BienSo, N'N/A') AS BienSo,
+                        ISNULL(hx.TenHang, N'') + ' ' + ISNULL(dx.TenDong, N'') + ' ' + ISNULL(ms.TenMau, N'') AS TenXe,
                         bt.MaTaiKhoan,
-                        nv.HoTenNV AS TenNhanVien,
-                        bt.GhiChuBaoTri,
+                        ISNULL(nv.HoTenNV, N'Chưa phân công') AS TenNhanVien,
+                        ISNULL(bt.GhiChuBaoTri, N'') AS GhiChuBaoTri,
                         ISNULL(SUM(ctbt.GiaSuDung * ctbt.SoLuong), 0) AS TongChiPhi
                     FROM BaoTriXe bt
                     LEFT JOIN XeMay xm ON bt.ID_Xe = xm.ID_Xe
@@ -84,13 +84,13 @@ namespace DAL
                     baoTri = new BaoTriDTO
                     {
                         ID_BaoTri = Convert.ToInt32(reader["ID_BaoTri"]),
-                        ID_Xe = reader["ID_Xe"].ToString(),
-                        BienSoXe = reader["BienSo"].ToString(),
-                        MaTaiKhoan = reader["MaTaiKhoan"].ToString(),
-                        TenNhanVien = reader["TenNhanVien"].ToString(),
-                        GhiChuBaoTri = reader["GhiChuBaoTri"].ToString(),
-                        TenHangXe = reader["TenHang"].ToString(),
-                        TenDongXe = reader["TenDong"].ToString()
+                        ID_Xe = reader["ID_Xe"] != DBNull.Value ? reader["ID_Xe"].ToString() : "",
+                        BienSoXe = reader["BienSo"] != DBNull.Value ? reader["BienSo"].ToString() : "",
+                        MaTaiKhoan = reader["MaTaiKhoan"] != DBNull.Value ? reader["MaTaiKhoan"].ToString() : null,
+                        TenNhanVien = reader["TenNhanVien"] != DBNull.Value ? reader["TenNhanVien"].ToString() : "",
+                        GhiChuBaoTri = reader["GhiChuBaoTri"] != DBNull.Value ? reader["GhiChuBaoTri"].ToString() : "",
+                        TenHangXe = reader["TenHang"] != DBNull.Value ? reader["TenHang"].ToString() : "",
+                        TenDongXe = reader["TenDong"] != DBNull.Value ? reader["TenDong"].ToString() : ""
                     };
                 }
             }
@@ -129,13 +129,13 @@ namespace DAL
                     {
                         ID_ChiTiet = Convert.ToInt32(reader["ID_ChiTiet"]),
                         ID_BaoTri = Convert.ToInt32(reader["ID_BaoTri"]),
-                        MaPhuTung = reader["MaPhuTung"].ToString(),
-                        TenPhuTung = reader["TenPhuTung"].ToString(),
-                        DonViTinh = reader["DonViTinh"].ToString(),
+                        MaPhuTung = reader["MaPhuTung"] != DBNull.Value ? reader["MaPhuTung"].ToString() : "",
+                        TenPhuTung = reader["TenPhuTung"] != DBNull.Value ? reader["TenPhuTung"].ToString() : "",
+                        DonViTinh = reader["DonViTinh"] != DBNull.Value ? reader["DonViTinh"].ToString() : "",
                         SoLuong = Convert.ToInt32(reader["SoLuong"]),
                         GiaSuDung = Convert.ToDecimal(reader["GiaSuDung"]),
                         ThanhTien = Convert.ToDecimal(reader["ThanhTien"]),
-                        GhiChu = reader["GhiChu"].ToString()
+                        GhiChu = reader["GhiChu"] != DBNull.Value ? reader["GhiChu"].ToString() : ""
                     };
                     list.Add(ct);
                 }
@@ -153,7 +153,7 @@ namespace DAL
 
                 try
                 {
-                    // Thêm bảo trì
+                    // Thêm bảo trì (kiểm tra nếu cột NgayBaoTri tồn tại)
                     string queryBaoTri = @"
                         INSERT INTO BaoTriXe (ID_Xe, MaTaiKhoan, GhiChuBaoTri)
                         VALUES (@ID_Xe, @MaTaiKhoan, @GhiChuBaoTri);
