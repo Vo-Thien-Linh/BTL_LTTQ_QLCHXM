@@ -110,9 +110,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(37, 114);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(85, 16);
+            this.label2.Size = new System.Drawing.Size(106, 16);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Số điện thoại";
+            this.label2.Text = "Gmail hoặc SDT";
             // 
             // label1
             // 

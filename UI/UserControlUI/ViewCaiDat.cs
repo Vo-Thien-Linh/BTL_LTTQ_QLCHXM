@@ -49,18 +49,13 @@ namespace UI.UserControlUI
             // GroupBox Giao diện
             grpGiaoDien.Text = languageManager.GetString("Interface");
             lblTheme.Text = languageManager.GetString("Theme");
-            chkHieuUng.Text = languageManager.GetString("Animations");
-            UpdateFontSizeLabel();
+            
 
             // ComboBox Theme
             UpdateThemeComboBox();
 
             // GroupBox Thông báo
-            grpThongBao.Text = languageManager.GetString("Notifications");
-            chkDangKy.Text = languageManager.GetString("NotifyRegistration");
-            chkBaoHiem.Text = languageManager.GetString("NotifyInsurance");
-            chkThueXe.Text = languageManager.GetString("NotifyRental");
-            lblSoNgay.Text = languageManager.GetString("DaysBefore");
+            
 
             // Buttons
             btnLuu.Text = languageManager.GetString("ButtonSave");
@@ -68,10 +63,7 @@ namespace UI.UserControlUI
             btnKhoiPhuc.Text = languageManager.GetString("ButtonRestore");
         }
 
-        private void UpdateFontSizeLabel()
-        {
-            lblFontSize.Text = $"{languageManager.GetString("FontSize")} {trackBarFont.Value}";
-        }
+        
 
         private void UpdateThemeComboBox()
         {
@@ -160,15 +152,9 @@ namespace UI.UserControlUI
             string themeKey = ConvertThemeValueToKey(settings.Theme);
             SetThemeByKey(themeKey);
 
-            chkHieuUng.Checked = settings.EnableAnimations;
-            trackBarFont.Value = settings.FontSize;
-            UpdateFontSizeLabel();
+            
 
-            // Thông báo
-            chkDangKy.Checked = settings.NotifyRegistrationExpiry;
-            chkBaoHiem.Checked = settings.NotifyInsuranceExpiry;
-            chkThueXe.Checked = settings.NotifyRentalExpiry;
-            nudSoNgay.Value = settings.NotificationDaysBefore;
+            
 
             // Áp dụng theme
             ApplyTheme(themeKey);
@@ -219,12 +205,7 @@ namespace UI.UserControlUI
             {
                 Language = rdoTiengViet.Checked ? "vi" : "en",
                 Theme = themeKey, // luôn là "Light", "Dark", hoặc "Auto"
-                EnableAnimations = chkHieuUng.Checked,
-                FontSize = trackBarFont.Value,
-                NotifyRegistrationExpiry = chkDangKy.Checked,
-                NotifyInsuranceExpiry = chkBaoHiem.Checked,
-                NotifyRentalExpiry = chkThueXe.Checked,
-                NotificationDaysBefore = (int)nudSoNgay.Value
+
             };
         }
 
@@ -339,10 +320,7 @@ namespace UI.UserControlUI
 
 
         // Event Handlers
-        private void trackBarFont_Scroll(object sender, EventArgs e)
-        {
-            UpdateFontSizeLabel();
-        }
+        
 
         private void btnLuu_Click(object sender, EventArgs e)
         {

@@ -15,13 +15,67 @@ namespace BLL
         }
 
         /// <summary>
+        /// Đăng nhập bằng Email + Mật khẩu (static method để gọi từ LoginForm)
+        /// </summary>
+        public static bool DangNhapBangEmail(string email, string matKhau)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== BẮT ĐẦU ĐĂNG NHẬP BẰNG EMAIL ===");
+                System.Diagnostics.Debug.WriteLine($"Email nhận được: [{email}]");
+                System.Diagnostics.Debug.WriteLine($"Mật khẩu nhận được: [{matKhau}]");
+
+                DataRow row = TaiKhoanDAL.DangNhapBangEmail(email, matKhau);
+
+                if (row != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ TaiKhoanDAL.DangNhapBangEmail trả về row != null");
+
+                    // Lưu thông tin vào CurrentUser
+                    CurrentUser.MaTaiKhoan = row["MaTaiKhoan"].ToString();
+                    CurrentUser.LoaiTaiKhoan = row["LoaiTaiKhoan"].ToString();
+                    CurrentUser.TrangThaiTaiKhoan = row["TrangThaiTaiKhoan"].ToString();
+                    CurrentUser.HoTen = row["HoTen"].ToString();
+                    CurrentUser.ChucVu = row["ChucVu"]?.ToString() ?? "";
+
+                    System.Diagnostics.Debug.WriteLine($"CurrentUser.HoTen: {CurrentUser.HoTen}");
+
+                    if (row["MaNV"] != DBNull.Value)
+                    {
+                        CurrentUser.MaNV = row["MaNV"].ToString();
+                        CurrentUser.SoDienThoai = row["SdtNV"]?.ToString() ?? "";
+                    }
+                    else if (row["MaKH"] != DBNull.Value)
+                    {
+                        CurrentUser.MaKH = row["MaKH"].ToString();
+                        CurrentUser.SoDienThoai = row["SdtKH"]?.ToString() ?? "";
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("✅ ĐĂNG NHẬP THÀNH CÔNG");
+                    return true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("❌ TaiKhoanDAL.DangNhapBangEmail trả về NULL");
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ LỖI BLL: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Đăng nhập (static method để gọi từ LoginForm)
         /// </summary>
         public static bool DangNhap(string soDienThoai, string matKhau)
         {
             try
             {
-                // ✅ DEBUG
                 System.Diagnostics.Debug.WriteLine("=== BẮT ĐẦU ĐĂNG NHẬP ===");
                 System.Diagnostics.Debug.WriteLine($"SĐT nhận được: [{soDienThoai}]");
                 System.Diagnostics.Debug.WriteLine($"Mật khẩu nhận được: [{matKhau}]");

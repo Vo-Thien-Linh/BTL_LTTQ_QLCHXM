@@ -11,6 +11,143 @@ namespace DAL
     public class TaiKhoanDAL
     {
         /// <summary>
+        /// Đăng nhập bằng Email + Mật khẩu
+        /// Email lấy từ bảng NhanVien hoặc KhachHang
+        /// </summary>
+        public static DataRow DangNhapBangEmail(string email, string matKhau)
+        {
+            string query = @"
+        SELECT 
+            tk.MaTaiKhoan,
+            tk.LoaiTaiKhoan,
+            tk.TrangThaiTaiKhoan,
+            tk.MaKH,
+            tk.MaNV,
+            ISNULL(kh.HoTenKH, nv.HoTenNV) AS HoTen,
+            kh.Sdt AS SdtKH,
+            nv.Sdt AS SdtNV,
+            nv.ChucVu,
+            nv.Email AS EmailNV,
+            kh.Email AS EmailKH
+        FROM TaiKhoan tk
+        LEFT JOIN KhachHang kh ON tk.MaKH = kh.MaKH
+        LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+        WHERE (LTRIM(RTRIM(nv.Email)) = @Email OR LTRIM(RTRIM(kh.Email)) = @Email)
+          AND LTRIM(RTRIM(tk.Password)) = @MatKhau
+          AND tk.TrangThaiTaiKhoan = N'Hoạt động'";
+
+            var parameters = new[]
+            {
+        new SqlParameter("@Email", email.Trim()),
+        new SqlParameter("@MatKhau", matKhau.Trim())
+    };
+
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== TaiKhoanDAL.DangNhapBangEmail ===");
+                System.Diagnostics.Debug.WriteLine($"@Email = [{email}]");
+                System.Diagnostics.Debug.WriteLine($"@MatKhau = [{matKhau}]");
+                System.Diagnostics.Debug.WriteLine($"Query: {query}");
+
+                DataTable dt = DataProvider.ExecuteQuery(query, parameters);
+
+                System.Diagnostics.Debug.WriteLine($"Số dòng trả về: {dt.Rows.Count}");
+
+                if (dt.Rows.Count > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("✅ Tìm thấy tài khoản!");
+                    System.Diagnostics.Debug.WriteLine($"HoTen: {dt.Rows[0]["HoTen"]}");
+                    System.Diagnostics.Debug.WriteLine($"Email: {dt.Rows[0]["EmailNV"] ?? dt.Rows[0]["EmailKH"]}");
+                    return dt.Rows[0];
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("❌ KHÔNG TÌM THẤY TÀI KHOẢN");
+
+                    // DEBUG: Kiểm tra có tài khoản với Email này không
+                    string checkQuery = @"
+                SELECT 
+                    tk.Password,
+                    tk.TrangThaiTaiKhoan,
+                    nv.Email,
+                    nv.HoTenNV,
+                    nv.Sdt
+                FROM TaiKhoan tk
+                INNER JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                WHERE LTRIM(RTRIM(nv.Email)) = @Email";
+
+                    var checkParams = new[] { new SqlParameter("@Email", email.Trim()) };
+                    DataTable checkDt = DataProvider.ExecuteQuery(checkQuery, checkParams);
+
+                    if (checkDt.Rows.Count > 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine("⚠️ Tìm thấy tài khoản với Email này:");
+                        System.Diagnostics.Debug.WriteLine($"   Email trong DB: [{checkDt.Rows[0]["Email"]}]");
+                        System.Diagnostics.Debug.WriteLine($"   Password trong DB: [{checkDt.Rows[0]["Password"]}]");
+                        System.Diagnostics.Debug.WriteLine($"   TrangThai trong DB: [{checkDt.Rows[0]["TrangThaiTaiKhoan"]}]");
+                        System.Diagnostics.Debug.WriteLine($"   HoTenNV: [{checkDt.Rows[0]["HoTenNV"]}]");
+
+                        // So sánh password
+                        string dbPassword = checkDt.Rows[0]["Password"].ToString().Trim();
+                        string inputPassword = matKhau.Trim();
+
+                        if (dbPassword == inputPassword)
+                        {
+                            System.Diagnostics.Debug.WriteLine("✅ Password KHỚP!");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"❌ Password KHÔNG KHỚP!");
+                            System.Diagnostics.Debug.WriteLine($"   Bạn nhập: [{inputPassword}] (length: {inputPassword.Length})");
+                            System.Diagnostics.Debug.WriteLine($"   Trong DB: [{dbPassword}] (length: {dbPassword.Length})");
+                        }
+
+                        // Kiểm tra trạng thái
+                        string dbTrangThai = checkDt.Rows[0]["TrangThaiTaiKhoan"].ToString().Trim();
+                        if (dbTrangThai == "Hoạt động")
+                        {
+                            System.Diagnostics.Debug.WriteLine("✅ TrangThai KHỚP!");
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine($"❌ TrangThai KHÔNG KHỚP!");
+                            System.Diagnostics.Debug.WriteLine($"   Trong DB: [{dbTrangThai}]");
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("❌ KHÔNG có tài khoản nào với Email này");
+
+                        // Kiểm tra xem có email nào khớp không (có thể do tài khoản chưa được tạo)
+                        string checkEmailQuery = @"
+                    SELECT TOP 5 
+                        nv.Email, 
+                        nv.HoTenNV,
+                        CASE WHEN tk.MaTaiKhoan IS NULL THEN N'Chưa có TK' ELSE N'Đã có TK' END AS TrangThaiTK
+                    FROM NhanVien nv
+                    LEFT JOIN TaiKhoan tk ON nv.MaNV = tk.MaNV
+                    WHERE nv.Email IS NOT NULL";
+
+                        DataTable emailListDt = DataProvider.ExecuteQuery(checkEmailQuery);
+                        System.Diagnostics.Debug.WriteLine("📋 Danh sách một số Email trong hệ thống:");
+                        foreach (DataRow row in emailListDt.Rows)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"   - Email: [{row["Email"]}] | Họ tên: {row["HoTenNV"]} | {row["TrangThaiTK"]}");
+                        }
+                    }
+
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ LỖI DAL: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Đăng nhập bằng SĐT + Mật khẩu
         /// Hỗ trợ cả Khách hàng và Nhân viên
         /// </summary>

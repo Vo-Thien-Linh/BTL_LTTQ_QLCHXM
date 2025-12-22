@@ -68,41 +68,87 @@ namespace DAL
             // Danh sách cột có thể tìm kiếm
             string[] VALID_FIELDS = { "ID_Xe", "BienSo", "TenHang", "TenDong", "TenMau" };
 
-            // Nếu field tìm không hợp lệ, trả về tất cả
-            if (string.IsNullOrEmpty(searchField) || !VALID_FIELDS.Contains(searchField))
-                return GetAllXeMay();
-
             string query = @"
-        SELECT xe.ID_Xe, xe.BienSo, xe.NgayMua, xe.GiaMua, xe.NgayDangKy, xe.HetHanDangKy,
-               xe.HetHanBaoHiem, xe.KmDaChay, xe.ThongTinXang, xe.AnhXe, xe.MucDichSuDung, xe.TrangThai,
-               lx.NamSX, lx.ID_Loai, hang.TenHang, dong.TenDong, dong.PhanKhoi, dong.LoaiXe, mau.TenMau
-        FROM XeMay xe
-        LEFT JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-        LEFT JOIN HangXe hang ON lx.MaHang = hang.MaHang
-        LEFT JOIN DongXe dong ON lx.MaDong = dong.MaDong
-        LEFT JOIN MauSac mau ON lx.MaMau = mau.MaMau
-        WHERE 1=1
-    ";
+        SELECT 
+            xm.ID_Xe,
+            xm.BienSo,
+            hx.TenHang,
+            dx.TenDong,
+            ms.TenMau,
+            lx.NamSX,
+            dx.PhanKhoi,
+            dx.LoaiXe,
+            xm.GiaMua,
+            xm.KmDaChay,
+            xm.TrangThai,
+            xm.ID_Loai,
+            xm.MaNCC,
+            xm.NgayMua,
+            xm.NgayDangKy,
+            xm.HetHanDangKy,
+            xm.HetHanBaoHiem,
+            xm.ThongTinXang,
+            xm.AnhXe,
+            xm.MucDichSuDung,
+            xm.GiaNhap,
+            xm.SoLuong,
+            xm.SoLuongBanRa
+        FROM XeMay xm
+        INNER JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
+        INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+        INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+        INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+        WHERE 1=1";
 
             List<SqlParameter> pars = new List<SqlParameter>();
 
-            // Lọc theo field
-            if (!string.IsNullOrEmpty(searchField) && !string.IsNullOrEmpty(searchKeyword))
+            // ✅ Lọc theo keyword
+            if (!string.IsNullOrEmpty(searchKeyword))
             {
-                query += $" AND {searchField} LIKE @keyword";
-                pars.Add(new SqlParameter("@keyword", "%" + searchKeyword + "%"));
+                if (!string.IsNullOrEmpty(searchField) && VALID_FIELDS.Contains(searchField))
+                {
+                    // Tìm theo field cụ thể
+                    query += $" AND {searchField} LIKE @keyword";
+                    pars.Add(new SqlParameter("@keyword", "%" + searchKeyword + "%"));
+                }
+                else
+                {
+                    // Tìm theo tất cả các field
+                    query += @" AND (
+                xm.ID_Xe LIKE @keyword OR
+                xm.BienSo LIKE @keyword OR
+                hx.TenHang LIKE @keyword OR
+                dx.TenDong LIKE @keyword OR
+                ms.TenMau LIKE @keyword
+            )";
+                    pars.Add(new SqlParameter("@keyword", "%" + searchKeyword + "%"));
+                }
             }
 
-            // Lọc theo trạng thái
+            // ✅ Lọc theo trạng thái
             if (!string.IsNullOrEmpty(trangThai) && trangThai != "Tất cả")
             {
-                query += " AND xe.TrangThai = @trangThai";
+                query += " AND xm.TrangThai = @trangThai";
                 pars.Add(new SqlParameter("@trangThai", trangThai));
             }
 
-            query += " ORDER BY xe.ID_Xe";
+            query += " ORDER BY xm.ID_Xe";
 
-            return DataProvider.ExecuteQuery(query, pars.ToArray());
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== SearchXeMay ===");
+                System.Diagnostics.Debug.WriteLine($"searchField: {searchField}");
+                System.Diagnostics.Debug.WriteLine($"searchKeyword: {searchKeyword}");
+                System.Diagnostics.Debug.WriteLine($"trangThai: {trangThai}");
+                System.Diagnostics.Debug.WriteLine($"Query: {query}");
+
+                return DataProvider.ExecuteQuery(query, pars.ToArray());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi SearchXeMay: {ex.Message}");
+                throw;
+            }
         }
 
 
