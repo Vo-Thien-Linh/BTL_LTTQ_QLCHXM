@@ -54,9 +54,9 @@
             this.panel1.Controls.Add(this.btnSua);
             this.panel1.Controls.Add(this.btnThem);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 134);
+            this.panel1.Location = new System.Drawing.Point(0, 117);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(2323, 808);
+            this.panel1.Size = new System.Drawing.Size(2323, 825);
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -64,7 +64,7 @@
             // 
             this.dgvQuanLyPhuTung.BackgroundColor = System.Drawing.Color.White;
             this.dgvQuanLyPhuTung.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuanLyPhuTung.Location = new System.Drawing.Point(70, 112);
+            this.dgvQuanLyPhuTung.Location = new System.Drawing.Point(69, 90);
             this.dgvQuanLyPhuTung.Name = "dgvQuanLyPhuTung";
             this.dgvQuanLyPhuTung.RowHeadersWidth = 51;
             this.dgvQuanLyPhuTung.RowTemplate.Height = 24;
@@ -80,7 +80,7 @@
             this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLamMoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLamMoi.ForeColor = System.Drawing.Color.White;
-            this.btnLamMoi.Location = new System.Drawing.Point(549, 42);
+            this.btnLamMoi.Location = new System.Drawing.Point(549, 24);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(140, 45);
             this.btnLamMoi.TabIndex = 7;
@@ -96,7 +96,7 @@
             this.btnXoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXoa.ForeColor = System.Drawing.Color.White;
-            this.btnXoa.Location = new System.Drawing.Point(389, 42);
+            this.btnXoa.Location = new System.Drawing.Point(389, 24);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(140, 45);
             this.btnXoa.TabIndex = 6;
@@ -112,7 +112,7 @@
             this.btnSua.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSua.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSua.ForeColor = System.Drawing.Color.White;
-            this.btnSua.Location = new System.Drawing.Point(229, 42);
+            this.btnSua.Location = new System.Drawing.Point(229, 24);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(140, 45);
             this.btnSua.TabIndex = 5;
@@ -128,7 +128,7 @@
             this.btnThem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnThem.ForeColor = System.Drawing.Color.White;
-            this.btnThem.Location = new System.Drawing.Point(69, 42);
+            this.btnThem.Location = new System.Drawing.Point(69, 24);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(140, 45);
             this.btnThem.TabIndex = 4;
@@ -147,7 +147,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(2323, 134);
+            this.panel3.Size = new System.Drawing.Size(2323, 117);
             this.panel3.TabIndex = 6;
             // 
             // btnTimKiem
@@ -155,7 +155,7 @@
             this.btnTimKiem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnTimKiem.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTimKiem.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnTimKiem.Location = new System.Drawing.Point(1494, 38);
+            this.btnTimKiem.Location = new System.Drawing.Point(1494, 19);
             this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Size = new System.Drawing.Size(259, 61);
             this.btnTimKiem.TabIndex = 3;
@@ -165,7 +165,7 @@
             // 
             // txtTuKhoa
             // 
-            this.txtTuKhoa.Location = new System.Drawing.Point(767, 75);
+            this.txtTuKhoa.Location = new System.Drawing.Point(767, 61);
             this.txtTuKhoa.Name = "txtTuKhoa";
             this.txtTuKhoa.Size = new System.Drawing.Size(399, 22);
             this.txtTuKhoa.TabIndex = 2;
@@ -174,7 +174,7 @@
             // cbbTimKiemTheo
             // 
             this.cbbTimKiemTheo.FormattingEnabled = true;
-            this.cbbTimKiemTheo.Location = new System.Drawing.Point(69, 75);
+            this.cbbTimKiemTheo.Location = new System.Drawing.Point(69, 61);
             this.cbbTimKiemTheo.Name = "cbbTimKiemTheo";
             this.cbbTimKiemTheo.Size = new System.Drawing.Size(369, 24);
             this.cbbTimKiemTheo.TabIndex = 1;
@@ -183,7 +183,7 @@
             // lblTuKhoa
             // 
             this.lblTuKhoa.AutoSize = true;
-            this.lblTuKhoa.Location = new System.Drawing.Point(764, 37);
+            this.lblTuKhoa.Location = new System.Drawing.Point(764, 23);
             this.lblTuKhoa.Name = "lblTuKhoa";
             this.lblTuKhoa.Size = new System.Drawing.Size(56, 16);
             this.lblTuKhoa.TabIndex = 0;
@@ -192,7 +192,7 @@
             // lblTimKiemTheo
             // 
             this.lblTimKiemTheo.AutoSize = true;
-            this.lblTimKiemTheo.Location = new System.Drawing.Point(66, 37);
+            this.lblTimKiemTheo.Location = new System.Drawing.Point(66, 23);
             this.lblTimKiemTheo.Name = "lblTimKiemTheo";
             this.lblTimKiemTheo.Size = new System.Drawing.Size(91, 16);
             this.lblTimKiemTheo.TabIndex = 0;

@@ -722,26 +722,155 @@ namespace UI.UserControlUI
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             string keyword = txtTuKhoa.Text.Trim();
-            string trangThai = cbbTrangThai.SelectedItem?.ToString();
+            string trangThaiDisplay = cbbTrangThai.SelectedItem?.ToString();
+            string displayField = cbbTimKiemTheo.SelectedItem?.ToString();
 
-            // Xử lý field theo ánh xạ
-            string displayField = cbbTimKiemTheo.SelectedItem?.ToString() ?? langMgr.GetString("VehicleID");
-            string searchField;
-            if (!searchFieldMap.TryGetValue(displayField, out searchField))
-                searchField = null;
-
-            // Nếu chọn "Tất cả" hoặc không có searchField thì tìm theo tất cả hoặc chỉ trạng thái
-            if (string.IsNullOrEmpty(keyword) || string.IsNullOrEmpty(searchField) || displayField == langMgr.GetString("AllStatus"))
+            // ✅ Chuyển đổi trạng thái hiển thị sang giá trị DB
+            string trangThaiDB = null;
+            if (!string.IsNullOrEmpty(trangThaiDisplay))
             {
-                LoadData(null, trangThai);
-                return;
+                switch (trangThaiDisplay)
+                {
+                    case "Tất cả":
+                        trangThaiDB = null;
+                        break;
+                    case "Sẵn sàng":
+                    case "ReadyStatus": // Tiếng Anh nếu có
+                        trangThaiDB = "Sẵn sàng";
+                        break;
+                    case "Đang thuê":
+                    case "RentedStatus":
+                        trangThaiDB = "Đang thuê";
+                        break;
+                    case "Đã bán":
+                    case "SoldStatus":
+                        trangThaiDB = "Đã bán";
+                        break;
+                    case "Đang bảo trì":
+                    case "MaintenanceStatus":
+                        trangThaiDB = "Đang bảo trì";
+                        break;
+                    default:
+                        trangThaiDB = trangThaiDisplay;
+                        break;
+                }
             }
-            else
+
+            // ✅ Chuyển đổi field hiển thị sang tên cột DB
+            string searchField = null;
+
+            if (!string.IsNullOrEmpty(displayField))
             {
-                // Truyền field name, keyword & trạng thái (nếu có) xuống BLL
-                DataTable dt = xeMayBLL.SearchXeMay(searchField, keyword, trangThai);
+                // Kiểm tra nếu là "Tất cả" hoặc "AllStatus"
+                if (displayField == "Tất cả" || displayField == langMgr.GetString("AllStatus"))
+                {
+                    searchField = null; // Tìm tất cả
+                }
+                else
+                {
+                    // Map từ tên hiển thị sang tên cột
+                    switch (displayField)
+                    {
+                        case "Mã xe":
+                        case "VehicleID":
+                            searchField = "ID_Xe";
+                            break;
+                        case "Biển số":
+                        case "PlateNumber":
+                            searchField = "BienSo";
+                            break;
+                        case "Hãng":
+                        case "Hãng xe":
+                        case "Brand":
+                            searchField = "TenHang";
+                            break;
+                        case "Dòng":
+                        case "Dòng xe":
+                        case "Model":
+                            searchField = "TenDong";
+                            break;
+                        default:
+                            // Thử dùng searchFieldMap nếu có
+                            if (!searchFieldMap.TryGetValue(displayField, out searchField))
+                            {
+                                searchField = null;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            // ✅ Xử lý logic tìm kiếm
+            try
+            {
+                DataTable dt;
+
+                // TH1: Không có từ khóa, chỉ lọc theo trạng thái
+                if (string.IsNullOrEmpty(keyword))
+                {
+                    if (string.IsNullOrEmpty(trangThaiDB) || trangThaiDB == "Tất cả")
+                    {
+                        // Hiển thị tất cả
+                        dt = xeMayBLL.GetAllXeMay();
+                    }
+                    else
+                    {
+                        // Lọc theo trạng thái
+                        dt = xeMayBLL.SearchXeMay(null, null, trangThaiDB);
+                    }
+                }
+                // TH2: Có từ khóa
+                else
+                {
+                    if (string.IsNullOrEmpty(searchField))
+                    {
+                        // Tìm theo tất cả field + trạng thái
+                        dt = xeMayBLL.SearchXeMay(null, keyword, trangThaiDB);
+                    }
+                    else
+                    {
+                        // Tìm theo field cụ thể + trạng thái
+                        dt = xeMayBLL.SearchXeMay(searchField, keyword, trangThaiDB);
+                    }
+                }
+
+                // Hiển thị kết quả
                 currentData = dt;
-                DisplayXeCards(dt);
+
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    MessageBox.Show(
+                        "Không tìm thấy xe nào phù hợp với điều kiện tìm kiếm!\n\n" +
+                        $"Từ khóa: {keyword}\n" +
+                        $"Trường: {displayField}\n" +
+                        $"Trạng thái: {trangThaiDisplay}",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    flowPanelXe.Controls.Clear();
+                }
+                else
+                {
+                    DisplayXeCards(dt);
+
+                    // Cập nhật số lượng
+                    Label lblCount = this.Controls.Find("lblRecordCount", true).FirstOrDefault() as Label;
+                    if (lblCount != null)
+                    {
+                        lblCount.Text = $"Tìm thấy: {dt.Rows.Count} xe";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Lỗi khi tìm kiếm xe!\n\n{ex.Message}",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                System.Diagnostics.Debug.WriteLine($"Lỗi tìm kiếm: {ex.Message}\n{ex.StackTrace}");
             }
         }
 
