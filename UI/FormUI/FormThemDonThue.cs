@@ -623,5 +623,35 @@ namespace UI.FormUI
                 this.Close();
             }
         }
+
+        private void btnThemKH_Click(object sender, EventArgs e)
+        {
+            using (FormThemKhachHang frm = new FormThemKhachHang())
+            {
+                // Hiển thị form và chờ kết quả
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    // 1. Load lại danh sách khách hàng để lấy dữ liệu mới nhất từ CSDL
+                    LoadKhachHang();
+
+                    // 2. Kiểm tra xem có dữ liệu khách hàng mới trả về không
+                    if (frm.KhachHangMoi != null)
+                    {
+                        // 3. Tự động chọn khách hàng vừa thêm trong ComboBox
+                        try
+                        {
+                            cboKhachHang.SelectedValue = frm.KhachHangMoi.MaKH;
+
+                            // (Tùy chọn) Hiển thị thông báo nhỏ
+                            // MessageBox.Show($"Đã chọn khách hàng: {frm.KhachHangMoi.HoTenKH}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Lỗi chọn khách hàng mới: {ex.Message}");
+                        }
+                    }
+                }
+            }
+        }
     }
 }

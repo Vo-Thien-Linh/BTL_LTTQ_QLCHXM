@@ -186,10 +186,19 @@ namespace UI.UserControlUI
                 BackColor = Color.FromArgb(245, 245, 245)
             };
 
-            string anhXe = row["AnhXeXeBan"].ToString();
-            if (!string.IsNullOrEmpty(anhXe) && File.Exists(anhXe))
+            if (row.Table.Columns.Contains("AnhXe") && row["AnhXe"] != DBNull.Value)
             {
-                picXe.Image = Image.FromFile(anhXe);
+                byte[] imageBytes = (byte[])row["AnhXe"];
+                Image img = ConvertByteArrayToImage(imageBytes);
+
+                if (img != null)
+                {
+                    picXe.Image = img;
+                }
+                else
+                {
+                    picXe.Image = CreatePlaceholderImage(330, 180, row["TenXe"].ToString());
+                }
             }
             else
             {
@@ -523,6 +532,24 @@ namespace UI.UserControlUI
             {
                 // Reload dữ liệu mỗi khi tab được hiển thị
                 LoadData();
+            }
+        }
+        private Image ConvertByteArrayToImage(byte[] imageBytes)
+        {
+            if (imageBytes == null || imageBytes.Length == 0)
+                return null;
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    return Image.FromStream(ms);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi convert ảnh: {ex.Message}");
+                return null;
             }
         }
     }
