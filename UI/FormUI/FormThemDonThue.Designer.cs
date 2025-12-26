@@ -79,6 +79,7 @@
             this.cboGiayToGiuLai = new System.Windows.Forms.ComboBox();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
+            this.btnThemKH = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             this.grpKhachHang.SuspendLayout();
             this.grpXe.SuspendLayout();
@@ -110,6 +111,7 @@
             // 
             // grpKhachHang
             // 
+            this.grpKhachHang.Controls.Add(this.btnThemKH);
             this.grpKhachHang.Controls.Add(this.lblKhachHang);
             this.grpKhachHang.Controls.Add(this.cboKhachHang);
             this.grpKhachHang.Controls.Add(this.lblSdtKH);
@@ -141,7 +143,7 @@
             this.cboKhachHang.FormattingEnabled = true;
             this.cboKhachHang.Location = new System.Drawing.Point(120, 30);
             this.cboKhachHang.Name = "cboKhachHang";
-            this.cboKhachHang.Size = new System.Drawing.Size(280, 23);
+            this.cboKhachHang.Size = new System.Drawing.Size(210, 23);
             this.cboKhachHang.TabIndex = 1;
             // 
             // lblSdtKH
@@ -458,6 +460,22 @@
             this.btnHuy.Text = " HỦY";
             this.btnHuy.UseVisualStyleBackColor = false;
             // 
+            // btnThemKH
+            // 
+            this.btnThemKH.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(175)))), ((int)(((byte)(80)))));
+            this.btnThemKH.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnThemKH.FlatAppearance.BorderSize = 0;
+            this.btnThemKH.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThemKH.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnThemKH.ForeColor = System.Drawing.Color.White;
+            this.btnThemKH.Location = new System.Drawing.Point(336, 30);
+            this.btnThemKH.Name = "btnThemKH";
+            this.btnThemKH.Size = new System.Drawing.Size(78, 25);
+            this.btnThemKH.TabIndex = 6;
+            this.btnThemKH.Text = "Thêm";
+            this.btnThemKH.UseVisualStyleBackColor = false;
+            this.btnThemKH.Click += new System.EventHandler(this.btnThemKH_Click);
+            // 
             // FormThemDonThue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -490,5 +508,7 @@
             this.ResumeLayout(false);
 
         }
+
+        private System.Windows.Forms.Button btnThemKH;
     }
 }

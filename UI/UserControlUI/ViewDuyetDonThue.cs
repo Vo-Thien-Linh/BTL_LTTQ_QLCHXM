@@ -492,17 +492,23 @@ namespace UI.FormUI
             };
 
             // Load ảnh nếu có
-            if (row.Table.Columns.Contains("AnhXeXeBan"))
+            if (row.Table.Columns.Contains("AnhXe") && row["AnhXe"] != DBNull.Value)
             {
-                string anhXe = row["AnhXeXeBan"].ToString();
-                if (!string.IsNullOrEmpty(anhXe) && File.Exists(anhXe))
+                byte[] imageBytes = (byte[])row["AnhXe"];
+                Image img = ConvertByteArrayToImage(imageBytes);
+
+                if (img != null)
                 {
-                    picXe.Image = Image.FromFile(anhXe);
+                    picXe.Image = img;
                 }
                 else
                 {
                     picXe.Image = CreatePlaceholderImage(340, 140, row["TenXe"].ToString());
                 }
+            }
+            else
+            {
+                picXe.Image = CreatePlaceholderImage(340, 140, row["TenXe"].ToString());
             }
 
             card.Controls.Add(picXe);
@@ -901,6 +907,24 @@ namespace UI.FormUI
         private void dgvDanhSachDonChoDuyet_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+        private Image ConvertByteArrayToImage(byte[] imageBytes)
+        {
+            if (imageBytes == null || imageBytes.Length == 0)
+                return null;
+
+            try
+            {
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    return Image.FromStream(ms);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi convert ảnh: {ex.Message}");
+                return null;
+            }
         }
     }
 }
