@@ -355,7 +355,105 @@ namespace UI.FormUI
         private void MainForm_Load(object sender, EventArgs e)
         {
             UpdateMenuLanguage();
-            SelectSidebarButton(btnThongKe); // Chọn nút mặc định
+            ApplyPermissions(); // Áp dụng phân quyền theo chức vụ
+        }
+
+        /// <summary>
+        /// Áp dụng phân quyền: Ẩn/hiện menu theo chức vụ
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            // Hiển thị/ẩn các menu theo quyền
+            btnThongKe.Visible = PermissionManager.CanViewDashboard();
+            btnQuanLyNhanVien.Visible = PermissionManager.CanViewNhanVien();
+            btnQuanLyKhachHang.Visible = PermissionManager.CanViewKhachHang();
+            btnQuanLySanPham.Visible = PermissionManager.CanViewSanPham();
+            btnQuanLyBanHang.Visible = PermissionManager.CanViewBanHang();
+            btnQuanLyChoThue.Visible = PermissionManager.CanViewChoThue();
+            btnQuanLyXuLy.Visible = PermissionManager.CanViewXuLy();
+            btnCaiDat.Visible = PermissionManager.CanViewSettings();
+
+            // Tự động dồn các button lên để không có khoảng trống
+            ReorganizeMenuButtons();
+
+            // Load view đầu tiên có quyền xem
+            string maTaiKhoan = CurrentUser.MaTaiKhoan;
+            string maNhanVien = CurrentUser.MaNV ?? "";
+            
+            if (PermissionManager.CanViewDashboard())
+            {
+                SelectSidebarButton(btnThongKe);
+                LoadControl(new ViewDashboard());
+            }
+            else if (PermissionManager.CanViewSanPham())
+            {
+                SelectSidebarButton(btnQuanLySanPham);
+                LoadControl(new ViewQuanLySanPham());
+            }
+            else if (PermissionManager.CanViewBanHang())
+            {
+                SelectSidebarButton(btnQuanLyBanHang);
+                LoadControl(new ViewQuanLyBanHang(maTaiKhoan));
+            }
+            else if (PermissionManager.CanViewChoThue())
+            {
+                SelectSidebarButton(btnQuanLyChoThue);
+                LoadControl(new ViewQuanLyChoThue(maNhanVien));
+            }
+            else if (PermissionManager.CanViewXuLy())
+            {
+                SelectSidebarButton(btnQuanLyXuLy);
+                LoadControl(new ViewQuanLyBaoTri());
+            }
+            else if (PermissionManager.CanViewKhachHang())
+            {
+                SelectSidebarButton(btnQuanLyKhachHang);
+                LoadControl(new ViewQuanLyKhachHang());
+            }
+            else
+            {
+                // Nếu không có quyền gì, hiển thị thông báo
+                MessageBox.Show(
+                    "Tài khoản của bạn chưa được cấp quyền truy cập!\n" +
+                    "Vui lòng liên hệ quản trị viên.",
+                    "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
+        }
+
+        /// <summary>
+        /// Tự động dồn các button menu lên để không có khoảng trống khi một số button bị ẩn
+        /// </summary>
+        private void ReorganizeMenuButtons()
+        {
+            // Danh sách các button theo thứ tự hiển thị
+            List<Button> menuButtons = new List<Button>
+            {
+                btnQuanLyNhanVien,
+                btnQuanLyKhachHang,
+                btnQuanLySanPham,
+                btnQuanLyBanHang,
+                btnQuanLyChoThue,
+                btnQuanLyXuLy,
+                btnThongKe,
+                btnCaiDat
+            };
+
+            int currentY = 0;
+            int buttonHeight = 98; // Chiều cao của mỗi button
+            int buttonWidth = 267; // Chiều rộng của button
+
+            foreach (Button btn in menuButtons)
+            {
+                if (btn.Visible)
+                {
+                    btn.Location = new Point(0, currentY);
+                    btn.Size = new Size(buttonWidth, buttonHeight);
+                    currentY += buttonHeight;
+                }
+            }
         }
 
         
@@ -490,6 +588,32 @@ namespace UI.FormUI
             control.Dock = DockStyle.Fill;
             pnlContent.Controls.Add(control);
             control.BringToFront();
+        }
+        
+        // Methods để navigate từ các view khác
+        public void NavigateToBanXe(string idXe)
+        {
+            // Chuyển sang view Quản lý Bán hàng
+            SelectSidebarButton(btnQuanLyBanHang);
+            string maTaiKhoan = CurrentUser.MaTaiKhoan;
+            LoadControl(new ViewQuanLyBanHang(maTaiKhoan));
+            
+            // Mở form bán xe với xe đã chọn
+            FormMuaXe formMuaXe = new FormMuaXe(maTaiKhoan, idXe);
+            formMuaXe.ShowDialog();
+        }
+        
+        public void NavigateToThueXe(string idXe)
+        {
+            // Chuyển sang view Quản lý Cho thuê
+            SelectSidebarButton(btnQuanLyChoThue);
+            string maNhanVien = CurrentUser.MaNV ?? "";
+            LoadControl(new ViewQuanLyChoThue(maNhanVien));
+            
+            // Mở form thuê xe với xe đã chọn
+            string maTaiKhoan = CurrentUser.MaTaiKhoan;
+            FormThemDonThue formThemDonThue = new FormThemDonThue(maTaiKhoan, idXe);
+            formThemDonThue.ShowDialog();
         }
 
         private void btnList_Click(object sender, EventArgs e)

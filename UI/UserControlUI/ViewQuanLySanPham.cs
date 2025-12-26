@@ -14,6 +14,12 @@ namespace UI.UserControlUI
     public partial class ViewQuanLySanPham : UserControl
     {
         private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+        private Timer animationTimer;
+        private int targetHeight = 60;
+        private int collapsedHeight = 10;
+        private int expandedHeight = 60;
+        private bool isExpanded = true; // Bắt đầu ở trạng thái mở rộng
+        
         public ViewQuanLySanPham()
         {
             InitializeComponent();
@@ -21,6 +27,74 @@ namespace UI.UserControlUI
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
             langMgr.LanguageChanged += (s, e) => ApplyLanguage();
             ApplyLanguage();
+            
+            // Khởi tạo timer cho animation
+            animationTimer = new Timer();
+            animationTimer.Interval = 10;
+            animationTimer.Tick += AnimationTimer_Tick;
+            
+            // Đặt chiều cao ban đầu = MỞ RỘNG để người dùng thấy
+            panel2.Height = expandedHeight;
+            btnQuanLyXe.Visible = true;
+            btnQuanLyPhuTung.Visible = true;
+            
+            // Thêm events
+            panel2.MouseEnter += Panel2_MouseEnter;
+            panel2.MouseLeave += Panel2_MouseLeave;
+            btnQuanLyXe.MouseEnter += (s, e) => Panel2_MouseEnter(s, e);
+            btnQuanLyPhuTung.MouseEnter += (s, e) => Panel2_MouseEnter(s, e);
+        }
+        
+        private void Panel2_MouseEnter(object sender, EventArgs e)
+        {
+            if (!isExpanded)
+            {
+                targetHeight = expandedHeight;
+                isExpanded = true;
+                btnQuanLyXe.Visible = true;
+                btnQuanLyPhuTung.Visible = true;
+                animationTimer.Start();
+            }
+        }
+        
+        private void Panel2_MouseLeave(object sender, EventArgs e)
+        {
+            // Kiểm tra nếu chuột không còn trong panel2 và các button
+            if (!panel2.ClientRectangle.Contains(panel2.PointToClient(Cursor.Position)))
+            {
+                if (isExpanded)
+                {
+                    targetHeight = collapsedHeight;
+                    isExpanded = false;
+                    animationTimer.Start();
+                }
+            }
+        }
+        
+        private void AnimationTimer_Tick(object sender, EventArgs e)
+        {
+            int step = 5;
+            
+            if (panel2.Height < targetHeight)
+            {
+                panel2.Height = Math.Min(panel2.Height + step, targetHeight);
+            }
+            else if (panel2.Height > targetHeight)
+            {
+                panel2.Height = Math.Max(panel2.Height - step, targetHeight);
+                
+                // Ẩn button khi thu gọn xong
+                if (panel2.Height == collapsedHeight)
+                {
+                    btnQuanLyXe.Visible = false;
+                    btnQuanLyPhuTung.Visible = false;
+                }
+            }
+            
+            if (panel2.Height == targetHeight)
+            {
+                animationTimer.Stop();
+            }
         }
 
         private void ApplyLanguage()

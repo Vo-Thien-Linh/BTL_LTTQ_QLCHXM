@@ -382,15 +382,16 @@ namespace DAL
             xe.BienSo,
             hx.TenHang,
             dx.TenDong,
-            ms.TenMau,
+            ms.TenMau AS TenMau,
             lx.NamSX,
             dx.PhanKhoi,
-            xe.ThongTinXang,
+            ISNULL(dx.LoaiXe, N'Không xác định') AS LoaiXe,
+            ISNULL(xe.ThongTinXang, N'Xăng thường') AS ThongTinXang,
             xe.SoLuong,
             xe.TrangThai,
             xe.MucDichSuDung,
             xe.AnhXe,
-            ISNULL(COALESCE(tg.GiaBan, xe.GiaNhap, xe.GiaMua), 0) AS GiaBan
+            ISNULL(tg.GiaBan, ISNULL(xe.GiaMua, 0)) AS GiaBan
             FROM XeMay xe
             INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
             INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
@@ -401,7 +402,6 @@ namespace DAL
               AND (xe.MucDichSuDung = N'Bán' OR xe.MucDichSuDung IS NULL)
               AND xe.SoLuong IS NOT NULL
               AND xe.SoLuong > 0
-              AND (tg.GiaBan IS NOT NULL OR xe.GiaNhap IS NOT NULL OR xe.GiaMua IS NOT NULL)
             ORDER BY hx.TenHang, dx.TenDong, lx.NamSX DESC";
 
             return DataProvider.ExecuteQuery(query);
@@ -588,12 +588,13 @@ namespace DAL
                         lx.NamSX,
                         dx.PhanKhoi,
                         1 AS SoLuong,
-                        ISNULL(xe.GiaMua, xe.GiaNhap) AS GiaBanGanNhat
+                        ISNULL(tg.GiaBan, ISNULL(xe.GiaMua, 0)) AS GiaBanGanNhat
                     FROM XeMay xe
                     INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
                     INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
                     INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
                     INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    LEFT JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe AND tg.PhanLoai = N'Bán'
                     WHERE xe.MucDichSuDung = N'Bán' 
                       AND xe.TrangThai = N'Sẵn sàng'
                       AND (xe.SoLuong IS NULL OR xe.SoLuong > 0)

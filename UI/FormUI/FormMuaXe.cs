@@ -55,6 +55,10 @@ namespace UI.FormUI
         // Constructor mới: nhận mã tài khoản và ID xe cụ thể
         public FormMuaXe(string maTK, string idXe) : this(maTK)
         {
+            // Kiểm tra nếu form đã bị dispose từ constructor base
+            if (this.IsDisposed || this.DialogResult == DialogResult.Cancel)
+                return;
+            
             this.idXeDaChon = idXe;
             
             // Load thông tin xe cụ thể
@@ -182,8 +186,24 @@ namespace UI.FormUI
         {
             try
             {
+                // Kiểm tra form đã bị dispose chưa
+                if (this.IsDisposed)
+                    return;
+                
                 // Lấy tất cả xe có thể bán
                 DataTable dt = xeMayBLL.GetXeCoTheBan();
+                
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    MessageBox.Show(
+                        "Không có xe nào sẵn sàng để bán!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                    return;
+                }
                 
                 // Tìm xe theo ID
                 bool found = false;
@@ -198,13 +218,54 @@ namespace UI.FormUI
                         {
                             xeHienTai = dv[0];
                             
-                            // Hiển thị thông tin xe
-                            txtTenXe.Text = row["TenXe"]?.ToString() ?? "";
-                            txtBienSo.Text = row["BienSo"]?.ToString() ?? "Chưa có";
-                            txtSoLuongTon.Text = row["SoLuong"]?.ToString() ?? "0";
+                            // Hiển thị thông tin xe - kiểm tra controls tồn tại
+                            if (txtTenXe != null)
+                                txtTenXe.Text = row["TenXe"]?.ToString() ?? "";
                             
-                            decimal giaBan = row["GiaBan"] != DBNull.Value ? Convert.ToDecimal(row["GiaBan"]) : 0;
-                            txtGiaBan.Text = giaBan.ToString("N0") + " VNĐ";
+                            // Hiển thị thông tin bổ sung
+                            if (txtMauXe != null)
+                            {
+                                txtMauXe.Text = row["TenMau"]?.ToString() ?? "Không xác định";
+                                txtMauXe.Visible = true;
+                                if (lblMauXe != null) lblMauXe.Visible = true;
+                            }
+                            
+                            if (txtLoaiXe != null)
+                            {
+                                txtLoaiXe.Text = row["LoaiXe"]?.ToString() ?? "Không xác định";
+                                txtLoaiXe.Visible = true;
+                                if (lblLoaiXe != null) lblLoaiXe.Visible = true;
+                            }
+                            
+                            if (txtPhanKhoi != null)
+                            {
+                                txtPhanKhoi.Text = row["PhanKhoi"]?.ToString() + " cc" ?? "Không xác định";
+                                txtPhanKhoi.Visible = true;
+                                if (lblPhanKhoi != null) lblPhanKhoi.Visible = true;
+                            }
+                            
+                            if (txtThongTinXang != null)
+                            {
+                                txtThongTinXang.Text = row["ThongTinXang"]?.ToString() ?? "Xăng thường";
+                                txtThongTinXang.Visible = true;
+                                if (lblThongTinXang != null) lblThongTinXang.Visible = true;
+                            }
+                            
+                            if (txtNamSX != null)
+                            {
+                                txtNamSX.Text = row["NamSX"]?.ToString() ?? "Không xác định";
+                                txtNamSX.Visible = true;
+                                if (lblNamSX != null) lblNamSX.Visible = true;
+                            }
+                            
+                            if (txtSoLuongTon != null)
+                                txtSoLuongTon.Text = row["SoLuong"]?.ToString() ?? "0";
+                            
+                            if (txtGiaBan != null)
+                            {
+                                decimal giaBan = row["GiaBan"] != DBNull.Value ? Convert.ToDecimal(row["GiaBan"]) : 0;
+                                txtGiaBan.Text = giaBan.ToString("N0") + " VNĐ";
+                            }
                             
                             found = true;
                         }
@@ -219,17 +280,27 @@ namespace UI.FormUI
                         "Thông báo",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
+                    this.DialogResult = DialogResult.Cancel;
                     this.Close();
+                    return;
                 }
             }
             catch (Exception ex)
             {
+                string errorMsg = $"Lỗi khi tải thông tin xe: {ex.Message}\n\nStack Trace: {ex.StackTrace}";
+                if (ex.InnerException != null)
+                {
+                    errorMsg += $"\n\nInner Exception: {ex.InnerException.Message}";
+                }
+                
                 MessageBox.Show(
-                    "Lỗi khi tải thông tin xe: " + ex.Message,
+                    errorMsg,
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.Cancel;
                 this.Close();
+                return;
             }
         }
 

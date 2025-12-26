@@ -53,10 +53,19 @@ namespace UI.FormUI
             this.grpXe = new System.Windows.Forms.GroupBox();
             this.txtSoLuongTon = new System.Windows.Forms.TextBox();
             this.txtGiaBan = new System.Windows.Forms.TextBox();
-            this.txtBienSo = new System.Windows.Forms.TextBox();
+            this.txtTenXe = new System.Windows.Forms.TextBox();
+            this.txtMauXe = new System.Windows.Forms.TextBox();
+            this.txtLoaiXe = new System.Windows.Forms.TextBox();
+            this.txtPhanKhoi = new System.Windows.Forms.TextBox();
+            this.txtThongTinXang = new System.Windows.Forms.TextBox();
+            this.txtNamSX = new System.Windows.Forms.TextBox();
             this.lblSoLuongTon = new System.Windows.Forms.Label();
             this.lblGiaBan = new System.Windows.Forms.Label();
-            this.lblBienSo = new System.Windows.Forms.Label();
+            this.lblMauXe = new System.Windows.Forms.Label();
+            this.lblLoaiXe = new System.Windows.Forms.Label();
+            this.lblPhanKhoi = new System.Windows.Forms.Label();
+            this.lblThongTinXang = new System.Windows.Forms.Label();
+            this.lblNamSX = new System.Windows.Forms.Label();
             this.lblXe = new System.Windows.Forms.Label();
             this.grpThongTinBan = new System.Windows.Forms.GroupBox();
             this.cboTrangThaiThanhToan = new System.Windows.Forms.ComboBox();
@@ -67,7 +76,6 @@ namespace UI.FormUI
             this.lblNgayBan = new System.Windows.Forms.Label();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
-            this.txtTenXe = new System.Windows.Forms.TextBox();
             this.grpKhachHang.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAnhGiayTo)).BeginInit();
             this.grpXe.SuspendLayout();
@@ -97,9 +105,9 @@ namespace UI.FormUI
             this.grpKhachHang.Controls.Add(this.lblSdtKH);
             this.grpKhachHang.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.grpKhachHang.Location = new System.Drawing.Point(27, 25);
-            this.grpKhachHang.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpKhachHang.Margin = new System.Windows.Forms.Padding(4);
             this.grpKhachHang.Name = "grpKhachHang";
-            this.grpKhachHang.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpKhachHang.Padding = new System.Windows.Forms.Padding(4);
             this.grpKhachHang.Size = new System.Drawing.Size(560, 418);
             this.grpKhachHang.TabIndex = 0;
             this.grpKhachHang.TabStop = false;
@@ -113,7 +121,7 @@ namespace UI.FormUI
             this.btnXemAnhGiayTo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
             this.btnXemAnhGiayTo.ForeColor = System.Drawing.Color.White;
             this.btnXemAnhGiayTo.Location = new System.Drawing.Point(373, 369);
-            this.btnXemAnhGiayTo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnXemAnhGiayTo.Margin = new System.Windows.Forms.Padding(4);
             this.btnXemAnhGiayTo.Name = "btnXemAnhGiayTo";
             this.btnXemAnhGiayTo.Size = new System.Drawing.Size(160, 31);
             this.btnXemAnhGiayTo.TabIndex = 17;
@@ -124,7 +132,7 @@ namespace UI.FormUI
             // 
             this.picAnhGiayTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.picAnhGiayTo.Location = new System.Drawing.Point(160, 369);
-            this.picAnhGiayTo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picAnhGiayTo.Margin = new System.Windows.Forms.Padding(4);
             this.picAnhGiayTo.Name = "picAnhGiayTo";
             this.picAnhGiayTo.Size = new System.Drawing.Size(199, 30);
             this.picAnhGiayTo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -149,7 +157,7 @@ namespace UI.FormUI
             this.cboLoaiGiayTo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.cboLoaiGiayTo.FormattingEnabled = true;
             this.cboLoaiGiayTo.Location = new System.Drawing.Point(160, 332);
-            this.cboLoaiGiayTo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboLoaiGiayTo.Margin = new System.Windows.Forms.Padding(4);
             this.cboLoaiGiayTo.Name = "cboLoaiGiayTo";
             this.cboLoaiGiayTo.Size = new System.Drawing.Size(372, 26);
             this.cboLoaiGiayTo.TabIndex = 15;
@@ -158,7 +166,7 @@ namespace UI.FormUI
             // 
             this.txtCCCD.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.txtCCCD.Location = new System.Drawing.Point(160, 295);
-            this.txtCCCD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCCCD.Margin = new System.Windows.Forms.Padding(4);
             this.txtCCCD.Name = "txtCCCD";
             this.txtCCCD.ReadOnly = true;
             this.txtCCCD.Size = new System.Drawing.Size(372, 24);
@@ -190,7 +198,7 @@ namespace UI.FormUI
             // 
             this.txtDiaChiKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.txtDiaChiKH.Location = new System.Drawing.Point(160, 258);
-            this.txtDiaChiKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtDiaChiKH.Margin = new System.Windows.Forms.Padding(4);
             this.txtDiaChiKH.Name = "txtDiaChiKH";
             this.txtDiaChiKH.ReadOnly = true;
             this.txtDiaChiKH.Size = new System.Drawing.Size(372, 24);
@@ -200,7 +208,7 @@ namespace UI.FormUI
             // 
             this.txtEmailKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.txtEmailKH.Location = new System.Drawing.Point(160, 215);
-            this.txtEmailKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtEmailKH.Margin = new System.Windows.Forms.Padding(4);
             this.txtEmailKH.Name = "txtEmailKH";
             this.txtEmailKH.ReadOnly = true;
             this.txtEmailKH.Size = new System.Drawing.Size(372, 24);
@@ -210,7 +218,7 @@ namespace UI.FormUI
             // 
             this.txtHoTenKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.txtHoTenKH.Location = new System.Drawing.Point(160, 172);
-            this.txtHoTenKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtHoTenKH.Margin = new System.Windows.Forms.Padding(4);
             this.txtHoTenKH.Name = "txtHoTenKH";
             this.txtHoTenKH.ReadOnly = true;
             this.txtHoTenKH.Size = new System.Drawing.Size(372, 24);
@@ -220,7 +228,7 @@ namespace UI.FormUI
             // 
             this.txtMaKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.txtMaKH.Location = new System.Drawing.Point(160, 129);
-            this.txtMaKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMaKH.Margin = new System.Windows.Forms.Padding(4);
             this.txtMaKH.Name = "txtMaKH";
             this.txtMaKH.ReadOnly = true;
             this.txtMaKH.Size = new System.Drawing.Size(372, 24);
@@ -233,7 +241,7 @@ namespace UI.FormUI
             this.btnThemKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.btnThemKH.ForeColor = System.Drawing.Color.White;
             this.btnThemKH.Location = new System.Drawing.Point(373, 74);
-            this.btnThemKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnThemKH.Margin = new System.Windows.Forms.Padding(4);
             this.btnThemKH.Name = "btnThemKH";
             this.btnThemKH.Size = new System.Drawing.Size(160, 37);
             this.btnThemKH.TabIndex = 7;
@@ -247,7 +255,7 @@ namespace UI.FormUI
             this.btnTimKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.btnTimKH.ForeColor = System.Drawing.Color.White;
             this.btnTimKH.Location = new System.Drawing.Point(160, 74);
-            this.btnTimKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTimKH.Margin = new System.Windows.Forms.Padding(4);
             this.btnTimKH.Name = "btnTimKH";
             this.btnTimKH.Size = new System.Drawing.Size(187, 37);
             this.btnTimKH.TabIndex = 6;
@@ -258,7 +266,7 @@ namespace UI.FormUI
             // 
             this.txtSdtKH.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.txtSdtKH.Location = new System.Drawing.Point(160, 37);
-            this.txtSdtKH.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSdtKH.Margin = new System.Windows.Forms.Padding(4);
             this.txtSdtKH.Name = "txtSdtKH";
             this.txtSdtKH.Size = new System.Drawing.Size(372, 24);
             this.txtSdtKH.TabIndex = 5;
@@ -323,16 +331,24 @@ namespace UI.FormUI
             this.grpXe.Controls.Add(this.txtSoLuongTon);
             this.grpXe.Controls.Add(this.txtGiaBan);
             this.grpXe.Controls.Add(this.txtTenXe);
-            this.grpXe.Controls.Add(this.txtBienSo);
+            this.grpXe.Controls.Add(this.txtMauXe);
+            this.grpXe.Controls.Add(this.txtLoaiXe);
+            this.grpXe.Controls.Add(this.txtPhanKhoi);
+            this.grpXe.Controls.Add(this.txtThongTinXang);
+            this.grpXe.Controls.Add(this.txtNamSX);
             this.grpXe.Controls.Add(this.lblSoLuongTon);
             this.grpXe.Controls.Add(this.lblGiaBan);
-            this.grpXe.Controls.Add(this.lblBienSo);
+            this.grpXe.Controls.Add(this.lblMauXe);
+            this.grpXe.Controls.Add(this.lblLoaiXe);
+            this.grpXe.Controls.Add(this.lblPhanKhoi);
+            this.grpXe.Controls.Add(this.lblThongTinXang);
+            this.grpXe.Controls.Add(this.lblNamSX);
             this.grpXe.Controls.Add(this.lblXe);
             this.grpXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.grpXe.Location = new System.Drawing.Point(613, 25);
-            this.grpXe.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpXe.Margin = new System.Windows.Forms.Padding(4);
             this.grpXe.Name = "grpXe";
-            this.grpXe.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpXe.Padding = new System.Windows.Forms.Padding(4);
             this.grpXe.Size = new System.Drawing.Size(560, 418);
             this.grpXe.TabIndex = 1;
             this.grpXe.TabStop = false;
@@ -341,8 +357,8 @@ namespace UI.FormUI
             // txtSoLuongTon
             // 
             this.txtSoLuongTon.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.txtSoLuongTon.Location = new System.Drawing.Point(160, 166);
-            this.txtSoLuongTon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSoLuongTon.Location = new System.Drawing.Point(160, 123);
+            this.txtSoLuongTon.Margin = new System.Windows.Forms.Padding(4);
             this.txtSoLuongTon.Name = "txtSoLuongTon";
             this.txtSoLuongTon.ReadOnly = true;
             this.txtSoLuongTon.Size = new System.Drawing.Size(372, 24);
@@ -351,28 +367,78 @@ namespace UI.FormUI
             // txtGiaBan
             // 
             this.txtGiaBan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.txtGiaBan.Location = new System.Drawing.Point(160, 123);
-            this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtGiaBan.Location = new System.Drawing.Point(160, 80);
+            this.txtGiaBan.Margin = new System.Windows.Forms.Padding(4);
             this.txtGiaBan.Name = "txtGiaBan";
             this.txtGiaBan.ReadOnly = true;
             this.txtGiaBan.Size = new System.Drawing.Size(372, 24);
             this.txtGiaBan.TabIndex = 6;
             // 
-            // txtBienSo
+            // txtTenXe
             // 
-            this.txtBienSo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.txtBienSo.Location = new System.Drawing.Point(160, 80);
-            this.txtBienSo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.txtBienSo.Name = "txtBienSo";
-            this.txtBienSo.ReadOnly = true;
-            this.txtBienSo.Size = new System.Drawing.Size(372, 24);
-            this.txtBienSo.TabIndex = 5;
+            this.txtTenXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.txtTenXe.Location = new System.Drawing.Point(160, 35);
+            this.txtTenXe.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTenXe.Name = "txtTenXe";
+            this.txtTenXe.ReadOnly = true;
+            this.txtTenXe.Size = new System.Drawing.Size(372, 24);
+            this.txtTenXe.TabIndex = 5;
+            // 
+            // txtMauXe
+            // 
+            this.txtMauXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.txtMauXe.Location = new System.Drawing.Point(160, 166);
+            this.txtMauXe.Margin = new System.Windows.Forms.Padding(4);
+            this.txtMauXe.Name = "txtMauXe";
+            this.txtMauXe.ReadOnly = true;
+            this.txtMauXe.Size = new System.Drawing.Size(372, 24);
+            this.txtMauXe.TabIndex = 8;
+            // 
+            // txtLoaiXe
+            // 
+            this.txtLoaiXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.txtLoaiXe.Location = new System.Drawing.Point(160, 209);
+            this.txtLoaiXe.Margin = new System.Windows.Forms.Padding(4);
+            this.txtLoaiXe.Name = "txtLoaiXe";
+            this.txtLoaiXe.ReadOnly = true;
+            this.txtLoaiXe.Size = new System.Drawing.Size(372, 24);
+            this.txtLoaiXe.TabIndex = 10;
+            // 
+            // txtPhanKhoi
+            // 
+            this.txtPhanKhoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.txtPhanKhoi.Location = new System.Drawing.Point(160, 252);
+            this.txtPhanKhoi.Margin = new System.Windows.Forms.Padding(4);
+            this.txtPhanKhoi.Name = "txtPhanKhoi";
+            this.txtPhanKhoi.ReadOnly = true;
+            this.txtPhanKhoi.Size = new System.Drawing.Size(372, 24);
+            this.txtPhanKhoi.TabIndex = 12;
+            // 
+            // txtThongTinXang
+            // 
+            this.txtThongTinXang.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.txtThongTinXang.Location = new System.Drawing.Point(160, 295);
+            this.txtThongTinXang.Margin = new System.Windows.Forms.Padding(4);
+            this.txtThongTinXang.Name = "txtThongTinXang";
+            this.txtThongTinXang.ReadOnly = true;
+            this.txtThongTinXang.Size = new System.Drawing.Size(372, 24);
+            this.txtThongTinXang.TabIndex = 14;
+            // 
+            // txtNamSX
+            // 
+            this.txtNamSX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.txtNamSX.Location = new System.Drawing.Point(160, 338);
+            this.txtNamSX.Margin = new System.Windows.Forms.Padding(4);
+            this.txtNamSX.Name = "txtNamSX";
+            this.txtNamSX.ReadOnly = true;
+            this.txtNamSX.Size = new System.Drawing.Size(372, 24);
+            this.txtNamSX.TabIndex = 16;
             // 
             // lblSoLuongTon
             // 
             this.lblSoLuongTon.AutoSize = true;
             this.lblSoLuongTon.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblSoLuongTon.Location = new System.Drawing.Point(27, 170);
+            this.lblSoLuongTon.Location = new System.Drawing.Point(27, 127);
             this.lblSoLuongTon.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSoLuongTon.Name = "lblSoLuongTon";
             this.lblSoLuongTon.Size = new System.Drawing.Size(96, 18);
@@ -383,23 +449,67 @@ namespace UI.FormUI
             // 
             this.lblGiaBan.AutoSize = true;
             this.lblGiaBan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblGiaBan.Location = new System.Drawing.Point(27, 127);
+            this.lblGiaBan.Location = new System.Drawing.Point(27, 84);
             this.lblGiaBan.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblGiaBan.Name = "lblGiaBan";
             this.lblGiaBan.Size = new System.Drawing.Size(63, 18);
             this.lblGiaBan.TabIndex = 2;
             this.lblGiaBan.Text = "Giá bán:";
             // 
-            // lblBienSo
+            // lblMauXe
             // 
-            this.lblBienSo.AutoSize = true;
-            this.lblBienSo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblBienSo.Location = new System.Drawing.Point(27, 84);
-            this.lblBienSo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblBienSo.Name = "lblBienSo";
-            this.lblBienSo.Size = new System.Drawing.Size(62, 18);
-            this.lblBienSo.TabIndex = 1;
-            this.lblBienSo.Text = "Biển số:";
+            this.lblMauXe.AutoSize = true;
+            this.lblMauXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblMauXe.Location = new System.Drawing.Point(27, 170);
+            this.lblMauXe.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMauXe.Name = "lblMauXe";
+            this.lblMauXe.Size = new System.Drawing.Size(60, 18);
+            this.lblMauXe.TabIndex = 9;
+            this.lblMauXe.Text = "Màu xe:";
+            // 
+            // lblLoaiXe
+            // 
+            this.lblLoaiXe.AutoSize = true;
+            this.lblLoaiXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblLoaiXe.Location = new System.Drawing.Point(27, 213);
+            this.lblLoaiXe.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLoaiXe.Name = "lblLoaiXe";
+            this.lblLoaiXe.Size = new System.Drawing.Size(59, 18);
+            this.lblLoaiXe.TabIndex = 11;
+            this.lblLoaiXe.Text = "Loại xe:";
+            // 
+            // lblPhanKhoi
+            // 
+            this.lblPhanKhoi.AutoSize = true;
+            this.lblPhanKhoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblPhanKhoi.Location = new System.Drawing.Point(27, 256);
+            this.lblPhanKhoi.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPhanKhoi.Name = "lblPhanKhoi";
+            this.lblPhanKhoi.Size = new System.Drawing.Size(78, 18);
+            this.lblPhanKhoi.TabIndex = 13;
+            this.lblPhanKhoi.Text = "Phân khối:";
+            // 
+            // lblThongTinXang
+            // 
+            this.lblThongTinXang.AutoSize = true;
+            this.lblThongTinXang.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblThongTinXang.Location = new System.Drawing.Point(27, 299);
+            this.lblThongTinXang.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblThongTinXang.Name = "lblThongTinXang";
+            this.lblThongTinXang.Size = new System.Drawing.Size(75, 18);
+            this.lblThongTinXang.TabIndex = 15;
+            this.lblThongTinXang.Text = "Loại xăng:";
+            // 
+            // lblNamSX
+            // 
+            this.lblNamSX.AutoSize = true;
+            this.lblNamSX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblNamSX.Location = new System.Drawing.Point(27, 342);
+            this.lblNamSX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblNamSX.Name = "lblNamSX";
+            this.lblNamSX.Size = new System.Drawing.Size(103, 18);
+            this.lblNamSX.TabIndex = 17;
+            this.lblNamSX.Text = "Năm sản xuất:";
             // 
             // lblXe
             // 
@@ -422,9 +532,9 @@ namespace UI.FormUI
             this.grpThongTinBan.Controls.Add(this.lblNgayBan);
             this.grpThongTinBan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             this.grpThongTinBan.Location = new System.Drawing.Point(27, 468);
-            this.grpThongTinBan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpThongTinBan.Margin = new System.Windows.Forms.Padding(4);
             this.grpThongTinBan.Name = "grpThongTinBan";
-            this.grpThongTinBan.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.grpThongTinBan.Padding = new System.Windows.Forms.Padding(4);
             this.grpThongTinBan.Size = new System.Drawing.Size(1147, 172);
             this.grpThongTinBan.TabIndex = 2;
             this.grpThongTinBan.TabStop = false;
@@ -440,7 +550,7 @@ namespace UI.FormUI
             "Chưa thanh toán",
             "Thanh toán một phần"});
             this.cboTrangThaiThanhToan.Location = new System.Drawing.Point(267, 123);
-            this.cboTrangThaiThanhToan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboTrangThaiThanhToan.Margin = new System.Windows.Forms.Padding(4);
             this.cboTrangThaiThanhToan.Name = "cboTrangThaiThanhToan";
             this.cboTrangThaiThanhToan.Size = new System.Drawing.Size(852, 26);
             this.cboTrangThaiThanhToan.TabIndex = 5;
@@ -456,7 +566,7 @@ namespace UI.FormUI
             "Thẻ tín dụng",
             "Trả góp"});
             this.cboHinhThucThanhToan.Location = new System.Drawing.Point(267, 80);
-            this.cboHinhThucThanhToan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboHinhThucThanhToan.Margin = new System.Windows.Forms.Padding(4);
             this.cboHinhThucThanhToan.Name = "cboHinhThucThanhToan";
             this.cboHinhThucThanhToan.Size = new System.Drawing.Size(852, 26);
             this.cboHinhThucThanhToan.TabIndex = 4;
@@ -466,7 +576,7 @@ namespace UI.FormUI
             this.dtpNgayBan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.dtpNgayBan.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpNgayBan.Location = new System.Drawing.Point(267, 37);
-            this.dtpNgayBan.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpNgayBan.Margin = new System.Windows.Forms.Padding(4);
             this.dtpNgayBan.Name = "dtpNgayBan";
             this.dtpNgayBan.Size = new System.Drawing.Size(852, 24);
             this.dtpNgayBan.TabIndex = 3;
@@ -511,7 +621,7 @@ namespace UI.FormUI
             this.btnLuu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnLuu.ForeColor = System.Drawing.Color.White;
             this.btnLuu.Location = new System.Drawing.Point(773, 665);
-            this.btnLuu.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnLuu.Margin = new System.Windows.Forms.Padding(4);
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(187, 49);
             this.btnLuu.TabIndex = 3;
@@ -525,22 +635,12 @@ namespace UI.FormUI
             this.btnHuy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnHuy.ForeColor = System.Drawing.Color.White;
             this.btnHuy.Location = new System.Drawing.Point(987, 665);
-            this.btnHuy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnHuy.Margin = new System.Windows.Forms.Padding(4);
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(187, 49);
             this.btnHuy.TabIndex = 4;
             this.btnHuy.Text = "❌ Hủy";
             this.btnHuy.UseVisualStyleBackColor = false;
-            // 
-            // txtTenXe
-            // 
-            this.txtTenXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.txtTenXe.Location = new System.Drawing.Point(160, 35);
-            this.txtTenXe.Margin = new System.Windows.Forms.Padding(4);
-            this.txtTenXe.Name = "txtTenXe";
-            this.txtTenXe.ReadOnly = true;
-            this.txtTenXe.Size = new System.Drawing.Size(372, 24);
-            this.txtTenXe.TabIndex = 5;
             // 
             // FormMuaXe
             // 
@@ -553,7 +653,7 @@ namespace UI.FormUI
             this.Controls.Add(this.grpXe);
             this.Controls.Add(this.grpKhachHang);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormMuaXe";
@@ -595,10 +695,18 @@ namespace UI.FormUI
         private System.Windows.Forms.GroupBox grpXe;
         private System.Windows.Forms.TextBox txtSoLuongTon;
         private System.Windows.Forms.TextBox txtGiaBan;
-        private System.Windows.Forms.TextBox txtBienSo;
+        private System.Windows.Forms.TextBox txtMauXe;
+        private System.Windows.Forms.TextBox txtLoaiXe;
+        private System.Windows.Forms.TextBox txtPhanKhoi;
+        private System.Windows.Forms.TextBox txtThongTinXang;
+        private System.Windows.Forms.TextBox txtNamSX;
         private System.Windows.Forms.Label lblSoLuongTon;
         private System.Windows.Forms.Label lblGiaBan;
-        private System.Windows.Forms.Label lblBienSo;
+        private System.Windows.Forms.Label lblMauXe;
+        private System.Windows.Forms.Label lblLoaiXe;
+        private System.Windows.Forms.Label lblPhanKhoi;
+        private System.Windows.Forms.Label lblThongTinXang;
+        private System.Windows.Forms.Label lblNamSX;
         private System.Windows.Forms.Label lblXe;
         private System.Windows.Forms.GroupBox grpThongTinBan;
         private System.Windows.Forms.ComboBox cboTrangThaiThanhToan;

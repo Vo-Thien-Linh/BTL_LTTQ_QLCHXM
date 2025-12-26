@@ -75,6 +75,7 @@
     <Compile Include="NhaCungCapBLL.cs" />
     <Compile Include="NhanVienBLL.cs" />
     <Compile Include="OTPManager.cs" />
+    <Compile Include="PermissionManager.cs" />
     <Compile Include="PhuTungBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuenMatKhauBLL.cs" />

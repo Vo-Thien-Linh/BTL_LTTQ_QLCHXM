@@ -25,7 +25,31 @@ namespace UI.UserControlUI
             
             // Thêm event để clear chi tiết khi đổi xe
             cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
+            
+            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
+            ApplyPermissions();
+        }
 
+        /// <summary>
+        /// Áp dụng phân quyền cho các nút thao tác
+        /// Quản lý: Xem (không sửa)
+        /// Kỹ thuật: Thêm/Sửa/Xóa
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            bool canEdit = PermissionManager.CanEditBaoTri(); // Chỉ Kỹ thuật
+            btnThem.Visible = canEdit;
+            btnXoa.Visible = canEdit;
+            btnThemPhuTung.Visible = canEdit;
+            
+            // Nếu không có quyền sửa, chỉ cho xem
+            if (!canEdit)
+            {
+                cboXe.Enabled = false;
+                cboPhuTung.Enabled = false;
+                nudSoLuong.Enabled = false;
+                txtGhiChu.ReadOnly = true;
+            }
         }
         
         // Xử lý khi đổi xe
