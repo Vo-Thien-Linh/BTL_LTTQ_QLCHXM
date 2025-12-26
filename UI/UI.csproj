@@ -62,6 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="FormHandleUI\FormBanPhuTung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHandleUI\FormBanPhuTung.Designer.cs">
+      <DependentUpon>FormBanPhuTung.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormHandleUI\FormChinhSuaThongTinXeDashBoard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -373,6 +379,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormHandleUI\FormBanPhuTung.resx">
+      <DependentUpon>FormBanPhuTung.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormHandleUI\FormChinhSuaThongTinXeDashBoard.resx">
       <DependentUpon>FormChinhSuaThongTinXeDashBoard.cs</DependentUpon>
     </EmbeddedResource>

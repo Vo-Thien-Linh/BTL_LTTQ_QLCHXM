@@ -71,7 +71,7 @@ namespace UI.UserControlUI
             btnXoa.Text = langMgr.GetString("DeleteBtn");
             btnLamMoi.Text = langMgr.GetString("RefreshBtn");
             btnTimKiem.Text = langMgr.GetString("SearchBtn");
-
+            btnBan.Text = "Bán";
             lblTimKiemTheo.Text = langMgr.GetString("SearchBy");
             
             lblTuKhoa.Text = langMgr.GetString("Keyword");
@@ -93,19 +93,77 @@ namespace UI.UserControlUI
 
             dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
             {
-                DataPropertyName = "MaPhuTung",
                 Name = "colMaPhuTung",
+                DataPropertyName = "MaPhuTung",
                 HeaderText = "Mã phụ tùng",
                 Width = 80
             });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TenPhuTung", HeaderText = "Tên phụ tùng", Width = 160 });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TenHang", HeaderText = "Hãng xe", Width = 80 });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "TenDong", HeaderText = "Dòng xe", Width = 110 });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "GiaMua", HeaderText = "Giá mua", Width = 90, DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" } });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "GiaBan", HeaderText = "Giá bán", Width = 90, DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" } });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "DonViTinh", HeaderText = "Đơn vị", Width = 75 });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "SoLuongTon", HeaderText = "Tồn kho", Width = 70 });
-            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "GhiChu", HeaderText = "Ghi chú", Width = 120 });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colTenPhuTung",
+                DataPropertyName = "TenPhuTung",
+                HeaderText = "Tên phụ tùng",
+                Width = 160
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colTenHang",
+                DataPropertyName = "TenHang",
+                HeaderText = "Hãng xe",
+                Width = 80
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colTenDong",
+                DataPropertyName = "TenDong",
+                HeaderText = "Dòng xe",
+                Width = 110
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colGiaMua",
+                DataPropertyName = "GiaMua",
+                HeaderText = "Giá mua",
+                Width = 90,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colGiaBan",
+                DataPropertyName = "GiaBan",
+                HeaderText = "Giá bán",
+                Width = 90,
+                DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colDonViTinh",
+                DataPropertyName = "DonViTinh",
+                HeaderText = "Đơn vị",
+                Width = 75
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colSoLuongTon",
+                DataPropertyName = "SoLuongTon",
+                HeaderText = "Tồn kho",
+                Width = 70
+            });
+
+            dgvQuanLyPhuTung.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "colGhiChu",
+                DataPropertyName = "GhiChu",
+                HeaderText = "Ghi chú",
+                Width = 120
+            });
         }
 
         private void LoadData()
@@ -228,6 +286,52 @@ namespace UI.UserControlUI
         private void dgvQuanLyPhuTung_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void btnBan_Click(object sender, EventArgs e)
+        {
+            // Kiểm tra có chọn dòng nào không
+            if (dgvQuanLyPhuTung.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn phụ tùng cần bán!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var row = dgvQuanLyPhuTung.SelectedRows[0];
+
+            string maPT = row.Cells["colMaPhuTung"].Value?.ToString();
+            string tenPT = row.Cells["colTenPhuTung"].Value?.ToString() ?? "Không xác định";
+            int tonKhoHienTai = Convert.ToInt32(row.Cells["colSoLuongTon"].Value ?? 0);
+            decimal giaBan = Convert.ToDecimal(row.Cells["colGiaBan"].Value ?? 0);
+            string donVi = row.Cells["colDonViTinh"].Value?.ToString() ?? "cái";
+
+            if (string.IsNullOrWhiteSpace(maPT))
+            {
+                MessageBox.Show("Không xác định được mã phụ tùng!", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (tonKhoHienTai <= 0)
+            {
+                MessageBox.Show($"Phụ tùng [{maPT}] - {tenPT} hiện đang hết hàng (tồn kho: 0)!",
+                    "Hết hàng", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
+            // Mở form nhập số lượng bán
+            using (var frm = new FormHandleUI.FormBanPhuTung(maPT, tenPT, tonKhoHienTai, giaBan))
+            {
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadData();
+
+                    // Optional: Thông báo thành công (bỏ DonVi vì chưa có)
+                    MessageBox.Show($"Đã bán thành công {frm.SoLuongBan} phụ tùng {tenPT}",
+                        "Bán hàng thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
     }
 }
