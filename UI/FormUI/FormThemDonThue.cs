@@ -14,6 +14,7 @@ namespace UI.FormUI
         private string maTaiKhoan;
         private bool isLoadingData = false;
         private string selectedIDXe = "";
+        private string preSelectedIDXe = ""; // Xe được chọn từ card
 
         public FormThemDonThue(string maTK)
         {
@@ -40,6 +41,39 @@ namespace UI.FormUI
             LoadKhachHang();
             SetupEvents();
             LoadXeTheoThoiGian();
+        }
+
+        // Constructor với idXe để chọn xe sẵn
+        public FormThemDonThue(string maTK, string idXe) : this(maTK)
+        {
+            this.preSelectedIDXe = idXe;
+            SetSelectedXe(idXe);
+        }
+
+        // Method để set xe được chọn từ card
+        private void SetSelectedXe(string idXe)
+        {
+            if (string.IsNullOrWhiteSpace(idXe)) return;
+
+            // Tìm và chọn xe trong combobox
+            for (int i = 0; i < cboXe.Items.Count; i++)
+            {
+                DataRowView row = (DataRowView)cboXe.Items[i];
+                if (row["ID_Xe"].ToString() == idXe)
+                {
+                    cboXe.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            // Nếu không tìm thấy xe (có thể đang được thuê)
+            MessageBox.Show(
+                "Xe bạn chọn hiện không khả dụng trong thời gian này!\n" +
+                "Vui lòng chọn xe khác hoặc thay đổi thời gian thuê.",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
         }
 
         private void SetDefaultValues()

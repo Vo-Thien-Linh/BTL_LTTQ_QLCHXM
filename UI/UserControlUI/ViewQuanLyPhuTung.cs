@@ -24,7 +24,45 @@ namespace UI.UserControlUI
 
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
             ApplyLanguage();
+            
+            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
+            ApplyPermissions();
         }
+
+        /// <summary>
+        /// Áp dụng phân quyền cho các nút thao tác
+        /// Chỉ Quản lý: Thêm/Sửa/Xóa
+        /// Bán hàng, Kỹ thuật: Chỉ xem
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            bool canEdit = PermissionManager.CanEditSanPham(); // Chỉ Quản lý
+            btnThem.Visible = canEdit;
+            btnSua.Visible = canEdit;
+            btnXoa.Visible = canEdit;
+            btnLamMoi.Visible = canEdit;
+            
+            ReorganizeButtons();
+        }
+
+        /// <summary>
+        /// Tự động dồn các button sang trái khi một số button bị ẩn
+        /// </summary>
+        private void ReorganizeButtons()
+        {
+            List<System.Windows.Forms.Button> buttons = new List<System.Windows.Forms.Button> { btnThem, btnSua, btnXoa, btnLamMoi };
+            int currentX = 66; // Vị trí X ban đầu
+            int spacing = 160; // Khoảng cách giữa các button
+            int y = 17; // Vị trí Y cố định
+
+            foreach (System.Windows.Forms.Button btn in buttons)
+            {
+                if (btn.Visible)
+                {
+                    btn.Location = new Point(currentX, y);
+                    currentX += spacing;
+                }
+            }        }
 
         private void ApplyLanguage()
         {

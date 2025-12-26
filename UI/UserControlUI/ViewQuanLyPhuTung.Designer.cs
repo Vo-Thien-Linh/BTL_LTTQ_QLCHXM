@@ -64,7 +64,7 @@
             // 
             this.dgvQuanLyPhuTung.BackgroundColor = System.Drawing.Color.White;
             this.dgvQuanLyPhuTung.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuanLyPhuTung.Location = new System.Drawing.Point(69, 90);
+            this.dgvQuanLyPhuTung.Location = new System.Drawing.Point(69, 77);
             this.dgvQuanLyPhuTung.Name = "dgvQuanLyPhuTung";
             this.dgvQuanLyPhuTung.RowHeadersWidth = 51;
             this.dgvQuanLyPhuTung.RowTemplate.Height = 24;
@@ -80,7 +80,7 @@
             this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLamMoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLamMoi.ForeColor = System.Drawing.Color.White;
-            this.btnLamMoi.Location = new System.Drawing.Point(549, 24);
+            this.btnLamMoi.Location = new System.Drawing.Point(549, 15);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(140, 45);
             this.btnLamMoi.TabIndex = 7;
@@ -96,7 +96,7 @@
             this.btnXoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXoa.ForeColor = System.Drawing.Color.White;
-            this.btnXoa.Location = new System.Drawing.Point(389, 24);
+            this.btnXoa.Location = new System.Drawing.Point(389, 15);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(140, 45);
             this.btnXoa.TabIndex = 6;
@@ -112,7 +112,7 @@
             this.btnSua.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSua.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSua.ForeColor = System.Drawing.Color.White;
-            this.btnSua.Location = new System.Drawing.Point(229, 24);
+            this.btnSua.Location = new System.Drawing.Point(229, 15);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(140, 45);
             this.btnSua.TabIndex = 5;
@@ -128,7 +128,7 @@
             this.btnThem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnThem.ForeColor = System.Drawing.Color.White;
-            this.btnThem.Location = new System.Drawing.Point(69, 24);
+            this.btnThem.Location = new System.Drawing.Point(69, 15);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(140, 45);
             this.btnThem.TabIndex = 4;
