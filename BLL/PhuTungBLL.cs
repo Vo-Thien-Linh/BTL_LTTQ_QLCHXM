@@ -97,6 +97,15 @@ namespace BLL
             return r2 > 0;
         }
 
-
+        public bool UpdateKhoPhuTungSoLuong(string maPT, int soLuongMoi)
+        {
+            string query = "UPDATE KhoPhuTung SET SoLuongTon = @sl WHERE MaPhuTung = @ma";
+            var pars = new[]
+            {
+        new SqlParameter("@sl", soLuongMoi),
+        new SqlParameter("@ma", maPT)
+    };
+            return DataProvider.ExecuteNonQuery(query, pars) > 0;
+        }
     }
 }

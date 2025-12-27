@@ -48,10 +48,50 @@ namespace UI.UserControlUI
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
             ApplyLanguage();
             InitSearchFieldMap();
-            cboSearchBy.SelectedIndex = 0;
-
-
+            
+            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
+            ApplyPermissions();
         }
+
+        /// <summary>
+        /// Áp dụng phân quyền cho các nút thao tác
+        /// Quản lý + Thu ngân: Sửa
+        /// Chỉ Quản lý: Thêm/Xóa
+        /// Bán hàng: Chỉ xem (không có nút)
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            bool canEdit = PermissionManager.CanEditKhachHang(); // Quản lý, Thu ngân
+            bool canManage = CurrentUser.ChucVu == "Quản lý"; // Chỉ Quản lý
+            
+            btn_AddCustomer.Visible = canManage;
+            btn_EditCustomer.Visible = canEdit;
+            btn_DeleteCustomer.Visible = canManage;
+            btn_RefreshCustomer.Visible = canEdit;
+            
+            ReorganizeButtons();
+        }
+
+        /// <summary>
+        /// Tự động dồn các button sang trái khi một số button bị ẩn
+        /// </summary>
+        private void ReorganizeButtons()
+        {
+            List<System.Windows.Forms.Button> buttons = new List<System.Windows.Forms.Button> { btn_AddCustomer, btn_EditCustomer, btn_DeleteCustomer, btn_RefreshCustomer };
+            int currentX = 20; // Vị trí X ban đầu
+            int spacing = 160; // Khoảng cách giữa các button
+            int y = 13; // Vị trí Y cố định
+
+            foreach (System.Windows.Forms.Button btn in buttons)
+            {
+                if (btn.Visible)
+                {
+                    btn.Location = new Point(currentX, y);
+                    currentX += spacing;
+                }
+            }
+        }
+
         private void InitSearchFieldMap()
         {
             searchFieldMap = new Dictionary<string, string>
@@ -61,6 +101,7 @@ namespace UI.UserControlUI
                 { langMgr.GetString("Phone"), "Sdt" },
                 { langMgr.GetString("Email"), "Email"}
             };
+            cboSearchBy.SelectedIndex = 0;
         }
 
 

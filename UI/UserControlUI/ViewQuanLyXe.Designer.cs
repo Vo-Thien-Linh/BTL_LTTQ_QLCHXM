@@ -60,14 +60,14 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(1934, 134);
+            this.panel3.Size = new System.Drawing.Size(1934, 87);
             this.panel3.TabIndex = 3;
             this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
             // 
             // cbbTrangThai
             // 
             this.cbbTrangThai.FormattingEnabled = true;
-            this.cbbTrangThai.Location = new System.Drawing.Point(507, 73);
+            this.cbbTrangThai.Location = new System.Drawing.Point(504, 36);
             this.cbbTrangThai.Name = "cbbTrangThai";
             this.cbbTrangThai.Size = new System.Drawing.Size(369, 24);
             this.cbbTrangThai.TabIndex = 5;
@@ -76,7 +76,7 @@
             // lblTrangThai
             // 
             this.lblTrangThai.AutoSize = true;
-            this.lblTrangThai.Location = new System.Drawing.Point(504, 37);
+            this.lblTrangThai.Location = new System.Drawing.Point(501, 14);
             this.lblTrangThai.Name = "lblTrangThai";
             this.lblTrangThai.Size = new System.Drawing.Size(73, 16);
             this.lblTrangThai.TabIndex = 4;
@@ -87,7 +87,7 @@
             this.btnTimKiem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
             this.btnTimKiem.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnTimKiem.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnTimKiem.Location = new System.Drawing.Point(1494, 36);
+            this.btnTimKiem.Location = new System.Drawing.Point(1467, 11);
             this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Size = new System.Drawing.Size(259, 61);
             this.btnTimKiem.TabIndex = 3;
@@ -97,7 +97,7 @@
             // 
             // txtTuKhoa
             // 
-            this.txtTuKhoa.Location = new System.Drawing.Point(965, 75);
+            this.txtTuKhoa.Location = new System.Drawing.Point(962, 38);
             this.txtTuKhoa.Name = "txtTuKhoa";
             this.txtTuKhoa.Size = new System.Drawing.Size(399, 22);
             this.txtTuKhoa.TabIndex = 2;
@@ -106,7 +106,7 @@
             // cbbTimKiemTheo
             // 
             this.cbbTimKiemTheo.FormattingEnabled = true;
-            this.cbbTimKiemTheo.Location = new System.Drawing.Point(69, 75);
+            this.cbbTimKiemTheo.Location = new System.Drawing.Point(66, 36);
             this.cbbTimKiemTheo.Name = "cbbTimKiemTheo";
             this.cbbTimKiemTheo.Size = new System.Drawing.Size(369, 24);
             this.cbbTimKiemTheo.TabIndex = 1;
@@ -115,7 +115,7 @@
             // lblTuKhoa
             // 
             this.lblTuKhoa.AutoSize = true;
-            this.lblTuKhoa.Location = new System.Drawing.Point(962, 37);
+            this.lblTuKhoa.Location = new System.Drawing.Point(959, 14);
             this.lblTuKhoa.Name = "lblTuKhoa";
             this.lblTuKhoa.Size = new System.Drawing.Size(56, 16);
             this.lblTuKhoa.TabIndex = 0;
@@ -125,7 +125,7 @@
             // lblTimKiemTheo
             // 
             this.lblTimKiemTheo.AutoSize = true;
-            this.lblTimKiemTheo.Location = new System.Drawing.Point(66, 37);
+            this.lblTimKiemTheo.Location = new System.Drawing.Point(63, 14);
             this.lblTimKiemTheo.Name = "lblTimKiemTheo";
             this.lblTimKiemTheo.Size = new System.Drawing.Size(91, 16);
             this.lblTimKiemTheo.TabIndex = 0;
@@ -141,9 +141,9 @@
             this.panel1.Controls.Add(this.btnSua);
             this.panel1.Controls.Add(this.btnThem);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 134);
+            this.panel1.Location = new System.Drawing.Point(0, 87);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1934, 700);
+            this.panel1.Size = new System.Drawing.Size(1934, 747);
             this.panel1.TabIndex = 5;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -151,12 +151,12 @@
             // 
             this.dgvQuanLyXe.BackgroundColor = System.Drawing.Color.White;
             this.dgvQuanLyXe.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuanLyXe.Location = new System.Drawing.Point(3, 112);
+            this.dgvQuanLyXe.Location = new System.Drawing.Point(3, 57);
             this.dgvQuanLyXe.Name = "dgvQuanLyXe";
             this.dgvQuanLyXe.RowHeadersWidth = 51;
             this.dgvQuanLyXe.RowTemplate.Height = 24;
             this.dgvQuanLyXe.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dgvQuanLyXe.Size = new System.Drawing.Size(1928, 449);
+            this.dgvQuanLyXe.Size = new System.Drawing.Size(1928, 479);
             this.dgvQuanLyXe.TabIndex = 8;
             this.dgvQuanLyXe.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvQuanLyXe_CellContentClick);
             // 
@@ -168,7 +168,7 @@
             this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLamMoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLamMoi.ForeColor = System.Drawing.Color.White;
-            this.btnLamMoi.Location = new System.Drawing.Point(549, 42);
+            this.btnLamMoi.Location = new System.Drawing.Point(545, 6);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(140, 45);
             this.btnLamMoi.TabIndex = 7;
@@ -184,7 +184,7 @@
             this.btnXoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXoa.ForeColor = System.Drawing.Color.White;
-            this.btnXoa.Location = new System.Drawing.Point(389, 42);
+            this.btnXoa.Location = new System.Drawing.Point(386, 6);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(140, 45);
             this.btnXoa.TabIndex = 6;
@@ -200,7 +200,7 @@
             this.btnSua.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSua.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSua.ForeColor = System.Drawing.Color.White;
-            this.btnSua.Location = new System.Drawing.Point(229, 42);
+            this.btnSua.Location = new System.Drawing.Point(225, 6);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(140, 45);
             this.btnSua.TabIndex = 5;
@@ -216,7 +216,7 @@
             this.btnThem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnThem.ForeColor = System.Drawing.Color.White;
-            this.btnThem.Location = new System.Drawing.Point(69, 42);
+            this.btnThem.Location = new System.Drawing.Point(66, 6);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(140, 45);
             this.btnThem.TabIndex = 4;

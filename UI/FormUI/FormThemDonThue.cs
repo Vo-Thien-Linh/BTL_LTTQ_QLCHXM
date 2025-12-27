@@ -14,6 +14,7 @@ namespace UI.FormUI
         private string maTaiKhoan;
         private bool isLoadingData = false;
         private string selectedIDXe = "";
+        private string preSelectedIDXe = ""; // Xe được chọn từ card
 
         public FormThemDonThue(string maTK)
         {
@@ -40,6 +41,39 @@ namespace UI.FormUI
             LoadKhachHang();
             SetupEvents();
             LoadXeTheoThoiGian();
+        }
+
+        // Constructor với idXe để chọn xe sẵn
+        public FormThemDonThue(string maTK, string idXe) : this(maTK)
+        {
+            this.preSelectedIDXe = idXe;
+            SetSelectedXe(idXe);
+        }
+
+        // Method để set xe được chọn từ card
+        private void SetSelectedXe(string idXe)
+        {
+            if (string.IsNullOrWhiteSpace(idXe)) return;
+
+            // Tìm và chọn xe trong combobox
+            for (int i = 0; i < cboXe.Items.Count; i++)
+            {
+                DataRowView row = (DataRowView)cboXe.Items[i];
+                if (row["ID_Xe"].ToString() == idXe)
+                {
+                    cboXe.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            // Nếu không tìm thấy xe (có thể đang được thuê)
+            MessageBox.Show(
+                "Xe bạn chọn hiện không khả dụng trong thời gian này!\n" +
+                "Vui lòng chọn xe khác hoặc thay đổi thời gian thuê.",
+                "Thông báo",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
         }
 
         private void SetDefaultValues()
@@ -587,6 +621,36 @@ namespace UI.FormUI
             {
                 this.DialogResult = DialogResult.Cancel;
                 this.Close();
+            }
+        }
+
+        private void btnThemKH_Click(object sender, EventArgs e)
+        {
+            using (FormThemKhachHang frm = new FormThemKhachHang())
+            {
+                // Hiển thị form và chờ kết quả
+                if (frm.ShowDialog() == DialogResult.OK)
+                {
+                    // 1. Load lại danh sách khách hàng để lấy dữ liệu mới nhất từ CSDL
+                    LoadKhachHang();
+
+                    // 2. Kiểm tra xem có dữ liệu khách hàng mới trả về không
+                    if (frm.KhachHangMoi != null)
+                    {
+                        // 3. Tự động chọn khách hàng vừa thêm trong ComboBox
+                        try
+                        {
+                            cboKhachHang.SelectedValue = frm.KhachHangMoi.MaKH;
+
+                            // (Tùy chọn) Hiển thị thông báo nhỏ
+                            // MessageBox.Show($"Đã chọn khách hàng: {frm.KhachHangMoi.HoTenKH}", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Lỗi chọn khách hàng mới: {ex.Message}");
+                        }
+                    }
+                }
             }
         }
     }

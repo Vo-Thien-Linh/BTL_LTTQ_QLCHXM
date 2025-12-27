@@ -47,6 +47,44 @@ namespace UI.UserControlUI
             ApplyLanguage();
 
             InitSearchFieldMap();
+            
+            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
+            ApplyPermissions();
+        }
+
+        /// <summary>
+        /// Áp dụng phân quyền cho các nút thao tác
+        /// Chỉ Quản lý mới có quyền thêm/sửa/xóa nhân viên
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            bool canManageNhanVien = PermissionManager.CanViewNhanVien(); // Chỉ Quản lý
+            btnThemNhanVien.Visible = canManageNhanVien;
+            btnSuaNhanVien.Visible = canManageNhanVien;
+            btnXoaNhanVien.Visible = canManageNhanVien;
+            btnLamMoi.Visible = canManageNhanVien;
+            
+            ReorganizeButtons();
+        }
+
+        /// <summary>
+        /// Tự động dồn các button sang trái khi một số button bị ẩn
+        /// </summary>
+        private void ReorganizeButtons()
+        {
+            List<System.Windows.Forms.Button> buttons = new List<System.Windows.Forms.Button> { btnThemNhanVien, btnSuaNhanVien, btnXoaNhanVien, btnLamMoi };
+            int currentX = 20; // Vị trí X ban đầu
+            int spacing = 160; // Khoảng cách giữa các button
+            int y = 13; // Vị trí Y cố định
+
+            foreach (System.Windows.Forms.Button btn in buttons)
+            {
+                if (btn.Visible)
+                {
+                    btn.Location = new Point(currentX, y);
+                    currentX += spacing;
+                }
+            }
         }
 
         private void InitSearchFieldMap()   

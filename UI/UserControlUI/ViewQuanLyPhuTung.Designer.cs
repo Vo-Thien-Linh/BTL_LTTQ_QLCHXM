@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnBan = new System.Windows.Forms.Button();
             this.dgvQuanLyPhuTung = new System.Windows.Forms.DataGridView();
             this.btnLamMoi = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
@@ -48,6 +49,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.panel1.Controls.Add(this.btnBan);
             this.panel1.Controls.Add(this.dgvQuanLyPhuTung);
             this.panel1.Controls.Add(this.btnLamMoi);
             this.panel1.Controls.Add(this.btnXoa);
@@ -60,11 +62,27 @@
             this.panel1.TabIndex = 7;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
+            // btnBan
+            // 
+            this.btnBan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.btnBan.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBan.FlatAppearance.BorderSize = 0;
+            this.btnBan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnBan.ForeColor = System.Drawing.Color.White;
+            this.btnBan.Location = new System.Drawing.Point(925, 20);
+            this.btnBan.Name = "btnBan";
+            this.btnBan.Size = new System.Drawing.Size(140, 45);
+            this.btnBan.TabIndex = 9;
+            this.btnBan.Text = "🛒Bán";
+            this.btnBan.UseVisualStyleBackColor = false;
+            this.btnBan.Click += new System.EventHandler(this.btnBan_Click);
+            // 
             // dgvQuanLyPhuTung
             // 
             this.dgvQuanLyPhuTung.BackgroundColor = System.Drawing.Color.White;
             this.dgvQuanLyPhuTung.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvQuanLyPhuTung.Location = new System.Drawing.Point(69, 90);
+            this.dgvQuanLyPhuTung.Location = new System.Drawing.Point(69, 77);
             this.dgvQuanLyPhuTung.Name = "dgvQuanLyPhuTung";
             this.dgvQuanLyPhuTung.RowHeadersWidth = 51;
             this.dgvQuanLyPhuTung.RowTemplate.Height = 24;
@@ -80,7 +98,7 @@
             this.btnLamMoi.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLamMoi.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLamMoi.ForeColor = System.Drawing.Color.White;
-            this.btnLamMoi.Location = new System.Drawing.Point(549, 24);
+            this.btnLamMoi.Location = new System.Drawing.Point(581, 15);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(140, 45);
             this.btnLamMoi.TabIndex = 7;
@@ -96,7 +114,7 @@
             this.btnXoa.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXoa.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXoa.ForeColor = System.Drawing.Color.White;
-            this.btnXoa.Location = new System.Drawing.Point(389, 24);
+            this.btnXoa.Location = new System.Drawing.Point(389, 15);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(140, 45);
             this.btnXoa.TabIndex = 6;
@@ -112,7 +130,7 @@
             this.btnSua.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSua.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnSua.ForeColor = System.Drawing.Color.White;
-            this.btnSua.Location = new System.Drawing.Point(229, 24);
+            this.btnSua.Location = new System.Drawing.Point(229, 15);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(140, 45);
             this.btnSua.TabIndex = 5;
@@ -128,7 +146,7 @@
             this.btnThem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThem.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnThem.ForeColor = System.Drawing.Color.White;
-            this.btnThem.Location = new System.Drawing.Point(69, 24);
+            this.btnThem.Location = new System.Drawing.Point(69, 15);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(140, 45);
             this.btnThem.TabIndex = 4;
@@ -228,5 +246,6 @@
         private System.Windows.Forms.ComboBox cbbTimKiemTheo;
         private System.Windows.Forms.Label lblTuKhoa;
         private System.Windows.Forms.Label lblTimKiemTheo;
+        private System.Windows.Forms.Button btnBan;
     }
 }

@@ -477,17 +477,13 @@ namespace BLL
             try
             {
                 DataTable dt = xeMayDAL.GetXeCoTheBan();
-
-                if (dt.Rows.Count == 0)
-                {
-                    throw new Exception("Hiện tại không có xe nào có thể bán!\nVui lòng kiểm tra lại kho xe.");
-                }
-
-                return dt;
+                return dt; // Trả về DataTable rỗng nếu không có dữ liệu, để form tự xử lý
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                // Log lỗi nếu cần
+                System.Diagnostics.Debug.WriteLine($"Lỗi GetXeCoTheBan: {ex.Message}");
+                throw; // Throw lại exception để form biết có lỗi
             }
         }
 

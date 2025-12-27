@@ -41,7 +41,45 @@ namespace UI.UserControlUI
             ApplyLanguage();
             
             InitSearchFieldMap();
+            
+            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
+            ApplyPermissions();
+        }
 
+        /// <summary>
+        /// Áp dụng phân quyền cho các nút thao tác
+        /// Chỉ Quản lý: Thêm/Sửa/Xóa
+        /// Bán hàng, Kỹ thuật: Chỉ xem
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            bool canEdit = PermissionManager.CanEditSanPham(); // Chỉ Quản lý
+            btnThem.Visible = canEdit;
+            btnSua.Visible = canEdit;
+            btnXoa.Visible = canEdit;
+            btnLamMoi.Visible = canEdit;
+            
+            ReorganizeButtons();
+        }
+
+        /// <summary>
+        /// Tự động dồn các button sang trái khi một số button bị ẩn
+        /// </summary>
+        private void ReorganizeButtons()
+        {
+            List<System.Windows.Forms.Button> buttons = new List<System.Windows.Forms.Button> { btnThem, btnSua, btnXoa, btnLamMoi };
+            int currentX = 66; // Vị trí X ban đầu
+            int spacing = 160; // Khoảng cách giữa các button
+            int y = 17; // Vị trí Y cố định
+
+            foreach (System.Windows.Forms.Button btn in buttons)
+            {
+                if (btn.Visible)
+                {
+                    btn.Location = new Point(currentX, y);
+                    currentX += spacing;
+                }
+            }
         }
 
         private void InitSearchFieldMap()
@@ -129,8 +167,8 @@ namespace UI.UserControlUI
             // Tạo FlowLayoutPanel để chứa các card
             flowPanelXe = new FlowLayoutPanel
             {
-                Location = new Point(0, 110), // Bắt đầu từ trái (0, không phải 70)
-                Size = new Size(panel1.Width - 20, panel1.Height - 140),
+                Location = new Point(0, 75), // Bắt đầu từ trái, dời lên cao hơn
+                Size = new Size(panel1.Width - 20, panel1.Height - 115),
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
                 AutoScroll = true,
                 Padding = new Padding(70, 10, 10, 10), // Padding bên trong thay vì Location
@@ -157,8 +195,8 @@ namespace UI.UserControlUI
         {
             Panel panel = new Panel
             {
-                Location = new Point(0, 110), // Bắt đầu từ trái
-                Size = new Size(panel1.Width - 20, panel1.Height - 140),
+                Location = new Point(0, 85), // Bắt đầu từ trái, dời lên cao hơn
+                Size = new Size(panel1.Width - 20, panel1.Height - 115),
                 Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
@@ -318,7 +356,7 @@ namespace UI.UserControlUI
                 Text = isXeChoThue ? "THUÊ NGAY" : "MUA NGAY",
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 Location = new Point(10, 290),
-                Size = new Size(115, 38),
+                Size = new Size(240, 38),
                 BackColor = isXeChoThue ? Color.FromArgb(33, 150, 243) : Color.FromArgb(76, 175, 80),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
@@ -327,54 +365,39 @@ namespace UI.UserControlUI
             btnAction.FlatAppearance.BorderSize = 0;
             btnAction.Click += (s, e) => 
             {
-                e = new EventArgs();
-                ShowXeDetail(xe);
-            };
-
-            // Nút Sửa
-            Button btnEdit = new Button
-            {
-                Text = "✏️ Sửa",
-                Font = new Font("Segoe UI", 8F, FontStyle.Bold),
-                Location = new Point(130, 290),
-                Size = new Size(55, 38),
-                BackColor = Color.FromArgb(255, 152, 0),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
-            };
-            btnEdit.FlatAppearance.BorderSize = 0;
-            btnEdit.Click += (s, e) =>
-            {
-                e = new EventArgs();
-                selectedXeId = xe["ID_Xe"].ToString();
-                btnSua_Click(s, e);
-            };
-
-            // Nút Xóa
-            Button btnDelete = new Button
-            {
-                Text = "🗑️",
-                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
-                Location = new Point(190, 290),
-                Size = new Size(60, 38),
-                BackColor = Color.FromArgb(244, 67, 54),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
-            };
-            btnDelete.FlatAppearance.BorderSize = 0;
-            btnDelete.Click += (s, e) =>
-            {
-                e = new EventArgs();
-                selectedXeId = xe["ID_Xe"].ToString();
-                btnXoa_Click(s, e);
+                string idXe = xe["ID_Xe"].ToString();
+                
+                // Tìm MainForm
+                Form mainForm = this.FindForm();
+                while (mainForm != null && mainForm.GetType().Name != "MainForm")
+                {
+                    mainForm = mainForm.ParentForm;
+                }
+                
+                if (mainForm != null)
+                {
+                    // Gọi method chuyển view từ MainForm
+                    if (isXeChoThue)
+                    {
+                        // Chuyển sang Quản lý cho thuê
+                        var method = mainForm.GetType().GetMethod("NavigateToThueXe", 
+                            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                        method?.Invoke(mainForm, new object[] { idXe });
+                    }
+                    else
+                    {
+                        // Chuyển sang Quản lý bán hàng
+                        var method = mainForm.GetType().GetMethod("NavigateToBanXe", 
+                            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                        method?.Invoke(mainForm, new object[] { idXe });
+                    }
+                }
             };
 
             // Thêm controls vào card
             card.Controls.AddRange(new Control[] { 
                 imagePanel, lblTenXe, lblThongTin, lblTrangThai,
-                lblGia, btnAction, btnEdit, btnDelete
+                lblGia, btnAction
             });
 
             // Hover effect
