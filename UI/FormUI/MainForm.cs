@@ -364,7 +364,7 @@ namespace UI.FormUI
         private void btnThongKe_Click(object sender, EventArgs e)
         {
             SelectSidebarButton(btnThongKe);
-            LoadControl(new UserControlUI.ViewDashboard());
+            LoadControl(new UserControlUI.ViewDashboardNew());
         }
 
         private void btnQuanLyNhanVien_Click(object sender, EventArgs e)

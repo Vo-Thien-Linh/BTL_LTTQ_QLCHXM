@@ -50,11 +50,11 @@ namespace UI.UserControlUI
 
                 // ✅ DEBUG: Log để kiểm tra
                 System.Diagnostics.Debug.WriteLine($"[UI] Xe sẵn sàng: {stats.XeSanSang}");
-                System.Diagnostics.Debug.WriteLine($"[UI] GD bán hôm nay: {stats.GiaoDichBanHomNay}");
-                System.Diagnostics.Debug.WriteLine($"[UI] Thuê hoạt động: {stats.ThueDangHoatDong}");
+                System.Diagnostics.Debug.WriteLine($"[UI] Tổng khách hàng: {stats.TongKhachHang}");
+                System.Diagnostics.Debug.WriteLine($"[UI] Tổng giao dịch: {stats.TongGiaoDich}");
                 System.Diagnostics.Debug.WriteLine($"[UI] Doanh thu tháng: {stats.DoanhThuThangNay:N0}");
 
-                SetStats(stats.XeSanSang, stats.GiaoDichBanHomNay, stats.ThueDangHoatDong, stats.DoanhThuThangNay);
+                SetStats(stats.XeSanSang, stats.TongKhachHang, stats.TongGiaoDich, stats.DoanhThuThangNay);
 
                 // ✅ 2) Lấy danh sách xe mới nhập (Top 8)
                 var dt = _bll.LayXeMoiNhap(8);
@@ -88,14 +88,14 @@ namespace UI.UserControlUI
             }
         }
 
-        private void SetStats(int xeSanSang, int giaoDichBanHomNay, int thueDangHoatDong, decimal doanhThuThangNay)
+        private void SetStats(int xeSanSang, int tongKhachHang, int tongGiaoDich, decimal doanhThuThangNay)
         {
             try
             {
                 // ✅ Hiển thị với format rõ ràng
                 lblStat1.Text = xeSanSang.ToString("N0");
-                lblStat2.Text = giaoDichBanHomNay.ToString("N0");
-                lblStat3.Text = thueDangHoatDong.ToString("N0");
+                lblStat2.Text = tongKhachHang.ToString("N0");
+                lblStat3.Text = tongGiaoDich.ToString("N0");
 
                 // ✅ Format doanh thu với đơn vị VNĐ
                 if (doanhThuThangNay >= 1000000000) // >= 1 tỷ
