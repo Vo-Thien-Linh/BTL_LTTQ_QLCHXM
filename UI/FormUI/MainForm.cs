@@ -383,7 +383,7 @@ namespace UI.FormUI
             if (PermissionManager.CanViewDashboard())
             {
                 SelectSidebarButton(btnThongKe);
-                LoadControl(new ViewDashboard());
+                LoadControl(new UserControlUI.ViewDashboardNew());
             }
             else if (PermissionManager.CanViewSanPham())
             {
@@ -462,7 +462,7 @@ namespace UI.FormUI
         private void btnThongKe_Click(object sender, EventArgs e)
         {
             SelectSidebarButton(btnThongKe);
-            LoadControl(new UserControlUI.ViewDashboard());
+            LoadControl(new UserControlUI.ViewDashboardNew());
         }
 
         private void btnQuanLyNhanVien_Click(object sender, EventArgs e)
