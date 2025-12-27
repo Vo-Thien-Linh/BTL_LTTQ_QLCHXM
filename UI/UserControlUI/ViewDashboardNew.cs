@@ -35,29 +35,30 @@ namespace UI.UserControlUI
 
         private void AdjustLayout()
         {
-            int padding = 20;
-            int cardGap = 15;
+            int padding = 15;
+            int cardGap = 10;
             int availableWidth = this.Width - (padding * 2);
             int cardWidth = (availableWidth - (cardGap * 3)) / 4;
-            int cardHeight = 130;
+            int cardHeight = 100; // Giảm từ 130 xuống 100
             
-            // Điều chỉnh 4 stat cards
-            pnlXeSanSang.SetBounds(padding, 110, cardWidth, cardHeight);
-            pnlDoanhThu.SetBounds(padding + cardWidth + cardGap, 110, cardWidth, cardHeight);
-            pnlKhachHang.SetBounds(padding + (cardWidth + cardGap) * 2, 110, cardWidth, cardHeight);
-            pnlGiaoDich.SetBounds(padding + (cardWidth + cardGap) * 3, 110, cardWidth, cardHeight);
+            // Điều chỉnh 4 stat cards - tăng khoảng cách từ top
+            int cardY = 100; // Tăng từ 70 lên 100 để tránh đè lên datetime
+            pnlXeSanSang.SetBounds(padding, cardY, cardWidth, cardHeight);
+            pnlDoanhThu.SetBounds(padding + cardWidth + cardGap, cardY, cardWidth, cardHeight);
+            pnlKhachHang.SetBounds(padding + (cardWidth + cardGap) * 2, cardY, cardWidth, cardHeight);
+            pnlGiaoDich.SetBounds(padding + (cardWidth + cardGap) * 3, cardY, cardWidth, cardHeight);
             
-            // Điều chỉnh charts
-            int chartY = 110 + cardHeight + 20;
+            // Điều chỉnh charts - giảm khoảng cách
+            int chartY = cardY + cardHeight + 15; // Giảm khoảng cách từ 20 xuống 15
             int chartWidth = (availableWidth - cardGap) / 2;
-            int chartHeight = 320;
+            int chartHeight = 280; // Giảm từ 320 xuống 280
             
             chartDoanhThu.SetBounds(padding, chartY, chartWidth, chartHeight);
             chartTop5Xe.SetBounds(padding + chartWidth + cardGap, chartY, chartWidth, chartHeight);
             
-            // Điều chỉnh tables
-            int tableY = chartY + chartHeight + 20;
-            int tableHeight = 260;
+            // Điều chỉnh tables - giảm khoảng cách
+            int tableY = chartY + chartHeight + 15; // Giảm khoảng cách từ 20 xuống 15
+            int tableHeight = 220; // Giảm từ 260 xuống 220
             
             pnlHoatDongGanDay.SetBounds(padding, tableY, chartWidth, tableHeight);
             pnlCanhBaoTonKho.SetBounds(padding + chartWidth + cardGap, tableY, chartWidth, tableHeight);

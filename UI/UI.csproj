@@ -256,12 +256,6 @@
       <DependentUpon>TestThuVien.cs</DependentUpon>
     </Compile>
     <Compile Include="PDFHelper.cs" />
-    <Compile Include="UserControlUI\ViewDashboard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControlUI\ViewDashboard.Designer.cs">
-      <DependentUpon>ViewDashboard.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControlUI\ViewDashboardNew.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -463,9 +457,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\TestThuVien.resx">
       <DependentUpon>TestThuVien.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControlUI\ViewDashboard.resx">
-      <DependentUpon>ViewDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewDashboardNew.resx">
       <DependentUpon>ViewDashboardNew.cs</DependentUpon>

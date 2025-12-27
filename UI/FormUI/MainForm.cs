@@ -383,7 +383,7 @@ namespace UI.FormUI
             if (PermissionManager.CanViewDashboard())
             {
                 SelectSidebarButton(btnThongKe);
-                LoadControl(new ViewDashboard());
+                LoadControl(new UserControlUI.ViewDashboardNew());
             }
             else if (PermissionManager.CanViewSanPham())
             {

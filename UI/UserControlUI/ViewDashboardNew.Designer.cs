@@ -95,7 +95,7 @@ namespace UI.UserControlUI
             this.lblDateTime.AutoSize = true;
             this.lblDateTime.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.lblDateTime.ForeColor = System.Drawing.Color.Gray;
-            this.lblDateTime.Location = new System.Drawing.Point(30, 70);
+            this.lblDateTime.Location = new System.Drawing.Point(30, 65);
             this.lblDateTime.Name = "lblDateTime";
             this.lblDateTime.Size = new System.Drawing.Size(158, 23);
             this.lblDateTime.TabIndex = 1;
@@ -117,9 +117,9 @@ namespace UI.UserControlUI
             // 
             this.lblXeSanSangTitle.AutoSize = true;
             this.lblXeSanSangTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblXeSanSangTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblXeSanSangTitle.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblXeSanSangTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblXeSanSangTitle.Location = new System.Drawing.Point(90, 75);
+            this.lblXeSanSangTitle.Location = new System.Drawing.Point(90, 60);
             this.lblXeSanSangTitle.Name = "lblXeSanSangTitle";
             this.lblXeSanSangTitle.Size = new System.Drawing.Size(139, 23);
             this.lblXeSanSangTitle.TabIndex = 2;
@@ -129,9 +129,9 @@ namespace UI.UserControlUI
             // 
             this.lblXeSanSangValue.AutoSize = true;
             this.lblXeSanSangValue.BackColor = System.Drawing.Color.Transparent;
-            this.lblXeSanSangValue.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblXeSanSangValue.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblXeSanSangValue.ForeColor = System.Drawing.Color.White;
-            this.lblXeSanSangValue.Location = new System.Drawing.Point(90, 25);
+            this.lblXeSanSangValue.Location = new System.Drawing.Point(90, 20);
             this.lblXeSanSangValue.Name = "lblXeSanSangValue";
             this.lblXeSanSangValue.Size = new System.Drawing.Size(46, 54);
             this.lblXeSanSangValue.TabIndex = 1;
@@ -141,9 +141,9 @@ namespace UI.UserControlUI
             // 
             this.lblXeSanSangIcon.AutoSize = true;
             this.lblXeSanSangIcon.BackColor = System.Drawing.Color.Transparent;
-            this.lblXeSanSangIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 32F);
+            this.lblXeSanSangIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 24F);
             this.lblXeSanSangIcon.ForeColor = System.Drawing.Color.White;
-            this.lblXeSanSangIcon.Location = new System.Drawing.Point(15, 25);
+            this.lblXeSanSangIcon.Location = new System.Drawing.Point(15, 20);
             this.lblXeSanSangIcon.Name = "lblXeSanSangIcon";
             this.lblXeSanSangIcon.Size = new System.Drawing.Size(104, 72);
             this.lblXeSanSangIcon.TabIndex = 0;
@@ -165,9 +165,9 @@ namespace UI.UserControlUI
             // 
             this.lblDoanhThuTitle.AutoSize = true;
             this.lblDoanhThuTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblDoanhThuTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblDoanhThuTitle.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblDoanhThuTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblDoanhThuTitle.Location = new System.Drawing.Point(90, 75);
+            this.lblDoanhThuTitle.Location = new System.Drawing.Point(90, 60);
             this.lblDoanhThuTitle.Name = "lblDoanhThuTitle";
             this.lblDoanhThuTitle.Size = new System.Drawing.Size(183, 23);
             this.lblDoanhThuTitle.TabIndex = 2;
@@ -177,9 +177,9 @@ namespace UI.UserControlUI
             // 
             this.lblDoanhThuValue.AutoSize = true;
             this.lblDoanhThuValue.BackColor = System.Drawing.Color.Transparent;
-            this.lblDoanhThuValue.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblDoanhThuValue.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblDoanhThuValue.ForeColor = System.Drawing.Color.White;
-            this.lblDoanhThuValue.Location = new System.Drawing.Point(90, 25);
+            this.lblDoanhThuValue.Location = new System.Drawing.Point(90, 20);
             this.lblDoanhThuValue.Name = "lblDoanhThuValue";
             this.lblDoanhThuValue.Size = new System.Drawing.Size(46, 54);
             this.lblDoanhThuValue.TabIndex = 1;
@@ -189,9 +189,9 @@ namespace UI.UserControlUI
             // 
             this.lblDoanhThuIcon.AutoSize = true;
             this.lblDoanhThuIcon.BackColor = System.Drawing.Color.Transparent;
-            this.lblDoanhThuIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 32F);
+            this.lblDoanhThuIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 24F);
             this.lblDoanhThuIcon.ForeColor = System.Drawing.Color.White;
-            this.lblDoanhThuIcon.Location = new System.Drawing.Point(15, 25);
+            this.lblDoanhThuIcon.Location = new System.Drawing.Point(15, 20);
             this.lblDoanhThuIcon.Name = "lblDoanhThuIcon";
             this.lblDoanhThuIcon.Size = new System.Drawing.Size(104, 72);
             this.lblDoanhThuIcon.TabIndex = 0;
@@ -213,9 +213,9 @@ namespace UI.UserControlUI
             // 
             this.lblKhachHangTitle.AutoSize = true;
             this.lblKhachHangTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblKhachHangTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblKhachHangTitle.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblKhachHangTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblKhachHangTitle.Location = new System.Drawing.Point(90, 75);
+            this.lblKhachHangTitle.Location = new System.Drawing.Point(90, 60);
             this.lblKhachHangTitle.Name = "lblKhachHangTitle";
             this.lblKhachHangTitle.Size = new System.Drawing.Size(137, 23);
             this.lblKhachHangTitle.TabIndex = 2;
@@ -225,9 +225,9 @@ namespace UI.UserControlUI
             // 
             this.lblKhachHangValue.AutoSize = true;
             this.lblKhachHangValue.BackColor = System.Drawing.Color.Transparent;
-            this.lblKhachHangValue.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblKhachHangValue.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblKhachHangValue.ForeColor = System.Drawing.Color.White;
-            this.lblKhachHangValue.Location = new System.Drawing.Point(90, 25);
+            this.lblKhachHangValue.Location = new System.Drawing.Point(90, 20);
             this.lblKhachHangValue.Name = "lblKhachHangValue";
             this.lblKhachHangValue.Size = new System.Drawing.Size(46, 54);
             this.lblKhachHangValue.TabIndex = 1;
@@ -237,9 +237,9 @@ namespace UI.UserControlUI
             // 
             this.lblKhachHangIcon.AutoSize = true;
             this.lblKhachHangIcon.BackColor = System.Drawing.Color.Transparent;
-            this.lblKhachHangIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 32F);
+            this.lblKhachHangIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 24F);
             this.lblKhachHangIcon.ForeColor = System.Drawing.Color.White;
-            this.lblKhachHangIcon.Location = new System.Drawing.Point(15, 25);
+            this.lblKhachHangIcon.Location = new System.Drawing.Point(15, 20);
             this.lblKhachHangIcon.Name = "lblKhachHangIcon";
             this.lblKhachHangIcon.Size = new System.Drawing.Size(104, 72);
             this.lblKhachHangIcon.TabIndex = 0;
@@ -261,9 +261,9 @@ namespace UI.UserControlUI
             // 
             this.lblGiaoDichTitle.AutoSize = true;
             this.lblGiaoDichTitle.BackColor = System.Drawing.Color.Transparent;
-            this.lblGiaoDichTitle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblGiaoDichTitle.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.lblGiaoDichTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.lblGiaoDichTitle.Location = new System.Drawing.Point(90, 75);
+            this.lblGiaoDichTitle.Location = new System.Drawing.Point(90, 60);
             this.lblGiaoDichTitle.Name = "lblGiaoDichTitle";
             this.lblGiaoDichTitle.Size = new System.Drawing.Size(161, 23);
             this.lblGiaoDichTitle.TabIndex = 2;
@@ -273,9 +273,9 @@ namespace UI.UserControlUI
             // 
             this.lblGiaoDichValue.AutoSize = true;
             this.lblGiaoDichValue.BackColor = System.Drawing.Color.Transparent;
-            this.lblGiaoDichValue.Font = new System.Drawing.Font("Segoe UI", 24F, System.Drawing.FontStyle.Bold);
+            this.lblGiaoDichValue.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblGiaoDichValue.ForeColor = System.Drawing.Color.White;
-            this.lblGiaoDichValue.Location = new System.Drawing.Point(90, 25);
+            this.lblGiaoDichValue.Location = new System.Drawing.Point(90, 20);
             this.lblGiaoDichValue.Name = "lblGiaoDichValue";
             this.lblGiaoDichValue.Size = new System.Drawing.Size(46, 54);
             this.lblGiaoDichValue.TabIndex = 1;
@@ -285,9 +285,9 @@ namespace UI.UserControlUI
             // 
             this.lblGiaoDichIcon.AutoSize = true;
             this.lblGiaoDichIcon.BackColor = System.Drawing.Color.Transparent;
-            this.lblGiaoDichIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 32F);
+            this.lblGiaoDichIcon.Font = new System.Drawing.Font("Segoe UI Emoji", 24F);
             this.lblGiaoDichIcon.ForeColor = System.Drawing.Color.White;
-            this.lblGiaoDichIcon.Location = new System.Drawing.Point(15, 25);
+            this.lblGiaoDichIcon.Location = new System.Drawing.Point(15, 20);
             this.lblGiaoDichIcon.Name = "lblGiaoDichIcon";
             this.lblGiaoDichIcon.Size = new System.Drawing.Size(104, 72);
             this.lblGiaoDichIcon.TabIndex = 0;
