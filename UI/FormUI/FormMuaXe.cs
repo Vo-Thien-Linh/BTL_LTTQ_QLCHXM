@@ -1,6 +1,7 @@
 ﻿using BLL;
 using DTO;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
@@ -12,11 +13,13 @@ namespace UI.FormUI
         private XeMayBLL xeMayBLL;
         private GiaoDichBanBLL giaoDichBanBLL;
         private HopDongMuaBLL hopDongMuaBLL;
+        private PhuTungBLL phuTungBLL;
         private string maTaiKhoan;
         private bool isLoadingData = false;
         private KhachHangDTO khachHangHienTai = null;
         private string idXeDaChon = null;
         private DataRowView xeHienTai = null; // Lưu thông tin xe hiện tại
+        private DataTable dtPhuTungDaChon; // DataTable lưu phụ tùng đã chọn
         
         public int MaGDBanVuaTao { get; private set; } = 0;
 
@@ -43,6 +46,10 @@ namespace UI.FormUI
             xeMayBLL = new XeMayBLL();
             giaoDichBanBLL = new GiaoDichBanBLL();
             hopDongMuaBLL = new HopDongMuaBLL();
+            phuTungBLL = new PhuTungBLL();
+
+            // Khởi tạo DataTable cho phụ tùng
+            InitializePhuTungDataTable();
 
             // Ẩn các control liên quan đến giấy tờ
             HideGiayToControls();
@@ -101,6 +108,8 @@ namespace UI.FormUI
             btnHuy.Click += BtnHuy_Click;
             btnThemKH.Click += BtnThemKH_Click;
             btnXemAnhGiayTo.Click += BtnXemAnhGiayTo_Click;
+            btnThemPhuTung.Click += BtnThemPhuTung_Click;
+            btnXoaPhuTung.Click += BtnXoaPhuTung_Click;
         }
 
         private void TxtSdtKH_KeyDown(object sender, KeyEventArgs e)
@@ -268,6 +277,9 @@ namespace UI.FormUI
                             }
                             
                             found = true;
+                            
+                            // Tính tổng tiền ngay khi load xe
+                            TinhTongTien();
                         }
                         break;
                     }
@@ -331,6 +343,26 @@ namespace UI.FormUI
 
                 decimal giaBan = xeHienTai["GiaBan"] != DBNull.Value ? Convert.ToDecimal(xeHienTai["GiaBan"]) : 0;
 
+                // Chuẩn bị danh sách phụ tùng (nếu có)
+                List<ChiTietPhuTungBanDTO> dsPhuTung = new List<ChiTietPhuTungBanDTO>();
+                decimal tongTienPhuTung = 0;
+                
+                if (dtPhuTungDaChon != null && dtPhuTungDaChon.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dtPhuTungDaChon.Rows)
+                    {
+                        var pt = new ChiTietPhuTungBanDTO
+                        {
+                            MaPhuTung = row["MaPhuTung"].ToString(),
+                            SoLuong = Convert.ToInt32(row["SoLuong"]),
+                            DonGia = Convert.ToDecimal(row["DonGia"]),
+                            ThanhTien = Convert.ToDecimal(row["ThanhTien"])
+                        };
+                        dsPhuTung.Add(pt);
+                        tongTienPhuTung += pt.ThanhTien;
+                    }
+                }
+
                 // Tạo DTO
                 GiaoDichBan gd = new GiaoDichBan
                 {
@@ -343,15 +375,27 @@ namespace UI.FormUI
                     MaTaiKhoan = maTaiKhoan
                 };
 
-                // Lưu vào database
+                // Lưu vào database (GỌI METHOD MỚI)
                 string errorMessage = "";
-                int maGDBan = giaoDichBanBLL.InsertGiaoDichBan(gd, out errorMessage);
+                int maGDBan = giaoDichBanBLL.InsertGiaoDichBanKemPhuTung(
+                    gd, null, 0, dsPhuTung, out errorMessage
+                );
 
                 if (maGDBan > 0)
                 {
                     MaGDBanVuaTao = maGDBan;
                     
-                    // Tạo hợp đồng mua
+                    // Tạo ghi chú với thông tin khách hàng
+                    string ghiChu = $"Khách hàng: {khachHangHienTai.HoTenKH}\n" +
+                                   $" Số điện thoại: {khachHangHienTai.Sdt}";
+                    
+                    if (!string.IsNullOrWhiteSpace(khachHangHienTai.Email))
+                        ghiChu += $"\n Email: {khachHangHienTai.Email}";
+                    
+                    if (dsPhuTung.Count > 0)
+                        ghiChu += $"\n\n Giao dịch bao gồm {dsPhuTung.Count} phụ tùng đi kèm.";
+                    
+                    // Tạo hợp đồng mua 
                     HopDongMuaDTO hopDong = new HopDongMuaDTO
                     {
                         MaGDBan = maGDBan,
@@ -359,29 +403,23 @@ namespace UI.FormUI
                         MaTaiKhoan = maTaiKhoan,
                         ID_Xe = idXe,
                         NgayLap = DateTime.Now,
-                        GiaBan = giaBan,
+                        GiaBan = giaBan + tongTienPhuTung,
                         DieuKhoan = "Hợp đồng mua bán xe máy theo quy định của pháp luật.",
-                        GhiChu = $"Khách hàng: {khachHangHienTai.HoTenKH}, SĐT: {khachHangHienTai.Sdt}",
+                        GhiChu = ghiChu,
                         TrangThaiHopDong = "Đang hiệu lực"
                     };
                     
                     string hopDongError = "";
                     int maHDM = hopDongMuaBLL.InsertHopDongMua(hopDong, out hopDongError);
                     
-                    string message = $"✓ Bán xe thành công!\n\n" +
-                        $"Khách hàng: {khachHangHienTai.HoTenKH}\n" +
-                        $"Xe: {xeHienTai["TenXe"]}\n" +
-                        $"Biển số: {xeHienTai["BienSo"]}\n" +
-                        $"Giá bán: {giaBan:N0} VNĐ\n" +
-                        $"Ngày bán: {ngayBan:dd/MM/yyyy}\n\n";
-                    
                     if (maHDM > 0)
                     {
-                        message += $"✓ Đã tạo hợp đồng mua #HDM{maHDM}\n\n" +
-                            $"Bạn có muốn xem hợp đồng không?";
-                        
-                        var result = MessageBox.Show(message, "Thành công",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        // Thông báo ngắn gọn
+                        var result = MessageBox.Show(
+                            "Bán xe thành công!\n\nBạn có muốn xem hợp đồng không?",
+                            "Thành công",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information);
                         
                         if (result == DialogResult.Yes)
                         {
@@ -392,9 +430,12 @@ namespace UI.FormUI
                     }
                     else
                     {
-                        message += $"⚠ Cảnh báo: Chưa tạo được hợp đồng\n{hopDongError}";
-                        MessageBox.Show(message, "Thành công (Có cảnh báo)",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        // Không tạo được hợp đồng
+                        MessageBox.Show(
+                            $"Bán xe thành công nhưng chưa tạo được hợp đồng!\n\n{hopDongError}",
+                            "Cảnh báo",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
                     }
 
                     this.DialogResult = DialogResult.OK;
@@ -583,6 +624,187 @@ namespace UI.FormUI
                 MessageBox.Show("Khách hàng chưa có ảnh giấy tờ!",
                     "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void InitializePhuTungDataTable()
+        {
+            if (dgvPhuTung == null)
+                return;
+
+            dtPhuTungDaChon = new DataTable();
+            dtPhuTungDaChon.Columns.Add("MaPhuTung", typeof(string));
+            dtPhuTungDaChon.Columns.Add("TenPhuTung", typeof(string));
+            dtPhuTungDaChon.Columns.Add("SoLuong", typeof(int));
+            dtPhuTungDaChon.Columns.Add("DonGia", typeof(decimal));
+            dtPhuTungDaChon.Columns.Add("ThanhTien", typeof(decimal));
+            dtPhuTungDaChon.Columns.Add("DonViTinh", typeof(string));
+
+            dgvPhuTung.DataSource = dtPhuTungDaChon;
+
+            // Chỉ ẩn cột, không set width/properties để tránh lỗi
+            if (dgvPhuTung.Columns.Count > 0)
+            {
+                if (dgvPhuTung.Columns.Contains("MaPhuTung"))
+                    dgvPhuTung.Columns["MaPhuTung"].Visible = false;
+                    
+                if (dgvPhuTung.Columns.Contains("DonViTinh"))
+                    dgvPhuTung.Columns["DonViTinh"].Visible = false;
+            }
+
+            TinhTongTien();
+        }
+
+        private void BtnThemPhuTung_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FormChonPhuTung formChonPT = new FormChonPhuTung();
+                
+                if (formChonPT.ShowDialog() == DialogResult.OK)
+                {
+                    var phuTungChon = formChonPT.PhuTungDaChon;
+                    int soLuong = formChonPT.SoLuong;
+
+                    if (phuTungChon != null && soLuong > 0)
+                    {
+                        DataRow[] existingRows = dtPhuTungDaChon.Select($"MaPhuTung = '{phuTungChon.MaPhuTung}'");
+                        
+                        if (existingRows.Length > 0)
+                        {
+                            int soLuongCu = Convert.ToInt32(existingRows[0]["SoLuong"]);
+                            int soLuongMoi = soLuongCu + soLuong;
+                            existingRows[0]["SoLuong"] = soLuongMoi;
+                            existingRows[0]["ThanhTien"] = soLuongMoi * phuTungChon.GiaBan;
+                        }
+                        else
+                        {
+                            DataRow newRow = dtPhuTungDaChon.NewRow();
+                            newRow["MaPhuTung"] = phuTungChon.MaPhuTung;
+                            newRow["TenPhuTung"] = phuTungChon.TenPhuTung;
+                            newRow["SoLuong"] = soLuong;
+                            newRow["DonGia"] = phuTungChon.GiaBan;
+                            newRow["ThanhTien"] = soLuong * phuTungChon.GiaBan;
+                            newRow["DonViTinh"] = phuTungChon.DonViTinh ?? "";
+
+                            dtPhuTungDaChon.Rows.Add(newRow);
+                        }
+
+                        TinhTongTien();
+
+                        MessageBox.Show(
+                            $"Đã thêm {soLuong} {phuTungChon.DonViTinh} {phuTungChon.TenPhuTung}",
+                            "Thành công",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi khi thêm phụ tùng: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnXoaPhuTung_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvPhuTung.CurrentRow != null && dgvPhuTung.CurrentRow.Index >= 0)
+                {
+                    string tenPhuTung = dgvPhuTung.CurrentRow.Cells["TenPhuTung"].Value?.ToString() ?? "";
+                    
+                    DialogResult result = MessageBox.Show(
+                        $"Bạn có chắc chắn muốn xóa phụ tùng '{tenPhuTung}' khỏi danh sách?",
+                        "Xác nhận xóa",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        dtPhuTungDaChon.Rows.RemoveAt(dgvPhuTung.CurrentRow.Index);
+                        TinhTongTien();
+
+                        MessageBox.Show(
+                            "Đã xóa phụ tùng khỏi danh sách",
+                            "Thành công",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Vui lòng chọn phụ tùng cần xóa!",
+                        "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Lỗi khi xóa phụ tùng: " + ex.Message,
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void TinhTongTien()
+        {
+            try
+            {
+                if (dtPhuTungDaChon == null)
+                    return;
+
+                decimal tongTienXe = 0;
+                if (xeHienTai != null && xeHienTai.Row != null)
+                {
+                    if (xeHienTai["GiaBan"] != DBNull.Value)
+                    {
+                        tongTienXe = Convert.ToDecimal(xeHienTai["GiaBan"]);
+                    }
+                    else if (xeHienTai.Row.Table.Columns.Contains("GiaBanGanNhat") && xeHienTai["GiaBanGanNhat"] != DBNull.Value)
+                    {
+                        tongTienXe = Convert.ToDecimal(xeHienTai["GiaBanGanNhat"]);
+                    }
+                }
+                
+                if (txtTongTienXe != null)
+                    txtTongTienXe.Text = tongTienXe.ToString("N0") + " VNĐ";
+
+                decimal tongTienPhuTung = 0;
+                if (dtPhuTungDaChon != null)
+                {
+                    foreach (DataRow row in dtPhuTungDaChon.Rows)
+                    {
+                        if (row.RowState != DataRowState.Deleted)
+                        {
+                            tongTienPhuTung += Convert.ToDecimal(row["ThanhTien"]);
+                        }
+                    }
+                }
+                
+                if (txtTongTienPhuTung != null)
+                    txtTongTienPhuTung.Text = tongTienPhuTung.ToString("N0") + " VNĐ";
+
+                decimal tongThanhToan = tongTienXe + tongTienPhuTung;
+                if (txtTongThanhToan != null)
+                    txtTongThanhToan.Text = tongThanhToan.ToString("N0") + " VNĐ";
+            }
+            catch (Exception ex)
+            {
+                // Bỏ qua lỗi tính tổng tiền
+            }
+        }
+
+        private void grpThongTinBan_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

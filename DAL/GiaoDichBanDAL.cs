@@ -314,5 +314,89 @@ namespace DAL
 
             return DataProvider.ExecuteQuery(query, parameters);
         }
+
+        /// <summary>
+        /// Thêm giao dịch bán kèm phụ tùng sử dụng stored procedure
+        /// </summary>
+        public int InsertGiaoDichBanKemPhuTung(
+            string maKH, string idXe, DateTime ngayBan, decimal giaBan,
+            string trangThaiThanhToan, string hinhThucThanhToan, string maTaiKhoan,
+            string maKM_Xe, decimal soTienGiam_Xe, string danhSachPhuTungJson,
+            out string errorMessage)
+        {
+            errorMessage = "";
+            
+            try
+            {
+                using (SqlConnection connection = DataProvider.GetConnection())
+                {
+                    connection.Open();
+                    
+                    using (SqlCommand cmd = new SqlCommand("sp_ThemGiaoDichBanKemPhuTung", connection))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                        // Thêm các parameters
+                        cmd.Parameters.AddWithValue("@MaKH", maKH);
+                        cmd.Parameters.AddWithValue("@ID_Xe", idXe);
+                        cmd.Parameters.AddWithValue("@NgayBan", ngayBan);
+                        cmd.Parameters.AddWithValue("@GiaBan", giaBan);
+                        cmd.Parameters.AddWithValue("@TrangThaiThanhToan", trangThaiThanhToan ?? "");
+                        cmd.Parameters.AddWithValue("@HinhThucThanhToan", hinhThucThanhToan ?? "");
+                        cmd.Parameters.AddWithValue("@MaTaiKhoan", maTaiKhoan ?? "");
+                        cmd.Parameters.AddWithValue("@MaKM_Xe", string.IsNullOrEmpty(maKM_Xe) ? (object)DBNull.Value : maKM_Xe);
+                        cmd.Parameters.AddWithValue("@SoTienGiam_Xe", soTienGiam_Xe);
+                        cmd.Parameters.AddWithValue("@DanhSachPhuTung", string.IsNullOrEmpty(danhSachPhuTungJson) ? (object)DBNull.Value : danhSachPhuTungJson);
+
+                        // Output parameter
+                        SqlParameter outputParam = new SqlParameter("@MaGDBan", System.Data.SqlDbType.Int)
+                        {
+                            Direction = System.Data.ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(outputParam);
+
+                        // Execute
+                        cmd.ExecuteNonQuery();
+
+                        // Lấy kết quả
+                        int maGDBan = Convert.ToInt32(outputParam.Value);
+                        return maGDBan;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                System.Diagnostics.Debug.WriteLine($"Lỗi InsertGiaoDichBanKemPhuTung: {ex.Message}");
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Lấy chi tiết phụ tùng đã bán kèm theo MaGDBan
+        /// </summary>
+        public DataTable GetChiTietPhuTungBan(int maGDBan)
+        {
+            string query = @"
+                SELECT 
+                    ct.ID_ChiTiet,
+                    ct.MaGDBan,
+                    ct.MaPhuTung,
+                    pt.TenPhuTung,
+                    ct.SoLuong,
+                    ct.DonGia,
+                    ct.ThanhTien,
+                    ct.GhiChu
+                FROM ChiTietPhuTungBan ct
+                INNER JOIN PhuTung pt ON ct.MaPhuTung = pt.MaPhuTung
+                WHERE ct.MaGDBan = @MaGDBan
+                ORDER BY ct.ID_ChiTiet";
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@MaGDBan", maGDBan)
+            };
+
+            return DataProvider.ExecuteQuery(query, parameters);
+        }
     }
 }

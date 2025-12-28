@@ -188,6 +188,55 @@ namespace DAL
         }
 
         /// <summary>
+        /// Thực thi Stored Procedure và trả về DataTable
+        /// </summary>
+        public static DataTable ExecuteStoredProcedure(string procedureName, SqlParameter[] parameters = null)
+        {
+            DataTable dt = new DataTable();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    // ✅ DEBUG
+                    System.Diagnostics.Debug.WriteLine("=== ExecuteStoredProcedure ===");
+                    System.Diagnostics.Debug.WriteLine($"Connection State: {conn.State}");
+                    System.Diagnostics.Debug.WriteLine($"Procedure: {procedureName}");
+
+                    SqlCommand cmd = new SqlCommand(procedureName, conn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    if (parameters != null)
+                    {
+                        cmd.Parameters.AddRange(parameters);
+
+                        // ✅ DEBUG Parameters
+                        System.Diagnostics.Debug.WriteLine("Parameters:");
+                        foreach (SqlParameter param in parameters)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"  {param.ParameterName} = [{param.Value}]");
+                        }
+                    }
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+
+                    System.Diagnostics.Debug.WriteLine($"✅ Rows returned: {dt.Rows.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"❌ ExecuteStoredProcedure Error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"StackTrace: {ex.StackTrace}");
+                throw;
+            }
+
+            return dt;
+        }
+
+        /// <summary>
         /// Test kết nối database
         /// </summary>
         public static bool TestConnection()

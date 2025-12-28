@@ -76,10 +76,22 @@ namespace UI.FormUI
             this.lblNgayBan = new System.Windows.Forms.Label();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
+            this.grpPhuTung = new System.Windows.Forms.GroupBox();
+            this.dgvPhuTung = new System.Windows.Forms.DataGridView();
+            this.btnThemPhuTung = new System.Windows.Forms.Button();
+            this.btnXoaPhuTung = new System.Windows.Forms.Button();
+            this.lblTongTienXe = new System.Windows.Forms.Label();
+            this.txtTongTienXe = new System.Windows.Forms.TextBox();
+            this.lblTongTienPhuTung = new System.Windows.Forms.Label();
+            this.txtTongTienPhuTung = new System.Windows.Forms.TextBox();
+            this.lblTongThanhToan = new System.Windows.Forms.Label();
+            this.txtTongThanhToan = new System.Windows.Forms.TextBox();
             this.grpKhachHang.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picAnhGiayTo)).BeginInit();
             this.grpXe.SuspendLayout();
             this.grpThongTinBan.SuspendLayout();
+            this.grpPhuTung.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPhuTung)).BeginInit();
             this.SuspendLayout();
             // 
             // grpKhachHang
@@ -527,18 +539,25 @@ namespace UI.FormUI
             this.grpThongTinBan.Controls.Add(this.cboTrangThaiThanhToan);
             this.grpThongTinBan.Controls.Add(this.cboHinhThucThanhToan);
             this.grpThongTinBan.Controls.Add(this.dtpNgayBan);
+            this.grpThongTinBan.Controls.Add(this.lblTongTienPhuTung);
+            this.grpThongTinBan.Controls.Add(this.lblTongTienXe);
             this.grpThongTinBan.Controls.Add(this.lblTrangThaiThanhToan);
+            this.grpThongTinBan.Controls.Add(this.txtTongTienPhuTung);
+            this.grpThongTinBan.Controls.Add(this.txtTongTienXe);
             this.grpThongTinBan.Controls.Add(this.lblHinhThucThanhToan);
+            this.grpThongTinBan.Controls.Add(this.lblTongThanhToan);
             this.grpThongTinBan.Controls.Add(this.lblNgayBan);
+            this.grpThongTinBan.Controls.Add(this.txtTongThanhToan);
             this.grpThongTinBan.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            this.grpThongTinBan.Location = new System.Drawing.Point(27, 468);
+            this.grpThongTinBan.Location = new System.Drawing.Point(26, 707);
             this.grpThongTinBan.Margin = new System.Windows.Forms.Padding(4);
             this.grpThongTinBan.Name = "grpThongTinBan";
             this.grpThongTinBan.Padding = new System.Windows.Forms.Padding(4);
-            this.grpThongTinBan.Size = new System.Drawing.Size(1147, 172);
+            this.grpThongTinBan.Size = new System.Drawing.Size(1147, 288);
             this.grpThongTinBan.TabIndex = 2;
             this.grpThongTinBan.TabStop = false;
             this.grpThongTinBan.Text = "Thông tin bán hàng";
+            this.grpThongTinBan.Enter += new System.EventHandler(this.grpThongTinBan_Enter);
             // 
             // cboTrangThaiThanhToan
             // 
@@ -620,7 +639,7 @@ namespace UI.FormUI
             this.btnLuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLuu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnLuu.ForeColor = System.Drawing.Color.White;
-            this.btnLuu.Location = new System.Drawing.Point(773, 665);
+            this.btnLuu.Location = new System.Drawing.Point(753, 1003);
             this.btnLuu.Margin = new System.Windows.Forms.Padding(4);
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(187, 49);
@@ -634,7 +653,7 @@ namespace UI.FormUI
             this.btnHuy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHuy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnHuy.ForeColor = System.Drawing.Color.White;
-            this.btnHuy.Location = new System.Drawing.Point(987, 665);
+            this.btnHuy.Location = new System.Drawing.Point(973, 1003);
             this.btnHuy.Margin = new System.Windows.Forms.Padding(4);
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(187, 49);
@@ -642,20 +661,148 @@ namespace UI.FormUI
             this.btnHuy.Text = "❌ Hủy";
             this.btnHuy.UseVisualStyleBackColor = false;
             // 
+            // grpPhuTung
+            // 
+            this.grpPhuTung.Controls.Add(this.dgvPhuTung);
+            this.grpPhuTung.Controls.Add(this.btnThemPhuTung);
+            this.grpPhuTung.Controls.Add(this.btnXoaPhuTung);
+            this.grpPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.grpPhuTung.Location = new System.Drawing.Point(27, 460);
+            this.grpPhuTung.Margin = new System.Windows.Forms.Padding(4);
+            this.grpPhuTung.Name = "grpPhuTung";
+            this.grpPhuTung.Padding = new System.Windows.Forms.Padding(4);
+            this.grpPhuTung.Size = new System.Drawing.Size(1147, 230);
+            this.grpPhuTung.TabIndex = 5;
+            this.grpPhuTung.TabStop = false;
+            this.grpPhuTung.Text = "Phụ tùng bán kèm (Tùy chọn)";
+            // 
+            // dgvPhuTung
+            // 
+            this.dgvPhuTung.AllowUserToAddRows = false;
+            this.dgvPhuTung.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvPhuTung.BackgroundColor = System.Drawing.Color.White;
+            this.dgvPhuTung.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPhuTung.Location = new System.Drawing.Point(31, 62);
+            this.dgvPhuTung.Margin = new System.Windows.Forms.Padding(4);
+            this.dgvPhuTung.Name = "dgvPhuTung";
+            this.dgvPhuTung.ReadOnly = true;
+            this.dgvPhuTung.RowHeadersWidth = 51;
+            this.dgvPhuTung.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPhuTung.Size = new System.Drawing.Size(1088, 150);
+            this.dgvPhuTung.TabIndex = 0;
+            // 
+            // btnThemPhuTung
+            // 
+            this.btnThemPhuTung.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
+            this.btnThemPhuTung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnThemPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.btnThemPhuTung.ForeColor = System.Drawing.Color.White;
+            this.btnThemPhuTung.Location = new System.Drawing.Point(31, 22);
+            this.btnThemPhuTung.Margin = new System.Windows.Forms.Padding(4);
+            this.btnThemPhuTung.Name = "btnThemPhuTung";
+            this.btnThemPhuTung.Size = new System.Drawing.Size(180, 32);
+            this.btnThemPhuTung.TabIndex = 1;
+            this.btnThemPhuTung.Text = "➕ Thêm phụ tùng";
+            this.btnThemPhuTung.UseVisualStyleBackColor = false;
+            // 
+            // btnXoaPhuTung
+            // 
+            this.btnXoaPhuTung.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
+            this.btnXoaPhuTung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnXoaPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
+            this.btnXoaPhuTung.ForeColor = System.Drawing.Color.White;
+            this.btnXoaPhuTung.Location = new System.Drawing.Point(219, 22);
+            this.btnXoaPhuTung.Margin = new System.Windows.Forms.Padding(4);
+            this.btnXoaPhuTung.Name = "btnXoaPhuTung";
+            this.btnXoaPhuTung.Size = new System.Drawing.Size(180, 32);
+            this.btnXoaPhuTung.TabIndex = 2;
+            this.btnXoaPhuTung.Text = "🗑️ Xóa phụ tùng";
+            this.btnXoaPhuTung.UseVisualStyleBackColor = false;
+            // 
+            // lblTongTienXe
+            // 
+            this.lblTongTienXe.AutoSize = true;
+            this.lblTongTienXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblTongTienXe.Location = new System.Drawing.Point(31, 162);
+            this.lblTongTienXe.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTongTienXe.Name = "lblTongTienXe";
+            this.lblTongTienXe.Size = new System.Drawing.Size(92, 18);
+            this.lblTongTienXe.TabIndex = 3;
+            this.lblTongTienXe.Text = "Tổng tiền xe:";
+            // 
+            // txtTongTienXe
+            // 
+            this.txtTongTienXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.txtTongTienXe.ForeColor = System.Drawing.Color.Blue;
+            this.txtTongTienXe.Location = new System.Drawing.Point(267, 157);
+            this.txtTongTienXe.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTongTienXe.Name = "txtTongTienXe";
+            this.txtTongTienXe.ReadOnly = true;
+            this.txtTongTienXe.Size = new System.Drawing.Size(852, 26);
+            this.txtTongTienXe.TabIndex = 4;
+            this.txtTongTienXe.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblTongTienPhuTung
+            // 
+            this.lblTongTienPhuTung.AutoSize = true;
+            this.lblTongTienPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblTongTienPhuTung.Location = new System.Drawing.Point(31, 196);
+            this.lblTongTienPhuTung.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTongTienPhuTung.Name = "lblTongTienPhuTung";
+            this.lblTongTienPhuTung.Size = new System.Drawing.Size(133, 18);
+            this.lblTongTienPhuTung.TabIndex = 5;
+            this.lblTongTienPhuTung.Text = "Tổng tiền phụ tùng:";
+            // 
+            // txtTongTienPhuTung
+            // 
+            this.txtTongTienPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.txtTongTienPhuTung.ForeColor = System.Drawing.Color.Blue;
+            this.txtTongTienPhuTung.Location = new System.Drawing.Point(267, 191);
+            this.txtTongTienPhuTung.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTongTienPhuTung.Name = "txtTongTienPhuTung";
+            this.txtTongTienPhuTung.ReadOnly = true;
+            this.txtTongTienPhuTung.Size = new System.Drawing.Size(852, 26);
+            this.txtTongTienPhuTung.TabIndex = 6;
+            this.txtTongTienPhuTung.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // lblTongThanhToan
+            // 
+            this.lblTongThanhToan.AutoSize = true;
+            this.lblTongThanhToan.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
+            this.lblTongThanhToan.ForeColor = System.Drawing.Color.Red;
+            this.lblTongThanhToan.Location = new System.Drawing.Point(31, 236);
+            this.lblTongThanhToan.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTongThanhToan.Name = "lblTongThanhToan";
+            this.lblTongThanhToan.Size = new System.Drawing.Size(217, 24);
+            this.lblTongThanhToan.TabIndex = 7;
+            this.lblTongThanhToan.Text = "TỔNG THANH TOÁN:";
+            // 
+            // txtTongThanhToan
+            // 
+            this.txtTongThanhToan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.txtTongThanhToan.ForeColor = System.Drawing.Color.Red;
+            this.txtTongThanhToan.Location = new System.Drawing.Point(267, 231);
+            this.txtTongThanhToan.Margin = new System.Windows.Forms.Padding(4);
+            this.txtTongThanhToan.Name = "txtTongThanhToan";
+            this.txtTongThanhToan.ReadOnly = true;
+            this.txtTongThanhToan.Size = new System.Drawing.Size(852, 30);
+            this.txtTongThanhToan.TabIndex = 8;
+            this.txtTongThanhToan.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // FormMuaXe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1200, 738);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(1220, 1055);
+            this.Controls.Add(this.grpPhuTung);
             this.Controls.Add(this.btnHuy);
             this.Controls.Add(this.btnLuu);
             this.Controls.Add(this.grpThongTinBan);
             this.Controls.Add(this.grpXe);
             this.Controls.Add(this.grpKhachHang);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1220, 900);
             this.Name = "FormMuaXe";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Bán xe";
@@ -666,6 +813,8 @@ namespace UI.FormUI
             this.grpXe.PerformLayout();
             this.grpThongTinBan.ResumeLayout(false);
             this.grpThongTinBan.PerformLayout();
+            this.grpPhuTung.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPhuTung)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -718,5 +867,15 @@ namespace UI.FormUI
         private System.Windows.Forms.Button btnLuu;
         private System.Windows.Forms.Button btnHuy;
         private System.Windows.Forms.TextBox txtTenXe;
+        private System.Windows.Forms.GroupBox grpPhuTung;
+        private System.Windows.Forms.DataGridView dgvPhuTung;
+        private System.Windows.Forms.Button btnThemPhuTung;
+        private System.Windows.Forms.Button btnXoaPhuTung;
+        private System.Windows.Forms.Label lblTongTienXe;
+        private System.Windows.Forms.Label lblTongTienPhuTung;
+        private System.Windows.Forms.Label lblTongThanhToan;
+        private System.Windows.Forms.TextBox txtTongTienXe;
+        private System.Windows.Forms.TextBox txtTongTienPhuTung;
+        private System.Windows.Forms.TextBox txtTongThanhToan;
     }
 }

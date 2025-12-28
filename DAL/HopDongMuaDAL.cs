@@ -100,8 +100,11 @@ namespace DAL
             dx.TenDong AS TenDongXe,
             ms.TenMau AS TenMauSac,
             lx.NamSX AS NamSanXuat,
+            dx.PhanKhoi,
+            ISNULL(dx.LoaiXe, N'Không xác định') AS LoaiXe,
+            ISNULL(xe.ThongTinXang, N'Xăng thường') AS ThongTinXang,
             -- Tên xe đầy đủ (Hãng + Dòng + Màu + Năm)
-            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' ', lx.NamSX) AS TenXe,
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' [', lx.NamSX, ']') AS TenXe,
             hdm.NgayLap,
             hdm.GiaBan,
             hdm.DieuKhoan,
