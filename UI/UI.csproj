@@ -183,6 +183,12 @@
     <Compile Include="FormUI\FormMuaXe.Designer.cs">
       <DependentUpon>FormMuaXe.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormUI\FormChonPhuTung.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUI\FormChonPhuTung.Designer.cs">
+      <DependentUpon>FormChonPhuTung.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormUI\FormNhapLyDo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -430,6 +436,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormMuaXe.resx">
       <DependentUpon>FormMuaXe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormChonPhuTung.resx">
+      <DependentUpon>FormChonPhuTung.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormNhapLyDo.resx">
       <DependentUpon>FormNhapLyDo.cs</DependentUpon>

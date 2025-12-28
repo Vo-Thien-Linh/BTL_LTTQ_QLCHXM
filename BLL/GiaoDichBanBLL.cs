@@ -2,16 +2,19 @@
 using System.Data;
 using DAL;
 using DTO;
+using Newtonsoft.Json;
 
 namespace BLL
 {
     public class GiaoDichBanBLL
     {
         private GiaoDichBanDAL giaoDichBanDAL;
+       //private KhuyenMaiBLL khuyenMaiBLL;
 
         public GiaoDichBanBLL()
         {
             giaoDichBanDAL = new GiaoDichBanDAL();
+           // khuyenMaiBLL = new KhuyenMaiBLL();
         }
 
         /// <summary>
@@ -224,5 +227,87 @@ namespace BLL
             // Có thể mở rộng thêm phương thức này trong DAL nếu cần
             return giaoDichBanDAL.GetAllGiaoDichBan();
         }
+
+        /// <summary>
+        /// Thêm giao dịch bán kèm phụ tùng
+        /// </summary>
+        public int InsertGiaoDichBanKemPhuTung(
+            GiaoDichBan gd,
+            string maKM_Xe,
+            decimal soTienGiam_Xe,
+            System.Collections.Generic.List<ChiTietPhuTungBanDTO> danhSachPhuTung,
+            out string errorMessage)
+        {
+            errorMessage = "";
+
+            // Validate dữ liệu
+            if (!ValidateGiaoDichBan(gd, out errorMessage))
+            {
+                return 0;
+            }
+
+            try
+            {
+                // Chuyển danh sách phụ tùng thành JSON
+                string jsonPhuTung = "[]";
+                if (danhSachPhuTung != null && danhSachPhuTung.Count > 0)
+                {
+                    var phuTungList = new System.Collections.Generic.List<object>();
+                    foreach (var pt in danhSachPhuTung)
+                    {
+                        phuTungList.Add(new
+                        {
+                            MaPhuTung = pt.MaPhuTung,
+                            SoLuong = pt.SoLuong,
+                            DonGia = pt.DonGia,
+                            MaKM = string.IsNullOrEmpty(pt.MaKM) ? (object)null : pt.MaKM,
+                            SoTienGiam = pt.SoTienGiam
+                        });
+                    }
+                    jsonPhuTung = Newtonsoft.Json.JsonConvert.SerializeObject(phuTungList);
+                }
+
+                // Gọi DAL để thêm giao dịch
+                return giaoDichBanDAL.InsertGiaoDichBanKemPhuTung(
+                    gd.MaKH, gd.ID_Xe, gd.NgayBan, gd.GiaBan,
+                    gd.TrangThaiThanhToan, gd.HinhThucThanhToan, gd.MaTaiKhoan,
+                    maKM_Xe, soTienGiam_Xe, jsonPhuTung,
+                    out errorMessage);
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi khi thêm giao dịch bán kèm phụ tùng: " + ex.Message;
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Lấy danh sách phụ tùng đã bán kèm theo MaGDBan
+        /// </summary>
+        public DataTable GetChiTietPhuTungBan(int maGDBan)
+        {
+            try
+            {
+                return giaoDichBanDAL.GetChiTietPhuTungBan(maGDBan);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Lấy danh sách khuyến mãi còn hiệu lực cho bán hàng
+        /// </summary>
+       
+        /// <summary>
+        /// Tính giá trị giảm cho xe
+        /// </summary>
+       //
+
+        /// <summary>
+        /// Tính giá trị giảm cho phụ tùng
+        /// </summary>
+        //
     }
 }

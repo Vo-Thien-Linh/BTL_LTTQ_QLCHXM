@@ -32,6 +32,7 @@ namespace UI.FormUI
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pnlHeader = new System.Windows.Forms.Panel();
+            this.btnList = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pnlMenuBar = new System.Windows.Forms.Panel();
@@ -46,7 +47,6 @@ namespace UI.FormUI
             this.btnQuanLyNhanVien = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pnlContent = new System.Windows.Forms.Panel();
-            this.btnList = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -66,6 +66,18 @@ namespace UI.FormUI
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(1385, 162);
             this.pnlHeader.TabIndex = 0;
+            // 
+            // btnList
+            // 
+            this.btnList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnList.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnList.Location = new System.Drawing.Point(26, 83);
+            this.btnList.Name = "btnList";
+            this.btnList.Size = new System.Drawing.Size(54, 59);
+            this.btnList.TabIndex = 2;
+            this.btnList.Text = "☰";
+            this.btnList.UseVisualStyleBackColor = false;
+            this.btnList.Click += new System.EventHandler(this.btnList_Click);
             // 
             // pictureBox2
             // 
@@ -105,7 +117,7 @@ namespace UI.FormUI
             this.pnlMenuBar.Location = new System.Drawing.Point(0, 162);
             this.pnlMenuBar.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlMenuBar.Name = "pnlMenuBar";
-            this.pnlMenuBar.Size = new System.Drawing.Size(356, 1013);
+            this.pnlMenuBar.Size = new System.Drawing.Size(356, 893);
             this.pnlMenuBar.TabIndex = 1;
             this.pnlMenuBar.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMenuBar_Paint);
             // 
@@ -216,7 +228,7 @@ namespace UI.FormUI
             this.panel1.Location = new System.Drawing.Point(356, 162);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1029, 1013);
+            this.panel1.Size = new System.Drawing.Size(1029, 893);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
@@ -226,28 +238,16 @@ namespace UI.FormUI
             this.pnlContent.Location = new System.Drawing.Point(0, 0);
             this.pnlContent.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1029, 1013);
+            this.pnlContent.Size = new System.Drawing.Size(1029, 893);
             this.pnlContent.TabIndex = 0;
             this.pnlContent.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlContent_Paint);
-            // 
-            // btnList
-            // 
-            this.btnList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.btnList.Font = new System.Drawing.Font("Microsoft Sans Serif", 25.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnList.Location = new System.Drawing.Point(26, 83);
-            this.btnList.Name = "btnList";
-            this.btnList.Size = new System.Drawing.Size(54, 59);
-            this.btnList.TabIndex = 2;
-            this.btnList.Text = "☰";
-            this.btnList.UseVisualStyleBackColor = false;
-            this.btnList.Click += new System.EventHandler(this.btnList_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ClientSize = new System.Drawing.Size(1385, 1175);
+            this.ClientSize = new System.Drawing.Size(1385, 1055);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pnlMenuBar);
             this.Controls.Add(this.pnlHeader);

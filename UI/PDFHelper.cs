@@ -217,10 +217,13 @@ namespace UI
                 benMuaTable.SetWidths(new float[] { 30f, 70f });
                 benMuaTable.SpacingAfter = 10f;
 
-                AddSimpleInfoRow(benMuaTable, "Họ và tên:", hopDong["HoTenKH"]?.ToString() ?? "");
+                string tenKH = hopDong["HoTenKH"]?.ToString() ?? "";
+                string sdtKH = hopDong["Sdt"]?.ToString() ?? "";
+                string khachHangInfo = $"{tenKH}, SĐT: {sdtKH}";
+                
+                AddSimpleInfoRow(benMuaTable, "Khách hàng:", khachHangInfo);
                 AddSimpleInfoRow(benMuaTable, "CCCD/CMND:", hopDong["SoCCCD"]?.ToString() ?? "");
                 AddSimpleInfoRow(benMuaTable, "Địa chỉ:", hopDong["DiaChi"]?.ToString() ?? "");
-                AddSimpleInfoRow(benMuaTable, "Điện thoại:", hopDong["Sdt"]?.ToString() ?? "");
                 AddSimpleInfoRow(benMuaTable, "Mã khách hàng:", hopDong["MaKH"]?.ToString() ?? "");
                 document.Add(benMuaTable);
 
@@ -233,16 +236,19 @@ namespace UI
                 // Tạo bảng 2 cột cho thông tin xe
                 PdfPTable xeTable = new PdfPTable(2);
                 xeTable.WidthPercentage = 100;
-                xeTable.SetWidths(new float[] { 50f, 50f });
+                xeTable.SetWidths(new float[] { 30f, 70f });
                 xeTable.SpacingAfter = 10f;
 
-                // ĐÃ SỬA: DÙNG "TenXe" THAY VÌ "TenLoaiXe"
-                AddSimpleInfoRow(xeTable, "Tên xe:", hopDong["TenXe"]?.ToString() ?? "Không xác định");
+                AddSimpleInfoRow(xeTable, "Tên xe:", hopDong["TenXe"]?.ToString() ?? "");
+                AddSimpleInfoRow(xeTable, "Biển số:", hopDong["BienSo"]?.ToString() ?? "Chưa đăng ký");
                 AddSimpleInfoRow(xeTable, "Hãng xe:", hopDong["TenHangXe"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Dòng xe:", hopDong["TenDongXe"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Màu sắc:", hopDong["TenMauSac"]?.ToString() ?? "");
+                AddSimpleInfoRow(xeTable, "Phân khối:", (hopDong["PhanKhoi"] != DBNull.Value ? hopDong["PhanKhoi"].ToString() + " cc" : ""));
+                AddSimpleInfoRow(xeTable, "Loại xe:", hopDong["LoaiXe"]?.ToString() ?? "");
+                AddSimpleInfoRow(xeTable, "Thông tin xăng:", hopDong["ThongTinXang"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Năm sản xuất:", hopDong["NamSanXuat"]?.ToString() ?? "");
-                AddSimpleInfoRow(xeTable, "Biển số:", hopDong["BienSo"]?.ToString() ?? "Chưa đăng ký");
+                
                 document.Add(xeTable);
 
                 // ==================== GIÁ TRỊ HỢP ĐỒNG ====================

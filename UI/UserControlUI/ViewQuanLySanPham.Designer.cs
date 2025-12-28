@@ -33,8 +33,8 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnQuanLyPhuTung = new System.Windows.Forms.Button();
             this.btnQuanLyXe = new System.Windows.Forms.Button();
-          //  this.panel3 = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.btnQuanLyKhuyenMai = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +65,7 @@
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.btnQuanLyKhuyenMai);
             this.panel2.Controls.Add(this.btnQuanLyPhuTung);
             this.panel2.Controls.Add(this.btnQuanLyXe);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -109,6 +110,18 @@
             this.pnlMain.TabIndex = 3;
             this.pnlMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMain_Paint);
             // 
+            // btnQuanLyKhuyenMai
+            // 
+            this.btnQuanLyKhuyenMai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLyKhuyenMai.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnQuanLyKhuyenMai.Location = new System.Drawing.Point(363, 10);
+            this.btnQuanLyKhuyenMai.Name = "btnQuanLyKhuyenMai";
+            this.btnQuanLyKhuyenMai.Size = new System.Drawing.Size(150, 40);
+            this.btnQuanLyKhuyenMai.TabIndex = 1;
+            this.btnQuanLyKhuyenMai.Text = "Quản lý khuyến mãi";
+            this.btnQuanLyKhuyenMai.UseVisualStyleBackColor = true;
+            this.btnQuanLyKhuyenMai.Click += new System.EventHandler(this.btnQuanLyPhuTung_Click);
+            // 
             // ViewQuanLySanPham
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -134,5 +147,6 @@
         private System.Windows.Forms.Button btnQuanLyPhuTung;
         private System.Windows.Forms.Button btnQuanLyXe;
         private System.Windows.Forms.Panel pnlMain;
+        private System.Windows.Forms.Button btnQuanLyKhuyenMai;
     }
 }

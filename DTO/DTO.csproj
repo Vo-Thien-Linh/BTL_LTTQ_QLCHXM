@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaoTriDTO.cs" />
+    <Compile Include="ChiTietPhuTungBanDTO.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="CurrentUser.cs" />
     <Compile Include="DashboardDTO.cs" />
