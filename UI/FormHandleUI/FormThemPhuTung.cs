@@ -33,7 +33,7 @@ namespace UI.FormHandleUI
         // Load data binding và giá trị mặc định
         private void FormThemPhuTung_Load(object sender, EventArgs e)
         {
-            // Binding hãng xe
+             // Binding hãng xe
             cbbHangXeTuongThich.DataSource = hangXeBLL.GetAllHangXe();
             cbbHangXeTuongThich.DisplayMember = "TenHang";
             cbbHangXeTuongThich.ValueMember = "MaHang";
