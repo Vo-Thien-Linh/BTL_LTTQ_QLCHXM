@@ -296,7 +296,7 @@ namespace UI.UserControlUI
                 {
                     DrawPlaceholder(e.Graphics, imagePanel);
                 }
-            };
+            };  
 
             // Tên xe (Hãng + Dòng)
             Label lblTenXe = new Label
@@ -311,7 +311,7 @@ namespace UI.UserControlUI
             // Thông tin chi tiết
             Label lblThongTin = new Label
             {
-                Text = $"Màu: {xe["TenMau"]} | Năm: {xe["NamSX"]} | {xe["PhanKhoi"]}cc",
+                Text = $"{langMgr.GetString("Color")}: {xe["TenMau"]} | {langMgr.GetString("Year")}: {xe["NamSX"]} | {xe["PhanKhoi"]}cc",
                 Font = new Font("Segoe UI", 8F),
                 Location = new Point(10, 198),
                 Size = new Size(240, 18),
@@ -319,9 +319,10 @@ namespace UI.UserControlUI
             };
 
             // Badge trạng thái (nhỏ)
+            string mucDichDisplay = isXeChoThue ? langMgr.GetString("ForRent") : langMgr.GetString("ForSale");
             Label lblTrangThai = new Label
             {
-                Text = mucDichSuDung,
+                Text = mucDichDisplay,
                 Font = new Font("Segoe UI", 8F, FontStyle.Bold),
                 Location = new Point(10, 222),
                 Size = new Size(70, 20),
@@ -338,11 +339,13 @@ namespace UI.UserControlUI
             };
 
             // Giá (lớn và nổi bật)
+            string giaText = isXeChoThue
+                ? (xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} {1}", Convert.ToDecimal(xe["GiaMua"]) / 30, langMgr.GetString("PerDay")) : "N/A")
+                : (xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} VNĐ", xe["GiaMua"]) : "N/A");
+
             Label lblGia = new Label
             {
-                Text = isXeChoThue 
-                    ? (xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} VNĐ/ngày", Convert.ToDecimal(xe["GiaMua"]) / 30) : "N/A")
-                    : (xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} VNĐ", xe["GiaMua"]) : "N/A"),
+                Text = giaText,
                 Font = new Font("Segoe UI", 11F, FontStyle.Bold),
                 Location = new Point(10, 252),
                 Size = new Size(240, 28),
@@ -351,9 +354,10 @@ namespace UI.UserControlUI
             };
 
             // Nút action (MUA NGAY / THUÊ NGAY)
+            string btnText = isXeChoThue ? langMgr.GetString("RentNow") : langMgr.GetString("BuyNow");
             Button btnAction = new Button
             {
-                Text = isXeChoThue ? "THUÊ NGAY" : "MUA NGAY",
+                Text = btnText,
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 Location = new Point(10, 290),
                 Size = new Size(240, 38),
@@ -363,31 +367,27 @@ namespace UI.UserControlUI
                 Cursor = Cursors.Hand
             };
             btnAction.FlatAppearance.BorderSize = 0;
-            btnAction.Click += (s, e) => 
+            btnAction.Click += (s, e) =>
             {
                 string idXe = xe["ID_Xe"].ToString();
-                
-                // Tìm MainForm
+
                 Form mainForm = this.FindForm();
                 while (mainForm != null && mainForm.GetType().Name != "MainForm")
                 {
                     mainForm = mainForm.ParentForm;
                 }
-                
+
                 if (mainForm != null)
                 {
-                    // Gọi method chuyển view từ MainForm
                     if (isXeChoThue)
                     {
-                        // Chuyển sang Quản lý cho thuê
-                        var method = mainForm.GetType().GetMethod("NavigateToThueXe", 
+                        var method = mainForm.GetType().GetMethod("NavigateToThueXe",
                             System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                         method?.Invoke(mainForm, new object[] { idXe });
                     }
                     else
                     {
-                        // Chuyển sang Quản lý bán hàng
-                        var method = mainForm.GetType().GetMethod("NavigateToBanXe", 
+                        var method = mainForm.GetType().GetMethod("NavigateToBanXe",
                             System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                         method?.Invoke(mainForm, new object[] { idXe });
                     }
@@ -508,9 +508,10 @@ namespace UI.UserControlUI
                 
                 // Icon
                 g.DrawString("🏍️", fontIcon, Brushes.Gray, new RectangleF(0, 20, panel.Width, 80), sf);
-                
+
                 // Text placeholder
-                g.DrawString("NO IMAGE", fontBrand, Brushes.DarkGray, new RectangleF(0, 110, panel.Width, 40), sf);
+                string noImageText = langMgr.GetString("NoImage") ?? "NO IMAGE";
+                g.DrawString(noImageText, fontBrand, Brushes.DarkGray, new RectangleF(0, 110, panel.Width, 40), sf);
             }
         }
 
@@ -521,7 +522,6 @@ namespace UI.UserControlUI
             panelXeDetail.Controls.Clear();
             panelXeDetail.AutoScroll = true;
 
-            // Nút đóng
             Button btnClose = new Button
             {
                 Text = "✕",
@@ -541,17 +541,15 @@ namespace UI.UserControlUI
                 selectedXeId = null;
             };
 
-            // Tiêu đề
             Label lblTitle = new Label
             {
-                Text = "THÔNG TIN CHI TIẾT XE MÁY",
+                Text = langMgr.GetString("VehicleDetailTitle") ?? "THÔNG TIN CHI TIẾT XE MÁY",
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
                 Location = new Point(20, 15),
                 Size = new Size(500, 30),
                 ForeColor = Color.FromArgb(25, 118, 210)
             };
 
-            // Ảnh xe lớn
             PictureBox picXe = new PictureBox
             {
                 Size = new Size(350, 250),
@@ -576,36 +574,51 @@ namespace UI.UserControlUI
                 catch { }
             }
 
-            // Thông tin chi tiết - Layout 2 cột
             int leftX = 390;
             int rightX = 750;
             int yPos = 70;
 
-            CreateDetailLabel("Mã xe:", xe["ID_Xe"].ToString(), leftX, yPos, true);
+            CreateDetailLabel(langMgr.GetString("VehicleID") + ":", xe["ID_Xe"].ToString(), leftX, yPos, true);
             yPos += 40;
-            CreateDetailLabel("Hãng xe:", xe["TenHang"].ToString(), leftX, yPos);
-            CreateDetailLabel("Dòng xe:", xe["TenDong"].ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("Brand") + ":", xe["TenHang"].ToString(), leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("Model") + ":", xe["TenDong"].ToString(), rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Màu sắc:", xe["TenMau"].ToString(), leftX, yPos);
-            CreateDetailLabel("Năm SX:", xe["NamSX"]?.ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("Color") + ":", xe["TenMau"].ToString(), leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("YearOfManufacture") + ":", xe["NamSX"]?.ToString(), rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Phân khối:", xe["PhanKhoi"]?.ToString() + " cc", leftX, yPos);
-            CreateDetailLabel("Loại xe:", xe["LoaiXe"]?.ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("EngineCapacity") + ":", xe["PhanKhoi"]?.ToString() + " cc", leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("VehicleType") + ":", xe["LoaiXe"]?.ToString(), rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Biển số:", xe["BienSo"] != DBNull.Value ? xe["BienSo"].ToString() : "Chưa có", leftX, yPos);
-            CreateDetailLabel("Km đã chạy:", xe["KmDaChay"] != DBNull.Value ? string.Format("{0:N0} km", xe["KmDaChay"]) : "0 km", rightX, yPos);
+
+            string plateNumberText = xe["BienSo"] != DBNull.Value ? xe["BienSo"].ToString() : langMgr.GetString("NotYet");
+            CreateDetailLabel(langMgr.GetString("PlateNumber") + ":", plateNumberText, leftX, yPos);
+
+            string kmText = xe["KmDaChay"] != DBNull.Value ? string.Format("{0:N0} km", xe["KmDaChay"]) : "0 km";
+            CreateDetailLabel(langMgr.GetString("Mileage") + ":", kmText, rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Mục đích:", xe["MucDichSuDung"]?.ToString() ?? "N/A", leftX, yPos);
-            CreateDetailLabel("Trạng thái:", xe["TrangThai"]?.ToString(), rightX, yPos);
+
+            CreateDetailLabel(langMgr.GetString("Purpose") + ":", xe["MucDichSuDung"]?.ToString() ?? "N/A", leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("Status") + ":", xe["TrangThai"]?.ToString(), rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Giá mua:", xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} VNĐ", xe["GiaMua"]) : "N/A", leftX, yPos);
-            CreateDetailLabel("Ngày mua:", xe["NgayMua"] != DBNull.Value ? Convert.ToDateTime(xe["NgayMua"]).ToString("dd/MM/yyyy") : "N/A", rightX, yPos);
+
+            string priceText = xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} VNĐ", xe["GiaMua"]) : "N/A";
+            CreateDetailLabel(langMgr.GetString("PurchasePrice") + ":", priceText, leftX, yPos);
+
+            string purchaseDateText = xe["NgayMua"] != DBNull.Value ? Convert.ToDateTime(xe["NgayMua"]).ToString("dd/MM/yyyy") : "N/A";
+            CreateDetailLabel(langMgr.GetString("PurchaseDate") + ":", purchaseDateText, rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Ngày ĐK:", xe["NgayDangKy"] != DBNull.Value ? Convert.ToDateTime(xe["NgayDangKy"]).ToString("dd/MM/yyyy") : "N/A", leftX, yPos);
-            CreateDetailLabel("Hết hạn ĐK:", xe["HetHanDangKy"] != DBNull.Value ? Convert.ToDateTime(xe["HetHanDangKy"]).ToString("dd/MM/yyyy") : "N/A", rightX, yPos);
+
+            string regDateText = xe["NgayDangKy"] != DBNull.Value ? Convert.ToDateTime(xe["NgayDangKy"]).ToString("dd/MM/yyyy") : "N/A";
+            CreateDetailLabel(langMgr.GetString("RegistrationDate") + ":", regDateText, leftX, yPos);
+
+            string regExpText = xe["HetHanDangKy"] != DBNull.Value ? Convert.ToDateTime(xe["HetHanDangKy"]).ToString("dd/MM/yyyy") : "N/A";
+            CreateDetailLabel(langMgr.GetString("RegistrationExpiry") + ":", regExpText, rightX, yPos);
             yPos += 35;
-            CreateDetailLabel("Hết hạn BH:", xe["HetHanBaoHiem"] != DBNull.Value ? Convert.ToDateTime(xe["HetHanBaoHiem"]).ToString("dd/MM/yyyy") : "N/A", leftX, yPos);
-            CreateDetailLabel("Xăng:", xe["ThongTinXang"]?.ToString() ?? "N/A", rightX, yPos);
+
+            string insuranceExpText = xe["HetHanBaoHiem"] != DBNull.Value ? Convert.ToDateTime(xe["HetHanBaoHiem"]).ToString("dd/MM/yyyy") : "N/A";
+            CreateDetailLabel(langMgr.GetString("InsuranceExpiry") + ":", insuranceExpText, leftX, yPos);
+
+            CreateDetailLabel(langMgr.GetString("FuelInfo") + ":", xe["ThongTinXang"]?.ToString() ?? "N/A", rightX, yPos);
             yPos += 35;
 
             panelXeDetail.Controls.Add(btnClose);
