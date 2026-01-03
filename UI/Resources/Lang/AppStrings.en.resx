@@ -132,6 +132,15 @@
   <data name="Address" xml:space="preserve">
     <value>Address</value>
   </data>
+  <data name="AddVehicle" xml:space="preserve">
+    <value>Add Vehicle</value>
+  </data>
+  <data name="AddVehicleFailed" xml:space="preserve">
+    <value>Failed to add vehicle! Please check the information.</value>
+  </data>
+  <data name="AddVehicleSuccess" xml:space="preserve">
+    <value>Vehicle added successfully!</value>
+  </data>
   <data name="AllStatus" xml:space="preserve">
     <value>All</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="Cashier" xml:space="preserve">
     <value>Cashier</value>
+  </data>
+  <data name="ChooseImage" xml:space="preserve">
+    <value>Choose Image</value>
   </data>
   <data name="Color" xml:space="preserve">
     <value>Color</value>
@@ -222,6 +234,16 @@
   <data name="EditBtn" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="EditVehicle" xml:space="preserve">
+    <value>Edit Vehicle</value>
+  </data>
+  <data name="EditVehicleFailed" xml:space="preserve">
+    <value>Failed to update vehicle!
+Please check the information.</value>
+  </data>
+  <data name="EditVehicleSuccess" xml:space="preserve">
+    <value>Vehicle updated successfully!</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -260,6 +282,18 @@
   </data>
   <data name="Gender" xml:space="preserve">
     <value>Gender</value>
+  </data>
+  <data name="GeneralInfo" xml:space="preserve">
+    <value>General Information</value>
+  </data>
+  <data name="ImageLoadError" xml:space="preserve">
+    <value>Error loading image</value>
+  </data>
+  <data name="ImportPrice" xml:space="preserve">
+    <value>Import Price</value>
+  </data>
+  <data name="ImportPricePositiveRequired" xml:space="preserve">
+    <value>Import price must be positive!</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>Info</value>
@@ -405,6 +439,12 @@
   <data name="PlateLabel" xml:space="preserve">
     <value> Plate: {0}</value>
   </data>
+  <data name="PleaseEnterFullInfo" xml:space="preserve">
+    <value>Please enter all information!</value>
+  </data>
+  <data name="PleaseEnterValidInfo" xml:space="preserve">
+    <value>Please enter valid information!</value>
+  </data>
   <data name="PleaseSelectVehicleToDelete" xml:space="preserve">
     <value>Please select a vehicle to delete!</value>
   </data>
@@ -413,6 +453,9 @@
   </data>
   <data name="PriceContact" xml:space="preserve">
     <value>Contact</value>
+  </data>
+  <data name="PricePositiveRequired" xml:space="preserve">
+    <value>Purchase price must be positive!</value>
   </data>
   <data name="ProductTitle" xml:space="preserve">
     <value>PRODUCT MANAGEMENT</value>
@@ -427,6 +470,9 @@
     <value>Purpose</value>
   </data>
   <data name="QtyColumn" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
     <value>Quantity</value>
   </data>
   <data name="QuantityLabel" xml:space="preserve">
@@ -483,6 +529,9 @@
   <data name="SearchBy" xml:space="preserve">
     <value>Search by:</value>
   </data>
+  <data name="SelectVehicleImage" xml:space="preserve">
+    <value>Select Vehicle Image</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -492,11 +541,17 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Supplier" xml:space="preserve">
+    <value>Supplier</value>
+  </data>
   <data name="TabApproveRental" xml:space="preserve">
     <value>Approve Rental</value>
   </data>
   <data name="TabManageRental" xml:space="preserve">
     <value>Rental Management</value>
+  </data>
+  <data name="TechnicalInfo" xml:space="preserve">
+    <value>Technical Information</value>
   </data>
   <data name="TechnicianLabel" xml:space="preserve">
     <value>Technician:</value>
@@ -537,8 +592,14 @@
   <data name="VehicleDetailTitle" xml:space="preserve">
     <value>VEHICLE DETAILS</value>
   </data>
+  <data name="VehicleIDRequired" xml:space="preserve">
+    <value>Vehicle ID is required!</value>
+  </data>
   <data name="VehicleLabel" xml:space="preserve">
     <value>Vehicle:</value>
+  </data>
+  <data name="VehicleNotFound" xml:space="preserve">
+    <value>Vehicle not found!</value>
   </data>
   <data name="Vehicles" xml:space="preserve">
     <value>vehicles</value>

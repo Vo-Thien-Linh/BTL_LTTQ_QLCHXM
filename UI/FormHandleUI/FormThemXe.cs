@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace UI.FormHandleUI
 {
-    
+
     public partial class FormThemXe : Form
     {
         private HangXeBLL HangXeBLL = new HangXeBLL();
@@ -22,8 +22,10 @@ namespace UI.FormHandleUI
         private NhaCungCapBLL NhaCungCapBLL = new NhaCungCapBLL();
         private LoaiXeBLL LoaiXeBLL = new LoaiXeBLL();
         private XeMayBLL xeMayBLL = new XeMayBLL();
-        private byte[] anhXeBytes = null; // Lưu ảnh dạng byte[]
+        private byte[] anhXeBytes = null;
         private ErrorProvider errorProvider1 = new ErrorProvider();
+
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
 
         public FormThemXe()
         {
@@ -31,7 +33,137 @@ namespace UI.FormHandleUI
             txtMaXe.Validating += txtMaXe_Validating;
             txtGiaMua.Validating += txtGiaMua_Validating;
             txtGiaNhap.Validating += txtGiaNhap_Validating;
+
+            langMgr.LanguageChanged += (s, e) => ApplyLanguage();
         }
+
+        private void ApplyLanguage()
+        {
+            this.Text = langMgr.GetString("AddVehicle") ?? "THÊM XE";
+
+            UpdateAllLabels(this);
+
+            if (cbbTrangThai != null)
+            {
+                int selectedIndex = cbbTrangThai.SelectedIndex;
+                cbbTrangThai.Items.Clear();
+                cbbTrangThai.Items.Add(langMgr.GetString("ReadyStatus") ?? "Sẵn sàng");
+                cbbTrangThai.Items.Add(langMgr.GetString("RentedStatus") ?? "Đang thuê");
+                cbbTrangThai.Items.Add(langMgr.GetString("SoldStatus") ?? "Đã bán");
+                cbbTrangThai.Items.Add(langMgr.GetString("MaintenanceStatus") ?? "Đang bảo trì");
+                if (selectedIndex >= 0 && selectedIndex < cbbTrangThai.Items.Count)
+                    cbbTrangThai.SelectedIndex = selectedIndex;
+                else if (cbbTrangThai.Items.Count > 0)
+                    cbbTrangThai.SelectedIndex = 0;
+            }
+
+            if (cbbMucDichSuDung != null)
+            {
+                int selectedIndex = cbbMucDichSuDung.SelectedIndex;
+                cbbMucDichSuDung.Items.Clear();
+                cbbMucDichSuDung.Items.Add(langMgr.GetString("ForRent") ?? "Cho thuê");
+                cbbMucDichSuDung.Items.Add(langMgr.GetString("ForSale") ?? "Bán");
+                if (selectedIndex >= 0 && selectedIndex < cbbMucDichSuDung.Items.Count)
+                    cbbMucDichSuDung.SelectedIndex = selectedIndex;
+                else if (cbbMucDichSuDung.Items.Count > 0)
+                    cbbMucDichSuDung.SelectedIndex = 0;
+            }
+        }
+
+        private void UpdateAllLabels(Control parent)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is Label lbl)
+                {
+                    string originalText = lbl.Text.Trim().TrimEnd(':');
+
+                    if (originalText == "THÊM XE" || originalText == "ADD VEHICLE")
+                    {
+                        lbl.Text = (langMgr.GetString("AddVehicle") ?? "THÊM XE").ToUpper();
+                    }
+                    else
+                    {
+                        string labelKey = GetLanguageKeyForLabel(originalText);
+                        if (!string.IsNullOrEmpty(labelKey))
+                            lbl.Text = langMgr.GetString(labelKey) ?? lbl.Text;
+                    }
+                }
+                else if (ctrl is Button btn)
+                {
+                    string btnText = btn.Text.Trim();
+                    if (btnText == "Choose Image" || btnText == "Chọn file ảnh")
+                        btn.Text = langMgr.GetString("ChooseImage") ?? "Chọn file ảnh";
+                    else if (btnText == "Add Vehicle" || btnText == "Thêm xe")
+                        btn.Text = langMgr.GetString("AddVehicle") ?? "Thêm xe";
+                }
+                else if (ctrl is GroupBox gb)
+                {
+                    string gbText = gb.Text.Trim();
+                    if (gbText == "General Information" || gbText == "Thông tin chung")
+                        gb.Text = langMgr.GetString("GeneralInfo") ?? "Thông tin chung";
+                    else if (gbText == "Technical Information" || gbText == "Thông tin kỹ thuật")
+                        gb.Text = langMgr.GetString("TechnicalInfo") ?? "Thông tin kỹ thuật";
+                }
+
+                if (ctrl.HasChildren)
+                {
+                    UpdateAllLabels(ctrl);
+                }
+            }
+        }
+
+        private string GetLanguageKeyForLabel(string labelText)
+        {
+            var mapping = new Dictionary<string, string>
+            {
+                { "Mã xe", "VehicleID" },
+                { "Vehicle ID", "VehicleID" },
+                { "VehicleID", "VehicleID" },
+                { "Biển số", "PlateNumber" },
+                { "Plate Number", "PlateNumber" },
+                { "PlateNumber", "PlateNumber" },
+                { "Hãng xe", "Brand" },
+                { "Brand", "Brand" },
+                { "Dòng xe", "Model" },
+                { "Model", "Model" },
+                { "Màu sắc", "Color" },
+                { "Color", "Color" },
+                { "Năm sản xuất", "YearOfManufacture" },
+                { "Year", "YearOfManufacture" },
+                { "Nhà cung cấp", "Supplier" },
+                { "Supplier", "Supplier" },
+                { "Loại xe", "VehicleType" },
+                { "Type", "VehicleType" },
+                { "Ngày mua", "PurchaseDate" },
+                { "Purchase Date", "PurchaseDate" },
+                { "Giá mua", "PurchasePrice" },
+                { "Price", "PurchasePrice" },
+                { "Ngày đăng ký", "RegistrationDate" },
+                { "Registration Date", "RegistrationDate" },
+                { "Reg. Date", "RegistrationDate" },
+                { "KM đã chạy", "Mileage" },
+                { "Mileage", "Mileage" },
+                { "Thông tin xăng", "FuelInfo" },
+                { "Fuel Type", "FuelInfo" },
+                { "Trạng thái", "Status" },
+                { "Status", "Status" },
+                { "Ngày hết hạn đăng ký", "RegistrationExpiry" },
+                { "Reg. Expiry", "RegistrationExpiry" },
+                { "Reg Expiry", "RegistrationExpiry" },
+                { "Ngày hết hạn bảo hiểm", "InsuranceExpiry" },
+                { "Insurance Expiry", "InsuranceExpiry" },
+                { "Mục đích sử dụng", "Purpose" },
+                { "Purpose", "Purpose" },
+                { "Giá nhập", "ImportPrice" },
+                { "Import Price", "ImportPrice" },
+                { "Số lượng", "Quantity" },
+                { "Quantity", "Quantity" }
+            };
+
+            return mapping.ContainsKey(labelText) ? mapping[labelText] : null;
+        }
+
         private void LoadHangXe()
         {
             cbbHangXe.DataSource = HangXeBLL.GetAllHangXe();
@@ -122,17 +254,15 @@ namespace UI.FormHandleUI
         private void btnChonFileAnh_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Title = "Chọn ảnh xe";
+            ofd.Title = langMgr.GetString("SelectVehicleImage") ?? "Chọn ảnh xe";
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    // Hiển thị ảnh trong PictureBox
                     picAnhXe.Image = Image.FromFile(ofd.FileName);
                     picAnhXe.SizeMode = PictureBoxSizeMode.Zoom;
-                    
-                    // Chuyển ảnh thành byte[] để lưu vào database
+
                     using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read))
                     {
                         anhXeBytes = new byte[fs.Length];
@@ -141,7 +271,12 @@ namespace UI.FormHandleUI
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi khi tải ảnh: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        langMgr.GetString("ImageLoadError") + ": " + ex.Message,
+                        langMgr.GetString("Error") ?? "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                 }
             }
         }
@@ -180,7 +315,7 @@ namespace UI.FormHandleUI
         {
             if (string.IsNullOrWhiteSpace(txtMaXe.Text))
             {
-                errorProvider1.SetError(txtMaXe, "Mã xe không được để trống!");
+                errorProvider1.SetError(txtMaXe, langMgr.GetString("VehicleIDRequired") ?? "Mã xe không được để trống!");
                 e.Cancel = true;
             }
             else
@@ -188,12 +323,12 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtMaXe, "");
             }
         }
-        
+
         private void txtGiaMua_Validating(object sender, CancelEventArgs e)
         {
             if (!decimal.TryParse(txtGiaMua.Text, out decimal giaMua) || giaMua < 0)
             {
-                errorProvider1.SetError(txtGiaMua, "Giá mua phải là số dương!");
+                errorProvider1.SetError(txtGiaMua, langMgr.GetString("PricePositiveRequired") ?? "Giá mua phải là số dương!");
                 e.Cancel = true;
             }
             else
@@ -201,11 +336,12 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtGiaMua, "");
             }
         }
+
         private void txtGiaNhap_Validating(object sender, CancelEventArgs e)
         {
             if (!decimal.TryParse(txtGiaNhap.Text, out decimal giaNhap) || giaNhap < 0)
             {
-                errorProvider1.SetError(txtGiaNhap, "Giá nhập phải là số dương!");
+                errorProvider1.SetError(txtGiaNhap, langMgr.GetString("ImportPricePositiveRequired") ?? "Giá nhập phải là số dương!");
                 e.Cancel = true;
             }
             else
@@ -218,7 +354,6 @@ namespace UI.FormHandleUI
         {
             try
             {
-                // Kiểm tra nhập hợp lệ trước khi thêm
                 if (string.IsNullOrWhiteSpace(txtMaXe.Text)
                     || cbbNhaCungCap.SelectedValue == null
                     || string.IsNullOrWhiteSpace(txtGiaMua.Text)
@@ -229,16 +364,26 @@ namespace UI.FormHandleUI
                     || cbbNamSanXuat.SelectedItem == null
                     || cbbLoaiXe.SelectedValue == null)
                 {
-                    MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-                if (!this.ValidateChildren())
-                {
-                    MessageBox.Show("Vui lòng nhập đúng và hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        langMgr.GetString("PleaseEnterFullInfo") ?? "Vui lòng nhập đầy đủ thông tin!",
+                        langMgr.GetString("Notification") ?? "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
                     return;
                 }
 
-                // Build DTO (giống code trước)
+                if (!this.ValidateChildren())
+                {
+                    MessageBox.Show(
+                        langMgr.GetString("PleaseEnterValidInfo") ?? "Vui lòng nhập đúng và hợp lệ!",
+                        langMgr.GetString("Notification") ?? "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                    return;
+                }
+
                 XeMayDTO dto = new XeMayDTO
                 {
                     ID_Xe = txtMaXe.Text.Trim(),
@@ -273,21 +418,35 @@ namespace UI.FormHandleUI
 
                 if (success)
                 {
-                    MessageBox.Show("Thêm xe thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        langMgr.GetString("AddVehicleSuccess") ?? "Thêm xe thành công!",
+                        langMgr.GetString("Notification") ?? "Thông báo",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("Thêm xe thất bại!\nVui lòng kiểm tra lại thông tin.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        langMgr.GetString("AddVehicleFailed") ?? "Thêm xe thất bại!\nVui lòng kiểm tra lại thông tin.",
+                        langMgr.GetString("Error") ?? "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
                 }
             }
             catch (Exception ex)
             {
-                // Log chi tiết lỗi để debug
                 string detailError = $"Lỗi: {ex.Message}\n\nChi tiết:\n{ex.ToString()}";
                 System.Diagnostics.Debug.WriteLine(detailError);
-                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    ex.Message,
+                    langMgr.GetString("Error") ?? "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
             }
         }
 
@@ -304,24 +463,11 @@ namespace UI.FormHandleUI
 
             cbbNamSanXuat.DataSource = Enumerable.Range(2000, DateTime.Now.Year - 1999).ToList();
 
-            cbbTrangThai.Items.Clear();
-            cbbTrangThai.Items.Add("Sẵn sàng");
-            cbbTrangThai.Items.Add("Đang thuê");
-            cbbTrangThai.Items.Add("Đã bán");
-            cbbTrangThai.Items.Add("Đang bảo trì");
-            cbbTrangThai.SelectedIndex = 0;
-
-            cbbMucDichSuDung.Items.Clear();
-            cbbMucDichSuDung.Items.Add("Cho thuê");
-            cbbMucDichSuDung.Items.Add("Bán");
-            cbbMucDichSuDung.SelectedIndex = 0;
+            ApplyLanguage();
         }
-
-
 
         private void txtGiaMua_TextChanged(object sender, EventArgs e)
         {
-            // Tự động tính GiaNhap = 85% GiaMua
             if (decimal.TryParse(txtGiaMua.Text, out decimal giaMua))
             {
                 txtGiaNhap.Text = (giaMua * 0.85m).ToString("0.##");
@@ -333,6 +479,11 @@ namespace UI.FormHandleUI
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }

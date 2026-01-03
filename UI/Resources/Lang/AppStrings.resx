@@ -132,6 +132,15 @@
   <data name="Address" xml:space="preserve">
     <value>Địa Chỉ</value>
   </data>
+  <data name="AddVehicle" xml:space="preserve">
+    <value>Thêm xe</value>
+  </data>
+  <data name="AddVehicleFailed" xml:space="preserve">
+    <value>Thêm xe thất bại! Vui lòng kiểm tra lại thông tin.</value>
+  </data>
+  <data name="AddVehicleSuccess" xml:space="preserve">
+    <value>Thêm xe thành công!</value>
+  </data>
   <data name="AllStatus" xml:space="preserve">
     <value>Tất cả</value>
   </data>
@@ -173,6 +182,9 @@
   </data>
   <data name="Cashier" xml:space="preserve">
     <value>Thu ngân</value>
+  </data>
+  <data name="ChooseImage" xml:space="preserve">
+    <value>Chọn file ảnh</value>
   </data>
   <data name="Color" xml:space="preserve">
     <value>Màu</value>
@@ -222,6 +234,15 @@
   <data name="EditBtn" xml:space="preserve">
     <value>Sửa</value>
   </data>
+  <data name="EditVehicle" xml:space="preserve">
+    <value>Sửa xe</value>
+  </data>
+  <data name="EditVehicleFailed" xml:space="preserve">
+    <value>Sửa xe thất bại! Vui lòng kiểm tra lại thông tin.</value>
+  </data>
+  <data name="EditVehicleSuccess" xml:space="preserve">
+    <value>Sửa xe thành công!</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -260,6 +281,18 @@
   </data>
   <data name="Gender" xml:space="preserve">
     <value>Giới Tính</value>
+  </data>
+  <data name="GeneralInfo" xml:space="preserve">
+    <value>Thông tin chung</value>
+  </data>
+  <data name="ImageLoadError" xml:space="preserve">
+    <value>Lỗi khi tải ảnh</value>
+  </data>
+  <data name="ImportPrice" xml:space="preserve">
+    <value>Giá nhập</value>
+  </data>
+  <data name="ImportPricePositiveRequired" xml:space="preserve">
+    <value>Giá nhập phải là số dương!</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value> Thông báo</value>
@@ -405,6 +438,12 @@
   <data name="PlateLabel" xml:space="preserve">
     <value>Biển số: {0} </value>
   </data>
+  <data name="PleaseEnterFullInfo" xml:space="preserve">
+    <value>Vui lòng nhập đầy đủ thông tin!</value>
+  </data>
+  <data name="PleaseEnterValidInfo" xml:space="preserve">
+    <value>Vui lòng nhập đúng và hợp lệ!</value>
+  </data>
   <data name="PleaseSelectVehicleToDelete" xml:space="preserve">
     <value>Vui lòng chọn xe cần xóa!</value>
   </data>
@@ -413,6 +452,9 @@
   </data>
   <data name="PriceContact" xml:space="preserve">
     <value>Liên hệ </value>
+  </data>
+  <data name="PricePositiveRequired" xml:space="preserve">
+    <value>Giá mua phải là số dương!</value>
   </data>
   <data name="ProductTitle" xml:space="preserve">
     <value>QUẢN LÝ SẢN PHẨM</value>
@@ -428,6 +470,9 @@
   </data>
   <data name="QtyColumn" xml:space="preserve">
     <value>Số Lượng </value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Số lượng</value>
   </data>
   <data name="QuantityLabel" xml:space="preserve">
     <value>Còn: {0} xe</value>
@@ -483,6 +528,9 @@
   <data name="SearchBy" xml:space="preserve">
     <value>Tìm kiếm theo:</value>
   </data>
+  <data name="SelectVehicleImage" xml:space="preserve">
+    <value>Chọn ảnh xe</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Cài đặt</value>
   </data>
@@ -492,11 +540,17 @@
   <data name="Status" xml:space="preserve">
     <value>Trạng thái</value>
   </data>
+  <data name="Supplier" xml:space="preserve">
+    <value>Nhà cung cấp</value>
+  </data>
   <data name="TabApproveRental" xml:space="preserve">
     <value>Duyệt Đơn Thuê </value>
   </data>
   <data name="TabManageRental" xml:space="preserve">
     <value>Quản Lý Cho Thuê </value>
+  </data>
+  <data name="TechnicalInfo" xml:space="preserve">
+    <value>Thông tin kỹ thuật</value>
   </data>
   <data name="TechnicianLabel" xml:space="preserve">
     <value>Nhân viên kỹ thuật: </value>
@@ -537,8 +591,14 @@
   <data name="VehicleDetailTitle" xml:space="preserve">
     <value>THÔNG TIN CHI TIẾT XE MÁY</value>
   </data>
+  <data name="VehicleIDRequired" xml:space="preserve">
+    <value>Mã xe không được để trống!</value>
+  </data>
   <data name="VehicleLabel" xml:space="preserve">
     <value>Xe:</value>
+  </data>
+  <data name="VehicleNotFound" xml:space="preserve">
+    <value>Không tìm thấy thông tin xe!</value>
   </data>
   <data name="Vehicles" xml:space="preserve">
     <value>xe</value>
