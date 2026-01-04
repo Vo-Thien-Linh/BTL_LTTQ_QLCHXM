@@ -14,6 +14,7 @@ namespace UI.UserControlUI
     {
         private readonly DashboardBLL _bll = new DashboardBLL();
         private Timer refreshTimer;
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
 
         public ViewDashboardNew()
         {
@@ -23,6 +24,48 @@ namespace UI.UserControlUI
             SetupRefreshTimer();
             SetupPanelHoverEffects();
             this.Resize += ViewDashboardNew_Resize;
+
+            langMgr.LanguageChanged += (s, e) => ApplyLanguage();
+        }
+
+        private void ApplyLanguage()
+        {
+            lblTitle.Text = (langMgr.GetString("Dashboard") ?? "DASHBOARD - TỔNG QUAN").ToUpper();
+
+            lblXeSanSangTitle.Text = langMgr.GetString("AvailableVehicles") ?? "Xe Sẵn Sàng Bán";
+            lblDoanhThuTitle.Text = langMgr.GetString("MonthlyRevenue") ?? "Doanh Thu Tháng Này";
+            lblKhachHangTitle.Text = langMgr.GetString("NewCustomers") ?? "Khách Hàng Mới";
+            lblGiaoDichTitle.Text = langMgr.GetString("TodayTransactions") ?? "Giao Dịch Hôm Nay";
+
+            lblTitleHoatDong.Text = langMgr.GetString("RecentActivities") ?? "Hoạt Động Gần Đây";
+            lblTitleCanhBao.Text = langMgr.GetString("LowStockWarning") ?? "Cảnh Báo Tồn Kho Thấp";
+
+            SetupChartTitles();
+
+            if (dgvHoatDongGanDay.Columns.Count > 0)
+            {
+                dgvHoatDongGanDay.Columns["Ngày"].HeaderText = langMgr.GetString("Date") ?? "Ngày";
+                dgvHoatDongGanDay.Columns["Loại"].HeaderText = langMgr.GetString("Type") ?? "Loại";
+                dgvHoatDongGanDay.Columns["Khách hàng"].HeaderText = langMgr.GetString("Customer") ?? "Khách hàng";
+                dgvHoatDongGanDay.Columns["Xe"].HeaderText = langMgr.GetString("Vehicle") ?? "Xe";
+                dgvHoatDongGanDay.Columns["Giá trị"].HeaderText = langMgr.GetString("Value") ?? "Giá trị";
+            }
+
+            if (dgvCanhBaoTonKho.Columns.Count > 0)
+            {
+                dgvCanhBaoTonKho.Columns["Phụ tùng"].HeaderText = langMgr.GetString("Part") ?? "Phụ tùng";
+                dgvCanhBaoTonKho.Columns["Tồn kho"].HeaderText = langMgr.GetString("Stock") ?? "Tồn kho";
+                dgvCanhBaoTonKho.Columns["Trạng thái"].HeaderText = langMgr.GetString("Status") ?? "Trạng thái";
+            }
+
+            UpdateDateTime();
+        }
+
+        private void UpdateDateTime()
+        {
+            string dayName = DateTime.Now.ToString("dddd");
+            string translatedDay = langMgr.GetString($"Day_{dayName}") ?? dayName;
+            lblDateTime.Text = $"{translatedDay}, {DateTime.Now:dd/MM/yyyy}";
         }
 
         private void ViewDashboardNew_Resize(object sender, EventArgs e)
@@ -39,37 +82,33 @@ namespace UI.UserControlUI
             int cardGap = 10;
             int availableWidth = this.Width - (padding * 2);
             int cardWidth = (availableWidth - (cardGap * 3)) / 4;
-            int cardHeight = 100; // Giảm từ 130 xuống 100
-            
-            // Điều chỉnh 4 stat cards - tăng khoảng cách từ top
-            int cardY = 100; // Tăng từ 70 lên 100 để tránh đè lên datetime
+            int cardHeight = 100;
+
+            int cardY = 100;
             pnlXeSanSang.SetBounds(padding, cardY, cardWidth, cardHeight);
             pnlDoanhThu.SetBounds(padding + cardWidth + cardGap, cardY, cardWidth, cardHeight);
             pnlKhachHang.SetBounds(padding + (cardWidth + cardGap) * 2, cardY, cardWidth, cardHeight);
             pnlGiaoDich.SetBounds(padding + (cardWidth + cardGap) * 3, cardY, cardWidth, cardHeight);
-            
-            // Điều chỉnh charts - giảm khoảng cách
-            int chartY = cardY + cardHeight + 15; // Giảm khoảng cách từ 20 xuống 15
+
+            int chartY = cardY + cardHeight + 15;
             int chartWidth = (availableWidth - cardGap) / 2;
-            int chartHeight = 280; // Giảm từ 320 xuống 280
-            
+            int chartHeight = 280;
+
             chartDoanhThu.SetBounds(padding, chartY, chartWidth, chartHeight);
             chartTop5Xe.SetBounds(padding + chartWidth + cardGap, chartY, chartWidth, chartHeight);
-            
-            // Điều chỉnh tables - giảm khoảng cách
-            int tableY = chartY + chartHeight + 15; // Giảm khoảng cách từ 20 xuống 15
-            int tableHeight = 220; // Giảm từ 260 xuống 220
-            
+
+            int tableY = chartY + chartHeight + 15;
+            int tableHeight = 220;
+
             pnlHoatDongGanDay.SetBounds(padding, tableY, chartWidth, tableHeight);
             pnlCanhBaoTonKho.SetBounds(padding + chartWidth + cardGap, tableY, chartWidth, tableHeight);
-            
-            // Điều chỉnh DataGridViews bên trong panels
+
             if (dgvHoatDongGanDay.Parent != null)
             {
                 dgvHoatDongGanDay.Width = pnlHoatDongGanDay.Width - 20;
                 dgvHoatDongGanDay.Height = pnlHoatDongGanDay.Height - 55;
             }
-            
+
             if (dgvCanhBaoTonKho.Parent != null)
             {
                 dgvCanhBaoTonKho.Width = pnlCanhBaoTonKho.Width - 20;
@@ -79,11 +118,10 @@ namespace UI.UserControlUI
 
         private void SetupChartTitles()
         {
-            // Setup chart Doanh Thu
             chartDoanhThu.Titles.Clear();
             Title titleDoanhThu = new Title
             {
-                Text = "Doanh Thu 7 Ngày Qua",
+                Text = langMgr.GetString("Revenue7Days") ?? "Doanh Thu 7 Ngày Qua",
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(33, 150, 243),
                 Docking = Docking.Top,
@@ -91,17 +129,27 @@ namespace UI.UserControlUI
             };
             chartDoanhThu.Titles.Add(titleDoanhThu);
 
-            // Setup chart Top 5 Xe
             chartTop5Xe.Titles.Clear();
             Title titleTop5 = new Title
             {
-                Text = "Top 5 Xe Bán Chạy Nhất",
+                Text = langMgr.GetString("Top5BestSellers") ?? "Top 5 Xe Bán Chạy Nhất",
                 Font = new Font("Segoe UI", 12F, FontStyle.Bold),
                 ForeColor = Color.FromArgb(33, 150, 243),
                 Docking = Docking.Top,
                 Alignment = ContentAlignment.MiddleLeft
             };
             chartTop5Xe.Titles.Add(titleTop5);
+
+            if (chartDoanhThu.Series.Count > 0)
+            {
+                chartDoanhThu.Series[0].Name = langMgr.GetString("VehicleSales") ?? "Bán xe";
+                chartDoanhThu.Series[1].Name = langMgr.GetString("VehicleRental") ?? "Cho thuê";
+            }
+
+            if (chartDoanhThu.ChartAreas.Count > 0)
+            {
+                chartDoanhThu.ChartAreas[0].AxisY.Title = langMgr.GetString("MillionVND") ?? "Triệu VNĐ";
+            }
         }
 
         private void StyleDataGridViews()
@@ -118,7 +166,7 @@ namespace UI.UserControlUI
             dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             dgv.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgv.ColumnHeadersHeight = 35;
-            
+
             dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 230, 255);
             dgv.DefaultCellStyle.SelectionForeColor = Color.Black;
             dgv.DefaultCellStyle.Font = new Font("Segoe UI", 9F);
@@ -137,8 +185,7 @@ namespace UI.UserControlUI
         {
             panel.MouseEnter += (s, e) => panel.BackColor = ControlPaint.Light(originalColor, 0.1f);
             panel.MouseLeave += (s, e) => panel.BackColor = originalColor;
-            
-            // Paint event for rounded corners
+
             panel.Paint += (s, e) =>
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -154,14 +201,19 @@ namespace UI.UserControlUI
         {
             try
             {
-                lblDateTime.Text = DateTime.Now.ToString("dddd, dd/MM/yyyy");
+                UpdateDateTime();
                 LoadAllData();
-                AdjustLayout(); // Điều chỉnh layout lần đầu
+                AdjustLayout();
+                ApplyLanguage();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải Dashboard: " + ex.Message, "Lỗi", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("DashboardLoadError") + ": " + ex.Message,
+                    langMgr.GetString("Error") ?? "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
@@ -181,23 +233,15 @@ namespace UI.UserControlUI
                 var stats = _bll.GetStats();
                 if (stats != null)
                 {
-                    // Stat Card 1: Xe Sẵn Sàng
                     lblXeSanSangValue.Text = stats.XeSanSang.ToString("N0");
-                    
-                    // Stat Card 2: Doanh Thu (tháng này)
                     lblDoanhThuValue.Text = (stats.DoanhThuThangNay / 1000000).ToString("N1") + "M";
-                    
-                    // Stat Card 3: Khách Hàng
                     lblKhachHangValue.Text = stats.TongKhachHang.ToString("N0");
-                    
-                    // Stat Card 4: Giao Dịch (tháng này)
                     lblGiaoDichValue.Text = stats.TongGiaoDich.ToString("N0");
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Lỗi LoadStatCards: {ex.Message}");
-                // Hiển thị giá trị mặc định nếu lỗi
                 lblXeSanSangValue.Text = "0";
                 lblDoanhThuValue.Text = "0M";
                 lblKhachHangValue.Text = "0";
@@ -210,11 +254,10 @@ namespace UI.UserControlUI
             try
             {
                 chartDoanhThu.Series.Clear();
-                
-                // Tạo 2 series: Doanh thu bán và Doanh thu thuê
+
                 Series seriesBan = new Series
                 {
-                    Name = "Bán xe",
+                    Name = langMgr.GetString("VehicleSales") ?? "Bán xe",
                     ChartType = SeriesChartType.Column,
                     Color = Color.FromArgb(33, 150, 243),
                     BorderWidth = 2
@@ -222,13 +265,12 @@ namespace UI.UserControlUI
 
                 Series seriesThue = new Series
                 {
-                    Name = "Cho thuê",
+                    Name = langMgr.GetString("VehicleRental") ?? "Cho thuê",
                     ChartType = SeriesChartType.Column,
                     Color = Color.FromArgb(76, 175, 80),
                     BorderWidth = 2
                 };
 
-                // Lấy dữ liệu từ database
                 DataTable dt = _bll.GetDoanhThu7Ngay();
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -237,14 +279,13 @@ namespace UI.UserControlUI
                         DateTime ngay = Convert.ToDateTime(row["Ngay"]);
                         decimal doanhThuBan = Convert.ToDecimal(row["DoanhThuBan"]);
                         decimal doanhThuThue = Convert.ToDecimal(row["DoanhThuThue"]);
-                        
+
                         seriesBan.Points.AddXY(ngay.ToString("dd/MM"), doanhThuBan / 1000000);
                         seriesThue.Points.AddXY(ngay.ToString("dd/MM"), doanhThuThue / 1000000);
                     }
                 }
                 else
                 {
-                    // Dữ liệu mặc định nếu không có dữ liệu
                     for (int i = 6; i >= 0; i--)
                     {
                         DateTime date = DateTime.Now.AddDays(-i);
@@ -255,9 +296,9 @@ namespace UI.UserControlUI
 
                 chartDoanhThu.Series.Add(seriesBan);
                 chartDoanhThu.Series.Add(seriesThue);
-                
+
                 chartDoanhThu.ChartAreas[0].AxisY.LabelStyle.Format = "N1";
-                chartDoanhThu.ChartAreas[0].AxisY.Title = "Triệu VNĐ";
+                chartDoanhThu.ChartAreas[0].AxisY.Title = langMgr.GetString("MillionVND") ?? "Triệu VNĐ";
                 chartDoanhThu.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
                 chartDoanhThu.Legends[0].Enabled = true;
             }
@@ -272,16 +313,15 @@ namespace UI.UserControlUI
             try
             {
                 chartTop5Xe.Series.Clear();
-                
+
                 Series series = new Series
                 {
-                    Name = "Số lượng giao dịch",
+                    Name = langMgr.GetString("TransactionCount") ?? "Số lượng giao dịch",
                     ChartType = SeriesChartType.Bar,
                     Color = Color.FromArgb(76, 175, 80),
                     BorderWidth = 2
                 };
 
-                // Lấy dữ liệu từ database
                 DataTable dt = _bll.GetTop5Xe();
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -289,15 +329,14 @@ namespace UI.UserControlUI
                     {
                         string tenXe = row["TenXe"].ToString();
                         int soLuong = Convert.ToInt32(row["SoLuong"]);
-                        
+
                         if (tenXe.Length > 20) tenXe = tenXe.Substring(0, 17) + "...";
                         series.Points.AddXY(tenXe, soLuong);
                     }
                 }
                 else
                 {
-                    // Dữ liệu mặc định nếu chưa có giao dịch
-                    series.Points.AddXY("Chưa có dữ liệu", 0);
+                    series.Points.AddXY(langMgr.GetString("NoData") ?? "Chưa có dữ liệu", 0);
                 }
 
                 chartTop5Xe.Series.Add(series);
@@ -314,10 +353,9 @@ namespace UI.UserControlUI
             try
             {
                 DataTable dt = _bll.GetHoatDongGanDay(10);
-                
+
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    // Tạo DataTable mới để hiển thị
                     DataTable displayTable = new DataTable();
                     displayTable.Columns.Add("Ngày", typeof(string));
                     displayTable.Columns.Add("Loại", typeof(string));
@@ -346,14 +384,13 @@ namespace UI.UserControlUI
                 }
                 else
                 {
-                    // Dữ liệu mặc định
                     DataTable emptyTable = new DataTable();
                     emptyTable.Columns.Add("Ngày", typeof(string));
                     emptyTable.Columns.Add("Loại", typeof(string));
                     emptyTable.Columns.Add("Khách hàng", typeof(string));
                     emptyTable.Columns.Add("Xe", typeof(string));
                     emptyTable.Columns.Add("Giá trị", typeof(string));
-                    emptyTable.Rows.Add("Chưa có dữ liệu", "", "", "", "");
+                    emptyTable.Rows.Add(langMgr.GetString("NoData") ?? "Chưa có dữ liệu", "", "", "", "");
                     dgvHoatDongGanDay.DataSource = emptyTable;
                 }
 
@@ -364,6 +401,12 @@ namespace UI.UserControlUI
                     dgvHoatDongGanDay.Columns["Khách hàng"].Width = 120;
                     dgvHoatDongGanDay.Columns["Xe"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     dgvHoatDongGanDay.Columns["Giá trị"].Width = 80;
+
+                    dgvHoatDongGanDay.Columns["Ngày"].HeaderText = langMgr.GetString("Date") ?? "Ngày";
+                    dgvHoatDongGanDay.Columns["Loại"].HeaderText = langMgr.GetString("Type") ?? "Loại";
+                    dgvHoatDongGanDay.Columns["Khách hàng"].HeaderText = langMgr.GetString("Customer") ?? "Khách hàng";
+                    dgvHoatDongGanDay.Columns["Xe"].HeaderText = langMgr.GetString("Vehicle") ?? "Xe";
+                    dgvHoatDongGanDay.Columns["Giá trị"].HeaderText = langMgr.GetString("Value") ?? "Giá trị";
                 }
             }
             catch (Exception ex)
@@ -377,10 +420,9 @@ namespace UI.UserControlUI
             try
             {
                 DataTable dt = _bll.GetCanhBaoTonKho(30);
-                
+
                 if (dt != null && dt.Rows.Count > 0)
                 {
-                    // Tạo DataTable mới để hiển thị
                     DataTable displayTable = new DataTable();
                     displayTable.Columns.Add("Phụ tùng", typeof(string));
                     displayTable.Columns.Add("Tồn kho", typeof(string));
@@ -393,7 +435,6 @@ namespace UI.UserControlUI
                         string trangThai = row["TrangThai"].ToString();
                         string donVi = row["DonViTinh"].ToString();
 
-                        // Thêm biểu tượng cho trạng thái
                         string icon = "";
                         if (trangThai == "Hết hàng") icon = "🔴";
                         else if (trangThai == "Sắp hết") icon = "⚠";
@@ -409,12 +450,11 @@ namespace UI.UserControlUI
                 }
                 else
                 {
-                    // Dữ liệu mặc định
                     DataTable emptyTable = new DataTable();
                     emptyTable.Columns.Add("Phụ tùng", typeof(string));
                     emptyTable.Columns.Add("Tồn kho", typeof(string));
                     emptyTable.Columns.Add("Trạng thái", typeof(string));
-                    emptyTable.Rows.Add("✅ Tất cả phụ tùng đều đủ hàng", "", "");
+                    emptyTable.Rows.Add(langMgr.GetString("AllPartsInStock") ?? "✅ Tất cả phụ tùng đều đủ hàng", "", "");
                     dgvCanhBaoTonKho.DataSource = emptyTable;
                 }
 
@@ -423,6 +463,10 @@ namespace UI.UserControlUI
                     dgvCanhBaoTonKho.Columns["Phụ tùng"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     dgvCanhBaoTonKho.Columns["Tồn kho"].Width = 100;
                     dgvCanhBaoTonKho.Columns["Trạng thái"].Width = 120;
+
+                    dgvCanhBaoTonKho.Columns["Phụ tùng"].HeaderText = langMgr.GetString("Part") ?? "Phụ tùng";
+                    dgvCanhBaoTonKho.Columns["Tồn kho"].HeaderText = langMgr.GetString("Stock") ?? "Tồn kho";
+                    dgvCanhBaoTonKho.Columns["Trạng thái"].HeaderText = langMgr.GetString("Status") ?? "Trạng thái";
                 }
 
                 dgvCanhBaoTonKho.CellFormatting += DgvCanhBaoTonKho_CellFormatting;
@@ -435,7 +479,7 @@ namespace UI.UserControlUI
 
         private void DgvCanhBaoTonKho_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (e.ColumnIndex == 2 && e.Value != null)  // Cột Trạng thái
+            if (e.ColumnIndex == 2 && e.Value != null)
             {
                 string status = e.Value.ToString();
                 if (status.Contains("Hết hàng"))
@@ -457,11 +501,11 @@ namespace UI.UserControlUI
         {
             refreshTimer = new Timer
             {
-                Interval = 60000 // 1 minute
+                Interval = 60000
             };
             refreshTimer.Tick += (s, e) =>
             {
-                lblDateTime.Text = DateTime.Now.ToString("dddd, dd/MM/yyyy HH:mm");
+                UpdateDateTime();
                 LoadAllData();
             };
             refreshTimer.Start();

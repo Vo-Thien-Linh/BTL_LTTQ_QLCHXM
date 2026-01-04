@@ -126,6 +126,15 @@
   <data name="AddBtn" xml:space="preserve">
     <value>+ Thêm mới</value>
   </data>
+  <data name="AddPart" xml:space="preserve">
+    <value>Thêm phụ tùng</value>
+  </data>
+  <data name="AddPartFailed" xml:space="preserve">
+    <value>Thêm phụ tùng thất bại!</value>
+  </data>
+  <data name="AddPartSuccess" xml:space="preserve">
+    <value>Thêm phụ tùng thành công.</value>
+  </data>
   <data name="AddPartTitle" xml:space="preserve">
     <value>Thêm phụ tùng </value>
   </data>
@@ -141,6 +150,9 @@
   <data name="AddVehicleSuccess" xml:space="preserve">
     <value>Thêm xe thành công!</value>
   </data>
+  <data name="AllPartsInStock" xml:space="preserve">
+    <value>✅ Tất cả phụ tùng đều đủ hàng</value>
+  </data>
   <data name="AllStatus" xml:space="preserve">
     <value>Tất cả</value>
   </data>
@@ -155,6 +167,9 @@
   </data>
   <data name="ApproveRentalTitle" xml:space="preserve">
     <value>DUYỆT ĐƠN THUÊ XE </value>
+  </data>
+  <data name="AvailableVehicles" xml:space="preserve">
+    <value>Xe Sẵn Sàng Bán</value>
   </data>
   <data name="BadgeWaitApprove" xml:space="preserve">
     <value>CHỜ DUYỆT</value>
@@ -189,6 +204,12 @@
   <data name="Color" xml:space="preserve">
     <value>Màu</value>
   </data>
+  <data name="CompatibleBrand" xml:space="preserve">
+    <value>Hãng xe tương thích</value>
+  </data>
+  <data name="CompatibleModel" xml:space="preserve">
+    <value>Dòng xe tương thích</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Xác nhận</value>
   </data>
@@ -201,17 +222,50 @@
   <data name="CreatedDate" xml:space="preserve">
     <value>Ngày Tạo</value>
   </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Khách hàng</value>
+  </data>
   <data name="CustomerID" xml:space="preserve">
     <value>Mã KH</value>
   </data>
   <data name="CustomerTitle" xml:space="preserve">
     <value>QUẢN LÝ KHÁCH HÀNG</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard - Tổng Quan</value>
+  </data>
+  <data name="DashboardLoadError" xml:space="preserve">
+    <value>Lỗi tải Dashboard</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Ngày</value>
+  </data>
   <data name="DaysBefore" xml:space="preserve">
     <value>Số ngày nhắc trước:</value>
   </data>
   <data name="DaysLabel" xml:space="preserve">
     <value>({0} ngày) </value>
+  </data>
+  <data name="Day_Friday" xml:space="preserve">
+    <value>Thứ Sáu</value>
+  </data>
+  <data name="Day_Monday" xml:space="preserve">
+    <value>Thứ Hai</value>
+  </data>
+  <data name="Day_Saturday" xml:space="preserve">
+    <value>Thứ Bảy</value>
+  </data>
+  <data name="Day_Sunday" xml:space="preserve">
+    <value>Chủ Nhật</value>
+  </data>
+  <data name="Day_Thursday" xml:space="preserve">
+    <value>Thứ Năm</value>
+  </data>
+  <data name="Day_Tuesday" xml:space="preserve">
+    <value>Thứ Ba</value>
+  </data>
+  <data name="Day_Wednesday" xml:space="preserve">
+    <value>Thứ Tư</value>
   </data>
   <data name="DeleteBtn" xml:space="preserve">
     <value>Xóa</value>
@@ -233,6 +287,15 @@
   </data>
   <data name="EditBtn" xml:space="preserve">
     <value>Sửa</value>
+  </data>
+  <data name="EditPart" xml:space="preserve">
+    <value>Sửa phụ tùng</value>
+  </data>
+  <data name="EditPartFailed" xml:space="preserve">
+    <value>Sửa phụ tùng thất bại!</value>
+  </data>
+  <data name="EditPartSuccess" xml:space="preserve">
+    <value>Sửa phụ tùng thành công.</value>
   </data>
   <data name="EditVehicle" xml:space="preserve">
     <value>Sửa xe</value>
@@ -318,6 +381,9 @@
   <data name="LoadError" xml:space="preserve">
     <value>Lỗi khi tải cài đặt:</value>
   </data>
+  <data name="LowStockWarning" xml:space="preserve">
+    <value>Cảnh Báo Tồn Kho Thấp</value>
+  </data>
   <data name="MaintenanceListTitle" xml:space="preserve">
     <value>Danh sách bảo trì </value>
   </data>
@@ -366,8 +432,20 @@
   <data name="Mileage" xml:space="preserve">
     <value>Km đã chạy</value>
   </data>
+  <data name="MillionVND" xml:space="preserve">
+    <value>Triệu VNĐ</value>
+  </data>
+  <data name="MonthlyRevenue" xml:space="preserve">
+    <value>Doanh Thu Tháng Này</value>
+  </data>
+  <data name="NewCustomers" xml:space="preserve">
+    <value>Khách Hàng Mới</value>
+  </data>
   <data name="NoCustomerData" xml:space="preserve">
     <value>Không có dữ liệu khách hàng</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>Chưa có dữ liệu</value>
   </data>
   <data name="NoDataWaitApprove" xml:space="preserve">
     <value>Không có đơn nào chờ duyệt!</value>
@@ -386,6 +464,9 @@
   </data>
   <data name="NoSaleData" xml:space="preserve">
     <value>Không có xe nào sẵn sàng bán</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Ghi chú</value>
   </data>
   <data name="NoteLabel" xml:space="preserve">
     <value>Ghi chú: </value>
@@ -417,17 +498,32 @@
   <data name="OrderLabel" xml:space="preserve">
     <value>Đơn #{0} </value>
   </data>
+  <data name="Part" xml:space="preserve">
+    <value>Phụ tùng</value>
+  </data>
   <data name="PartCodeColumn" xml:space="preserve">
     <value>Mã PT</value>
+  </data>
+  <data name="PartID" xml:space="preserve">
+    <value>Mã phụ tùng</value>
   </data>
   <data name="PartLabel" xml:space="preserve">
     <value>Phụ tùng: </value>
   </data>
+  <data name="PartName" xml:space="preserve">
+    <value>Tên phụ tùng</value>
+  </data>
   <data name="PartNameColumn" xml:space="preserve">
     <value>Tên Phụ Tùng </value>
   </data>
+  <data name="PartNameRequired" xml:space="preserve">
+    <value>Tên phụ tùng không được để trống!</value>
+  </data>
   <data name="PartNoteColumn" xml:space="preserve">
     <value>Ghi Chú </value>
+  </data>
+  <data name="PartNotFound" xml:space="preserve">
+    <value>Không tìm thấy phụ tùng!</value>
   </data>
   <data name="PerDay" xml:space="preserve">
     <value>VNĐ/ngày</value>
@@ -480,6 +576,9 @@
   <data name="ReadyStatus" xml:space="preserve">
     <value>Sẵn sàng</value>
   </data>
+  <data name="RecentActivities" xml:space="preserve">
+    <value>Hoạt Động Gần Đây</value>
+  </data>
   <data name="RecordCount" xml:space="preserve">
     <value>Tổng số bản ghi: {0}</value>
   </data>
@@ -509,6 +608,15 @@
   </data>
   <data name="RestoreSuccess" xml:space="preserve">
     <value>Đã khôi phục cài đặt mặc định!</value>
+  </data>
+  <data name="Revenue7Days" xml:space="preserve">
+    <value>Doanh Thu 7 Ngày Qua</value>
+  </data>
+  <data name="SalePrice" xml:space="preserve">
+    <value>Giá bán</value>
+  </data>
+  <data name="SalePricePositiveRequired" xml:space="preserve">
+    <value>Giá bán phải là số dương!</value>
   </data>
   <data name="SaleTitle" xml:space="preserve">
     <value>QUẢN LÝ BÁN HÀNG </value>
@@ -540,6 +648,15 @@
   <data name="Status" xml:space="preserve">
     <value>Trạng thái</value>
   </data>
+  <data name="Stock" xml:space="preserve">
+    <value>Tồn kho</value>
+  </data>
+  <data name="StockQuantity" xml:space="preserve">
+    <value>Số lượng tồn kho</value>
+  </data>
+  <data name="StockQuantityPositiveRequired" xml:space="preserve">
+    <value>Số lượng tồn kho phải là số nguyên dương!</value>
+  </data>
   <data name="Supplier" xml:space="preserve">
     <value>Nhà cung cấp</value>
   </data>
@@ -567,6 +684,12 @@
   <data name="ThemeLight" xml:space="preserve">
     <value>Sáng</value>
   </data>
+  <data name="TodayTransactions" xml:space="preserve">
+    <value>Giao Dịch Hôm Nay</value>
+  </data>
+  <data name="Top5BestSellers" xml:space="preserve">
+    <value>Top 5 Xe Bán Chạy Nhất</value>
+  </data>
   <data name="TotalCost" xml:space="preserve">
     <value>TỔNG CHI PHÍ: </value>
   </data>
@@ -576,17 +699,44 @@
   <data name="TotalWaitApprove" xml:space="preserve">
     <value>Tổng: {0} đơn chờ duyệt</value>
   </data>
+  <data name="TransactionCount" xml:space="preserve">
+    <value>Số lượng giao dịch</value>
+  </data>
   <data name="Trial" xml:space="preserve">
     <value>Thử việc</value>
   </data>
+  <data name="Type" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Đơn vị tính</value>
+  </data>
   <data name="UnitColumn" xml:space="preserve">
     <value>ĐVT</value>
+  </data>
+  <data name="Unit_Item" xml:space="preserve">
+    <value>Chiếc</value>
+  </data>
+  <data name="Unit_Liter" xml:space="preserve">
+    <value>Lít</value>
+  </data>
+  <data name="Unit_Other" xml:space="preserve">
+    <value>Khác...</value>
+  </data>
+  <data name="Unit_Piece" xml:space="preserve">
+    <value>Cái</value>
+  </data>
+  <data name="Unit_Set" xml:space="preserve">
+    <value>Bộ</value>
   </data>
   <data name="UpdatedDate" xml:space="preserve">
     <value>Cập Nhật</value>
   </data>
   <data name="UsagePriceColumn" xml:space="preserve">
     <value>Đơn Giá </value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Giá trị</value>
   </data>
   <data name="VehicleDetailTitle" xml:space="preserve">
     <value>THÔNG TIN CHI TIẾT XE MÁY</value>
@@ -600,8 +750,14 @@
   <data name="VehicleNotFound" xml:space="preserve">
     <value>Không tìm thấy thông tin xe!</value>
   </data>
+  <data name="VehicleRental" xml:space="preserve">
+    <value>Cho thuê</value>
+  </data>
   <data name="Vehicles" xml:space="preserve">
     <value>xe</value>
+  </data>
+  <data name="VehicleSales" xml:space="preserve">
+    <value>Bán xe</value>
   </data>
   <data name="VehicleTitle" xml:space="preserve">
     <value>QUẢN LÝ XE</value>

@@ -121,7 +121,7 @@ namespace UI.UserControlUI
             this.lblXeSanSangTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblXeSanSangTitle.Location = new System.Drawing.Point(90, 60);
             this.lblXeSanSangTitle.Name = "lblXeSanSangTitle";
-            this.lblXeSanSangTitle.Size = new System.Drawing.Size(139, 23);
+            this.lblXeSanSangTitle.Size = new System.Drawing.Size(120, 20);
             this.lblXeSanSangTitle.TabIndex = 2;
             this.lblXeSanSangTitle.Text = "Xe Sẵn Sàng Bán";
             // 
@@ -133,7 +133,7 @@ namespace UI.UserControlUI
             this.lblXeSanSangValue.ForeColor = System.Drawing.Color.White;
             this.lblXeSanSangValue.Location = new System.Drawing.Point(90, 20);
             this.lblXeSanSangValue.Name = "lblXeSanSangValue";
-            this.lblXeSanSangValue.Size = new System.Drawing.Size(46, 54);
+            this.lblXeSanSangValue.Size = new System.Drawing.Size(40, 46);
             this.lblXeSanSangValue.TabIndex = 1;
             this.lblXeSanSangValue.Text = "0";
             // 
@@ -145,7 +145,7 @@ namespace UI.UserControlUI
             this.lblXeSanSangIcon.ForeColor = System.Drawing.Color.White;
             this.lblXeSanSangIcon.Location = new System.Drawing.Point(15, 20);
             this.lblXeSanSangIcon.Name = "lblXeSanSangIcon";
-            this.lblXeSanSangIcon.Size = new System.Drawing.Size(104, 72);
+            this.lblXeSanSangIcon.Size = new System.Drawing.Size(78, 53);
             this.lblXeSanSangIcon.TabIndex = 0;
             this.lblXeSanSangIcon.Text = "📦";
             // 
@@ -169,7 +169,7 @@ namespace UI.UserControlUI
             this.lblDoanhThuTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblDoanhThuTitle.Location = new System.Drawing.Point(90, 60);
             this.lblDoanhThuTitle.Name = "lblDoanhThuTitle";
-            this.lblDoanhThuTitle.Size = new System.Drawing.Size(183, 23);
+            this.lblDoanhThuTitle.Size = new System.Drawing.Size(156, 20);
             this.lblDoanhThuTitle.TabIndex = 2;
             this.lblDoanhThuTitle.Text = "Doanh Thu Tháng Này";
             // 
@@ -181,7 +181,7 @@ namespace UI.UserControlUI
             this.lblDoanhThuValue.ForeColor = System.Drawing.Color.White;
             this.lblDoanhThuValue.Location = new System.Drawing.Point(90, 20);
             this.lblDoanhThuValue.Name = "lblDoanhThuValue";
-            this.lblDoanhThuValue.Size = new System.Drawing.Size(46, 54);
+            this.lblDoanhThuValue.Size = new System.Drawing.Size(40, 46);
             this.lblDoanhThuValue.TabIndex = 1;
             this.lblDoanhThuValue.Text = "0";
             // 
@@ -193,7 +193,7 @@ namespace UI.UserControlUI
             this.lblDoanhThuIcon.ForeColor = System.Drawing.Color.White;
             this.lblDoanhThuIcon.Location = new System.Drawing.Point(15, 20);
             this.lblDoanhThuIcon.Name = "lblDoanhThuIcon";
-            this.lblDoanhThuIcon.Size = new System.Drawing.Size(104, 72);
+            this.lblDoanhThuIcon.Size = new System.Drawing.Size(78, 53);
             this.lblDoanhThuIcon.TabIndex = 0;
             this.lblDoanhThuIcon.Text = "💰";
             // 
@@ -217,7 +217,7 @@ namespace UI.UserControlUI
             this.lblKhachHangTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblKhachHangTitle.Location = new System.Drawing.Point(90, 60);
             this.lblKhachHangTitle.Name = "lblKhachHangTitle";
-            this.lblKhachHangTitle.Size = new System.Drawing.Size(137, 23);
+            this.lblKhachHangTitle.Size = new System.Drawing.Size(119, 20);
             this.lblKhachHangTitle.TabIndex = 2;
             this.lblKhachHangTitle.Text = "Khách Hàng Mới";
             // 
@@ -229,7 +229,7 @@ namespace UI.UserControlUI
             this.lblKhachHangValue.ForeColor = System.Drawing.Color.White;
             this.lblKhachHangValue.Location = new System.Drawing.Point(90, 20);
             this.lblKhachHangValue.Name = "lblKhachHangValue";
-            this.lblKhachHangValue.Size = new System.Drawing.Size(46, 54);
+            this.lblKhachHangValue.Size = new System.Drawing.Size(40, 46);
             this.lblKhachHangValue.TabIndex = 1;
             this.lblKhachHangValue.Text = "0";
             // 
@@ -241,7 +241,7 @@ namespace UI.UserControlUI
             this.lblKhachHangIcon.ForeColor = System.Drawing.Color.White;
             this.lblKhachHangIcon.Location = new System.Drawing.Point(15, 20);
             this.lblKhachHangIcon.Name = "lblKhachHangIcon";
-            this.lblKhachHangIcon.Size = new System.Drawing.Size(104, 72);
+            this.lblKhachHangIcon.Size = new System.Drawing.Size(78, 53);
             this.lblKhachHangIcon.TabIndex = 0;
             this.lblKhachHangIcon.Text = "👥";
             // 
@@ -265,7 +265,7 @@ namespace UI.UserControlUI
             this.lblGiaoDichTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
             this.lblGiaoDichTitle.Location = new System.Drawing.Point(90, 60);
             this.lblGiaoDichTitle.Name = "lblGiaoDichTitle";
-            this.lblGiaoDichTitle.Size = new System.Drawing.Size(161, 23);
+            this.lblGiaoDichTitle.Size = new System.Drawing.Size(141, 20);
             this.lblGiaoDichTitle.TabIndex = 2;
             this.lblGiaoDichTitle.Text = "Giao Dịch Hôm Nay";
             // 
@@ -277,7 +277,7 @@ namespace UI.UserControlUI
             this.lblGiaoDichValue.ForeColor = System.Drawing.Color.White;
             this.lblGiaoDichValue.Location = new System.Drawing.Point(90, 20);
             this.lblGiaoDichValue.Name = "lblGiaoDichValue";
-            this.lblGiaoDichValue.Size = new System.Drawing.Size(46, 54);
+            this.lblGiaoDichValue.Size = new System.Drawing.Size(40, 46);
             this.lblGiaoDichValue.TabIndex = 1;
             this.lblGiaoDichValue.Text = "0";
             // 
@@ -289,7 +289,7 @@ namespace UI.UserControlUI
             this.lblGiaoDichIcon.ForeColor = System.Drawing.Color.White;
             this.lblGiaoDichIcon.Location = new System.Drawing.Point(15, 20);
             this.lblGiaoDichIcon.Name = "lblGiaoDichIcon";
-            this.lblGiaoDichIcon.Size = new System.Drawing.Size(104, 72);
+            this.lblGiaoDichIcon.Size = new System.Drawing.Size(78, 53);
             this.lblGiaoDichIcon.TabIndex = 0;
             this.lblGiaoDichIcon.Text = "📊";
             // 
@@ -420,7 +420,7 @@ namespace UI.UserControlUI
             this.Controls.Add(this.lblDateTime);
             this.Controls.Add(this.lblTitle);
             this.Name = "ViewDashboardNew";
-            this.Size = new System.Drawing.Size(1529, 483);
+            this.Size = new System.Drawing.Size(1529, 921);
             this.Load += new System.EventHandler(this.ViewDashboardNew_Load);
             this.pnlXeSanSang.ResumeLayout(false);
             this.pnlXeSanSang.PerformLayout();

@@ -126,6 +126,15 @@
   <data name="AddBtn" xml:space="preserve">
     <value>+ Add new</value>
   </data>
+  <data name="AddPart" xml:space="preserve">
+    <value>Add Part</value>
+  </data>
+  <data name="AddPartFailed" xml:space="preserve">
+    <value>Failed to add part!</value>
+  </data>
+  <data name="AddPartSuccess" xml:space="preserve">
+    <value>Part added successfully.</value>
+  </data>
   <data name="AddPartTitle" xml:space="preserve">
     <value>Add part</value>
   </data>
@@ -141,6 +150,9 @@
   <data name="AddVehicleSuccess" xml:space="preserve">
     <value>Vehicle added successfully!</value>
   </data>
+  <data name="AllPartsInStock" xml:space="preserve">
+    <value>✅ All parts are sufficiently stocked</value>
+  </data>
   <data name="AllStatus" xml:space="preserve">
     <value>All</value>
   </data>
@@ -155,6 +167,9 @@
   </data>
   <data name="ApproveRentalTitle" xml:space="preserve">
     <value>APPROVE RENTAL</value>
+  </data>
+  <data name="AvailableVehicles" xml:space="preserve">
+    <value>Available Vehicles</value>
   </data>
   <data name="BadgeWaitApprove" xml:space="preserve">
     <value>WAITING</value>
@@ -189,6 +204,12 @@
   <data name="Color" xml:space="preserve">
     <value>Color</value>
   </data>
+  <data name="CompatibleBrand" xml:space="preserve">
+    <value>Compatible Brand</value>
+  </data>
+  <data name="CompatibleModel" xml:space="preserve">
+    <value>Compatible Model</value>
+  </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
@@ -201,17 +222,50 @@
   <data name="CreatedDate" xml:space="preserve">
     <value>Created Date</value>
   </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
   <data name="CustomerID" xml:space="preserve">
     <value>Customer ID</value>
   </data>
   <data name="CustomerTitle" xml:space="preserve">
     <value>CUSTOMER MANAGEMENT</value>
   </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard - Overview</value>
+  </data>
+  <data name="DashboardLoadError" xml:space="preserve">
+    <value>Dashboard loading error</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
   <data name="DaysBefore" xml:space="preserve">
     <value>Days before notification:</value>
   </data>
   <data name="DaysLabel" xml:space="preserve">
     <value>({0} days)</value>
+  </data>
+  <data name="Day_Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="Day_Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="Day_Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="Day_Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Day_Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Day_Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Day_Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
   </data>
   <data name="DeleteBtn" xml:space="preserve">
     <value>Delete</value>
@@ -233,6 +287,15 @@
   </data>
   <data name="EditBtn" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="EditPart" xml:space="preserve">
+    <value>Edit Part</value>
+  </data>
+  <data name="EditPartFailed" xml:space="preserve">
+    <value>Failed to update part!</value>
+  </data>
+  <data name="EditPartSuccess" xml:space="preserve">
+    <value>Part updated successfully.</value>
   </data>
   <data name="EditVehicle" xml:space="preserve">
     <value>Edit Vehicle</value>
@@ -319,6 +382,9 @@ Please check the information.</value>
   <data name="LoadError" xml:space="preserve">
     <value>Error loading settings:</value>
   </data>
+  <data name="LowStockWarning" xml:space="preserve">
+    <value>Low Stock Warning</value>
+  </data>
   <data name="MaintenanceListTitle" xml:space="preserve">
     <value>Maintenance list</value>
   </data>
@@ -367,8 +433,20 @@ Please check the information.</value>
   <data name="Mileage" xml:space="preserve">
     <value>Mileage</value>
   </data>
+  <data name="MillionVND" xml:space="preserve">
+    <value>Million VND</value>
+  </data>
+  <data name="MonthlyRevenue" xml:space="preserve">
+    <value>Monthly Revenue</value>
+  </data>
+  <data name="NewCustomers" xml:space="preserve">
+    <value>New Customers</value>
+  </data>
   <data name="NoCustomerData" xml:space="preserve">
     <value>No customer data</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>No data available</value>
   </data>
   <data name="NoDataWaitApprove" xml:space="preserve">
     <value>No rentals to approve!</value>
@@ -387,6 +465,9 @@ Please check the information.</value>
   </data>
   <data name="NoSaleData" xml:space="preserve">
     <value>No ready-to-sell vehicles</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
   </data>
   <data name="NoteLabel" xml:space="preserve">
     <value>Note:</value>
@@ -418,17 +499,32 @@ Please check the information.</value>
   <data name="OrderLabel" xml:space="preserve">
     <value>Order #{0}</value>
   </data>
+  <data name="Part" xml:space="preserve">
+    <value>Part</value>
+  </data>
   <data name="PartCodeColumn" xml:space="preserve">
     <value>Part Code</value>
+  </data>
+  <data name="PartID" xml:space="preserve">
+    <value>Part ID</value>
   </data>
   <data name="PartLabel" xml:space="preserve">
     <value>Part:</value>
   </data>
+  <data name="PartName" xml:space="preserve">
+    <value>Part Name</value>
+  </data>
   <data name="PartNameColumn" xml:space="preserve">
     <value>Part Name</value>
   </data>
+  <data name="PartNameRequired" xml:space="preserve">
+    <value>Part name is required!</value>
+  </data>
   <data name="PartNoteColumn" xml:space="preserve">
     <value>Note</value>
+  </data>
+  <data name="PartNotFound" xml:space="preserve">
+    <value>Part not found!</value>
   </data>
   <data name="PerDay" xml:space="preserve">
     <value>VNĐ/day</value>
@@ -481,6 +577,9 @@ Please check the information.</value>
   <data name="ReadyStatus" xml:space="preserve">
     <value>Ready</value>
   </data>
+  <data name="RecentActivities" xml:space="preserve">
+    <value>Recent Activities</value>
+  </data>
   <data name="RecordCount" xml:space="preserve">
     <value>Total records: {0}</value>
   </data>
@@ -510,6 +609,15 @@ Please check the information.</value>
   </data>
   <data name="RestoreSuccess" xml:space="preserve">
     <value>Default settings restored!</value>
+  </data>
+  <data name="Revenue7Days" xml:space="preserve">
+    <value>Revenue Last 7 Days</value>
+  </data>
+  <data name="SalePrice" xml:space="preserve">
+    <value>Sale Price</value>
+  </data>
+  <data name="SalePricePositiveRequired" xml:space="preserve">
+    <value>Sale price must be positive!</value>
   </data>
   <data name="SaleTitle" xml:space="preserve">
     <value>SALE MANAGEMENT</value>
@@ -541,6 +649,15 @@ Please check the information.</value>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Stock" xml:space="preserve">
+    <value>Stock</value>
+  </data>
+  <data name="StockQuantity" xml:space="preserve">
+    <value>Stock Quantity</value>
+  </data>
+  <data name="StockQuantityPositiveRequired" xml:space="preserve">
+    <value>Stock quantity must be a positive integer!</value>
+  </data>
   <data name="Supplier" xml:space="preserve">
     <value>Supplier</value>
   </data>
@@ -568,6 +685,12 @@ Please check the information.</value>
   <data name="ThemeLight" xml:space="preserve">
     <value>Light</value>
   </data>
+  <data name="TodayTransactions" xml:space="preserve">
+    <value>Today's Transactions</value>
+  </data>
+  <data name="Top5BestSellers" xml:space="preserve">
+    <value>Top 5 Best-Selling Vehicles</value>
+  </data>
   <data name="TotalCost" xml:space="preserve">
     <value>TOTAL COST:</value>
   </data>
@@ -577,17 +700,44 @@ Please check the information.</value>
   <data name="TotalWaitApprove" xml:space="preserve">
     <value>Total: {0} pending</value>
   </data>
+  <data name="TransactionCount" xml:space="preserve">
+    <value>Transaction Count</value>
+  </data>
   <data name="Trial" xml:space="preserve">
     <value>Trial</value>
   </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Unit" xml:space="preserve">
+    <value>Unit</value>
+  </data>
   <data name="UnitColumn" xml:space="preserve">
     <value>Unit</value>
+  </data>
+  <data name="Unit_Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="Unit_Liter" xml:space="preserve">
+    <value>Liter</value>
+  </data>
+  <data name="Unit_Other" xml:space="preserve">
+    <value>Other...</value>
+  </data>
+  <data name="Unit_Piece" xml:space="preserve">
+    <value>Piece</value>
+  </data>
+  <data name="Unit_Set" xml:space="preserve">
+    <value>Set</value>
   </data>
   <data name="UpdatedDate" xml:space="preserve">
     <value>Updated Date</value>
   </data>
   <data name="UsagePriceColumn" xml:space="preserve">
     <value>Unit Price</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
   </data>
   <data name="VehicleDetailTitle" xml:space="preserve">
     <value>VEHICLE DETAILS</value>
@@ -601,8 +751,14 @@ Please check the information.</value>
   <data name="VehicleNotFound" xml:space="preserve">
     <value>Vehicle not found!</value>
   </data>
+  <data name="VehicleRental" xml:space="preserve">
+    <value>Vehicle Rental</value>
+  </data>
   <data name="Vehicles" xml:space="preserve">
     <value>vehicles</value>
+  </data>
+  <data name="VehicleSales" xml:space="preserve">
+    <value>Vehicle Sales</value>
   </data>
   <data name="VehicleTitle" xml:space="preserve">
     <value>VEHICLE MANAGEMENT</value>

@@ -290,6 +290,7 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel1);
             this.Name = "FormSuaPhuTung";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormSuaPhuTung";
             this.Load += new System.EventHandler(this.FormSuaPhuTung_Load);
             this.groupBox2.ResumeLayout(false);
