@@ -1,5 +1,5 @@
 ﻿using BLL;
-using DTO; // Nếu bạn dùng DTO cho datamodel
+using DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,37 +19,118 @@ namespace UI.FormHandleUI
         private PhuTungBLL phuTungBLL = new PhuTungBLL();
         private ErrorProvider errorProvider1 = new ErrorProvider();
 
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
+
         public FormThemPhuTung()
         {
             InitializeComponent();
-            // Gắn sự kiện cho các control
             txtGiaMua.Validating += txtGiaMua_Validating;
             txtGiaBan.Validating += txtGiaBan_Validating;
             txtSoLuongTonKho.Validating += txtSoLuongTonKho_Validating;
             txtTenPhuTung.Validating += txtTenPhuTung_Validating;
             cbbHangXeTuongThich.SelectedIndexChanged += cbbHangXeTuongThich_SelectedIndexChanged;
+
+            langMgr.LanguageChanged += (s, e) => ApplyLanguage();
         }
 
-        // Load data binding và giá trị mặc định
+        private void ApplyLanguage()
+        {
+            this.Text = langMgr.GetString("AddPart") ?? "THÊM PHỤ TÙNG";
+
+            UpdateAllLabels(this);
+
+            if (cbbDonViTinh != null)
+            {
+                int selectedIndex = cbbDonViTinh.SelectedIndex;
+                cbbDonViTinh.Items.Clear();
+                cbbDonViTinh.Items.Add(langMgr.GetString("Unit_Piece") ?? "Cái");
+                cbbDonViTinh.Items.Add(langMgr.GetString("Unit_Set") ?? "Bộ");
+                cbbDonViTinh.Items.Add(langMgr.GetString("Unit_Item") ?? "Chiếc");
+                cbbDonViTinh.Items.Add(langMgr.GetString("Unit_Liter") ?? "Lít");
+                cbbDonViTinh.Items.Add(langMgr.GetString("Unit_Other") ?? "Khác...");
+
+                if (selectedIndex >= 0 && selectedIndex < cbbDonViTinh.Items.Count)
+                    cbbDonViTinh.SelectedIndex = selectedIndex;
+                else if (cbbDonViTinh.Items.Count > 0)
+                    cbbDonViTinh.SelectedIndex = 0;
+            }
+        }
+
+        private void UpdateAllLabels(Control parent)
+        {
+            foreach (Control ctrl in parent.Controls)
+            {
+                if (ctrl is Label lbl)
+                {
+                    string originalText = lbl.Text.Trim().TrimEnd(':');
+
+                    if (originalText == "THÊM PHỤ TÙNG" || originalText == "ADD PART")
+                    {
+                        lbl.Text = (langMgr.GetString("AddPart") ?? "THÊM PHỤ TÙNG").ToUpper();
+                    }
+                    else
+                    {
+                        string labelKey = GetLanguageKeyForLabel(originalText);
+                        if (!string.IsNullOrEmpty(labelKey))
+                            lbl.Text = langMgr.GetString(labelKey) ?? lbl.Text;
+                    }
+                }
+                else if (ctrl is Button btn)
+                {
+                    string btnText = btn.Text.Trim();
+                    if (btnText == "Add Part" || btnText == "Thêm phụ tùng")
+                        btn.Text = langMgr.GetString("AddPart") ?? "Thêm phụ tùng";
+                }
+
+                if (ctrl.HasChildren)
+                {
+                    UpdateAllLabels(ctrl);
+                }
+            }
+        }
+
+        private string GetLanguageKeyForLabel(string labelText)
+        {
+            var mapping = new Dictionary<string, string>
+            {
+                { "Mã phụ tùng", "PartID" },
+                { "Part ID", "PartID" },
+                { "Tên phụ tùng", "PartName" },
+                { "Part Name", "PartName" },
+                { "Hãng xe tương thích", "CompatibleBrand" },
+                { "Compatible Brand", "CompatibleBrand" },
+                { "Dòng xe tương thích", "CompatibleModel" },
+                { "Compatible Model", "CompatibleModel" },
+                { "Giá mua", "PurchasePrice" },
+                { "Purchase Price", "PurchasePrice" },
+                { "Giá bán", "SalePrice" },
+                { "Sale Price", "SalePrice" },
+                { "Đơn vị tính", "Unit" },
+                { "Unit", "Unit" },
+                { "Ghi chú", "Note" },
+                { "Note", "Note" },
+                { "Số lượng tồn kho", "StockQuantity" },
+                { "Stock Quantity", "StockQuantity" }
+            };
+
+            return mapping.ContainsKey(labelText) ? mapping[labelText] : null;
+        }
+
         private void FormThemPhuTung_Load(object sender, EventArgs e)
         {
-             // Binding hãng xe
             cbbHangXeTuongThich.DataSource = hangXeBLL.GetAllHangXe();
             cbbHangXeTuongThich.DisplayMember = "TenHang";
             cbbHangXeTuongThich.ValueMember = "MaHang";
 
-            // Binding dòng xe đầu tiên nếu có hãng
             if (cbbHangXeTuongThich.SelectedValue != null)
                 LoadDongXeTuongThich(cbbHangXeTuongThich.SelectedValue.ToString());
 
-            // Đơn vị tính
             cbbDonViTinh.Items.Clear();
-            cbbDonViTinh.Items.AddRange(new object[] { "Cái", "Bộ", "Chiếc", "Lít", "Khác..." });
-            cbbDonViTinh.SelectedIndex = 0;
 
-            // Sinh mã phụ tùng tự động
             txtMaPhuTung.Text = SinhMaPhuTungTuDong();
             txtMaPhuTung.ReadOnly = true;
+
+            ApplyLanguage();
         }
 
         private void LoadDongXeTuongThich(string maHang)
@@ -71,12 +152,11 @@ namespace UI.FormHandleUI
             return "PT0000001";
         }
 
-        // Validation cho các TextBox
         private void txtTenPhuTung_Validating(object sender, CancelEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTenPhuTung.Text))
             {
-                errorProvider1.SetError(txtTenPhuTung, "Tên phụ tùng không được để trống!");
+                errorProvider1.SetError(txtTenPhuTung, langMgr.GetString("PartNameRequired") ?? "Tên phụ tùng không được để trống!");
                 e.Cancel = true;
             }
             else
@@ -84,11 +164,12 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtTenPhuTung, "");
             }
         }
+
         private void txtGiaMua_Validating(object sender, CancelEventArgs e)
         {
             if (!decimal.TryParse(txtGiaMua.Text, out decimal giaMua) || giaMua < 0)
             {
-                errorProvider1.SetError(txtGiaMua, "Giá mua phải là số dương!");
+                errorProvider1.SetError(txtGiaMua, langMgr.GetString("PricePositiveRequired") ?? "Giá mua phải là số dương!");
                 e.Cancel = true;
             }
             else
@@ -96,11 +177,12 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtGiaMua, "");
             }
         }
+
         private void txtGiaBan_Validating(object sender, CancelEventArgs e)
         {
             if (!decimal.TryParse(txtGiaBan.Text, out decimal giaBan) || giaBan < 0)
             {
-                errorProvider1.SetError(txtGiaBan, "Giá bán phải là số dương!");
+                errorProvider1.SetError(txtGiaBan, langMgr.GetString("SalePricePositiveRequired") ?? "Giá bán phải là số dương!");
                 e.Cancel = true;
             }
             else
@@ -108,11 +190,12 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtGiaBan, "");
             }
         }
+
         private void txtSoLuongTonKho_Validating(object sender, CancelEventArgs e)
         {
             if (!int.TryParse(txtSoLuongTonKho.Text, out int soLuongTon) || soLuongTon < 0)
             {
-                errorProvider1.SetError(txtSoLuongTonKho, "Số lượng tồn kho phải là số nguyên dương!");
+                errorProvider1.SetError(txtSoLuongTonKho, langMgr.GetString("StockQuantityPositiveRequired") ?? "Số lượng tồn kho phải là số nguyên dương!");
                 e.Cancel = true;
             }
             else
@@ -121,17 +204,14 @@ namespace UI.FormHandleUI
             }
         }
 
-        // Thay đổi hãng xe để load lại dòng xe
         private void cbbHangXeTuongThich_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbbHangXeTuongThich.SelectedValue != null)
                 LoadDongXeTuongThich(cbbHangXeTuongThich.SelectedValue.ToString());
         }
 
-        // Xử lý nút Thêm
         private void btnThemPhuTung_Click(object sender, EventArgs e)
         {
-            // Ràng buộc kiểm tra dữ liệu
             if (string.IsNullOrWhiteSpace(txtTenPhuTung.Text)
                 || cbbHangXeTuongThich.SelectedValue == null
                 || cbbDongXeTuongThich.SelectedValue == null
@@ -140,13 +220,23 @@ namespace UI.FormHandleUI
                 || string.IsNullOrWhiteSpace(txtGiaBan.Text)
                 || string.IsNullOrWhiteSpace(txtSoLuongTonKho.Text))
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    langMgr.GetString("PleaseEnterFullInfo") ?? "Vui lòng nhập đầy đủ thông tin!",
+                    langMgr.GetString("Notification") ?? "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 return;
             }
-            // Kiểm tra bằng hàm ValidateChildren để xác nhận các control hợp lệ
+
             if (!this.ValidateChildren())
             {
-                MessageBox.Show("Vui lòng nhập đúng và hợp lệ!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    langMgr.GetString("PleaseEnterValidInfo") ?? "Vui lòng nhập đúng và hợp lệ!",
+                    langMgr.GetString("Notification") ?? "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 return;
             }
 
@@ -167,17 +257,26 @@ namespace UI.FormHandleUI
 
             if (success)
             {
-                MessageBox.Show("Thêm phụ tùng thành công.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    langMgr.GetString("AddPartSuccess") ?? "Thêm phụ tùng thành công.",
+                    langMgr.GetString("Notification") ?? "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Thêm phụ tùng thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("AddPartFailed") ?? "Thêm phụ tùng thất bại!",
+                    langMgr.GetString("Error") ?? "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
             }
         }
 
-        // Các event TextChanged/SelectedIndexChanged cho GUI (tuỳ ý dùng)
         private void txtMaPhuTung_TextChanged(object sender, EventArgs e) { }
         private void txtTenPhuTung_TextChanged(object sender, EventArgs e) { }
         private void cbbDongXeTuongThich_SelectedIndexChanged(object sender, EventArgs e) { }
