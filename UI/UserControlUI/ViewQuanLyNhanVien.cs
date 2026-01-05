@@ -22,8 +22,6 @@ namespace UI.UserControlUI
         private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
         private Dictionary<string, string> searchFieldMap;
 
-        
-
         public ViewQuanLyNhanVien()
         {
             InitializeComponent();
@@ -42,40 +40,30 @@ namespace UI.UserControlUI
             ThemeManager.Instance.ThemeChanged += OnThemeChanged;
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
 
-            // Đăng ký cập nhật ngôn ngữ động
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
             ApplyLanguage();
 
             InitSearchFieldMap();
-            
-            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
             ApplyPermissions();
         }
 
-        /// <summary>
-        /// Áp dụng phân quyền cho các nút thao tác
-        /// Chỉ Quản lý mới có quyền thêm/sửa/xóa nhân viên
-        /// </summary>
         private void ApplyPermissions()
         {
-            bool canManageNhanVien = PermissionManager.CanViewNhanVien(); // Chỉ Quản lý
+            bool canManageNhanVien = PermissionManager.CanViewNhanVien();
             btnThemNhanVien.Visible = canManageNhanVien;
             btnSuaNhanVien.Visible = canManageNhanVien;
             btnXoaNhanVien.Visible = canManageNhanVien;
             btnLamMoi.Visible = canManageNhanVien;
-            
+
             ReorganizeButtons();
         }
 
-        /// <summary>
-        /// Tự động dồn các button sang trái khi một số button bị ẩn
-        /// </summary>
         private void ReorganizeButtons()
         {
             List<System.Windows.Forms.Button> buttons = new List<System.Windows.Forms.Button> { btnThemNhanVien, btnSuaNhanVien, btnXoaNhanVien, btnLamMoi };
-            int currentX = 20; // Vị trí X ban đầu
-            int spacing = 160; // Khoảng cách giữa các button
-            int y = 13; // Vị trí Y cố định
+            int currentX = 20;
+            int spacing = 160;
+            int y = 13;
 
             foreach (System.Windows.Forms.Button btn in buttons)
             {
@@ -87,18 +75,17 @@ namespace UI.UserControlUI
             }
         }
 
-        private void InitSearchFieldMap()   
+        private void InitSearchFieldMap()
         {
             searchFieldMap = new Dictionary<string, string>
-    {
-        { langMgr.GetString("Mã nhân viên"), "MaNV" },
-        { langMgr.GetString("FullName"), "HoTenNV" },
-        { langMgr.GetString("Phone"), "Sdt" },
-        { langMgr.GetString("Email"), "Email" },
-        { langMgr.GetString("vai trò"), "ChucVu" }
-    };
+            {
+                { langMgr.GetString("EmployeeID"), "MaNV" },
+                { langMgr.GetString("FullName"), "HoTenNV" },
+                { langMgr.GetString("Phone"), "Sdt" },
+                { langMgr.GetString("Email"), "Email" },
+                { langMgr.GetString("Role"), "ChucVu" }
+            };
         }
-
 
         private void OnThemeChanged(object sender, EventArgs e)
         {
@@ -111,21 +98,16 @@ namespace UI.UserControlUI
             {
                 this.BackColor = Color.FromArgb(45, 45, 48);
                 this.ForeColor = Color.White;
-                // đổi màu cho child controls...
             }
             else
             {
                 this.BackColor = Color.White;
                 this.ForeColor = Color.Black;
-                // đổi màu cho child controls...
             }
         }
 
-
-
         private void ApplyLanguage()
         {
-            // Gán lại text từ resource cho tất cả controls
             lblTieuDe.Text = langMgr.GetString("EmployeeTitle");
             btnThemNhanVien.Text = langMgr.GetString("AddBtn");
             btnSuaNhanVien.Text = langMgr.GetString("EditBtn");
@@ -136,15 +118,15 @@ namespace UI.UserControlUI
             lblTimKiem.Text = langMgr.GetString("SearchBy");
             lblTuKhoa.Text = langMgr.GetString("Keyword");
 
-            // ComboBox tìm kiếm
             var searchOptions = new[]
             {
-                langMgr.GetString("Mã nhân viên"),
+                langMgr.GetString("EmployeeID"),
                 langMgr.GetString("FullName"),
-                langMgr.GetString("vai trò"),
+                langMgr.GetString("Role"),
                 langMgr.GetString("Phone"),
                 langMgr.GetString("Email")
             };
+
             if (cboTimKiem.Items.Count != searchOptions.Length)
             {
                 cboTimKiem.Items.Clear();
@@ -156,12 +138,12 @@ namespace UI.UserControlUI
                 for (int i = 0; i < searchOptions.Length; i++)
                     cboTimKiem.Items[i] = searchOptions[i];
             }
+
             UpdateRecordCount(currentData?.Rows.Count ?? 0);
         }
 
         private void InitializeCardView()
         {
-            // FlowLayoutPanel để chứa các card nhân viên
             flowPanelEmployees = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -171,7 +153,6 @@ namespace UI.UserControlUI
                 WrapContents = true
             };
 
-            // Panel chi tiết nhân viên (ẩn mặc định)
             panelEmployeeDetail = CreateDetailPanel();
             panelEmployeeDetail.Visible = false;
 
@@ -223,7 +204,8 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(langMgr.GetString("LoadDataError") + ": " + ex.Message,
+                    langMgr.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -235,7 +217,7 @@ namespace UI.UserControlUI
             {
                 Label lblEmpty = new Label
                 {
-                    Text = "Không có dữ liệu nhân viên",
+                    Text = langMgr.GetString("NoEmployeeData"),
                     Font = new Font("Segoe UI", 14F, FontStyle.Italic),
                     ForeColor = Color.Gray,
                     AutoSize = true,
@@ -263,7 +245,6 @@ namespace UI.UserControlUI
                 Tag = employee
             };
 
-            // Shadow effect
             card.Paint += (s, e) =>
             {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -273,7 +254,6 @@ namespace UI.UserControlUI
                 }
             };
 
-            // Avatar
             Panel avatarPanel = new Panel
             {
                 Size = new Size(80, 80),
@@ -289,7 +269,6 @@ namespace UI.UserControlUI
                     avatarPanel.Region = new Region(path);
                 }
 
-                // Kiểm tra nếu có ảnh nhân viên thì hiển thị ảnh, không thì hiển thị chữ cái
                 if (employee["AnhNhanVien"] != DBNull.Value)
                 {
                     byte[] imageData = (byte[])employee["AnhNhanVien"];
@@ -300,11 +279,10 @@ namespace UI.UserControlUI
                             Image empImage = Image.FromStream(ms);
                             e.Graphics.DrawImage(empImage, 0, 0, avatarPanel.Width, avatarPanel.Height);
                         }
-                        return; // Đã vẽ ảnh, không cần vẽ chữ
+                        return;
                     }
                 }
 
-                // Vẽ chữ cái đầu nếu không có ảnh
                 string initials = GetInitials(employee["HoTenNV"].ToString());
                 using (Font font = new Font("Segoe UI", 24F, FontStyle.Bold))
                 using (SolidBrush brush = new SolidBrush(Color.White))
@@ -316,7 +294,6 @@ namespace UI.UserControlUI
                 }
             };
 
-            // Thông tin nhân viên
             Label lblName = new Label
             {
                 Text = employee["HoTenNV"].ToString(),
@@ -328,7 +305,7 @@ namespace UI.UserControlUI
 
             Label lblCode = new Label
             {
-                Text = "Mã NV: " + employee["MaNV"].ToString(),
+                Text = langMgr.GetString("EmployeeIDLabel") + ": " + employee["MaNV"].ToString(),
                 Font = new Font("Segoe UI", 9F),
                 Location = new Point(115, 50),
                 Size = new Size(200, 20),
@@ -344,7 +321,6 @@ namespace UI.UserControlUI
                 ForeColor = Color.FromArgb(25, 118, 210)
             };
 
-            // Separator line
             Panel separator = new Panel
             {
                 Location = new Point(20, 110),
@@ -352,7 +328,6 @@ namespace UI.UserControlUI
                 BackColor = Color.FromArgb(224, 224, 224)
             };
 
-            // Thông tin chi tiết
             Label lblPhone = new Label
             {
                 Text = "📱 " + (employee["Sdt"] != DBNull.Value ? employee["Sdt"].ToString() : "N/A"),
@@ -390,10 +365,8 @@ namespace UI.UserControlUI
                 }
             };
 
-            // Thêm controls vào card
             card.Controls.AddRange(new Control[] { avatarPanel, lblName, lblCode, lblPosition, separator, lblPhone, lblEmail, lblStatus });
 
-            // Hover effect
             card.MouseEnter += (s, e) =>
             {
                 card.BackColor = Color.FromArgb(245, 250, 255);
@@ -405,7 +378,6 @@ namespace UI.UserControlUI
                 card.Padding = new Padding(0);
             };
 
-            // Click event
             card.Click += (s, e) => ShowEmployeeDetail(employee);
             foreach (Control ctrl in card.Controls)
             {
@@ -421,7 +393,6 @@ namespace UI.UserControlUI
             panelEmployeeDetail.Controls.Clear();
             panelEmployeeDetail.AutoScroll = true;
 
-            // Nút đóng
             Button btnClose = new Button
             {
                 Text = "✕",
@@ -437,17 +408,15 @@ namespace UI.UserControlUI
             btnClose.FlatAppearance.BorderSize = 0;
             btnClose.Click += (s, e) => { panelEmployeeDetail.Visible = false; selectedEmployeeId = null; };
 
-            // Header
             Label lblDetailTitle = new Label
             {
-                Text = "THÔNG TIN CHI TIẾT NHÂN VIÊN",
+                Text = langMgr.GetString("EmployeeDetailTitle"),
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
                 Location = new Point(30, 30),
                 Size = new Size(500, 30),
                 ForeColor = Color.FromArgb(25, 118, 210)
             };
 
-            // Avatar lớn
             Panel avatarLarge = new Panel
             {
                 Size = new Size(120, 120),
@@ -463,7 +432,6 @@ namespace UI.UserControlUI
                     avatarLarge.Region = new Region(path);
                 }
 
-                // Kiểm tra nếu có ảnh nhân viên thì hiển thị ảnh, không thì hiển thị chữ cái
                 if (employee["AnhNhanVien"] != DBNull.Value)
                 {
                     byte[] imageData = (byte[])employee["AnhNhanVien"];
@@ -474,11 +442,10 @@ namespace UI.UserControlUI
                             Image empImage = Image.FromStream(ms);
                             e.Graphics.DrawImage(empImage, 0, 0, avatarLarge.Width, avatarLarge.Height);
                         }
-                        return; // Đã vẽ ảnh, không cần vẽ chữ
+                        return;
                     }
                 }
 
-                // Nếu không có ảnh, hiển thị chữ cái
                 string initials = GetInitials(employee["HoTenNV"].ToString());
                 using (Font font = new Font("Segoe UI", 36F, FontStyle.Bold))
                 using (SolidBrush brush = new SolidBrush(Color.White))
@@ -494,29 +461,28 @@ namespace UI.UserControlUI
             int rightX = 580;
             int yPos = 90;
 
-            // Cột trái
-            CreateDetailLabel("Họ tên:", employee["HoTenNV"].ToString(), leftX, yPos, true);
+            CreateDetailLabel(langMgr.GetString("FullNameLabel") + ":", employee["HoTenNV"].ToString(), leftX, yPos, true);
             yPos += 45;
-            CreateDetailLabel("Mã nhân viên:", employee["MaNV"].ToString(), leftX, yPos);
-            CreateDetailLabel("Chức vụ:", employee["ChucVu"]?.ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("EmployeeIDLabel") + ":", employee["MaNV"].ToString(), leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("RoleLabel") + ":", employee["ChucVu"]?.ToString(), rightX, yPos);
             yPos += 40;
-            CreateDetailLabel("Ngày sinh:", employee["NgaySinh"] != DBNull.Value ? Convert.ToDateTime(employee["NgaySinh"]).ToString("dd/MM/yyyy") : "N/A", leftX, yPos);
-            CreateDetailLabel("Giới tính:", employee["GioiTinh"]?.ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("BirthDateLabel") + ":", employee["NgaySinh"] != DBNull.Value ? Convert.ToDateTime(employee["NgaySinh"]).ToString("dd/MM/yyyy") : "N/A", leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("GenderLabel") + ":", employee["GioiTinh"]?.ToString(), rightX, yPos);
             yPos += 40;
-            CreateDetailLabel("Số điện thoại:", employee["Sdt"]?.ToString(), leftX, yPos);
-            CreateDetailLabel("Email:", employee["Email"]?.ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("PhoneLabel") + ":", employee["Sdt"]?.ToString(), leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("EmailLabel") + ":", employee["Email"]?.ToString(), rightX, yPos);
             yPos += 40;
-            CreateDetailLabel("CCCD:", employee["CCCD"]?.ToString(), leftX, yPos);
-            CreateDetailLabel("Trình độ:", employee["TrinhDoHocVan"]?.ToString(), rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("CCCDLabel") + ":", employee["CCCD"]?.ToString(), leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("EducationLabel") + ":", employee["TrinhDoHocVan"]?.ToString(), rightX, yPos);
             yPos += 40;
-            CreateDetailLabel("Địa chỉ:", employee["DiaChi"]?.ToString(), leftX, yPos);
-            CreateDetailLabel("Lương cơ bản:", employee["LuongCoBan"] != DBNull.Value ? string.Format("{0:N0} VNĐ", employee["LuongCoBan"]) : "N/A", rightX, yPos);
+            CreateDetailLabel(langMgr.GetString("AddressLabel") + ":", employee["DiaChi"]?.ToString(), leftX, yPos);
+            CreateDetailLabel(langMgr.GetString("BaseSalaryLabel") + ":", employee["LuongCoBan"] != DBNull.Value ? string.Format("{0:N0} VNĐ", employee["LuongCoBan"]) : "N/A", rightX, yPos);
             yPos += 40;
-            CreateDetailLabel("Tình trạng:", employee["TinhTrangLamViec"]?.ToString(), leftX, yPos);
-            
+            CreateDetailLabel(langMgr.GetString("StatusLabel") + ":", employee["TinhTrangLamViec"]?.ToString(), leftX, yPos);
+
             if (employee.Table.Columns.Contains("NgayVaoLam") && employee["NgayVaoLam"] != DBNull.Value)
             {
-                CreateDetailLabel("Ngày vào làm:", Convert.ToDateTime(employee["NgayVaoLam"]).ToString("dd/MM/yyyy"), rightX, yPos);
+                CreateDetailLabel(langMgr.GetString("JoinDateLabel") + ":", Convert.ToDateTime(employee["NgayVaoLam"]).ToString("dd/MM/yyyy"), rightX, yPos);
             }
             yPos += 40;
 
@@ -525,7 +491,6 @@ namespace UI.UserControlUI
             panelEmployeeDetail.Controls.Add(avatarLarge);
 
             panelEmployeeDetail.AutoScrollMinSize = new Size(0, yPos + 50);
-
             panelEmployeeDetail.Visible = true;
         }
 
@@ -541,9 +506,8 @@ namespace UI.UserControlUI
             };
             panelEmployeeDetail.Controls.Add(lblTitle);
 
-            // Tính toán vị trí value dựa trên độ rộng thực tế của title
-            int valueX = x + 120; // Khoảng cách cố định 120px
-            int valueWidth = 250; // Độ rộng cho value
+            int valueX = x + 120;
+            int valueWidth = 250;
 
             Label lblValue = new Label
             {
@@ -601,9 +565,9 @@ namespace UI.UserControlUI
         private Color GetStatusColor(string status)
         {
             if (status == null) return Color.Gray;
-            if (status.Contains("Còn làm")) return Color.FromArgb(76, 175, 80);
-            if (status.Contains("Nghỉ")) return Color.FromArgb(244, 67, 54);
-            if (status.Contains("Thử việc")) return Color.FromArgb(255, 152, 0);
+            if (status.Contains("Còn làm") || status.Contains("Working")) return Color.FromArgb(76, 175, 80);
+            if (status.Contains("Nghỉ") || status.Contains("Inactive")) return Color.FromArgb(244, 67, 54);
+            if (status.Contains("Thử việc") || status.Contains("Probation")) return Color.FromArgb(255, 152, 0);
             return Color.FromArgb(96, 125, 139);
         }
 
@@ -612,11 +576,10 @@ namespace UI.UserControlUI
             string displayField = cboTimKiem.SelectedItem?.ToString() ?? langMgr.GetString("EmployeeID");
             string keyword = txtTuKhoa.Text.Trim();
 
-            // Map sang tên trường database
             string searchField;
             if (!searchFieldMap.TryGetValue(displayField, out searchField))
             {
-                searchField = "MaNV"; // default nếu không thấy
+                searchField = "MaNV";
             }
 
             if (string.IsNullOrEmpty(keyword))
@@ -634,7 +597,8 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(langMgr.GetString("SearchError") + ": " + ex.Message,
+                    langMgr.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -656,13 +620,15 @@ namespace UI.UserControlUI
                     if (form.ShowDialog() == DialogResult.OK)
                     {
                         LoadData();
-                        MessageBox.Show("Thêm nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(langMgr.GetString("AddEmployeeSuccess"),
+                            langMgr.GetString("Notification"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi thêm nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(langMgr.GetString("AddEmployeeError") + ": " + ex.Message,
+                    langMgr.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -670,7 +636,8 @@ namespace UI.UserControlUI
         {
             if (string.IsNullOrEmpty(selectedEmployeeId))
             {
-                MessageBox.Show("Vui lòng chọn một nhân viên để sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(langMgr.GetString("SelectEmployeeToEdit"),
+                    langMgr.GetString("Notification"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -683,13 +650,15 @@ namespace UI.UserControlUI
                         LoadData();
                         panelEmployeeDetail.Visible = false;
                         selectedEmployeeId = null;
-                        MessageBox.Show("Cập nhật nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(langMgr.GetString("UpdateEmployeeSuccess"),
+                            langMgr.GetString("Notification"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi sửa nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(langMgr.GetString("EditEmployeeError") + ": " + ex.Message,
+                    langMgr.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -697,7 +666,8 @@ namespace UI.UserControlUI
         {
             if (string.IsNullOrEmpty(selectedEmployeeId))
             {
-                MessageBox.Show("Vui lòng chọn một nhân viên để xóa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(langMgr.GetString("SelectEmployeeToDelete"),
+                    langMgr.GetString("Notification"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -708,8 +678,11 @@ namespace UI.UserControlUI
 
             string hoTenNV = selectedRow["HoTenNV"].ToString();
 
-            var confirmResult = MessageBox.Show($"Bạn có chắc chắn muốn xóa nhân viên '{hoTenNV}' (Mã: {selectedEmployeeId})?\n\nLưu ý: Thao tác này không thể hoàn tác!",
-                "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var confirmResult = MessageBox.Show(
+                string.Format(langMgr.GetString("ConfirmDeleteEmployee"), hoTenNV, selectedEmployeeId),
+                langMgr.GetString("ConfirmDelete1"),
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
             if (confirmResult == DialogResult.Yes)
             {
@@ -720,26 +693,29 @@ namespace UI.UserControlUI
 
                     if (success)
                     {
-                        MessageBox.Show("Xóa nhân viên thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(langMgr.GetString("DeleteEmployeeSuccess"),
+                            langMgr.GetString("Notification"), MessageBoxButtons.OK, MessageBoxIcon.Information);
                         panelEmployeeDetail.Visible = false;
                         selectedEmployeeId = null;
                         LoadData();
                     }
                     else
                     {
-                        MessageBox.Show(errorMessage, "Lỗi xóa", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(errorMessage,
+                            langMgr.GetString("DeleteError1"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi xóa nhân viên: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(langMgr.GetString("DeleteEmployeeError") + ": " + ex.Message,
+                        langMgr.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void UpdateRecordCount(int count)
         {
-            lblDemNhanVien.Text = $"Tổng số bản ghi: {count}";
+            lblDemNhanVien.Text = string.Format(langMgr.GetString("TotalRecords"), count);
             lblDemNhanVien.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
         }
 

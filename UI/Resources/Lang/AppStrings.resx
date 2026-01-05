@@ -126,6 +126,12 @@
   <data name="AddBtn" xml:space="preserve">
     <value>+ Thêm mới</value>
   </data>
+  <data name="AddEmployeeError" xml:space="preserve">
+    <value>Lỗi thêm nhân viên</value>
+  </data>
+  <data name="AddEmployeeSuccess" xml:space="preserve">
+    <value>Thêm nhân viên thành công!</value>
+  </data>
   <data name="AddPart" xml:space="preserve">
     <value>Thêm phụ tùng</value>
   </data>
@@ -140,6 +146,9 @@
   </data>
   <data name="Address" xml:space="preserve">
     <value>Địa Chỉ</value>
+  </data>
+  <data name="AddressLabel" xml:space="preserve">
+    <value>Địa chỉ</value>
   </data>
   <data name="AddVehicle" xml:space="preserve">
     <value>Thêm xe</value>
@@ -174,8 +183,14 @@
   <data name="BadgeWaitApprove" xml:space="preserve">
     <value>CHỜ DUYỆT</value>
   </data>
+  <data name="BaseSalaryLabel" xml:space="preserve">
+    <value>Lương cơ bản</value>
+  </data>
   <data name="BirthDate" xml:space="preserve">
     <value>Ngày Sinh</value>
+  </data>
+  <data name="BirthDateLabel" xml:space="preserve">
+    <value>Ngày sinh</value>
   </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Hủy</value>
@@ -198,6 +213,9 @@
   <data name="Cashier" xml:space="preserve">
     <value>Thu ngân</value>
   </data>
+  <data name="CCCDLabel" xml:space="preserve">
+    <value>CCCD</value>
+  </data>
   <data name="ChooseImage" xml:space="preserve">
     <value>Chọn file ảnh</value>
   </data>
@@ -215,6 +233,13 @@
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>Bạn có chắc chắn muốn xóa xe</value>
+  </data>
+  <data name="ConfirmDelete1" xml:space="preserve">
+    <value>Xác nhận xóa</value>
+  </data>
+  <data name="ConfirmDeleteEmployee" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa nhân viên '{0}' (Mã: {1})?
+Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="CreateBtn" xml:space="preserve">
     <value>Tạo phiếu bảo trì</value>
@@ -270,8 +295,17 @@
   <data name="DeleteBtn" xml:space="preserve">
     <value>Xóa</value>
   </data>
+  <data name="DeleteEmployeeError" xml:space="preserve">
+    <value>Lỗi xóa nhân viên</value>
+  </data>
+  <data name="DeleteEmployeeSuccess" xml:space="preserve">
+    <value>Xóa nhân viên thành công!</value>
+  </data>
   <data name="DeleteError" xml:space="preserve">
     <value>Lỗi khi xóa xe</value>
+  </data>
+  <data name="DeleteError1" xml:space="preserve">
+    <value>Lỗi xóa</value>
   </data>
   <data name="DeleteFailed" xml:space="preserve">
     <value>Xóa xe thất bại!</value>
@@ -287,6 +321,9 @@
   </data>
   <data name="EditBtn" xml:space="preserve">
     <value>Sửa</value>
+  </data>
+  <data name="EditEmployeeError" xml:space="preserve">
+    <value>Lỗi sửa nhân viên</value>
   </data>
   <data name="EditPart" xml:space="preserve">
     <value>Sửa phụ tùng</value>
@@ -306,8 +343,23 @@
   <data name="EditVehicleSuccess" xml:space="preserve">
     <value>Sửa xe thành công!</value>
   </data>
+  <data name="EducationLabel" xml:space="preserve">
+    <value>Trình độ</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmployeeDetailTitle" xml:space="preserve">
+    <value>THÔNG TIN CHI TIẾT NHÂN VIÊN</value>
+  </data>
+  <data name="EmployeeID" xml:space="preserve">
+    <value>Mã nhân viên</value>
+  </data>
+  <data name="EmployeeIDLabel" xml:space="preserve">
+    <value>Mã NV</value>
   </data>
   <data name="EmployeeTitle" xml:space="preserve">
     <value>QUẢN LÝ NHÂN VIÊN</value>
@@ -342,8 +394,14 @@
   <data name="FullName" xml:space="preserve">
     <value>Họ Tên</value>
   </data>
+  <data name="FullNameLabel" xml:space="preserve">
+    <value>Họ tên</value>
+  </data>
   <data name="Gender" xml:space="preserve">
     <value>Giới Tính</value>
+  </data>
+  <data name="GenderLabel" xml:space="preserve">
+    <value>Giới tính</value>
   </data>
   <data name="GeneralInfo" xml:space="preserve">
     <value>Thông tin chung</value>
@@ -369,6 +427,9 @@
   <data name="Interface" xml:space="preserve">
     <value>Giao diện</value>
   </data>
+  <data name="JoinDateLabel" xml:space="preserve">
+    <value>Ngày vào làm</value>
+  </data>
   <data name="Keyword" xml:space="preserve">
     <value>Từ khóa:</value>
   </data>
@@ -377,6 +438,9 @@
   </data>
   <data name="Left" xml:space="preserve">
     <value>Nghỉ</value>
+  </data>
+  <data name="LoadDataError" xml:space="preserve">
+    <value>Lỗi tải dữ liệu</value>
   </data>
   <data name="LoadError" xml:space="preserve">
     <value>Lỗi khi tải cài đặt:</value>
@@ -531,6 +595,9 @@
   <data name="Phone" xml:space="preserve">
     <value>SĐT</value>
   </data>
+  <data name="PhoneLabel" xml:space="preserve">
+    <value>Số điện thoại</value>
+  </data>
   <data name="PlateLabel" xml:space="preserve">
     <value>Biển số: {0} </value>
   </data>
@@ -612,6 +679,12 @@
   <data name="Revenue7Days" xml:space="preserve">
     <value>Doanh Thu 7 Ngày Qua</value>
   </data>
+  <data name="Role" xml:space="preserve">
+    <value>vai trò</value>
+  </data>
+  <data name="RoleLabel" xml:space="preserve">
+    <value>Chức vụ</value>
+  </data>
   <data name="SalePrice" xml:space="preserve">
     <value>Giá bán</value>
   </data>
@@ -636,6 +709,15 @@
   <data name="SearchBy" xml:space="preserve">
     <value>Tìm kiếm theo:</value>
   </data>
+  <data name="SearchError" xml:space="preserve">
+    <value>Lỗi tìm kiếm</value>
+  </data>
+  <data name="SelectEmployeeToDelete" xml:space="preserve">
+    <value>Vui lòng chọn một nhân viên để xóa!</value>
+  </data>
+  <data name="SelectEmployeeToEdit" xml:space="preserve">
+    <value>Vui lòng chọn một nhân viên để sửa!</value>
+  </data>
   <data name="SelectVehicleImage" xml:space="preserve">
     <value>Chọn ảnh xe</value>
   </data>
@@ -647,6 +729,9 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Trạng thái</value>
+  </data>
+  <data name="StatusLabel" xml:space="preserve">
+    <value>Tình trạng</value>
   </data>
   <data name="Stock" xml:space="preserve">
     <value>Tồn kho</value>
@@ -693,6 +778,9 @@
   <data name="TotalCost" xml:space="preserve">
     <value>TỔNG CHI PHÍ: </value>
   </data>
+  <data name="TotalRecords" xml:space="preserve">
+    <value>Tổng số bản ghi: {0}</value>
+  </data>
   <data name="TotalVehicles" xml:space="preserve">
     <value>Tổng số xe</value>
   </data>
@@ -731,6 +819,9 @@
   </data>
   <data name="UpdatedDate" xml:space="preserve">
     <value>Cập Nhật</value>
+  </data>
+  <data name="UpdateEmployeeSuccess" xml:space="preserve">
+    <value>Cập nhật nhân viên thành công!</value>
   </data>
   <data name="UsagePriceColumn" xml:space="preserve">
     <value>Đơn Giá </value>
