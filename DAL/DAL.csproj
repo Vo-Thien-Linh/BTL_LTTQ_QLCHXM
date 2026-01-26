@@ -70,6 +70,7 @@
     <Compile Include="HopDongMuaDAL.cs" />
     <Compile Include="HopDongThueDAL.cs" />
     <Compile Include="KhachHangDAL.cs" />
+    <Compile Include="KhuyenMaiDAL.cs" />
     <Compile Include="LoaiXeDAL.cs" />
     <Compile Include="MauSacDAL.cs" />
     <Compile Include="NhaCungCapDAL.cs" />

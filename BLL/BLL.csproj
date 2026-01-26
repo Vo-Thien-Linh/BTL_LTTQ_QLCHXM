@@ -72,6 +72,7 @@
     <Compile Include="HopDongMuaBLL.cs" />
     <Compile Include="HopDongThueBLL.cs" />
     <Compile Include="KhachHangBLL.cs" />
+    <Compile Include="KhuyenMaiBLL.cs" />
     <Compile Include="LanguageManagerBLL.cs" />
     <Compile Include="LoaiXeBLL.cs" />
     <Compile Include="MauSacBLL.cs" />

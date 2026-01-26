@@ -333,6 +333,18 @@
     <Compile Include="UserControlUI\ViewQuanLyKhachHang.Designer.cs">
       <DependentUpon>ViewQuanLyKhachHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControlUI\FormThemSuaKhuyenMai.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\FormThemSuaKhuyenMai.Designer.cs">
+      <DependentUpon>FormThemSuaKhuyenMai.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyKhuyenMai.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControlUI\ViewQuanLyKhuyenMai.Designer.cs">
+      <DependentUpon>ViewQuanLyKhuyenMai.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControlUI\ViewQuanLyNhanVien.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -502,6 +514,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyKhachHang.resx">
       <DependentUpon>ViewQuanLyKhachHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\FormThemSuaKhuyenMai.resx">
+      <DependentUpon>FormThemSuaKhuyenMai.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControlUI\ViewQuanLyKhuyenMai.resx">
+      <DependentUpon>ViewQuanLyKhuyenMai.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControlUI\ViewQuanLyNhanVien.resx">
       <DependentUpon>ViewQuanLyNhanVien.cs</DependentUpon>

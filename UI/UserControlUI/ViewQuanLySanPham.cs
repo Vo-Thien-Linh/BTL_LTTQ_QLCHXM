@@ -170,5 +170,18 @@ namespace UI.UserControlUI
         {
 
         }
+
+        private void btnQuanLyKhuyenMai_Click(object sender, EventArgs e)
+        {
+            pnlMain.Controls.Clear();
+
+            ViewQuanLyKhuyenMai viewQuanLyKhuyenMai = new ViewQuanLyKhuyenMai();
+
+            viewQuanLyKhuyenMai.Dock = DockStyle.Fill;
+
+            pnlMain.Controls.Add(viewQuanLyKhuyenMai);
+
+            viewQuanLyKhuyenMai.BringToFront();
+        }
     }
 }

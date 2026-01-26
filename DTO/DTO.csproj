@@ -69,6 +69,7 @@
     <Compile Include="HopDongMuaDTO.cs" />
     <Compile Include="HopDongThueDTO.cs" />
     <Compile Include="KhachHangDTO.cs" />
+    <Compile Include="KhuyenMaiDTO.cs" />
     <Compile Include="MauSacDTO.cs" />
     <Compile Include="NhanVienDTO.cs" />
     <Compile Include="PhuTungDTO.cs" />
