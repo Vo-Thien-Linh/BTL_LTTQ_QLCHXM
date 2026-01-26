@@ -372,6 +372,9 @@ namespace UI.FormUI
             btnQuanLyChoThue.Visible = PermissionManager.CanViewChoThue();
             btnQuanLyXuLy.Visible = PermissionManager.CanViewXuLy();
             btnCaiDat.Visible = PermissionManager.CanViewSettings();
+            
+            // NÚT ĐĂNG XUẤT LUÔN HIỂN THỊ CHO TẤT CẢ USER
+            btnDangXuat.Visible = true;
 
             // Tự động dồn các button lên để không có khoảng trống
             ReorganizeMenuButtons();
@@ -428,7 +431,7 @@ namespace UI.FormUI
         /// </summary>
         private void ReorganizeMenuButtons()
         {
-            // Danh sách các button theo thứ tự hiển thị
+            // Danh sách các button theo thứ tự hiển thị (THÊM btnDangXuat vào cuối)
             List<Button> menuButtons = new List<Button>
             {
                 btnQuanLyNhanVien,
@@ -438,7 +441,8 @@ namespace UI.FormUI
                 btnQuanLyChoThue,
                 btnQuanLyXuLy,
                 btnThongKe,
-                btnCaiDat
+                btnCaiDat,
+                btnDangXuat  // ← THÊM NÚT ĐĂNG XUẤT
             };
 
             int currentY = 0;

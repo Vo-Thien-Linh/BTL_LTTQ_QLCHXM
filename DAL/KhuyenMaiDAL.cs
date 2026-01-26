@@ -87,7 +87,11 @@ namespace DAL
 
             if (!string.IsNullOrEmpty(loaiApDung))
             {
-                query += " AND (LoaiApDung = N'Tất cả' OR LoaiApDung = @LoaiApDung)";
+                query += @" AND (LoaiApDung = N'Tất cả' 
+                            OR LoaiApDung = @LoaiApDung
+                            OR (LoaiApDung = N'Xe bán' AND @LoaiApDung IN ('XeBan', N'Xe bán'))
+                            OR (LoaiApDung = N'Xe thuê' AND @LoaiApDung IN ('XeThue', N'Xe thuê'))
+                            OR (LoaiApDung = N'Phụ tùng' AND @LoaiApDung IN ('PhuTung', N'Phụ tùng')))";
                 SqlParameter[] parameters = {
                     new SqlParameter("@LoaiApDung", loaiApDung)
                 };
@@ -98,23 +102,112 @@ namespace DAL
         }
 
         /// <summary>
-        /// Lấy khuyến mãi còn hiệu lực theo ngày và loại áp dụng (tạm thời disabled)
+        /// Lấy khuyến mãi còn hiệu lực theo ngày và loại áp dụng
         /// </summary>
         public DataTable GetKhuyenMaiHieuLuc(DateTime? ngayApDung = null, string loaiApDung = null)
         {
-            // Tạm thời tắt chức năng khuyến mãi
-            return new DataTable();
+            DateTime ngay = ngayApDung ?? DateTime.Now;
+            
+            string query = @"
+                SELECT 
+                    MaKM,
+                    TenKM,
+                    MoTa,
+                    NgayBatDau,
+                    NgayKetThuc,
+                    LoaiKhuyenMai,
+                    PhanTramGiam,
+                    SoTienGiam,
+                    GiaTriGiamToiDa,
+                    LoaiApDung,
+                    TrangThai
+                FROM KhuyenMai
+                WHERE TrangThai = N'Hoạt động'
+                  AND @NgayApDung BETWEEN NgayBatDau AND NgayKetThuc";
+
+            if (!string.IsNullOrEmpty(loaiApDung))
+            {
+                query += @" AND (LoaiApDung = N'Tất cả' 
+                            OR LoaiApDung = @LoaiApDung
+                            OR (LoaiApDung = N'Xe bán' AND @LoaiApDung IN ('XeBan', N'Xe bán'))
+                            OR (LoaiApDung = N'Xe thuê' AND @LoaiApDung IN ('XeThue', N'Xe thuê'))
+                            OR (LoaiApDung = N'Phụ tùng' AND @LoaiApDung IN ('PhuTung', N'Phụ tùng')))";
+                SqlParameter[] parameters = {
+                    new SqlParameter("@NgayApDung", ngay),
+                    new SqlParameter("@LoaiApDung", loaiApDung)
+                };
+                return DataProvider.ExecuteQuery(query, parameters);
+            }
+
+            SqlParameter[] parametersOnly = {
+                new SqlParameter("@NgayApDung", ngay)
+            };
+            return DataProvider.ExecuteQuery(query, parametersOnly);
         }
 
         /// <summary>
-        /// Tính giá trị giảm từ khuyến mãi (tạm thời disabled)
+        /// Tính giá trị giảm từ khuyến mãi
         /// </summary>
         public decimal TinhGiaTriGiam(string maKM, decimal giaTriDonHang, out string errorMessage)
         {
             errorMessage = "";
             
-            // Tạm thời tắt chức năng khuyến mãi, không tính giảm giá
-            return 0;
+            try
+            {
+                string query = @"
+                    SELECT 
+                        LoaiKhuyenMai,
+                        PhanTramGiam,
+                        SoTienGiam,
+                        GiaTriGiamToiDa
+                    FROM KhuyenMai
+                    WHERE MaKM = @MaKM
+                      AND TrangThai = N'Hoạt động'
+                      AND GETDATE() BETWEEN NgayBatDau AND NgayKetThuc";
+
+                SqlParameter[] parameters = {
+                    new SqlParameter("@MaKM", maKM)
+                };
+
+                DataTable dt = DataProvider.ExecuteQuery(query, parameters);
+
+                if (dt.Rows.Count == 0)
+                {
+                    errorMessage = "Khuyến mãi không tồn tại hoặc đã hết hạn!";
+                    return 0;
+                }
+
+                DataRow row = dt.Rows[0];
+                string loaiKM = row["LoaiKhuyenMai"].ToString();
+                decimal giaTriGiam = 0;
+
+                if (loaiKM == "Giảm %")
+                {
+                    decimal phanTramGiam = row["PhanTramGiam"] != DBNull.Value 
+                        ? Convert.ToDecimal(row["PhanTramGiam"]) : 0;
+                    
+                    giaTriGiam = giaTriDonHang * phanTramGiam / 100;
+
+                    // Áp dụng giới hạn tối đa nếu có
+                    if (row["GiaTriGiamToiDa"] != DBNull.Value)
+                    {
+                        decimal giaTriToiDa = Convert.ToDecimal(row["GiaTriGiamToiDa"]);
+                        if (giaTriGiam > giaTriToiDa)
+                            giaTriGiam = giaTriToiDa;
+                    }
+                }
+                else if (loaiKM == "Giảm tiền")
+                {
+                    giaTriGiam = row["SoTienGiam"] != DBNull.Value 
+                        ? Convert.ToDecimal(row["SoTienGiam"]) : 0;
+                }
+
+                // Không giảm quá giá trị đơn hàng
+                if (giaTriGiam > giaTriDonHang)
+                    giaTriGiam = giaTriDonHang;
+
+                return giaTriGiam;
+            }
             catch (Exception ex)
             {
                 errorMessage = ex.Message;

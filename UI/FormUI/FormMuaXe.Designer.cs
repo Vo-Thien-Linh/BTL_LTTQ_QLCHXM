@@ -68,6 +68,10 @@ namespace UI.FormUI
             this.lblNamSX = new System.Windows.Forms.Label();
             this.lblXe = new System.Windows.Forms.Label();
             this.grpThongTinBan = new System.Windows.Forms.GroupBox();
+            this.cboKhuyenMai = new System.Windows.Forms.ComboBox();
+            this.lblKhuyenMai = new System.Windows.Forms.Label();
+            this.lblSoTienGiam = new System.Windows.Forms.Label();
+            this.txtSoTienGiam = new System.Windows.Forms.TextBox();
             this.cboTrangThaiThanhToan = new System.Windows.Forms.ComboBox();
             this.cboHinhThucThanhToan = new System.Windows.Forms.ComboBox();
             this.dtpNgayBan = new System.Windows.Forms.DateTimePicker();
@@ -536,6 +540,10 @@ namespace UI.FormUI
             // 
             // grpThongTinBan
             // 
+            this.grpThongTinBan.Controls.Add(this.cboKhuyenMai);
+            this.grpThongTinBan.Controls.Add(this.lblKhuyenMai);
+            this.grpThongTinBan.Controls.Add(this.lblSoTienGiam);
+            this.grpThongTinBan.Controls.Add(this.txtSoTienGiam);
             this.grpThongTinBan.Controls.Add(this.cboTrangThaiThanhToan);
             this.grpThongTinBan.Controls.Add(this.cboHinhThucThanhToan);
             this.grpThongTinBan.Controls.Add(this.dtpNgayBan);
@@ -553,7 +561,7 @@ namespace UI.FormUI
             this.grpThongTinBan.Margin = new System.Windows.Forms.Padding(4);
             this.grpThongTinBan.Name = "grpThongTinBan";
             this.grpThongTinBan.Padding = new System.Windows.Forms.Padding(4);
-            this.grpThongTinBan.Size = new System.Drawing.Size(1147, 288);
+            this.grpThongTinBan.Size = new System.Drawing.Size(1147, 365);
             this.grpThongTinBan.TabIndex = 2;
             this.grpThongTinBan.TabStop = false;
             this.grpThongTinBan.Text = "Thông tin bán hàng";
@@ -633,13 +641,59 @@ namespace UI.FormUI
             this.lblNgayBan.TabIndex = 0;
             this.lblNgayBan.Text = "Ngày bán:";
             // 
+            // cboKhuyenMai
+            // 
+            this.cboKhuyenMai.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboKhuyenMai.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.cboKhuyenMai.FormattingEnabled = true;
+            this.cboKhuyenMai.Location = new System.Drawing.Point(267, 166);
+            this.cboKhuyenMai.Margin = new System.Windows.Forms.Padding(4);
+            this.cboKhuyenMai.Name = "cboKhuyenMai";
+            this.cboKhuyenMai.Size = new System.Drawing.Size(852, 26);
+            this.cboKhuyenMai.TabIndex = 6;
+            // 
+            // lblKhuyenMai
+            // 
+            this.lblKhuyenMai.AutoSize = true;
+            //this.lblKhuyenMai.Font = new System.Windows.Forms.Font("Microsoft Sans Serif", 9F);
+            this.lblKhuyenMai.Location = new System.Drawing.Point(27, 170);
+            this.lblKhuyenMai.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblKhuyenMai.Name = "lblKhuyenMai";
+            this.lblKhuyenMai.Size = new System.Drawing.Size(91, 18);
+            this.lblKhuyenMai.TabIndex = 6;
+            this.lblKhuyenMai.Text = "Khuyến mãi:";
+            // 
+            // lblSoTienGiam
+            // 
+            this.lblSoTienGiam.AutoSize = true;
+            this.lblSoTienGiam.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            this.lblSoTienGiam.Location = new System.Drawing.Point(31, 209);
+            this.lblSoTienGiam.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSoTienGiam.Name = "lblSoTienGiam";
+            this.lblSoTienGiam.Size = new System.Drawing.Size(97, 18);
+            this.lblSoTienGiam.TabIndex = 7;
+            this.lblSoTienGiam.Text = "Số tiền giảm:";
+            // 
+            // txtSoTienGiam
+            // 
+            this.txtSoTienGiam.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.txtSoTienGiam.ForeColor = System.Drawing.Color.Green;
+            this.txtSoTienGiam.Location = new System.Drawing.Point(267, 204);
+            this.txtSoTienGiam.Margin = new System.Windows.Forms.Padding(4);
+            this.txtSoTienGiam.Name = "txtSoTienGiam";
+            this.txtSoTienGiam.ReadOnly = true;
+            this.txtSoTienGiam.Size = new System.Drawing.Size(852, 26);
+            this.txtSoTienGiam.TabIndex = 8;
+            this.txtSoTienGiam.Text = "0 VNĐ";
+            this.txtSoTienGiam.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // btnLuu
             // 
             this.btnLuu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(175)))), ((int)(((byte)(80)))));
             this.btnLuu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLuu.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnLuu.ForeColor = System.Drawing.Color.White;
-            this.btnLuu.Location = new System.Drawing.Point(753, 1003);
+            this.btnLuu.Location = new System.Drawing.Point(753, 1085);
             this.btnLuu.Margin = new System.Windows.Forms.Padding(4);
             this.btnLuu.Name = "btnLuu";
             this.btnLuu.Size = new System.Drawing.Size(187, 49);
@@ -653,7 +707,7 @@ namespace UI.FormUI
             this.btnHuy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnHuy.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnHuy.ForeColor = System.Drawing.Color.White;
-            this.btnHuy.Location = new System.Drawing.Point(973, 1003);
+            this.btnHuy.Location = new System.Drawing.Point(973, 1085);
             this.btnHuy.Margin = new System.Windows.Forms.Padding(4);
             this.btnHuy.Name = "btnHuy";
             this.btnHuy.Size = new System.Drawing.Size(187, 49);
@@ -723,7 +777,7 @@ namespace UI.FormUI
             // 
             this.lblTongTienXe.AutoSize = true;
             this.lblTongTienXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblTongTienXe.Location = new System.Drawing.Point(31, 162);
+            this.lblTongTienXe.Location = new System.Drawing.Point(31, 248);
             this.lblTongTienXe.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTongTienXe.Name = "lblTongTienXe";
             this.lblTongTienXe.Size = new System.Drawing.Size(92, 18);
@@ -734,7 +788,7 @@ namespace UI.FormUI
             // 
             this.txtTongTienXe.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.txtTongTienXe.ForeColor = System.Drawing.Color.Blue;
-            this.txtTongTienXe.Location = new System.Drawing.Point(267, 157);
+            this.txtTongTienXe.Location = new System.Drawing.Point(267, 243);
             this.txtTongTienXe.Margin = new System.Windows.Forms.Padding(4);
             this.txtTongTienXe.Name = "txtTongTienXe";
             this.txtTongTienXe.ReadOnly = true;
@@ -746,7 +800,7 @@ namespace UI.FormUI
             // 
             this.lblTongTienPhuTung.AutoSize = true;
             this.lblTongTienPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
-            this.lblTongTienPhuTung.Location = new System.Drawing.Point(31, 196);
+            this.lblTongTienPhuTung.Location = new System.Drawing.Point(31, 282);
             this.lblTongTienPhuTung.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTongTienPhuTung.Name = "lblTongTienPhuTung";
             this.lblTongTienPhuTung.Size = new System.Drawing.Size(133, 18);
@@ -757,7 +811,7 @@ namespace UI.FormUI
             // 
             this.txtTongTienPhuTung.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.txtTongTienPhuTung.ForeColor = System.Drawing.Color.Blue;
-            this.txtTongTienPhuTung.Location = new System.Drawing.Point(267, 191);
+            this.txtTongTienPhuTung.Location = new System.Drawing.Point(267, 277);
             this.txtTongTienPhuTung.Margin = new System.Windows.Forms.Padding(4);
             this.txtTongTienPhuTung.Name = "txtTongTienPhuTung";
             this.txtTongTienPhuTung.ReadOnly = true;
@@ -770,7 +824,7 @@ namespace UI.FormUI
             this.lblTongThanhToan.AutoSize = true;
             this.lblTongThanhToan.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold);
             this.lblTongThanhToan.ForeColor = System.Drawing.Color.Red;
-            this.lblTongThanhToan.Location = new System.Drawing.Point(31, 236);
+            this.lblTongThanhToan.Location = new System.Drawing.Point(31, 322);
             this.lblTongThanhToan.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTongThanhToan.Name = "lblTongThanhToan";
             this.lblTongThanhToan.Size = new System.Drawing.Size(217, 24);
@@ -781,7 +835,7 @@ namespace UI.FormUI
             // 
             this.txtTongThanhToan.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.txtTongThanhToan.ForeColor = System.Drawing.Color.Red;
-            this.txtTongThanhToan.Location = new System.Drawing.Point(267, 231);
+            this.txtTongThanhToan.Location = new System.Drawing.Point(267, 317);
             this.txtTongThanhToan.Margin = new System.Windows.Forms.Padding(4);
             this.txtTongThanhToan.Name = "txtTongThanhToan";
             this.txtTongThanhToan.ReadOnly = true;
@@ -858,6 +912,10 @@ namespace UI.FormUI
         private System.Windows.Forms.Label lblNamSX;
         private System.Windows.Forms.Label lblXe;
         private System.Windows.Forms.GroupBox grpThongTinBan;
+        private System.Windows.Forms.ComboBox cboKhuyenMai;
+        private System.Windows.Forms.Label lblKhuyenMai;
+        private System.Windows.Forms.Label lblSoTienGiam;
+        private System.Windows.Forms.TextBox txtSoTienGiam;
         private System.Windows.Forms.ComboBox cboTrangThaiThanhToan;
         private System.Windows.Forms.ComboBox cboHinhThucThanhToan;
         private System.Windows.Forms.DateTimePicker dtpNgayBan;

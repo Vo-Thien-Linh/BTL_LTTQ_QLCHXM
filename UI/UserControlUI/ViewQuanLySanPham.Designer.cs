@@ -31,10 +31,10 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnQuanLyKhuyenMai = new System.Windows.Forms.Button();
             this.btnQuanLyPhuTung = new System.Windows.Forms.Button();
             this.btnQuanLyXe = new System.Windows.Forms.Button();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.btnQuanLyKhuyenMai = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -75,6 +75,18 @@
             this.panel2.Size = new System.Drawing.Size(1928, 60);
             this.panel2.TabIndex = 1;
             // 
+            // btnQuanLyKhuyenMai
+            // 
+            this.btnQuanLyKhuyenMai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnQuanLyKhuyenMai.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnQuanLyKhuyenMai.Location = new System.Drawing.Point(363, 10);
+            this.btnQuanLyKhuyenMai.Name = "btnQuanLyKhuyenMai";
+            this.btnQuanLyKhuyenMai.Size = new System.Drawing.Size(184, 40);
+            this.btnQuanLyKhuyenMai.TabIndex = 1;
+            this.btnQuanLyKhuyenMai.Text = "Quản lý khuyến mãi";
+            this.btnQuanLyKhuyenMai.UseVisualStyleBackColor = true;
+            this.btnQuanLyKhuyenMai.Click += new System.EventHandler(this.btnQuanLyKhuyenMai_Click);
+            // 
             // btnQuanLyPhuTung
             // 
             this.btnQuanLyPhuTung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -109,18 +121,6 @@
             this.pnlMain.Size = new System.Drawing.Size(1928, 643);
             this.pnlMain.TabIndex = 3;
             this.pnlMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlMain_Paint);
-            // 
-            // btnQuanLyKhuyenMai
-            // 
-            this.btnQuanLyKhuyenMai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnQuanLyKhuyenMai.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnQuanLyKhuyenMai.Location = new System.Drawing.Point(363, 10);
-            this.btnQuanLyKhuyenMai.Name = "btnQuanLyKhuyenMai";
-            this.btnQuanLyKhuyenMai.Size = new System.Drawing.Size(150, 40);
-            this.btnQuanLyKhuyenMai.TabIndex = 1;
-            this.btnQuanLyKhuyenMai.Text = "Quản lý khuyến mãi";
-            this.btnQuanLyKhuyenMai.UseVisualStyleBackColor = true;
-            this.btnQuanLyKhuyenMai.Click += new System.EventHandler(this.btnQuanLyPhuTung_Click);
             // 
             // ViewQuanLySanPham
             // 

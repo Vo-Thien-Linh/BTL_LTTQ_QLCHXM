@@ -14,12 +14,14 @@ namespace UI.FormUI
         private GiaoDichBanBLL giaoDichBanBLL;
         private HopDongMuaBLL hopDongMuaBLL;
         private PhuTungBLL phuTungBLL;
+        private KhuyenMaiBLL khuyenMaiBLL;
         private string maTaiKhoan;
         private bool isLoadingData = false;
         private KhachHangDTO khachHangHienTai = null;
         private string idXeDaChon = null;
         private DataRowView xeHienTai = null; // Lưu thông tin xe hiện tại
         private DataTable dtPhuTungDaChon; // DataTable lưu phụ tùng đã chọn
+        private KhuyenMaiDTO khuyenMaiHienTai = null; // Lưu khuyến mãi đang chọn
         
         public int MaGDBanVuaTao { get; private set; } = 0;
 
@@ -47,6 +49,7 @@ namespace UI.FormUI
             giaoDichBanBLL = new GiaoDichBanBLL();
             hopDongMuaBLL = new HopDongMuaBLL();
             phuTungBLL = new PhuTungBLL();
+            khuyenMaiBLL = new KhuyenMaiBLL();
 
             // Khởi tạo DataTable cho phụ tùng
             InitializePhuTungDataTable();
@@ -110,6 +113,9 @@ namespace UI.FormUI
             btnXemAnhGiayTo.Click += BtnXemAnhGiayTo_Click;
             btnThemPhuTung.Click += BtnThemPhuTung_Click;
             btnXoaPhuTung.Click += BtnXoaPhuTung_Click;
+            cboKhuyenMai.SelectedIndexChanged += CboKhuyenMai_SelectedIndexChanged;
+            
+            LoadKhuyenMai();
         }
 
         private void TxtSdtKH_KeyDown(object sender, KeyEventArgs e)
@@ -375,10 +381,19 @@ namespace UI.FormUI
                     MaTaiKhoan = maTaiKhoan
                 };
 
+                // Tính tổng tiền và khuyến mãi
+                decimal tongTien = giaBan + tongTienPhuTung;
+                string maKM = khuyenMaiHienTai != null ? khuyenMaiHienTai.MaKM : null;
+                decimal soTienGiam = 0;
+                if (khuyenMaiHienTai != null)
+                {
+                    soTienGiam = khuyenMaiBLL.TinhGiaTriGiam(khuyenMaiHienTai, tongTien);
+                }
+
                 // Lưu vào database (GỌI METHOD MỚI)
                 string errorMessage = "";
                 int maGDBan = giaoDichBanBLL.InsertGiaoDichBanKemPhuTung(
-                    gd, null, 0, dsPhuTung, out errorMessage
+                    gd, maKM, soTienGiam, dsPhuTung, out errorMessage
                 );
 
                 if (maGDBan > 0)
@@ -792,7 +807,21 @@ namespace UI.FormUI
                 if (txtTongTienPhuTung != null)
                     txtTongTienPhuTung.Text = tongTienPhuTung.ToString("N0") + " VNĐ";
 
-                decimal tongThanhToan = tongTienXe + tongTienPhuTung;
+                // Tính tổng trước khi giảm
+                decimal tongTruocGiam = tongTienXe + tongTienPhuTung;
+                
+                // Tính số tiền giảm từ khuyến mãi
+                decimal soTienGiam = 0;
+                if (khuyenMaiHienTai != null)
+                {
+                    soTienGiam = khuyenMaiBLL.TinhGiaTriGiam(khuyenMaiHienTai, tongTruocGiam);
+                }
+                
+                if (txtSoTienGiam != null)
+                    txtSoTienGiam.Text = soTienGiam.ToString("N0") + " VNĐ";
+
+                // Tổng thanh toán sau khi giảm
+                decimal tongThanhToan = tongTruocGiam - soTienGiam;
                 if (txtTongThanhToan != null)
                     txtTongThanhToan.Text = tongThanhToan.ToString("N0") + " VNĐ";
             }
@@ -805,6 +834,79 @@ namespace UI.FormUI
         private void grpThongTinBan_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Load danh sách khuyến mãi hợp lệ cho xe bán
+        /// </summary>
+        private void LoadKhuyenMai()
+        {
+            try
+            {
+                // Lấy khuyến mãi còn hiệu lực, áp dụng cho "Xe bán" hoặc "Tất cả"
+                DataTable dt = khuyenMaiBLL.GetKhuyenMaiHieuLuc(DateTime.Now, "Xe bán");
+                
+                cboKhuyenMai.Items.Clear();
+                cboKhuyenMai.DisplayMember = "TenKM";
+                cboKhuyenMai.ValueMember = "MaKM";
+                
+                // Thêm option "Không áp dụng"
+                DataRow emptyRow = dt.NewRow();
+                emptyRow["MaKM"] = "";
+                emptyRow["TenKM"] = "-- Không áp dụng khuyến mãi --";
+                dt.Rows.InsertAt(emptyRow, 0);
+                
+                cboKhuyenMai.DataSource = dt;
+                cboKhuyenMai.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải khuyến mãi: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Xử lý khi chọn khuyến mãi
+        /// </summary>
+        private void CboKhuyenMai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cboKhuyenMai.SelectedValue == null || string.IsNullOrEmpty(cboKhuyenMai.SelectedValue.ToString()))
+                {
+                    khuyenMaiHienTai = null;
+                    TinhTongTien();
+                    return;
+                }
+
+                string maKM = cboKhuyenMai.SelectedValue.ToString();
+                
+                // Lấy thông tin khuyến mãi từ DataTable
+                DataTable dt = (DataTable)cboKhuyenMai.DataSource;
+                DataRow[] rows = dt.Select($"MaKM = '{maKM}'");
+                
+                if (rows.Length > 0)
+                {
+                    DataRow row = rows[0];
+                    khuyenMaiHienTai = new KhuyenMaiDTO
+                    {
+                        MaKM = row["MaKM"].ToString(),
+                        TenKM = row["TenKM"].ToString(),
+                        LoaiKhuyenMai = row["LoaiKhuyenMai"] != DBNull.Value ? row["LoaiKhuyenMai"].ToString() : "Giảm %",
+                        PhanTramGiam = row["PhanTramGiam"] != DBNull.Value ? Convert.ToDecimal(row["PhanTramGiam"]) : (decimal?)null,
+                        SoTienGiam = row["SoTienGiam"] != DBNull.Value ? Convert.ToDecimal(row["SoTienGiam"]) : (decimal?)null,
+                        GiaTriGiamToiDa = row["GiaTriGiamToiDa"] != DBNull.Value ? Convert.ToDecimal(row["GiaTriGiamToiDa"]) : (decimal?)null
+                    };
+                    
+                    TinhTongTien();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi chọn khuyến mãi: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
