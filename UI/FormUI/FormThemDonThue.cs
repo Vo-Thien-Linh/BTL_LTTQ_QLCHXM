@@ -11,10 +11,12 @@ namespace UI.FormUI
         private KhachHangBLL khachHangBLL;
         private XeMayBLL xeMayBLL;
         private GiaoDichThueBLL giaoDichThueBLL;
+        private KhuyenMaiBLL khuyenMaiBLL; // THÊM MỚI
         private string maTaiKhoan;
         private bool isLoadingData = false;
         private string selectedIDXe = "";
         private string preSelectedIDXe = ""; // Xe được chọn từ card
+        private string selectedMaKM = ""; // THÊM MỚI
 
         public FormThemDonThue(string maTK)
         {
@@ -36,9 +38,11 @@ namespace UI.FormUI
             khachHangBLL = new KhachHangBLL();
             xeMayBLL = new XeMayBLL();
             giaoDichThueBLL = new GiaoDichThueBLL();
+            khuyenMaiBLL = new KhuyenMaiBLL(); // THÊM MỚI
 
             SetDefaultValues();
             LoadKhachHang();
+            LoadKhuyenMai(); // THÊM MỚI
             SetupEvents();
             LoadXeTheoThoiGian();
         }
@@ -101,6 +105,7 @@ namespace UI.FormUI
         {
             cboKhachHang.SelectedIndexChanged += CboKhachHang_SelectedIndexChanged;
             cboXe.SelectedIndexChanged += CboXe_SelectedIndexChanged;
+            cboKhuyenMai.SelectedIndexChanged += CboKhuyenMai_SelectedIndexChanged; // THÊM MỚI
 
             dtpNgayBatDau.ValueChanged += DateChanged;
             dtpNgayKetThuc.ValueChanged += DateChanged;
@@ -124,6 +129,37 @@ namespace UI.FormUI
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi tải danh sách khách hàng: " + ex.Message,
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                isLoadingData = false;
+            }
+        }
+
+        private void LoadKhuyenMai()
+        {
+            try
+            {
+                isLoadingData = true;
+
+                DataTable dt = giaoDichThueBLL.GetKhuyenMaiThueXe(DateTime.Now);
+
+                // Thêm dòng "Không áp dụng"
+                DataRow emptyRow = dt.NewRow();
+                emptyRow["MaKM"] = "";
+                emptyRow["TenKM"] = "-- Không áp dụng khuyến mãi --";
+                emptyRow["MoTaGiam"] = "";
+                dt.Rows.InsertAt(emptyRow, 0);
+
+                cboKhuyenMai.DataSource = dt;
+                cboKhuyenMai.DisplayMember = "TenKM";
+                cboKhuyenMai.ValueMember = "MaKM";
+                cboKhuyenMai.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải khuyến mãi: " + ex.Message,
                     "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
@@ -373,11 +409,46 @@ namespace UI.FormUI
             TinhTienTuDong();
         }
 
+        private void CboKhuyenMai_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (isLoadingData || cboKhuyenMai.SelectedIndex == -1)
+            {
+                selectedMaKM = "";
+                TinhTienTuDong();
+                return;
+            }
+
+            DataRowView row = cboKhuyenMai.SelectedItem as DataRowView;
+            if (row != null)
+            {
+                selectedMaKM = row["MaKM"]?.ToString() ?? "";
+                
+                // Hiển thị mô tả khuyến mãi
+                if (!string.IsNullOrWhiteSpace(selectedMaKM))
+                {
+                    string moTaGiam = row["MoTaGiam"]?.ToString() ?? "";
+                    if (!string.IsNullOrWhiteSpace(moTaGiam))
+                    {
+                        lblThongTinKhuyenMai.Text = "🎉 " + moTaGiam;
+                        lblThongTinKhuyenMai.ForeColor = System.Drawing.Color.FromArgb(76, 175, 80);
+                    }
+                }
+                else
+                {
+                    lblThongTinKhuyenMai.Text = "";
+                }
+
+                TinhTienTuDong();
+            }
+        }
+
         private void TinhTienTuDong()
         {
             if (isLoadingData || cboXe.SelectedIndex == -1)
             {
                 txtTongTien.Text = "0 VNĐ";
+                txtSoTienGiam.Text = "0 VNĐ"; // THÊM MỚI
+                txtThanhToan.Text = "0 VNĐ"; // THÊM MỚI
                 return;
             }
 
@@ -387,6 +458,8 @@ namespace UI.FormUI
                 if (row == null)
                 {
                     txtTongTien.Text = "0 VNĐ";
+                    txtSoTienGiam.Text = "0 VNĐ";
+                    txtThanhToan.Text = "0 VNĐ";
                     return;
                 }
 
@@ -401,14 +474,44 @@ namespace UI.FormUI
                 );
 
                 txtTongTien.Text = tongTien.ToString("N0") + " VNĐ";
-                txtTongTien.BackColor = System.Drawing.Color.FromArgb(200, 230, 201);
-                txtTongTien.ForeColor = System.Drawing.Color.FromArgb(56, 142, 60);
+
+                // TÍNH KHUYẾN MÃI
+                decimal soTienGiam = 0;
+                if (!string.IsNullOrWhiteSpace(selectedMaKM))
+                {
+                    string errorMessage;
+                    soTienGiam = giaoDichThueBLL.TinhGiaTriGiamKhuyenMai(
+                        selectedMaKM,
+                        tongTien,
+                        ngayBatDau,
+                        out errorMessage
+                    );
+
+                    if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        MessageBox.Show(errorMessage, "Lỗi khuyến mãi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        cboKhuyenMai.SelectedIndex = 0; // Reset về "Không áp dụng"
+                        return;
+                    }
+                }
+
+                decimal thanhToan = tongTien - soTienGiam;
+
+                // HIỂN THỊ
+                txtSoTienGiam.Text = soTienGiam.ToString("N0") + " VNĐ";
+                txtSoTienGiam.ForeColor = System.Drawing.Color.FromArgb(244, 67, 54);
+
+                txtThanhToan.Text = thanhToan.ToString("N0") + " VNĐ";
+                txtThanhToan.BackColor = System.Drawing.Color.FromArgb(200, 230, 201);
+                txtThanhToan.ForeColor = System.Drawing.Color.FromArgb(56, 142, 60);
+                txtThanhToan.Font = new System.Drawing.Font(txtThanhToan.Font.FontFamily, 12F, System.Drawing.FontStyle.Bold);
             }
             catch (Exception ex)
             {
                 txtTongTien.Text = "0 VNĐ";
-                txtTongTien.BackColor = System.Drawing.Color.White;
-                txtTongTien.ForeColor = System.Drawing.Color.Black;
+                txtSoTienGiam.Text = "0 VNĐ";
+                txtThanhToan.Text = "0 VNĐ";
                 System.Diagnostics.Debug.WriteLine($"Lỗi tính tiền: {ex.Message}");
             }
         }
@@ -445,6 +548,26 @@ namespace UI.FormUI
                 decimal tongTien = giaoDichThueBLL.TinhTongGiaThue(
                     ngayBatDau, ngayKetThuc, giaThueNgay);
 
+                // TÍNH KHUYẾN MÃI
+                decimal soTienGiam = 0;
+                decimal tongThanhToan = tongTien;
+
+                if (!string.IsNullOrWhiteSpace(selectedMaKM))
+                {
+                    string errorKM;
+                    soTienGiam = giaoDichThueBLL.TinhGiaTriGiamKhuyenMai(
+                        selectedMaKM, tongTien, ngayBatDau, out errorKM);
+                    
+                    if (!string.IsNullOrWhiteSpace(errorKM))
+                    {
+                        MessageBox.Show(errorKM, "Lỗi khuyến mãi",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    tongThanhToan = tongTien - soTienGiam;
+                }
+
                 decimal tienCoc = 0;
                 string tienCocText = txtTienCoc.Text.Replace(",", "").Replace(".", "");
                 if (!decimal.TryParse(tienCocText, out tienCoc))
@@ -468,11 +591,6 @@ namespace UI.FormUI
                     return;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"MaTaiKhoan: {maTaiKhoan}");
-                System.Diagnostics.Debug.WriteLine($"MaKH: {maKH}");
-                System.Diagnostics.Debug.WriteLine($"ID_Xe: {idXe}");
-                System.Diagnostics.Debug.WriteLine($"TienCoc: {tienCoc:N0}");
-
                 GiaoDichThue gd = new GiaoDichThue
                 {
                     MaKH = maKH,
@@ -487,7 +605,12 @@ namespace UI.FormUI
                     GiayToGiuLai = cboGiayToGiuLai.SelectedItem?.ToString() ?? "",
                     MaTaiKhoan = maTaiKhoan,
                     TrangThaiDuyet = "Chờ duyệt",
-                    HinhThucThanhToan = null
+                    HinhThucThanhToan = null,
+                    // THÊM KHUYẾN MÃI
+                    MaKM = string.IsNullOrWhiteSpace(selectedMaKM) ? null : selectedMaKM,
+                    SoTienGiam = soTienGiam,
+                    TongTienTruocGiam = tongTien,
+                    TongThanhToan = tongThanhToan
                 };
 
                 string errorMessage = "";
@@ -495,12 +618,17 @@ namespace UI.FormUI
 
                 if (success)
                 {
+                    string khuyenMaiInfo = soTienGiam > 0 
+                        ? $"\nKhuyến mãi: -{soTienGiam:N0} VNĐ" 
+                        : "";
+
                     MessageBox.Show(
                         $"Tạo đơn thuê thành công!\n\n" +
                         $"Khách hàng: {((DataRowView)cboKhachHang.SelectedItem)["HoTenKH"]}\n" +
                         $"Xe: {rowXe["BienSo"]}\n" +
                         $"Thời gian: {ngayBatDau:dd/MM/yyyy} - {ngayKetThuc:dd/MM/yyyy}\n" +
-                        $"Tổng tiền: {tongTien:N0} VNĐ\n" +
+                        $"Tổng tiền: {tongTien:N0} VNĐ{khuyenMaiInfo}\n" +
+                        $"Thanh toán: {tongThanhToan:N0} VNĐ\n" +
                         $"Tiền cọc: {tienCoc:N0} VNĐ\n" +
                         $"Giấy tờ giữ lại: {gd.GiayToGiuLai}\n\n" +
                         $"Trạng thái: Chờ duyệt",

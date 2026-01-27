@@ -61,6 +61,12 @@ namespace BLL
                     gd.TrangThaiDuyet,
                     gd.NgayGiaoXeThucTe,
                     gd.KmBatDau,
+                    -- THÊM MỚI: Các cột khuyến mãi
+                    gd.MaKM,
+                    km.TenKM,
+                    gd.SoTienGiam,
+                    gd.TongTienTruocGiam,
+                    gd.TongThanhToan,
                     CASE 
                         WHEN gd.NgayKetThuc < GETDATE() AND gd.TrangThai = N'Đang thuê' 
                         THEN DATEDIFF(DAY, gd.NgayKetThuc, GETDATE())
@@ -81,6 +87,7 @@ namespace BLL
                     INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
                     LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
                     LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                    LEFT JOIN KhuyenMai km ON gd.MaKM = km.MaKM
                     WHERE gd.TrangThaiDuyet IN (N'Chờ duyệt', N'Đã duyệt')
                     ORDER BY 
                     CASE 
@@ -98,43 +105,49 @@ namespace BLL
 
         public DataTable GetGiaoDichThueById(int maGDThue)
         {
-            //lay du lieu tu db
             string query = @"
-                SELECT 
-                    gd.MaGDThue, 
-                    gd.MaKH, 
-                    kh.HoTenKH, 
-                    kh.Sdt AS SdtKhachHang,
-                    gd.ID_Xe, 
-                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
-                    xe.BienSo,
-                    gd.NgayBatDau, 
-                    gd.NgayKetThuc,
-                    DATEDIFF(DAY, gd.NgayBatDau, gd.NgayKetThuc) AS SoNgayThue,
-                    gd.GiaThueNgay,
-                    gd.TongGia, 
-                    gd.TrangThai,
-                    gd.TrangThaiThanhToan, 
-                    gd.HinhThucThanhToan,
-                    gd.SoTienCoc,
-                    gd.GiayToGiuLai,
-                    gd.TrangThaiDuyet,
-                    gd.NguoiDuyet,
-                    gd.NgayDuyet,
-                    gd.GhiChuDuyet,
-                    gd.NgayGiaoXeThucTe,
-                    gd.KmBatDau,
-                    nv.HoTenNV AS TenNhanVien
-                FROM GiaoDichThue gd
-                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
-                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
-                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
-                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
-                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
-                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
-                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                WHERE gd.MaGDThue = @MaGDThue";
+        SELECT 
+            gd.MaGDThue, 
+            gd.MaKH, 
+            kh.HoTenKH, 
+            kh.Sdt AS SdtKhachHang,
+            gd.ID_Xe, 
+            CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS TenXe,
+            xe.BienSo,
+            gd.NgayBatDau, 
+            gd.NgayKetThuc,
+            DATEDIFF(DAY, gd.NgayBatDau, gd.NgayKetThuc) AS SoNgayThue,
+            gd.GiaThueNgay,
+            gd.TongGia, 
+            gd.TrangThai,
+            gd.TrangThaiThanhToan, 
+            gd.HinhThucThanhToan,
+            gd.SoTienCoc,
+            gd.GiayToGiuLai,
+            gd.TrangThaiDuyet,
+            gd.NguoiDuyet,
+            gd.NgayDuyet,
+            gd.GhiChuDuyet,
+            gd.NgayGiaoXeThucTe,
+            gd.KmBatDau,
+            -- THÊM MỚI: Các cột khuyến mãi
+            gd.MaKM,
+            km.TenKM,
+            gd.SoTienGiam,
+            gd.TongTienTruocGiam,
+            gd.TongThanhToan,
+            nv.HoTenNV AS TenNhanVien
+        FROM GiaoDichThue gd
+        INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+        INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+        INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+        INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+        INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+        INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+        LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+        LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+        LEFT JOIN KhuyenMai km ON gd.MaKM = km.MaKM
+        WHERE gd.MaGDThue = @MaGDThue";
 
             SqlParameter[] parameters = { new SqlParameter("@MaGDThue", maGDThue) };
             return DataProvider.ExecuteQuery(query, parameters);
@@ -1019,26 +1032,147 @@ namespace BLL
 
         #endregion
 
+        #region KHUYẾN MÃI
+
         /// <summary>
-        /// Lấy tiền cọc quy định của xe từ bảng XeMay
+        /// Lấy danh sách khuyến mãi khả dụng cho thuê xe
+        /// </summary>
+        public DataTable GetKhuyenMaiThueXe(DateTime? ngayThue = null)
+        {
+            if (!ngayThue.HasValue)
+            {
+                ngayThue = DateTime.Now;
+            }
+
+            return giaoDichThueDAL.GetKhuyenMaiThueXe(ngayThue.Value);
+        }
+
+        /// <summary>
+        /// Kiểm tra và tính giá trị giảm từ khuyến mãi
+        /// </summary>
+        public decimal TinhGiaTriGiamKhuyenMai(string maKM, decimal tongTienThue, DateTime ngayThue, out string errorMessage)
+        {
+            errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(maKM))
+            {
+                return 0;
+            }
+
+            // Kiểm tra khuyến mãi hợp lệ
+            if (!giaoDichThueDAL.KiemTraKhuyenMaiHopLe(maKM, ngayThue, out errorMessage))
+            {
+                return 0;
+            }
+
+            // Tính giá trị giảm
+            return giaoDichThueDAL.TinhGiaTriGiamKhuyenMai(maKM, tongTienThue, out errorMessage);
+        }
+
+        /// <summary>
+        /// Cập nhật khuyến mãi cho giao dịch thuê (chỉ khi đơn chưa duyệt hoặc chờ giao xe)
+        /// </summary>
+        public bool CapNhatKhuyenMai(int maGDThue, string maKM, out string errorMessage)
+        {
+            errorMessage = "";
+
+            try
+            {
+                // Lấy thông tin giao dịch
+                DataTable dt = GetGiaoDichThueById(maGDThue);
+                if (dt.Rows.Count == 0)
+                {
+                    errorMessage = "Không tìm thấy giao dịch!";
+                    return false;
+                }
+
+                DataRow row = dt.Rows[0];
+                string trangThai = row["TrangThai"].ToString();
+
+                // Chỉ cho phép cập nhật khuyến mãi khi đơn chưa giao xe
+                if (trangThai != "Chờ xác nhận" && trangThai != "Chờ giao xe")
+                {
+                    errorMessage = $"Không thể cập nhật khuyến mãi cho đơn ở trạng thái '{trangThai}'!";
+                    return false;
+                }
+
+                decimal tongTienTruocGiam = Convert.ToDecimal(row["TongGia"]);
+                DateTime ngayBatDau = Convert.ToDateTime(row["NgayBatDau"]);
+
+                decimal soTienGiam = 0;
+                decimal tongThanhToan = tongTienTruocGiam;
+
+                // Nếu có mã khuyến mãi
+                if (!string.IsNullOrWhiteSpace(maKM))
+                {
+                    // Kiểm tra và tính giảm giá
+                    soTienGiam = TinhGiaTriGiamKhuyenMai(maKM, tongTienTruocGiam, ngayBatDau, out errorMessage);
+                    if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        return false;
+                    }
+
+                    tongThanhToan = tongTienTruocGiam - soTienGiam;
+                }
+
+                // Cập nhật vào database
+                string query = @"
+                    UPDATE GiaoDichThue
+                    SET MaKM = @MaKM,
+                        SoTienGiam = @SoTienGiam,
+                        TongTienTruocGiam = @TongTienTruocGiam,
+                        TongThanhToan = @TongThanhToan
+                    WHERE MaGDThue = @MaGDThue";
+
+                SqlParameter[] parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@MaKM", string.IsNullOrWhiteSpace(maKM) ? (object)DBNull.Value : maKM),
+                    new SqlParameter("@SoTienGiam", soTienGiam),
+                    new SqlParameter("@TongTienTruocGiam", tongTienTruocGiam),
+                    new SqlParameter("@TongThanhToan", tongThanhToan),
+                    new SqlParameter("@MaGDThue", maGDThue)
+                };
+
+                int result = DataProvider.ExecuteNonQuery(query, parameters);
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi: " + ex.Message;
+                return false;
+            }
+        }
+        /// <summary>
+        /// Lấy tiền cọc quy định của xe từ database
         /// </summary>
         private decimal GetTienCocQuyDinhCuaXe(string idXe)
         {
             try
             {
-                string query = "SELECT ISNULL(TienCoc, 0) FROM XeMay WHERE ID_Xe = @ID_Xe";
+                string query = @"
+                    SELECT TOP 1 TienCoc 
+                    FROM ThongTinGiaXe 
+                    WHERE ID_Xe = @ID_Xe 
+                      AND PhanLoai = N'Cho thuê'
+                      AND TienCoc IS NOT NULL";
+
                 SqlParameter[] parameters = { new SqlParameter("@ID_Xe", idXe) };
+
                 object result = DataProvider.ExecuteScalar(query, parameters);
+
                 if (result != null && result != DBNull.Value)
                 {
                     return Convert.ToDecimal(result);
                 }
+
                 return 0;
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"Lỗi GetTienCocQuyDinhCuaXe: {ex.Message}");
                 return 0;
             }
         }
+        #endregion
     }
 }

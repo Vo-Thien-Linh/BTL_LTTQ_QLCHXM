@@ -28,6 +28,12 @@ namespace DTO
         public string GhiChuGiaoXe { get; set; }
         public int? KmBatDau { get; set; }
 
+        // ===== THÊM MỚI: KHUYẾN MÃI =====
+        public string MaKM { get; set; }
+        public decimal SoTienGiam { get; set; }
+        public decimal? TongTienTruocGiam { get; set; }
+        public decimal? TongThanhToan { get; set; }
+
         // Thông tin bổ sung
         public string TenKhachHang { get; set; }
         public string SdtKhachHang { get; set; }
@@ -41,6 +47,7 @@ namespace DTO
             TrangThaiDuyet = "Chờ duyệt";
             TrangThai = "Chờ xác nhận";
             TrangThaiThanhToan = "Chưa thanh toán";
+            SoTienGiam = 0;
         }
 
         public GiaoDichThue(int maGDThue, string iD_Xe, string maKH, DateTime ngayBatDau,
@@ -66,6 +73,7 @@ namespace DTO
             NguoiDuyet = nguoiDuyet;
             NgayDuyet = ngayDuyet;
             GhiChuDuyet = ghiChuDuyet;
+            SoTienGiam = 0;
         }
     }
 }
