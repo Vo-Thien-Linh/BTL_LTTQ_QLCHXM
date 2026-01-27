@@ -36,6 +36,14 @@ namespace UI.UserControlUI
         {
             try
             {
+                // Tự động cập nhật trạng thái khuyến mãi hết hạn
+                int updatedCount = khuyenMaiBLL.CapNhatTrangThaiKhuyenMaiHetHan();
+                if (updatedCount > 0)
+                {
+                    MessageBox.Show($"Đã tự động cập nhật {updatedCount} khuyến mãi sang trạng thái 'Hết hạn'",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 LoadComboBoxTimKiem();
                 LoadDanhSachKhuyenMai();
                 SetupDataGridView();

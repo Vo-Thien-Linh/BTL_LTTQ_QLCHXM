@@ -356,26 +356,103 @@ namespace DAL
         }
 
         /// <summary>
-        /// Tự động tạo mã khuyến mãi
+        /// Tự động tạo mã khuyến mãi (đảm bảo không trùng)
         /// </summary>
         public string GenerateMaKM()
         {
-            string query = @"
-                SELECT TOP 1 MaKM 
-                FROM KhuyenMai 
-                WHERE MaKM LIKE 'KM%' 
-                ORDER BY MaKM DESC";
-
-            object result = DataProvider.ExecuteScalar(query);
-
-            if (result != null)
+            try
             {
-                string lastMa = result.ToString();
-                int number = int.Parse(lastMa.Substring(2)) + 1;
+                string query = @"
+                    SELECT TOP 1 MaKM 
+                    FROM KhuyenMai 
+                    WHERE MaKM LIKE 'KM%' 
+                    ORDER BY MaKM DESC";
+
+                object result = DataProvider.ExecuteScalar(query);
+
+                int number = 1;
+                if (result != null && result != DBNull.Value)
+                {
+                    string lastMa = result.ToString().Trim();
+                    if (lastMa.Length >= 3 && lastMa.StartsWith("KM"))
+                    {
+                        string numberPart = lastMa.Substring(2);
+                        if (int.TryParse(numberPart, out int lastNumber))
+                        {
+                            number = lastNumber + 1;
+                        }
+                    }
+                }
+
+                // Kiểm tra mã mới có trùng không
+                string newMaKM;
+                int maxAttempts = 1000;
+                int attempts = 0;
+
+                do
+                {
+                    newMaKM = "KM" + number.ToString("D8");
+                    
+                    // Kiểm tra mã đã tồn tại chưa
+                    string checkQuery = "SELECT COUNT(*) FROM KhuyenMai WHERE MaKM = @MaKM";
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@MaKM", newMaKM)
+                    };
+                    
+                    int count = Convert.ToInt32(DataProvider.ExecuteScalar(checkQuery, parameters));
+                    
+                    if (count == 0)
+                    {
+                        return newMaKM;
+                    }
+                    
+                    number++;
+                    attempts++;
+                    
+                } while (attempts < maxAttempts);
+
+                // Nếu không tìm được mã duy nhất, dùng timestamp
+                number = (int)(DateTime.Now.Ticks % 100000000);
                 return "KM" + number.ToString("D8");
             }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"❌ Lỗi GenerateMaKM: {ex.Message}");
+                int number = (int)(DateTime.Now.Ticks % 100000000);
+                return "KM" + number.ToString("D8");
+            }
+        }
 
-            return "KM00000001";
+        /// <summary>
+        /// Tự động cập nhật trạng thái của các khuyến mãi đã hết hạn
+        /// Chuyển trạng thái từ "Hoạt động" sang "Hết hạn" nếu NgayKetThuc < ngày hiện tại
+        /// </summary>
+        /// <returns>Số lượng bản ghi đã được cập nhật</returns>
+        public int CapNhatTrangThaiKhuyenMaiHetHan()
+        {
+            try
+            {
+                string query = @"
+                    UPDATE KhuyenMai 
+                    SET TrangThai = N'Hết hạn' 
+                    WHERE TrangThai = N'Hoạt động' 
+                    AND NgayKetThuc < CAST(GETDATE() AS DATE)";
+
+                int rowsAffected = DataProvider.ExecuteNonQuery(query, null);
+                
+                if (rowsAffected > 0)
+                {
+                    System.Console.WriteLine($"✅ Đã tự động cập nhật {rowsAffected} khuyến mãi sang trạng thái 'Hết hạn'");
+                }
+                
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"❌ Lỗi CapNhatTrangThaiKhuyenMaiHetHan: {ex.Message}");
+                return 0;
+            }
         }
     }
 }

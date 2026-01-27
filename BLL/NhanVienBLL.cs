@@ -28,10 +28,19 @@ namespace BLL
                 return false;
             }
 
+            // ✅ Nếu mã nhân viên bị trùng, tự động tạo mã mới
             if (nhanVienDAL.CheckMaNVExists(nv.MaNV))
             {
-                errorMessage = "Mã nhân viên đã tồn tại!";
-                return false;
+                System.Console.WriteLine($"⚠️ Mã {nv.MaNV} đã tồn tại, tạo mã mới...");
+                nv.MaNV = nhanVienDAL.GenerateMaNV();
+                System.Console.WriteLine($"✅ Mã mới: {nv.MaNV}");
+                
+                // Kiểm tra lại lần nữa
+                if (nhanVienDAL.CheckMaNVExists(nv.MaNV))
+                {
+                    errorMessage = "Không thể tạo mã nhân viên duy nhất. Vui lòng thử lại!";
+                    return false;
+                }
             }
 
             // ✅ KIỂM TRA TRÙNG TRONG BẢNG NHÂN VIÊN

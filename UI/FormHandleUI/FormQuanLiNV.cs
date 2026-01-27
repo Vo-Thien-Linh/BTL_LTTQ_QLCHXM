@@ -594,6 +594,12 @@ namespace UI.FormUI
 
             try
             {
+                // ✅ Sinh mã nhân viên mới ngay trước khi lưu (chỉ ở chế độ thêm mới)
+                if (!isEditMode)
+                {
+                    txtMaNV.Text = nhanVienBLL.GenerateMaNV();
+                }
+
                 NhanVien nv = new NhanVien
                 {
                     MaNV = txtMaNV.Text.Trim(),

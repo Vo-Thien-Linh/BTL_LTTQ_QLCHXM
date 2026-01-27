@@ -464,6 +464,9 @@
     <EmbeddedResource Include="FormUI\FormThemDonThue.resx">
       <DependentUpon>FormThemDonThue.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormUI\FormXemHopDongMua.resx">
+      <DependentUpon>FormXemHopDongMua.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormUI\FormXemHopDongThue.resx">
       <DependentUpon>FormXemHopDongThue.cs</DependentUpon>
     </EmbeddedResource>

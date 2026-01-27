@@ -201,34 +201,67 @@ namespace DAL
         }
 
         /// <summary>
-        /// Tự động tạo mã khách hàng mới
+        /// Tự động tạo mã khách hàng mới (đảm bảo không trùng)
         /// </summary>
         public string GenerateMaKH()
         {
-            string query = "SELECT TOP 1 MaKH FROM KhachHang ORDER BY MaKH DESC";
-            object result = DataProvider.ExecuteScalar(query);
+            try
+            {
+                string query = "SELECT TOP 1 MaKH FROM KhachHang ORDER BY MaKH DESC";
+                object result = DataProvider.ExecuteScalar(query);
 
-            if (result == null || result == DBNull.Value)
-            {
-                return "KH0001";
-            }
+                int number = 1;
+                if (result != null && result != DBNull.Value)
+                {
+                    string lastMaKH = result.ToString().Trim();
+                    
+                    if (lastMaKH.Length >= 3 && lastMaKH.StartsWith("KH"))
+                    {
+                        string numberPart = lastMaKH.Substring(2);
+                        if (int.TryParse(numberPart, out int lastNumber))
+                        {
+                            number = lastNumber + 1;
+                        }
+                    }
+                }
 
-            string lastMaKH = result.ToString().Trim();
-            
-            // Xử lý cả trường hợp mã có thể không chuẩn
-            string numberPart = lastMaKH.Substring(2); // Bỏ "KH"
-            int number;
-            
-            // Parse số, bỏ qua các số 0 đằng trước
-            if (int.TryParse(numberPart, out number))
-            {
-                number++;
-                return "KH" + number.ToString("D4"); // Chỉ còn 4 chữ số
+                // Kiểm tra mã mới có trùng không
+                string newMaKH;
+                int maxAttempts = 1000;
+                int attempts = 0;
+
+                do
+                {
+                    newMaKH = "KH" + number.ToString("D4");
+                    
+                    // Kiểm tra mã đã tồn tại chưa
+                    string checkQuery = "SELECT COUNT(*) FROM KhachHang WHERE MaKH = @MaKH";
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@MaKH", newMaKH)
+                    };
+                    
+                    int count = Convert.ToInt32(DataProvider.ExecuteScalar(checkQuery, parameters));
+                    
+                    if (count == 0)
+                    {
+                        return newMaKH;
+                    }
+                    
+                    number++;
+                    attempts++;
+                    
+                } while (attempts < maxAttempts);
+
+                // Nếu không tìm được mã duy nhất, dùng timestamp
+                number = (int)(DateTime.Now.Ticks % 10000);
+                return "KH" + number.ToString("D4");
             }
-            else
+            catch (Exception ex)
             {
-                // Nếu parse thất bại, trả về mã mặc định
-                return "KH0001";
+                System.Console.WriteLine($"❌ Lỗi GenerateMaKH: {ex.Message}");
+                int number = (int)(DateTime.Now.Ticks % 10000);
+                return "KH" + number.ToString("D4");
             }
         }
 

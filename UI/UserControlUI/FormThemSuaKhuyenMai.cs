@@ -186,6 +186,28 @@ namespace UI.UserControlUI
                     return;
                 }
 
+                // Kiểm tra ngày bắt đầu và ngày kết thúc không được nhỏ hơn ngày hiện tại khi thêm mới
+                if (!isEditMode)
+                {
+                    DateTime today = DateTime.Now.Date;
+                    
+                    if (dtpNgayBatDau.Value.Date < today)
+                    {
+                        MessageBox.Show("Ngày bắt đầu không được nhỏ hơn ngày hiện tại!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        dtpNgayBatDau.Focus();
+                        return;
+                    }
+
+                    if (dtpNgayKetThuc.Value.Date < today)
+                    {
+                        MessageBox.Show("Ngày kết thúc không được nhỏ hơn ngày hiện tại!", "Thông báo",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        dtpNgayKetThuc.Focus();
+                        return;
+                    }
+                }
+
                 // Validate theo loại khuyến mãi
                 if (cboLoaiKhuyenMai.SelectedItem.ToString() == "Giảm %")
                 {

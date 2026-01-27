@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
@@ -18,7 +19,34 @@ namespace UI.FormUI
             hopDongMuaBLL = new HopDongMuaBLL();
 
             InitializeDataGrid();
+            LoadComboBoxes();
             LoadHopDong();
+        }
+
+        private void LoadComboBoxes()
+        {
+            // ComboBox tìm kiếm theo
+            cboTimKiemTheo.Items.Clear();
+            cboTimKiemTheo.Items.Add("Tất cả");
+            cboTimKiemTheo.Items.Add("Mã hợp đồng");
+            cboTimKiemTheo.Items.Add("Mã giao dịch");
+            cboTimKiemTheo.Items.Add("Khách hàng");
+            cboTimKiemTheo.Items.Add("Số điện thoại");
+            cboTimKiemTheo.Items.Add("Biển số xe");
+            cboTimKiemTheo.Items.Add("Tên xe");
+            cboTimKiemTheo.SelectedIndex = 0;
+
+            // ComboBox trạng thái
+            cboTrangThai.Items.Clear();
+            cboTrangThai.Items.Add("Tất cả");
+            cboTrangThai.Items.Add("Đang hiệu lực");
+            cboTrangThai.Items.Add("Hết hạn");
+            cboTrangThai.Items.Add("Hủy");
+            cboTrangThai.SelectedIndex = 0;
+
+            // Set ngày mặc định
+            dtpTuNgay.Value = DateTime.Now.AddMonths(-3);
+            dtpDenNgay.Value = DateTime.Now;
         }
 
         private void InitializeDataGrid()
@@ -156,22 +184,97 @@ namespace UI.FormUI
 
         private void BtnTimKiem_Click(object sender, EventArgs e)
         {
-            string keyword = txtTimKiem.Text.Trim();
-
-            if (string.IsNullOrEmpty(keyword))
-            {
-                LoadHopDong();
-                return;
-            }
-
             try
             {
                 DataTable dt = hopDongMuaBLL.GetAllHopDongMua();
                 DataView dv = dt.DefaultView;
-                dv.RowFilter = $"HoTenKH LIKE '%{keyword}%' OR Sdt LIKE '%{keyword}%' OR BienSo LIKE '%{keyword}%' OR TenXe LIKE '%{keyword}%' OR MaHDM = '{keyword}' OR MaGDBan = '{keyword}'";
+                string filter = "";
 
+                // Lọc theo từ khóa
+                string keyword = txtTimKiem.Text.Trim();
+                string timKiemTheo = cboTimKiemTheo.SelectedItem?.ToString();
+
+                if (!string.IsNullOrEmpty(keyword) && timKiemTheo != "Tất cả")
+                {
+                    switch (timKiemTheo)
+                    {
+                        case "Mã hợp đồng":
+                            // MaHDM có thể là chuỗi
+                            filter = $"MaHDM LIKE '%{keyword}%'";
+                            break;
+                        case "Mã giao dịch":
+                            // MaGDBan là số nguyên
+                            if (int.TryParse(keyword, out int maGD))
+                            {
+                                filter = $"MaGDBan = {maGD}";
+                            }
+                            else
+                            {
+                                filter = "1=0"; // Không tìm thấy
+                            }
+                            break;
+                        case "Khách hàng":
+                            filter = $"HoTenKH LIKE '%{keyword}%'";
+                            break;
+                        case "Số điện thoại":
+                            filter = $"Sdt LIKE '%{keyword}%'";
+                            break;
+                        case "Biển số xe":
+                            filter = $"BienSo LIKE '%{keyword}%'";
+                            break;
+                        case "Tên xe":
+                            filter = $"TenXe LIKE '%{keyword}%'";
+                            break;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(keyword))
+                {
+                    // Tìm kiếm tất cả
+                    List<string> conditions = new List<string>();
+                    
+                    // Tìm trong các trường chuỗi
+                    conditions.Add($"HoTenKH LIKE '%{keyword}%'");
+                    conditions.Add($"Sdt LIKE '%{keyword}%'");
+                    conditions.Add($"BienSo LIKE '%{keyword}%'");
+                    conditions.Add($"TenXe LIKE '%{keyword}%'");
+                    conditions.Add($"MaHDM LIKE '%{keyword}%'");
+                    
+                    // Thử tìm MaGDBan nếu là số
+                    if (int.TryParse(keyword, out int maGD))
+                    {
+                        conditions.Add($"MaGDBan = {maGD}");
+                    }
+                    
+                    filter = string.Join(" OR ", conditions);
+                }
+
+                // Lọc theo ngày
+                DateTime tuNgay = dtpTuNgay.Value.Date;
+                DateTime denNgay = dtpDenNgay.Value.Date.AddDays(1).AddSeconds(-1);
+
+                string dateFilter = $"NgayLap >= #{tuNgay:MM/dd/yyyy}# AND NgayLap <= #{denNgay:MM/dd/yyyy}#";
+                
+                if (!string.IsNullOrEmpty(filter))
+                    filter += " AND " + dateFilter;
+                else
+                    filter = dateFilter;
+
+                // Lọc theo trạng thái
+                string trangThai = cboTrangThai.SelectedItem?.ToString();
+                if (trangThai != "Tất cả" && !string.IsNullOrEmpty(trangThai))
+                {
+                    filter += $" AND TrangThaiHopDong = '{trangThai}'";
+                }
+
+                dv.RowFilter = filter;
                 dgvHopDong.DataSource = dv.ToTable();
                 lblRecordCount.Text = $"Tổng số hợp đồng: {dv.Count}";
+
+                if (dv.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy hợp đồng nào phù hợp với điều kiện tìm kiếm!",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -183,6 +286,10 @@ namespace UI.FormUI
         private void BtnLamMoi_Click(object sender, EventArgs e)
         {
             txtTimKiem.Clear();
+            cboTimKiemTheo.SelectedIndex = 0;
+            cboTrangThai.SelectedIndex = 0;
+            dtpTuNgay.Value = DateTime.Now.AddMonths(-3);
+            dtpDenNgay.Value = DateTime.Now;
             LoadHopDong();
         }
 

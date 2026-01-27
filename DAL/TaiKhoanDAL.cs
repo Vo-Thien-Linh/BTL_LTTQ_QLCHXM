@@ -278,7 +278,7 @@ namespace DAL
         }
 
         /// <summary>
-        /// Tự động tạo mã tài khoản mới
+        /// Tự động tạo mã tài khoản mới (đảm bảo không trùng)
         /// </summary>
         public string GenerateMaTaiKhoan()
         {
@@ -290,39 +290,68 @@ namespace DAL
                 System.Console.WriteLine($"=== GenerateMaTaiKhoan ===");
                 System.Console.WriteLine($"Query result: {result}");
 
-                if (result == null || result == DBNull.Value)
+                int number = 1;
+                if (result != null && result != DBNull.Value)
                 {
-                    System.Console.WriteLine("Bảng TaiKhoan rỗng, tạo mã đầu tiên: TK00000001");
-                    return "TK00000001";
+                    string lastMaTK = result.ToString().Trim();
+                    System.Console.WriteLine($"Mã TK cuối cùng: [{lastMaTK}]");
+
+                    if (lastMaTK.Length >= 3 && lastMaTK.StartsWith("TK"))
+                    {
+                        string numberPart = lastMaTK.Substring(2).Trim();
+                        System.Console.WriteLine($"Phần số: [{numberPart}]");
+
+                        if (int.TryParse(numberPart, out int lastNumber))
+                        {
+                            number = lastNumber + 1;
+                        }
+                    }
                 }
 
-                string lastMaTK = result.ToString().Trim(); // Trim khoảng trắng
-                System.Console.WriteLine($"Mã TK cuối cùng: [{lastMaTK}]");
+                // Kiểm tra mã mới có trùng không, nếu trùng thì tăng lên
+                string newMaTK;
+                int maxAttempts = 1000;
+                int attempts = 0;
 
-                if (lastMaTK.Length < 3 || !lastMaTK.StartsWith("TK"))
+                do
                 {
-                    System.Console.WriteLine($"⚠️ Mã không hợp lệ, tạo mã mới: TK00000001");
-                    return "TK00000001";
-                }
+                    newMaTK = "TK" + number.ToString("D8");
+                    
+                    // Kiểm tra mã đã tồn tại chưa
+                    string checkQuery = "SELECT COUNT(*) FROM TaiKhoan WHERE MaTaiKhoan = @MaTaiKhoan";
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@MaTaiKhoan", newMaTK)
+                    };
+                    
+                    int count = Convert.ToInt32(DataProvider.ExecuteScalar(checkQuery, parameters));
+                    
+                    if (count == 0)
+                    {
+                        // Mã không trùng, trả về
+                        System.Console.WriteLine($"✅ Mã TK mới: {newMaTK}");
+                        return newMaTK;
+                    }
+                    
+                    // Mã bị trùng, tăng số lên
+                    System.Console.WriteLine($"⚠️ Mã {newMaTK} đã tồn tại, thử mã tiếp theo...");
+                    number++;
+                    attempts++;
+                    
+                } while (attempts < maxAttempts);
 
-                string numberPart = lastMaTK.Substring(2).Trim();
-                System.Console.WriteLine($"Phần số: [{numberPart}]");
-
-                if (!int.TryParse(numberPart, out int number))
-                {
-                    System.Console.WriteLine($"❌ Không parse được số từ: [{numberPart}]");
-                    return "TK00000001";
-                }
-
-                number++;
-                string newMaTK = "TK" + number.ToString("D8");
-                System.Console.WriteLine($"✅ Mã TK mới: {newMaTK}");
+                // Nếu vẫn không tìm được mã duy nhất, sử dụng timestamp
+                number = (int)(DateTime.Now.Ticks % 100000000);
+                newMaTK = "TK" + number.ToString("D8");
+                System.Console.WriteLine($"⚠️ Sử dụng timestamp: {newMaTK}");
                 return newMaTK;
             }
             catch (Exception ex)
             {
                 System.Console.WriteLine($"❌ Lỗi GenerateMaTaiKhoan: {ex.Message}");
-                return "TK00000001";
+                // Trường hợp lỗi, trả về mã với timestamp
+                int number = (int)(DateTime.Now.Ticks % 100000000);
+                return "TK" + number.ToString("D8");
             }
         }
 
@@ -344,9 +373,9 @@ namespace DAL
                 // Mật khẩu = admin nhập
                 string matKhau = password;
 
-                // ✅ Xác định loại tài khoản dựa trên chức vụ
+                // ✅ Xác định loại tài khoản dựa trên chức vụ (chỉ có 4 role)
                 string chucVuNormalized = chucVu?.Trim().ToLower() ?? "";
-                string loaiTaiKhoan = "NhanVien"; // Mặc định
+                string loaiTaiKhoan = null; // Mặc định là null nếu không match
                 
                 if (chucVuNormalized == "quản lý" || chucVuNormalized == "quan ly")
                     loaiTaiKhoan = "QuanLy";
@@ -356,6 +385,7 @@ namespace DAL
                     loaiTaiKhoan = "KyThuat";
                 else if (chucVuNormalized == "bán hàng" || chucVuNormalized == "ban hang")
                     loaiTaiKhoan = "BanHang";
+                // Không có case "Nhân viên" nữa
 
                 // ✅ QUAN TRỌNG: Query phải đúng
                 string query = @"INSERT INTO TaiKhoan 
@@ -367,8 +397,8 @@ namespace DAL
                 {
             new SqlParameter("@MaTaiKhoan", maTaiKhoan),
             new SqlParameter("@TenDangNhap", tenDangNhap),
-            new SqlParameter("@Password", matKhau),  // Lưu mật khẩu vào cột Password
-            new SqlParameter("@LoaiTaiKhoan", loaiTaiKhoan),  // "QuanLy" hoặc "NhanVien"
+            new SqlParameter("@Password", matKhau),
+            new SqlParameter("@LoaiTaiKhoan", string.IsNullOrEmpty(loaiTaiKhoan) ? (object)DBNull.Value : loaiTaiKhoan),
             new SqlParameter("@TrangThaiTaiKhoan", "Hoạt động"),
             new SqlParameter("@MaNV", maNV),
             new SqlParameter("@NgayTao", DateTime.Now),
@@ -381,7 +411,7 @@ namespace DAL
                 System.Diagnostics.Debug.WriteLine($"Password: {matKhau}");
                 System.Diagnostics.Debug.WriteLine($"MaNV: {maNV}");
                 System.Diagnostics.Debug.WriteLine($"ChucVu: {chucVu}");
-                System.Diagnostics.Debug.WriteLine($"LoaiTaiKhoan: {loaiTaiKhoan}");
+                System.Diagnostics.Debug.WriteLine($"LoaiTaiKhoan: {loaiTaiKhoan ?? "NULL"}");
 
                 System.Console.WriteLine("=== BẮT ĐẦU TẠO TÀI KHOẢN ===");
                 System.Console.WriteLine($"Mã NV: {maNV} | Email: {email}");
@@ -442,8 +472,8 @@ namespace DAL
                 {
             new SqlParameter("@MaTaiKhoan", maTaiKhoan),
             new SqlParameter("@TenDangNhap", tenDangNhap),
-            new SqlParameter("@Password", matKhau),  // Lưu mật khẩu vào cột Password
-            new SqlParameter("@LoaiTaiKhoan", "NhanVien"),
+            new SqlParameter("@Password", matKhau),
+            new SqlParameter("@LoaiTaiKhoan", DBNull.Value),  // Không đặt role mặc định
             new SqlParameter("@TrangThaiTaiKhoan", "Hoạt động"),
             new SqlParameter("@MaNV", maNV),
             new SqlParameter("@NgayTao", DateTime.Now),

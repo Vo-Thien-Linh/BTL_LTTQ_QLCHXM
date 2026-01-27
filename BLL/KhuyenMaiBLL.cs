@@ -77,6 +77,96 @@ namespace BLL
         }
 
         /// <summary>
+        /// Tự động cập nhật trạng thái của các khuyến mãi đã hết hạn
+        /// </summary>
+        /// <returns>Số lượng khuyến mãi đã được cập nhật</returns>
+        public int CapNhatTrangThaiKhuyenMaiHetHan()
+        {
+            try
+            {
+                return khuyenMaiDAL.CapNhatTrangThaiKhuyenMaiHetHan();
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"❌ Lỗi BLL CapNhatTrangThaiKhuyenMaiHetHan: {ex.Message}");
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// Kiểm tra khuyến mãi có còn hiệu lực không
+        /// </summary>
+        public bool KiemTraKhuyenMaiHieuLuc(string maKM, out string errorMessage)
+        {
+            errorMessage = "";
+            
+            if (string.IsNullOrWhiteSpace(maKM))
+            {
+                errorMessage = "Mã khuyến mãi không được để trống!";
+                return false;
+            }
+
+            try
+            {
+                string query = @"
+                    SELECT 
+                        NgayBatDau,
+                        NgayKetThuc,
+                        TrangThai,
+                        TenKM
+                    FROM KhuyenMai
+                    WHERE MaKM = @MaKM";
+
+                System.Data.SqlClient.SqlParameter[] parameters = {
+                    new System.Data.SqlClient.SqlParameter("@MaKM", maKM)
+                };
+
+                DataTable dt = DAL.DataProvider.ExecuteQuery(query, parameters);
+
+                if (dt.Rows.Count == 0)
+                {
+                    errorMessage = "Khuyến mãi không tồn tại!";
+                    return false;
+                }
+
+                DataRow row = dt.Rows[0];
+                string trangThai = row["TrangThai"].ToString();
+                DateTime ngayBatDau = Convert.ToDateTime(row["NgayBatDau"]);
+                DateTime ngayKetThuc = Convert.ToDateTime(row["NgayKetThuc"]);
+                DateTime ngayHienTai = DateTime.Now;
+
+                if (trangThai != "Hoạt động")
+                {
+                    errorMessage = $"Khuyến mãi '{row["TenKM"]}' đang ở trạng thái: {trangThai}";
+                    return false;
+                }
+
+                if (ngayHienTai < ngayBatDau)
+                {
+                    errorMessage = $"Khuyến mãi '{row["TenKM"]}' chưa đến thời gian áp dụng!\n" +
+                                  $"Ngày bắt đầu: {ngayBatDau:dd/MM/yyyy}\n" +
+                                  $"Ngày hiện tại: {ngayHienTai:dd/MM/yyyy}";
+                    return false;
+                }
+
+                if (ngayHienTai > ngayKetThuc)
+                {
+                    errorMessage = $"Khuyến mãi '{row["TenKM"]}' đã hết hạn!\n" +
+                                  $"Ngày kết thúc: {ngayKetThuc:dd/MM/yyyy}\n" +
+                                  $"Ngày hiện tại: {ngayHienTai:dd/MM/yyyy}";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi khi kiểm tra khuyến mãi: " + ex.Message;
+                return false;
+            }
+        }
+
+        /// <summary>
         /// Thêm khuyến mãi mới
         /// </summary>
         public bool InsertKhuyenMai(KhuyenMaiDTO km, out string errorMessage)
