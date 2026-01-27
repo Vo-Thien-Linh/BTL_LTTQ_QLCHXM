@@ -33,6 +33,12 @@ namespace DAL
                     gd.NguoiDuyet,
                     gd.NgayDuyet,
                     gd.GhiChuDuyet,
+                    -- THÊM MỚI: Các cột khuyến mãi
+                    gd.MaKM,
+                    km.TenKM,
+                    gd.SoTienGiam,
+                    gd.TongTienTruocGiam,
+                    gd.TongThanhToan,
                     nv.HoTenNV AS TenNhanVien
                     FROM GiaoDichThue gd
                     INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
@@ -43,6 +49,7 @@ namespace DAL
                     INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
                     LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
                     LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                    LEFT JOIN KhuyenMai km ON gd.MaKM = km.MaKM
                     ORDER BY gd.NgayBatDau DESC";
 
             return DataProvider.ExecuteQuery(query);
@@ -98,47 +105,41 @@ namespace DAL
         /// Thêm giao dịch thuê mới
         public bool InsertGiaoDichThue(GiaoDichThue gd)
         {
-            try
-            {
-                string query = @"
-                INSERT INTO GiaoDichThue (
-                    ID_Xe, MaKH, NgayBatDau, NgayKetThuc,
-                    GiaThueNgay, TongGia, TrangThai, TrangThaiThanhToan,
-                    SoTienCoc, GiayToGiuLai, MaTaiKhoan, TrangThaiDuyet,
-                    HinhThucThanhToan
-                )
-                VALUES (
-                    @ID_Xe, @MaKH, @NgayBatDau, @NgayKetThuc,
-                    @GiaThueNgay, @TongGia, @TrangThai, @TrangThaiThanhToan,
-                    @SoTienCoc, @GiayToGiuLai, @MaTaiKhoan, @TrangThaiDuyet,
-                    @HinhThucThanhToan
-                )";
+            string query = @"
+                INSERT INTO GiaoDichThue 
+                (ID_Xe, MaKH, NgayBatDau, NgayKetThuc, GiaThueNgay, TongGia, 
+                 TrangThai, TrangThaiThanhToan, HinhThucThanhToan, SoTienCoc, 
+                 GiayToGiuLai, MaTaiKhoan, TrangThaiDuyet,
+                 MaKM, SoTienGiam, TongTienTruocGiam, TongThanhToan)
+                VALUES 
+                (@ID_Xe, @MaKH, @NgayBatDau, @NgayKetThuc, @GiaThueNgay, @TongGia, 
+                 @TrangThai, @TrangThaiThanhToan, @HinhThucThanhToan, @SoTienCoc, 
+                 @GiayToGiuLai, @MaTaiKhoan, @TrangThaiDuyet,
+                 @MaKM, @SoTienGiam, @TongTienTruocGiam, @TongThanhToan)";
 
-                SqlParameter[] parameters = new SqlParameter[]
-                {
-            new SqlParameter("@ID_Xe", gd.ID_Xe),
-            new SqlParameter("@MaKH", gd.MaKH),
-            new SqlParameter("@NgayBatDau", gd.NgayBatDau),
-            new SqlParameter("@NgayKetThuc", gd.NgayKetThuc),
-            new SqlParameter("@GiaThueNgay", gd.GiaThueNgay),
-            new SqlParameter("@TongGia", gd.TongGia),
-            new SqlParameter("@TrangThai", gd.TrangThai ?? "Chờ xác nhận"),
-            new SqlParameter("@TrangThaiThanhToan", gd.TrangThaiThanhToan ?? "Chưa thanh toán"),
-            new SqlParameter("@SoTienCoc", (object)gd.SoTienCoc ?? DBNull.Value),
-            new SqlParameter("@GiayToGiuLai", gd.GiayToGiuLai ?? ""),
-            new SqlParameter("@MaTaiKhoan", gd.MaTaiKhoan),
-            new SqlParameter("@TrangThaiDuyet", gd.TrangThaiDuyet ?? "Chờ duyệt"),
-            new SqlParameter("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value)
-                };
-
-                int result = DataProvider.ExecuteNonQuery(query, parameters);
-                return result > 0;
-            }
-            catch (Exception ex)
+            SqlParameter[] parameters = new SqlParameter[]
             {
-                System.Diagnostics.Debug.WriteLine($"DAL Insert Error: {ex.Message}");
-                throw new Exception("Lỗi khi thêm giao dịch thuê vào database: " + ex.Message);
-            }
+                new SqlParameter("@ID_Xe", gd.ID_Xe),
+                new SqlParameter("@MaKH", gd.MaKH),
+                new SqlParameter("@NgayBatDau", gd.NgayBatDau),
+                new SqlParameter("@NgayKetThuc", gd.NgayKetThuc),
+                new SqlParameter("@GiaThueNgay", gd.GiaThueNgay),
+                new SqlParameter("@TongGia", gd.TongGia),
+                new SqlParameter("@TrangThai", gd.TrangThai),
+                new SqlParameter("@TrangThaiThanhToan", gd.TrangThaiThanhToan),
+                new SqlParameter("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value),
+                new SqlParameter("@SoTienCoc", (object)gd.SoTienCoc ?? DBNull.Value),
+                new SqlParameter("@GiayToGiuLai", gd.GiayToGiuLai),
+                new SqlParameter("@MaTaiKhoan", gd.MaTaiKhoan),
+                new SqlParameter("@TrangThaiDuyet", gd.TrangThaiDuyet),
+                // THÊM KHUYẾN MÃI
+                new SqlParameter("@MaKM", string.IsNullOrWhiteSpace(gd.MaKM) ? (object)DBNull.Value : gd.MaKM),
+                new SqlParameter("@SoTienGiam", gd.SoTienGiam),
+                new SqlParameter("@TongTienTruocGiam", gd.TongTienTruocGiam ?? gd.TongGia),
+                new SqlParameter("@TongThanhToan", gd.TongThanhToan ?? gd.TongGia)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
         }
 
         /// Duyệt đơn thuê
@@ -253,5 +254,156 @@ namespace DAL
 
             return DataProvider.ExecuteQuery(query, parameters);
         }
+
+#region KHUYẾN MÃI
+
+/// <summary>
+/// Lấy danh sách khuyến mãi khả dụng cho thuê xe
+/// </summary>
+public DataTable GetKhuyenMaiThueXe(DateTime ngayThue)
+{
+    string query = @"
+        SELECT 
+            MaKM,
+            TenKM,
+            MoTa,
+            NgayBatDau,
+            NgayKetThuc,
+            LoaiKhuyenMai,
+            PhanTramGiam,
+            SoTienGiam,
+            GiaTriGiamToiDa,
+            LoaiApDung,
+            GhiChu,
+            CASE 
+                WHEN LoaiKhuyenMai = N'Giảm %' THEN 
+                    CONCAT(N'Giảm ', PhanTramGiam, N'%', 
+                        CASE WHEN GiaTriGiamToiDa IS NOT NULL 
+                        THEN CONCAT(N' (Tối đa ', FORMAT(GiaTriGiamToiDa, 'N0'), N'đ)') 
+                        ELSE N'' END)
+                WHEN LoaiKhuyenMai = N'Giảm tiền' THEN 
+                    CONCAT(N'Giảm ', FORMAT(SoTienGiam, 'N0'), N'đ')
+                ELSE N''
+            END AS MoTaGiam
+        FROM KhuyenMai
+        WHERE TrangThai = N'Hoạt động'
+            AND @NgayThue BETWEEN NgayBatDau AND NgayKetThuc
+            AND (LoaiApDung = N'Tất cả' OR LoaiApDung = N'Xe thuê')
+        ORDER BY NgayBatDau DESC";
+
+    SqlParameter[] parameters = new SqlParameter[]
+    {
+        new SqlParameter("@NgayThue", ngayThue)
+    };
+
+    return DataProvider.ExecuteQuery(query, parameters);
+}
+
+/// <summary>
+/// Kiểm tra khuyến mãi có hợp lệ không
+/// </summary>
+public bool KiemTraKhuyenMaiHopLe(string maKM, DateTime ngayThue, out string errorMessage)
+{
+    errorMessage = "";
+
+    if (string.IsNullOrWhiteSpace(maKM))
+    {
+        errorMessage = "Mã khuyến mãi không được để trống!";
+        return false;
+    }
+
+    string query = @"
+        SELECT COUNT(*) 
+        FROM KhuyenMai
+        WHERE MaKM = @MaKM
+            AND TrangThai = N'Hoạt động'
+            AND @NgayThue BETWEEN NgayBatDau AND NgayKetThuc
+            AND (LoaiApDung = N'Tất cả' OR LoaiApDung = N'Xe thuê')";
+
+    SqlParameter[] parameters = new SqlParameter[]
+    {
+        new SqlParameter("@MaKM", maKM),
+        new SqlParameter("@NgayThue", ngayThue)
+    };
+
+    int count = Convert.ToInt32(DataProvider.ExecuteScalar(query, parameters));
+
+    if (count == 0)
+    {
+        errorMessage = "Mã khuyến mãi không hợp lệ hoặc không áp dụng cho thuê xe!";
+        return false;
+    }
+
+    return true;
+}
+
+/// <summary>
+/// Tính giá trị giảm từ khuyến mãi
+/// </summary>
+public decimal TinhGiaTriGiamKhuyenMai(string maKM, decimal tongTienThue, out string errorMessage)
+{
+    errorMessage = "";
+
+    if (string.IsNullOrWhiteSpace(maKM))
+    {
+        return 0;
+    }
+
+    string query = @"
+        SELECT 
+            LoaiKhuyenMai,
+            PhanTramGiam,
+            SoTienGiam,
+            GiaTriGiamToiDa
+        FROM KhuyenMai
+        WHERE MaKM = @MaKM";
+
+    SqlParameter[] parameters = new SqlParameter[]
+    {
+        new SqlParameter("@MaKM", maKM)
+    };
+
+    DataTable dt = DataProvider.ExecuteQuery(query, parameters);
+
+    if (dt.Rows.Count == 0)
+    {
+        errorMessage = "Không tìm thấy khuyến mãi!";
+        return 0;
+    }
+
+    DataRow row = dt.Rows[0];
+    string loaiKM = row["LoaiKhuyenMai"].ToString();
+    decimal giaTriGiam = 0;
+
+    if (loaiKM == "Giảm %")
+    {
+        decimal phanTramGiam = Convert.ToDecimal(row["PhanTramGiam"]);
+        giaTriGiam = tongTienThue * phanTramGiam / 100;
+
+        // Áp dụng giới hạn tối đa
+        if (row["GiaTriGiamToiDa"] != DBNull.Value)
+        {
+            decimal giaTriGiamToiDa = Convert.ToDecimal(row["GiaTriGiamToiDa"]);
+            if (giaTriGiam > giaTriGiamToiDa)
+            {
+                giaTriGiam = giaTriGiamToiDa;
+            }
+        }
+    }
+    else if (loaiKM == "Giảm tiền")
+    {
+        giaTriGiam = Convert.ToDecimal(row["SoTienGiam"]);
+    }
+
+    // Không giảm quá tổng tiền
+    if (giaTriGiam > tongTienThue)
+    {
+        giaTriGiam = tongTienThue;
+    }
+
+    return giaTriGiam;
+}
+
+#endregion
     }
 }
