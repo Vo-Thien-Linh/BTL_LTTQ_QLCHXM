@@ -50,6 +50,22 @@ namespace UI.FormUI
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
         }
 
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            // Unsubscribe events để tránh memory leak
+            LanguageManagerBLL.Instance.LanguageChanged -= OnLanguageChanged_Menu;
+            ThemeManager.Instance.ThemeChanged -= OnThemeChanged;
+
+            // Cleanup timer
+            if (slideTimer != null)
+            {
+                slideTimer.Stop();
+                slideTimer.Dispose();
+            }
+
+            base.OnFormClosing(e);
+        }
+
         // --- SỬA ĐÂY: Hàm chọn nút ---
         private void SelectSidebarButton(Button btn)
         {
@@ -446,7 +462,7 @@ namespace UI.FormUI
             };
 
             int currentY = 0;
-            int buttonHeight = 98; // Chiều cao của mỗi button
+            int buttonHeight = 80; // Chiều cao của mỗi button
             int buttonWidth = 267; // Chiều rộng của button
 
             foreach (Button btn in menuButtons)
@@ -560,14 +576,17 @@ namespace UI.FormUI
         private void btnDangxuat_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
-                "Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?",
-                "Xác Nhận Đăng Xuất",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
+        "Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?",
+        "Xác Nhận Đăng Xuất",
+        MessageBoxButtons.YesNo,
+        MessageBoxIcon.Question
+    );
 
             if (result == DialogResult.Yes)
             {
+                // Cleanup trước khi đóng
+                CleanupBeforeLogout();
+
                 MessageBox.Show(
                     "Đăng xuất thành công! Hẹn gặp lại.",
                     "Thông Báo",
@@ -575,13 +594,60 @@ namespace UI.FormUI
                     MessageBoxIcon.Information
                 );
 
-                this.Hide();
-
-                LoginForm loginForm = new LoginForm();
-                loginForm.ShowDialog();
+                // Đóng MainForm - LoginForm sẽ tự động hiện lại
                 this.Close();
             }
         }
+
+        private void CleanupBeforeLogout()
+        {
+            try
+            {
+                // Clear tất cả controls trong pnlContent
+                pnlContent.Controls.Clear();
+
+                // Unsubscribe events
+                LanguageManagerBLL.Instance.LanguageChanged -= OnLanguageChanged_Menu;
+                ThemeManager.Instance.ThemeChanged -= OnThemeChanged;
+
+                // Clear event handlers của buttons
+                if (sidebarButtons != null)
+                {
+                    foreach (var btn in sidebarButtons)
+                    {
+                        btn.MouseEnter -= Button_MouseEnter;
+                        btn.MouseLeave -= Button_MouseLeave;
+                        btn.MouseDown -= Button_MouseDown;
+                        btn.MouseUp -= Button_MouseUp;
+                    }
+                }
+
+                btnDangXuat.MouseEnter -= LogoutButton_MouseEnter;
+                btnDangXuat.MouseLeave -= LogoutButton_MouseLeave;
+                btnDangXuat.MouseDown -= LogoutButton_MouseDown;
+                btnDangXuat.MouseUp -= LogoutButton_MouseUp;
+
+                // Stop và dispose timer
+                if (slideTimer != null)
+                {
+                    slideTimer.Stop();
+                    slideTimer.Tick -= SlideTimer_Tick;
+                    slideTimer.Dispose();
+                    slideTimer = null;
+                }
+
+                // Clear current user
+                CurrentUser.Clear();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi cleanup: {ex.Message}");
+            }
+        }
+
+        
+
+
 
         // Các hàm hỗ trợ khác giữ nguyên...
 
