@@ -92,6 +92,18 @@ namespace UI.FormUI
             };
             dgvHopDong.Columns.Add(btnXem);
 
+            // Thêm nút xuất hóa đơn
+            DataGridViewButtonColumn btnXuatHoaDon = new DataGridViewButtonColumn
+            {
+                Name = "btnXuatHoaDon",
+                HeaderText = "Hóa đơn",
+                Text = "📄 Xuất",
+                UseColumnTextForButtonValue = true,
+                Width = 80,
+                FlatStyle = FlatStyle.Flat
+            };
+            dgvHopDong.Columns.Add(btnXuatHoaDon);
+
             // Event
             dgvHopDong.CellClick += DgvHopDong_CellClick;
 
@@ -173,12 +185,18 @@ namespace UI.FormUI
         {
             if (e.RowIndex < 0) return;
 
+            int maGDBan = Convert.ToInt32(dgvHopDong.Rows[e.RowIndex].Cells["MaGDBan"].Value);
+
             // Click nút Xem
             if (e.ColumnIndex == dgvHopDong.Columns["btnXem"].Index)
             {
-                int maGDBan = Convert.ToInt32(dgvHopDong.Rows[e.RowIndex].Cells["MaGDBan"].Value);
                 FormXemHopDongMua formXem = new FormXemHopDongMua(maGDBan);
                 formXem.ShowDialog();
+            }
+            // Click nút Xuất hóa đơn
+            else if (e.ColumnIndex == dgvHopDong.Columns["btnXuatHoaDon"].Index)
+            {
+                XuatHoaDonMuaXe(maGDBan);
             }
         }
 
@@ -345,6 +363,60 @@ namespace UI.FormUI
             {
                 MessageBox.Show("Lỗi xuất file: " + ex.Message, "Lỗi",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Xuất hóa đơn mua xe (bao gồm xe và phụ tùng nếu có)
+        /// </summary>
+        private void XuatHoaDonMuaXe(int maGDBan)
+        {
+            try
+            {
+                // Lấy thông tin giao dịch bán
+                GiaoDichBanBLL giaoDichBanBLL = new GiaoDichBanBLL();
+                DataTable dtGiaoDich = giaoDichBanBLL.GetGiaoDichBanByMa(maGDBan);
+                
+                if (dtGiaoDich == null || dtGiaoDich.Rows.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy thông tin giao dịch!", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                DataRow giaoDich = dtGiaoDich.Rows[0];
+
+                // Lấy chi tiết phụ tùng (nếu có)
+                DataTable dtPhuTung = giaoDichBanBLL.GetChiTietPhuTungBan(maGDBan);
+
+                // Chọn nơi lưu file
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+                saveDialog.FileName = $"HoaDon_MuaXe_{maGDBan}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                saveDialog.Title = "Lưu hóa đơn mua xe";
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Xuất PDF
+                    PDFHelper.ExportHoaDonMuaXe(giaoDich, dtPhuTung, saveDialog.FileName);
+
+                    // Thông báo thành công và hỏi có muốn mở file không
+                    var result = MessageBox.Show(
+                        "Xuất hóa đơn thành công!\n\nBạn có muốn mở file vừa xuất không?",
+                        "Thành công",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(saveDialog.FileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất hóa đơn: {ex.Message}",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

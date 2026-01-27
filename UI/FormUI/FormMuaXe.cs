@@ -429,18 +429,16 @@ namespace UI.FormUI
                     
                     if (maHDM > 0)
                     {
-                        // Thông báo ngắn gọn
+                        // Thông báo ngắn gọn và hỏi có muốn xuất hóa đơn không
                         var result = MessageBox.Show(
-                            "Bán xe thành công!\n\nBạn có muốn xem hợp đồng không?",
+                            "Bán xe thành công!\n\nBạn có muốn xuất hóa đơn mua xe không?",
                             "Thành công",
                             MessageBoxButtons.YesNo,
                             MessageBoxIcon.Information);
                         
                         if (result == DialogResult.Yes)
                         {
-                            // Mở form xem hợp đồng
-                            FormXemHopDongMua frmXemHD = new FormXemHopDongMua(maGDBan);
-                            frmXemHD.ShowDialog();
+                            XuatHoaDonMuaXe(maGDBan);
                         }
                     }
                     else
@@ -828,6 +826,59 @@ namespace UI.FormUI
             catch (Exception ex)
             {
                 // Bỏ qua lỗi tính tổng tiền
+            }
+        }
+
+        /// <summary>
+        /// Xuất hóa đơn mua xe (bao gồm xe và phụ tùng nếu có)
+        /// </summary>
+        private void XuatHoaDonMuaXe(int maGDBan)
+        {
+            try
+            {
+                // Lấy thông tin giao dịch bán
+                DataTable dtGiaoDich = giaoDichBanBLL.GetGiaoDichBanByMa(maGDBan);
+                
+                if (dtGiaoDich == null || dtGiaoDich.Rows.Count == 0)
+                {
+                    MessageBox.Show("Không tìm thấy thông tin giao dịch!", "Lỗi",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                DataRow giaoDich = dtGiaoDich.Rows[0];
+
+                // Lấy chi tiết phụ tùng (nếu có)
+                DataTable dtPhuTung = giaoDichBanBLL.GetChiTietPhuTungBan(maGDBan);
+
+                // Chọn nơi lưu file
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+                saveDialog.FileName = $"HoaDon_MuaXe_{maGDBan}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                saveDialog.Title = "Lưu hóa đơn mua xe";
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Xuất PDF
+                    PDFHelper.ExportHoaDonMuaXe(giaoDich, dtPhuTung, saveDialog.FileName);
+
+                    // Thông báo thành công và hỏi có muốn mở file không
+                    var result = MessageBox.Show(
+                        "Xuất hóa đơn thành công!\n\nBạn có muốn mở file vừa xuất không?",
+                        "Thành công",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(saveDialog.FileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xuất hóa đơn: {ex.Message}",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

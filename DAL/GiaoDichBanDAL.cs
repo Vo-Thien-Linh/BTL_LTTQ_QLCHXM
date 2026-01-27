@@ -25,10 +25,11 @@ namespace DAL
                     gd.GiaBan, 
                     gd.TrangThaiThanhToan, 
                     gd.HinhThucThanhToan,
-                    gd.TrangThaiDuyet,
-                    gd.NguoiDuyet,
-                    gd.NgayDuyet,
-                    gd.GhiChuDuyet,
+                    gd.MaKM,
+                    gd.SoTienGiam,
+                    gd.TongGiaPhuTung,
+                    gd.TongGiamPhuTung,
+                    gd.TongThanhToan,
                     nv.HoTenNV AS TenNhanVien
                 FROM GiaoDichBan gd
                 INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
@@ -47,7 +48,7 @@ namespace DAL
         /// <summary>
         /// Lấy giao dịch bán theo trạng thái duyệt
         /// </summary>
-        public DataTable GetGiaoDichBanByTrangThai(string trangThaiDuyet)
+        public DataTable GetGiaoDichBanByTrangThai(string trangThaiThanhToan)
         {
             string query = @"
                 SELECT 
@@ -62,10 +63,11 @@ namespace DAL
                     gd.GiaBan, 
                     gd.TrangThaiThanhToan, 
                     gd.HinhThucThanhToan,
-                    gd.TrangThaiDuyet,
-                    gd.NguoiDuyet,
-                    gd.NgayDuyet,
-                    gd.GhiChuDuyet,
+                    gd.MaKM,
+                    gd.SoTienGiam,
+                    gd.TongGiaPhuTung,
+                    gd.TongGiamPhuTung,
+                    gd.TongThanhToan,
                     nv.HoTenNV AS TenNhanVien
                 FROM GiaoDichBan gd
                 INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
@@ -76,12 +78,12 @@ namespace DAL
                 INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
                 LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
                 LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
-                WHERE gd.TrangThaiDuyet = @TrangThaiDuyet
+                WHERE gd.TrangThaiThanhToan = @TrangThaiThanhToan
                 ORDER BY gd.NgayBan DESC";
 
             SqlParameter[] parameters = new SqlParameter[]
             {
-                new SqlParameter("@TrangThaiDuyet", trangThaiDuyet)
+                new SqlParameter("@TrangThaiThanhToan", trangThaiThanhToan)
             };
 
             return DataProvider.ExecuteQuery(query, parameters);
@@ -107,11 +109,13 @@ namespace DAL
                     gd.GiaBan, 
                     gd.TrangThaiThanhToan, 
                     gd.HinhThucThanhToan,
-                    gd.TrangThaiDuyet,
-                    gd.NguoiDuyet,
-                    gd.NgayDuyet,
-                    gd.GhiChuDuyet,
                     gd.MaTaiKhoan,
+                    gd.MaKM,
+                    gd.SoTienGiam,
+                    gd.TongGiaPhuTung,
+                    gd.TongGiamPhuTung,
+                    gd.TongThanhToan,
+                    km.TenKM,
                     nv.HoTenNV AS TenNhanVien
                 FROM GiaoDichBan gd
                 INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
@@ -122,6 +126,7 @@ namespace DAL
                 INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
                 LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
                 LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                LEFT JOIN KhuyenMai km ON gd.MaKM = km.MaKM
                 WHERE gd.MaGDBan = @MaGDBan";
 
             SqlParameter[] parameters = new SqlParameter[]
@@ -385,8 +390,7 @@ namespace DAL
                     pt.TenPhuTung,
                     ct.SoLuong,
                     ct.DonGia,
-                    ct.ThanhTien,
-                    ct.GhiChu
+                    ct.ThanhTien
                 FROM ChiTietPhuTungBan ct
                 INNER JOIN PhuTung pt ON ct.MaPhuTung = pt.MaPhuTung
                 WHERE ct.MaGDBan = @MaGDBan

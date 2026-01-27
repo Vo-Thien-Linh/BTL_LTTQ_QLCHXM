@@ -449,6 +449,393 @@ namespace UI
             return result.Trim();
         }
 
+        /// <summary>
+        /// Xuất hóa đơn mua xe (bao gồm xe và phụ tùng nếu có)
+        /// </summary>
+        public static void ExportHoaDonMuaXe(DataRow giaoDich, DataTable chiTietPhuTung, string filePath)
+        {
+            Document document = new Document(PageSize.A4, 40, 40, 30, 30);
+
+            try
+            {
+                PdfWriter.GetInstance(document, new FileStream(filePath, FileMode.Create));
+                document.Open();
+
+                // ==================== HEADER ====================
+                PdfPTable headerTable = new PdfPTable(2);
+                headerTable.WidthPercentage = 100;
+                headerTable.SetWidths(new float[] { 50f, 50f });
+                headerTable.SpacingAfter = 15f;
+
+                // Bên trái - Thông tin cửa hàng
+                PdfPCell leftCell = new PdfPCell();
+                leftCell.Border = Rectangle.NO_BORDER;
+                Font shopNameFont = new Font(baseFont, 16, Font.BOLD, new BaseColor(0, 102, 204));
+                leftCell.AddElement(new Paragraph("CỬA HÀNG XE MÁY ABC", shopNameFont));
+                leftCell.AddElement(new Paragraph("Địa chỉ: 123 Đường Lê Lợi, Quận 1, TP.HCM", smallFont));
+                leftCell.AddElement(new Paragraph("Điện thoại: 0123.456.789 | Hotline: 0987.654.321", smallFont));
+                leftCell.AddElement(new Paragraph("Email: info@cuahangxemay.vn", smallFont));
+                leftCell.AddElement(new Paragraph("MST: 0123456789", smallFont));
+                leftCell.PaddingTop = 5;
+                headerTable.AddCell(leftCell);
+
+                // Bên phải - Mã hóa đơn và ngày
+                PdfPCell rightCell = new PdfPCell();
+                rightCell.Border = Rectangle.NO_BORDER;
+                rightCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                rightCell.AddElement(new Paragraph($"HÓA ĐƠN BÁN HÀNG", new Font(baseFont, 14, Font.BOLD, BaseColor.RED)));
+                rightCell.AddElement(new Paragraph($"Số: {giaoDich["MaGDBan"]}", boldFont));
+                rightCell.AddElement(new Paragraph($"Ngày: {Convert.ToDateTime(giaoDich["NgayBan"]):dd/MM/yyyy}", normalFont));
+                rightCell.AddElement(new Paragraph($"Giờ: {Convert.ToDateTime(giaoDich["NgayBan"]):HH:mm:ss}", smallFont));
+                rightCell.PaddingTop = 5;
+                headerTable.AddCell(rightCell);
+
+                document.Add(headerTable);
+
+                // Đường kẻ ngang
+                PdfPTable lineTable = new PdfPTable(1);
+                lineTable.WidthPercentage = 100;
+                lineTable.SpacingAfter = 10f;
+                PdfPCell lineCell = new PdfPCell();
+                lineCell.Border = Rectangle.BOTTOM_BORDER;
+                lineCell.BorderWidth = 1.5f;
+                lineCell.BorderColor = BaseColor.GRAY;
+                lineCell.FixedHeight = 0f;
+                lineTable.AddCell(lineCell);
+                document.Add(lineTable);
+
+                // ==================== THÔNG TIN KHÁCH HÀNG ====================
+                Font sectionTitleFont = new Font(baseFont, 12, Font.BOLD, new BaseColor(0, 102, 204));
+                Paragraph khachHangTitle = new Paragraph("THÔNG TIN KHÁCH HÀNG", sectionTitleFont);
+                khachHangTitle.SpacingBefore = 5f;
+                khachHangTitle.SpacingAfter = 8f;
+                document.Add(khachHangTitle);
+
+                PdfPTable khachHangTable = new PdfPTable(2);
+                khachHangTable.WidthPercentage = 100;
+                khachHangTable.SetWidths(new float[] { 30f, 70f });
+                khachHangTable.SpacingAfter = 10f;
+
+                AddInvoiceInfoRow(khachHangTable, "Họ tên:", giaoDich["HoTenKH"]?.ToString() ?? "");
+                AddInvoiceInfoRow(khachHangTable, "Mã KH:", giaoDich["MaKH"]?.ToString() ?? "");
+                AddInvoiceInfoRow(khachHangTable, "Số điện thoại:", giaoDich["SdtKhachHang"]?.ToString() ?? "");
+                
+                if (giaoDich.Table.Columns.Contains("EmailKhachHang") && giaoDich["EmailKhachHang"] != DBNull.Value)
+                    AddInvoiceInfoRow(khachHangTable, "Email:", giaoDich["EmailKhachHang"].ToString());
+                
+                if (giaoDich.Table.Columns.Contains("DiaChiKhachHang") && giaoDich["DiaChiKhachHang"] != DBNull.Value)
+                    AddInvoiceInfoRow(khachHangTable, "Địa chỉ:", giaoDich["DiaChiKhachHang"].ToString());
+                
+                document.Add(khachHangTable);
+
+                // ==================== CHI TIẾT SẢN PHẨM ====================
+                Paragraph chiTietTitle = new Paragraph("CHI TIẾT SẢN PHẨM", sectionTitleFont);
+                chiTietTitle.SpacingBefore = 10f;
+                chiTietTitle.SpacingAfter = 8f;
+                document.Add(chiTietTitle);
+
+                // Bảng chi tiết
+                PdfPTable productTable = new PdfPTable(5);
+                productTable.WidthPercentage = 100;
+                productTable.SetWidths(new float[] { 10f, 40f, 15f, 17f, 18f });
+                productTable.SpacingAfter = 10f;
+
+                // Header bảng
+                AddProductTableHeader(productTable, "STT");
+                AddProductTableHeader(productTable, "Tên sản phẩm");
+                AddProductTableHeader(productTable, "Số lượng");
+                AddProductTableHeader(productTable, "Đơn giá");
+                AddProductTableHeader(productTable, "Thành tiền");
+
+                decimal tongTien = 0;
+                int stt = 1;
+
+                // Thêm xe
+                string tenXe = giaoDich["TenXe"]?.ToString() ?? "";
+                string bienSo = giaoDich["BienSo"]?.ToString();
+                if (!string.IsNullOrEmpty(bienSo))
+                    tenXe += $"\n(Biển số: {bienSo})";
+
+                decimal giaXe = giaoDich["GiaBan"] != DBNull.Value ? Convert.ToDecimal(giaoDich["GiaBan"]) : 0;
+                
+                // Nếu có phụ tùng, giá xe = giá bán - tổng tiền phụ tùng
+                decimal tongTienPhuTung = 0;
+                if (chiTietPhuTung != null && chiTietPhuTung.Rows.Count > 0)
+                {
+                    foreach (DataRow row in chiTietPhuTung.Rows)
+                    {
+                        tongTienPhuTung += row["ThanhTien"] != DBNull.Value ? Convert.ToDecimal(row["ThanhTien"]) : 0;
+                    }
+                }
+                
+                decimal giaXeThucTe = giaXe - tongTienPhuTung;
+                
+                AddProductTableRow(productTable, stt.ToString(), tenXe, "1", giaXeThucTe.ToString("N0"), giaXeThucTe.ToString("N0"));
+                tongTien += giaXeThucTe;
+                stt++;
+
+                // Thêm phụ tùng (nếu có)
+                if (chiTietPhuTung != null && chiTietPhuTung.Rows.Count > 0)
+                {
+                    foreach (DataRow row in chiTietPhuTung.Rows)
+                    {
+                        string tenPhuTung = row["TenPhuTung"]?.ToString() ?? "";
+                        int soLuong = row["SoLuong"] != DBNull.Value ? Convert.ToInt32(row["SoLuong"]) : 0;
+                        decimal donGia = row["DonGia"] != DBNull.Value ? Convert.ToDecimal(row["DonGia"]) : 0;
+                        decimal thanhTien = row["ThanhTien"] != DBNull.Value ? Convert.ToDecimal(row["ThanhTien"]) : 0;
+
+                        AddProductTableRow(productTable, stt.ToString(), tenPhuTung, soLuong.ToString(), 
+                            donGia.ToString("N0"), thanhTien.ToString("N0"));
+                        tongTien += thanhTien;
+                        stt++;
+                    }
+                }
+
+                document.Add(productTable);
+
+                // ==================== TỔNG TIỀN ====================
+                // Lấy giá trị từ database
+                decimal giaBanXe = giaoDich["GiaBan"] != DBNull.Value ? Convert.ToDecimal(giaoDich["GiaBan"]) : 0;
+                decimal soTienGiamXe = giaoDich["SoTienGiam"] != DBNull.Value ? Convert.ToDecimal(giaoDich["SoTienGiam"]) : 0;
+                decimal tongGiaPhuTung = giaoDich["TongGiaPhuTung"] != DBNull.Value ? Convert.ToDecimal(giaoDich["TongGiaPhuTung"]) : 0;
+                decimal tongGiamPhuTung = giaoDich["TongGiamPhuTung"] != DBNull.Value ? Convert.ToDecimal(giaoDich["TongGiamPhuTung"]) : 0;
+                decimal tongThanhToan = giaoDich["TongThanhToan"] != DBNull.Value ? Convert.ToDecimal(giaoDich["TongThanhToan"]) : 0;
+                
+                // Tính tạm tính (trước khi giảm)
+                decimal tamTinh = giaBanXe + tongGiaPhuTung;
+                decimal tongGiam = soTienGiamXe + tongGiamPhuTung;
+
+                PdfPTable tongTienTable = new PdfPTable(2);
+                tongTienTable.WidthPercentage = 100;
+                tongTienTable.SetWidths(new float[] { 70f, 30f });
+                tongTienTable.SpacingBefore = 10f;
+                tongTienTable.SpacingAfter = 5f;
+
+                // Tạm tính
+                PdfPCell tamTinhLabelCell = new PdfPCell(new Phrase("Tạm tính:", new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK)));
+                tamTinhLabelCell.Border = Rectangle.NO_BORDER;
+                tamTinhLabelCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                tamTinhLabelCell.PaddingRight = 10;
+                tamTinhLabelCell.PaddingBottom = 5;
+                tongTienTable.AddCell(tamTinhLabelCell);
+
+                PdfPCell tamTinhValueCell = new PdfPCell(new Phrase(tamTinh.ToString("N0") + " VNĐ", new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK)));
+                tamTinhValueCell.Border = Rectangle.NO_BORDER;
+                tamTinhValueCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                tamTinhValueCell.PaddingBottom = 5;
+                tongTienTable.AddCell(tamTinhValueCell);
+
+                // Giảm giá (nếu có)
+                if (tongGiam > 0)
+                {
+                    // Hiển thị tên khuyến mãi nếu có
+                    string labelGiamGia = "Giảm giá (khuyến mãi):";
+                    if (giaoDich.Table.Columns.Contains("TenKM") && giaoDich["TenKM"] != DBNull.Value && !string.IsNullOrEmpty(giaoDich["TenKM"].ToString()))
+                    {
+                        labelGiamGia = $"Giảm giá ({giaoDich["TenKM"]}):";
+                    }
+
+                    PdfPCell giamGiaLabelCell = new PdfPCell(new Phrase(labelGiamGia, new Font(baseFont, 11, Font.NORMAL, new BaseColor(255, 69, 0))));
+                    giamGiaLabelCell.Border = Rectangle.NO_BORDER;
+                    giamGiaLabelCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    giamGiaLabelCell.PaddingRight = 10;
+                    giamGiaLabelCell.PaddingBottom = 5;
+                    tongTienTable.AddCell(giamGiaLabelCell);
+
+                    PdfPCell giamGiaValueCell = new PdfPCell(new Phrase("- " + tongGiam.ToString("N0") + " VNĐ", new Font(baseFont, 11, Font.BOLD, new BaseColor(255, 69, 0))));
+                    giamGiaValueCell.Border = Rectangle.NO_BORDER;
+                    giamGiaValueCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    giamGiaValueCell.PaddingBottom = 5;
+                    tongTienTable.AddCell(giamGiaValueCell);
+                }
+
+                // Đường kẻ ngang
+                PdfPCell lineCell1 = new PdfPCell();
+                lineCell1.Border = Rectangle.NO_BORDER;
+                lineCell1.Colspan = 2;
+                lineCell1.FixedHeight = 0f;
+                lineCell1.BorderWidthBottom = 1f;
+                lineCell1.BorderColorBottom = BaseColor.LIGHT_GRAY;
+                tongTienTable.AddCell(lineCell1);
+
+                // Thành tiền (tổng cộng)
+                PdfPCell thanhTienLabelCell = new PdfPCell(new Phrase("THÀNH TIỀN:", new Font(baseFont, 12, Font.BOLD, BaseColor.BLACK)));
+                thanhTienLabelCell.Border = Rectangle.NO_BORDER;
+                thanhTienLabelCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                thanhTienLabelCell.PaddingRight = 10;
+                thanhTienLabelCell.PaddingTop = 5;
+                tongTienTable.AddCell(thanhTienLabelCell);
+
+                PdfPCell thanhTienValueCell = new PdfPCell(new Phrase(tongThanhToan.ToString("N0") + " VNĐ", new Font(baseFont, 12, Font.BOLD, new BaseColor(220, 20, 60))));
+                thanhTienValueCell.Border = Rectangle.BOX;
+                thanhTienValueCell.BorderWidth = 1f;
+                thanhTienValueCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                thanhTienValueCell.Padding = 5;
+                thanhTienValueCell.BackgroundColor = new BaseColor(255, 250, 205);
+                tongTienTable.AddCell(thanhTienValueCell);
+
+                document.Add(tongTienTable);
+
+                // Số tiền bằng chữ
+                string tienBangChu = ConvertNumberToWords((long)tongThanhToan);
+                Paragraph bangChu = new Paragraph($"Bằng chữ: {tienBangChu}", new Font(baseFont, 10, Font.ITALIC, BaseColor.BLACK));
+                bangChu.SpacingAfter = 10f;
+                document.Add(bangChu);
+
+                // ==================== THÔNG TIN THANH TOÁN ====================
+                Paragraph thanhToanTitle = new Paragraph("THÔNG TIN THANH TOÁN", sectionTitleFont);
+                thanhToanTitle.SpacingBefore = 10f;
+                thanhToanTitle.SpacingAfter = 8f;
+                document.Add(thanhToanTitle);
+
+                PdfPTable thanhToanTable = new PdfPTable(2);
+                thanhToanTable.WidthPercentage = 100;
+                thanhToanTable.SetWidths(new float[] { 30f, 70f });
+                thanhToanTable.SpacingAfter = 15f;
+
+                AddInvoiceInfoRow(thanhToanTable, "Hình thức thanh toán:", giaoDich["HinhThucThanhToan"]?.ToString() ?? "");
+                AddInvoiceInfoRow(thanhToanTable, "Trạng thái:", giaoDich["TrangThaiThanhToan"]?.ToString() ?? "");
+                AddInvoiceInfoRow(thanhToanTable, "Nhân viên bán hàng:", giaoDich["TenNhanVien"]?.ToString() ?? "");
+
+                document.Add(thanhToanTable);
+
+                // ==================== CHỮ KÝ ====================
+                document.Add(new Paragraph("\n"));
+
+                PdfPTable signTable = new PdfPTable(3);
+                signTable.WidthPercentage = 100;
+                signTable.SetWidths(new float[] { 33f, 34f, 33f });
+                signTable.SpacingBefore = 20f;
+
+                // Người mua hàng
+                PdfPCell signCell1 = new PdfPCell();
+                signCell1.Border = Rectangle.NO_BORDER;
+                signCell1.HorizontalAlignment = Element.ALIGN_CENTER;
+                Paragraph nguoiMua = new Paragraph("NGƯỜI MUA HÀNG", boldFont);
+                nguoiMua.Alignment = Element.ALIGN_CENTER;
+                signCell1.AddElement(nguoiMua);
+                signCell1.AddElement(new Paragraph("(Ký và ghi rõ họ tên)", smallFont) { Alignment = Element.ALIGN_CENTER });
+                signCell1.AddElement(new Paragraph("\n\n\n", normalFont));
+                signCell1.AddElement(new Paragraph(giaoDich["HoTenKH"]?.ToString() ?? "", normalFont) { Alignment = Element.ALIGN_CENTER });
+                signTable.AddCell(signCell1);
+
+                // Người bán hàng
+                PdfPCell signCell2 = new PdfPCell();
+                signCell2.Border = Rectangle.NO_BORDER;
+                signCell2.HorizontalAlignment = Element.ALIGN_CENTER;
+                Paragraph nguoiBan = new Paragraph("NGƯỜI BÁN HÀNG", boldFont);
+                nguoiBan.Alignment = Element.ALIGN_CENTER;
+                signCell2.AddElement(nguoiBan);
+                signCell2.AddElement(new Paragraph("(Ký và ghi rõ họ tên)", smallFont) { Alignment = Element.ALIGN_CENTER });
+                signCell2.AddElement(new Paragraph("\n\n\n", normalFont));
+                signCell2.AddElement(new Paragraph(giaoDich["TenNhanVien"]?.ToString() ?? "", normalFont) { Alignment = Element.ALIGN_CENTER });
+                signTable.AddCell(signCell2);
+
+                // Thủ quỹ
+                PdfPCell signCell3 = new PdfPCell();
+                signCell3.Border = Rectangle.NO_BORDER;
+                signCell3.HorizontalAlignment = Element.ALIGN_CENTER;
+                Paragraph thuQuy = new Paragraph("THỦ QUỸ", boldFont);
+                thuQuy.Alignment = Element.ALIGN_CENTER;
+                signCell3.AddElement(thuQuy);
+                signCell3.AddElement(new Paragraph("(Ký và ghi rõ họ tên)", smallFont) { Alignment = Element.ALIGN_CENTER });
+                signCell3.AddElement(new Paragraph("\n\n\n", normalFont));
+                signCell3.AddElement(new Paragraph("_______________", normalFont) { Alignment = Element.ALIGN_CENTER });
+                signTable.AddCell(signCell3);
+
+                document.Add(signTable);
+
+                // ==================== FOOTER ====================
+                document.Add(new Paragraph("\n"));
+                PdfPTable footerLineTable = new PdfPTable(1);
+                footerLineTable.WidthPercentage = 100;
+                PdfPCell footerLineCell = new PdfPCell();
+                footerLineCell.Border = Rectangle.BOTTOM_BORDER;
+                footerLineCell.BorderWidth = 0.5f;
+                footerLineCell.BorderColor = BaseColor.LIGHT_GRAY;
+                footerLineCell.FixedHeight = 0f;
+                footerLineTable.AddCell(footerLineCell);
+                document.Add(footerLineTable);
+
+                Paragraph footer = new Paragraph(
+                    "Cảm ơn quý khách đã mua hàng tại cửa hàng!\n" +
+                    "Mọi thắc mắc xin liên hệ: 0123.456.789 hoặc email: info@cuahangxemay.vn",
+                    smallFont
+                );
+                footer.Alignment = Element.ALIGN_CENTER;
+                footer.SpacingBefore = 5f;
+                document.Add(footer);
+
+            }
+            finally
+            {
+                document.Close();
+            }
+        }
+
+        // Helper methods cho hóa đơn
+        private static void AddInvoiceInfoRow(PdfPTable table, string label, string value)
+        {
+            PdfPCell labelCell = new PdfPCell(new Phrase(label, boldFont));
+            labelCell.Border = Rectangle.NO_BORDER;
+            labelCell.Padding = 3;
+            table.AddCell(labelCell);
+
+            PdfPCell valueCell = new PdfPCell(new Phrase(value ?? "", normalFont));
+            valueCell.Border = Rectangle.NO_BORDER;
+            valueCell.Padding = 3;
+            table.AddCell(valueCell);
+        }
+
+        private static void AddProductTableHeader(PdfPTable table, string text)
+        {
+            Font whiteFont = new Font(baseFont, 11, Font.BOLD, BaseColor.WHITE);
+            PdfPCell cell = new PdfPCell(new Phrase(text, whiteFont));
+            cell.BackgroundColor = new BaseColor(33, 150, 243);
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            cell.VerticalAlignment = Element.ALIGN_MIDDLE;
+            cell.Padding = 8;
+            table.AddCell(cell);
+        }
+
+        private static void AddProductTableRow(PdfPTable table, string stt, string tenSP, string soLuong, string donGia, string thanhTien)
+        {
+            // STT
+            PdfPCell sttCell = new PdfPCell(new Phrase(stt, normalFont));
+            sttCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            sttCell.Padding = 5;
+            sttCell.BorderColor = BaseColor.LIGHT_GRAY;
+            table.AddCell(sttCell);
+
+            // Tên sản phẩm
+            PdfPCell tenCell = new PdfPCell(new Phrase(tenSP, normalFont));
+            tenCell.HorizontalAlignment = Element.ALIGN_LEFT;
+            tenCell.Padding = 5;
+            tenCell.BorderColor = BaseColor.LIGHT_GRAY;
+            table.AddCell(tenCell);
+
+            // Số lượng
+            PdfPCell slCell = new PdfPCell(new Phrase(soLuong, normalFont));
+            slCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            slCell.Padding = 5;
+            slCell.BorderColor = BaseColor.LIGHT_GRAY;
+            table.AddCell(slCell);
+
+            // Đơn giá
+            PdfPCell dgCell = new PdfPCell(new Phrase(donGia + " VNĐ", normalFont));
+            dgCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            dgCell.Padding = 5;
+            dgCell.BorderColor = BaseColor.LIGHT_GRAY;
+            table.AddCell(dgCell);
+
+            // Thành tiền
+            PdfPCell ttCell = new PdfPCell(new Phrase(thanhTien + " VNĐ", normalFont));
+            ttCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            ttCell.Padding = 5;
+            ttCell.BorderColor = BaseColor.LIGHT_GRAY;
+            table.AddCell(ttCell);
+        }
+
         // Helper methods cho danh sách
         private static void AddTableHeader(PdfPTable table, string text)
         {
