@@ -50,7 +50,13 @@ namespace UI.FormUI
 
                 // Thông tin xe
                 txtIDXe.Text = row["ID_Xe"].ToString();
-                txtTenXe.Text = row["TenXe"].ToString();
+                txtHangXe.Text = row["TenHangXe"]?.ToString() ?? "";
+                txtDongXe.Text = row["TenDongXe"]?.ToString() ?? "";
+                txtMauSac.Text = row["TenMauSac"]?.ToString() ?? "";
+                txtNamSanXuat.Text = row["NamSanXuat"]?.ToString() ?? "";
+                txtLoaiXe.Text = row["LoaiXe"]?.ToString() ?? "";
+                txtPhanKhoi.Text = row["PhanKhoi"]?.ToString() + " cc";
+                txtLoaiXang.Text = row["ThongTinXang"]?.ToString() ?? "";
                 txtBienSo.Text = row["BienSo"].ToString();
 
                 // Thông tin hợp đồng

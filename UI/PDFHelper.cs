@@ -251,37 +251,6 @@ namespace UI
                 
                 document.Add(xeTable);
 
-                // ==================== GIÁ TRỊ HỢP ĐỒNG ====================
-                Paragraph giaTriHD = new Paragraph("GIÁ TRỊ HỢP ĐỒNG:", sectionTitleFont);
-                giaTriHD.SpacingBefore = 15f;
-                giaTriHD.SpacingAfter = 8f;
-                document.Add(giaTriHD);
-
-                decimal giaBan = Convert.ToDecimal(hopDong["GiaBan"]);
-                PdfPTable priceTable = new PdfPTable(1);
-                priceTable.WidthPercentage = 100;
-                priceTable.SpacingAfter = 10f;
-
-                PdfPCell priceCell = new PdfPCell();
-                priceCell.BackgroundColor = new BaseColor(230, 240, 255);
-                priceCell.Border = Rectangle.BOX;
-                priceCell.BorderColor = new BaseColor(0, 102, 204);
-                priceCell.BorderWidth = 2;
-                priceCell.Padding = 15;
-
-                Font priceFont = new Font(baseFont, 16, Font.BOLD, new BaseColor(204, 0, 0));
-                Paragraph priceLine = new Paragraph($"Tổng giá trị: {giaBan:N0} VNĐ", priceFont);
-                priceLine.Alignment = Element.ALIGN_CENTER;
-                priceCell.AddElement(priceLine);
-
-                string soTienChu = ConvertNumberToWords((long)giaBan);
-                Paragraph priceWords = new Paragraph($"({soTienChu})", normalFont);
-                priceWords.Alignment = Element.ALIGN_CENTER;
-                priceCell.AddElement(priceWords);
-
-                priceTable.AddCell(priceCell);
-                document.Add(priceTable);
-
                 // ==================== ĐIỀU KHOẢN HỢP ĐỒNG ====================
                 Paragraph dieuKhoan = new Paragraph("ĐIỀU KHOẢN HỢP ĐỒNG:", sectionTitleFont);
                 dieuKhoan.SpacingBefore = 15f;

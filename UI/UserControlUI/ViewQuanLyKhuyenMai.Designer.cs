@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnBan = new System.Windows.Forms.Button();
             this.dgvQuanLyKhuyenMai = new System.Windows.Forms.DataGridView();
             this.btnLamMoi = new System.Windows.Forms.Button();
             this.btnXoa = new System.Windows.Forms.Button();
@@ -49,7 +48,6 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.panel1.Controls.Add(this.btnBan);
             this.panel1.Controls.Add(this.dgvQuanLyKhuyenMai);
             this.panel1.Controls.Add(this.btnLamMoi);
             this.panel1.Controls.Add(this.btnXoa);
@@ -60,21 +58,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(2323, 825);
             this.panel1.TabIndex = 7;
-            // 
-            // btnBan
-            // 
-            this.btnBan.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(67)))), ((int)(((byte)(54)))));
-            this.btnBan.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnBan.FlatAppearance.BorderSize = 0;
-            this.btnBan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnBan.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnBan.ForeColor = System.Drawing.Color.White;
-            this.btnBan.Location = new System.Drawing.Point(898, 26);
-            this.btnBan.Name = "btnBan";
-            this.btnBan.Size = new System.Drawing.Size(140, 45);
-            this.btnBan.TabIndex = 9;
-            this.btnBan.Text = "🛒Bán";
-            this.btnBan.UseVisualStyleBackColor = false;
             // 
             // dgvQuanLyKhuyenMai
             // 
@@ -237,6 +220,5 @@
         private System.Windows.Forms.ComboBox cbbTimKiemTheo;
         private System.Windows.Forms.Label lblTuKhoa;
         private System.Windows.Forms.Label lblTimKiemTheo;
-        private System.Windows.Forms.Button btnBan;
     }
 }

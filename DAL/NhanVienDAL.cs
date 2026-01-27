@@ -8,9 +8,8 @@ namespace DAL
 {
     public class NhanVienDAL
     {
-        /// <summary>
+       
         /// Lấy tất cả nhân viên
-        /// </summary>
         public DataTable GetAllNhanVien()
         {
             string query = @"SELECT MaNV, HoTenNV, NgaySinh, GioiTinh, Sdt, Email, DiaChi, 
@@ -21,9 +20,7 @@ namespace DAL
             return DataProvider.ExecuteQuery(query);
         }
 
-        /// <summary>
         /// Tìm kiếm nhân viên theo nhiều tiêu chí
-        /// </summary>
         public DataTable SearchNhanVien(string searchBy, string keyword)
         {
             // Chỉ cho phép search các trường hợp lệ
@@ -62,9 +59,7 @@ namespace DAL
             return DataProvider.ExecuteQuery(query, parameters);
         }
 
-        /// <summary>
         /// Thêm nhân viên mới
-        /// </summary>
         public bool InsertNhanVien(NhanVien nv)
         {
             string query = @"INSERT INTO NhanVien 
@@ -277,22 +272,71 @@ namespace DAL
         }
 
         /// <summary>
-        /// Tự động tạo mã nhân viên mới
+        /// Tự động tạo mã nhân viên mới (đảm bảo không trùng)
         /// </summary>
         public string GenerateMaNV()
         {
-            string query = "SELECT TOP 1 MaNV FROM NhanVien ORDER BY MaNV DESC";
-            object result = DataProvider.ExecuteScalar(query);
-
-            if (result == null || result == DBNull.Value)
+            try
             {
-                return "NV00000001";
-            }
+                string query = "SELECT TOP 1 MaNV FROM NhanVien ORDER BY MaNV DESC";
+                object result = DataProvider.ExecuteScalar(query);
 
-            string lastMaNV = result.ToString();
-            int number = int.Parse(lastMaNV.Substring(2));
-            number++;
-            return "NV" + number.ToString("D8");
+                int number = 1;
+                if (result != null && result != DBNull.Value)
+                {
+                    string lastMaNV = result.ToString().Trim();
+                    if (lastMaNV.Length >= 2 && lastMaNV.StartsWith("NV"))
+                    {
+                        string numberPart = lastMaNV.Substring(2);
+                        if (int.TryParse(numberPart, out int lastNumber))
+                        {
+                            number = lastNumber + 1;
+                        }
+                    }
+                }
+
+                // Kiểm tra mã mới có trùng không, nếu trùng thì tăng lên
+                string newMaNV;
+                int maxAttempts = 1000; // Giới hạn số lần thử để tránh vòng lặp vô hạn
+                int attempts = 0;
+                
+                do
+                {
+                    newMaNV = "NV" + number.ToString("D8");
+                    
+                    // Kiểm tra mã đã tồn tại chưa
+                    string checkQuery = "SELECT COUNT(*) FROM NhanVien WHERE MaNV = @MaNV";
+                    SqlParameter[] parameters = new SqlParameter[]
+                    {
+                        new SqlParameter("@MaNV", newMaNV)
+                    };
+                    
+                    int count = Convert.ToInt32(DataProvider.ExecuteScalar(checkQuery, parameters));
+                    
+                    if (count == 0)
+                    {
+                        // Mã không trùng, trả về
+                        return newMaNV;
+                    }
+                    
+                    // Mã bị trùng, tăng số lên
+                    number++;
+                    attempts++;
+                    
+                } while (attempts < maxAttempts);
+
+                // Nếu vẫn không tìm được mã duy nhất sau maxAttempts lần thử
+                // Sử dụng timestamp để tạo mã unique
+                number = (int)(DateTime.Now.Ticks % 100000000);
+                return "NV" + number.ToString("D8");
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"❌ Lỗi GenerateMaNV: {ex.Message}");
+                // Trường hợp lỗi, trả về mã với timestamp
+                int number = (int)(DateTime.Now.Ticks % 100000000);
+                return "NV" + number.ToString("D8");
+            }
         }
     }
 }

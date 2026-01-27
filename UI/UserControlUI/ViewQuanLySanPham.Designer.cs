@@ -77,38 +77,45 @@
             // 
             // btnQuanLyKhuyenMai
             // 
+            this.btnQuanLyKhuyenMai.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.btnQuanLyKhuyenMai.FlatAppearance.BorderSize = 0;
             this.btnQuanLyKhuyenMai.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQuanLyKhuyenMai.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnQuanLyKhuyenMai.Location = new System.Drawing.Point(363, 10);
+            this.btnQuanLyKhuyenMai.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.btnQuanLyKhuyenMai.Location = new System.Drawing.Point(365, 13);
             this.btnQuanLyKhuyenMai.Name = "btnQuanLyKhuyenMai";
             this.btnQuanLyKhuyenMai.Size = new System.Drawing.Size(184, 40);
             this.btnQuanLyKhuyenMai.TabIndex = 1;
             this.btnQuanLyKhuyenMai.Text = "Quản lý khuyến mãi";
-            this.btnQuanLyKhuyenMai.UseVisualStyleBackColor = true;
+            this.btnQuanLyKhuyenMai.UseVisualStyleBackColor = false;
             this.btnQuanLyKhuyenMai.Click += new System.EventHandler(this.btnQuanLyKhuyenMai_Click);
             // 
             // btnQuanLyPhuTung
             // 
+            this.btnQuanLyPhuTung.BackColor = System.Drawing.Color.Red;
             this.btnQuanLyPhuTung.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQuanLyPhuTung.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnQuanLyPhuTung.Location = new System.Drawing.Point(190, 10);
+            this.btnQuanLyPhuTung.ForeColor = System.Drawing.Color.Silver;
+            this.btnQuanLyPhuTung.Location = new System.Drawing.Point(190, 14);
             this.btnQuanLyPhuTung.Name = "btnQuanLyPhuTung";
             this.btnQuanLyPhuTung.Size = new System.Drawing.Size(150, 40);
             this.btnQuanLyPhuTung.TabIndex = 1;
             this.btnQuanLyPhuTung.Text = "Quản lý phụ tùng";
-            this.btnQuanLyPhuTung.UseVisualStyleBackColor = true;
+            this.btnQuanLyPhuTung.UseVisualStyleBackColor = false;
             this.btnQuanLyPhuTung.Click += new System.EventHandler(this.btnQuanLyPhuTung_Click);
             // 
             // btnQuanLyXe
             // 
+            this.btnQuanLyXe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(36)))), ((int)(((byte)(207)))));
             this.btnQuanLyXe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnQuanLyXe.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnQuanLyXe.Location = new System.Drawing.Point(20, 10);
+            this.btnQuanLyXe.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(111)))));
+            this.btnQuanLyXe.Location = new System.Drawing.Point(23, 14);
             this.btnQuanLyXe.Name = "btnQuanLyXe";
             this.btnQuanLyXe.Size = new System.Drawing.Size(150, 40);
             this.btnQuanLyXe.TabIndex = 0;
             this.btnQuanLyXe.Text = "Quản Lý xe";
-            this.btnQuanLyXe.UseVisualStyleBackColor = true;
+            this.btnQuanLyXe.UseVisualStyleBackColor = false;
             this.btnQuanLyXe.Click += new System.EventHandler(this.btnQuanLyXe_Click);
             // 
             // pnlMain
