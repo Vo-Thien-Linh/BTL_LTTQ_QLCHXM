@@ -15,6 +15,7 @@ namespace UI.FormUI
 {
     public partial class LoginForm : Form
     {
+        private bool isLoggingIn = false;
         public LoginForm()
         {
             InitializeComponent();
@@ -33,6 +34,8 @@ namespace UI.FormUI
 
             txtMatKhau.KeyDown += TxtMatKhau_KeyDown;
             txtSoDienThoai.KeyDown += TxtSoDienThoai_KeyDown;
+            this.FormClosing += LoginForm_FormClosing;
+
         }
 
         private void TxtMatKhau_KeyDown(object sender, KeyEventArgs e)
@@ -106,10 +109,7 @@ namespace UI.FormUI
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     // ✅ Mở MainForm và đóng LoginForm đúng cách
-                    MainForm mainForm = new MainForm();
-                    mainForm.FormClosed += (s, args) => this.Close();
-                    mainForm.Show();
-                    this.Hide();
+                    ShowMainFormAndWait();
                 }
                 else
                 {
@@ -140,6 +140,45 @@ namespace UI.FormUI
             }
         }
 
+        private void ShowMainFormAndWait()
+        {
+            isLoggingIn = true; // Set flag trước khi hide
+            this.Hide();
+
+            try
+            {
+                MainForm mainForm = new MainForm();
+                DialogResult result = mainForm.ShowDialog(); // Dùng ShowDialog thay vì Show
+
+                // Khi MainForm đóng, quay lại đây
+                System.Diagnostics.Debug.WriteLine("MainForm đã đóng, quay lại LoginForm");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi mở MainForm: {ex.Message}",
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                isLoggingIn = false;
+
+                // Reset form và hiển thị lại
+                ResetLoginForm();
+                this.Show();
+                this.Activate();
+                this.BringToFront();
+            }
+        }
+
+
+        public void ResetLoginForm()
+        {
+            txtSoDienThoai.Clear();
+            txtMatKhau.Clear();
+            txtSoDienThoai.Focus();
+
+            CurrentUser.Clear();
+        }
 
         /// <summary>
         /// Kiểm tra chuỗi có phải là Email hợp lệ không
@@ -172,5 +211,36 @@ namespace UI.FormUI
             formDienGmailQuenMK.Show();
             this.Hide();
         }
+
+        private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Nếu đang trong quá trình login, không cho phép đóng
+            if (isLoggingIn)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // Chỉ hỏi confirm khi form đang visible (user thật sự muốn thoát)
+            if (this.Visible)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Bạn có chắc chắn muốn thoát chương trình?",
+                    "Thoát",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                // Cleanup trước khi thoát
+                Application.Exit();
+            }
+        }
+
     }
 }

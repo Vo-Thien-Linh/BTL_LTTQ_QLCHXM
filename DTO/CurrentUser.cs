@@ -18,6 +18,7 @@ namespace DTO
         public static string Email { get; set; }
         public static string ChucVu { get; set; }
 
+
         /// <summary>
         /// Kiểm tra người dùng có phải Admin không
         /// </summary>
