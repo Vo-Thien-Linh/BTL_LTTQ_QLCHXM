@@ -101,21 +101,23 @@ namespace UI.UserControlUI
         /// Chỉ Quản lý: Thêm/Sửa/Xóa
         /// Bán hàng, Kỹ thuật: Chỉ xem
         /// Kỹ thuật: Không được bán/mua xe
+        /// Thu ngân: Không được mua xe (chỉ xem)
         /// </summary>
         private void ApplyPermissions()
         {
             bool canEdit = PermissionManager.CanEditSanPham(); // Chỉ Quản lý
             bool isKyThuat = PermissionManager.IsKyThuat();
+            bool isThuNgan = PermissionManager.IsThuNgan();
             
             btnThem.Visible = canEdit;
             btnSua.Visible = canEdit;
             btnXoa.Visible = canEdit;
             btnLamMoi.Visible = canEdit;
             
-            // Kỹ thuật không được bán/mua xe
-            if (isKyThuat)
+            // Kỹ thuật và Thu ngân không được bán/mua xe
+            if (isKyThuat || isThuNgan)
             {
-                // Sẽ ẩn nút bán trong card view - xử lý trong method RenderCardView
+                // Sẽ ẩn nút bán trong card view - xử lý trong method CreateXeCard
             }
             
             ReorganizeButtons();
@@ -485,11 +487,12 @@ namespace UI.UserControlUI
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
-            // Nút action (MUA NGAY / THUÊ NGAY) - Ẩn với role Kỹ thuật
+            // Nút action (MUA NGAY / THUÊ NGAY) - Ẩn với role Kỹ thuật và Thu ngân
             Button btnAction = null;
             bool isKyThuat = PermissionManager.IsKyThuat();
+            bool isThuNgan = PermissionManager.IsThuNgan();
             
-            if (!isKyThuat)
+            if (!isKyThuat && !isThuNgan)
             {
                 string btnText = isXeChoThue ? langMgr.GetString("RentNow") : langMgr.GetString("BuyNow");
                 btnAction = new Button

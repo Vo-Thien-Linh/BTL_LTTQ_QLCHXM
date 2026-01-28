@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.btnToggleArrow = new System.Windows.Forms.Button();
             this.btnQuanLyKhuyenMai = new System.Windows.Forms.Button();
             this.btnQuanLyPhuTung = new System.Windows.Forms.Button();
             this.btnQuanLyXe = new System.Windows.Forms.Button();
@@ -42,6 +43,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(118)))), ((int)(((byte)(210)))));
+            this.panel1.Controls.Add(this.btnToggleArrow);
             this.panel1.Controls.Add(this.lblTitle);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -61,6 +63,22 @@
             this.lblTitle.Text = "QUẢN LÝ SẢN PHẨM";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblTitle.Click += new System.EventHandler(this.lblTitle_Click);
+            // 
+            // btnToggleArrow
+            // 
+            this.btnToggleArrow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnToggleArrow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(150)))), ((int)(((byte)(243)))));
+            this.btnToggleArrow.FlatAppearance.BorderSize = 0;
+            this.btnToggleArrow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnToggleArrow.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
+            this.btnToggleArrow.ForeColor = System.Drawing.Color.White;
+            this.btnToggleArrow.Location = new System.Drawing.Point(1840, 25);
+            this.btnToggleArrow.Name = "btnToggleArrow";
+            this.btnToggleArrow.Size = new System.Drawing.Size(60, 40);
+            this.btnToggleArrow.TabIndex = 2;
+            this.btnToggleArrow.Text = "▼";
+            this.btnToggleArrow.UseVisualStyleBackColor = false;
+            this.btnToggleArrow.Click += new System.EventHandler(this.btnToggleArrow_Click);
             // 
             // panel2
             // 
@@ -150,6 +168,7 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnToggleArrow;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnQuanLyPhuTung;
         private System.Windows.Forms.Button btnQuanLyXe;
