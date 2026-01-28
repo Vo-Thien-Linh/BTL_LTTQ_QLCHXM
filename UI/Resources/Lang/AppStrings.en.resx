@@ -126,6 +126,15 @@
   <data name="AddBtn" xml:space="preserve">
     <value>+ Add new</value>
   </data>
+  <data name="AddCustomer" xml:space="preserve">
+    <value>Add New Customer</value>
+  </data>
+  <data name="AddCustomerSuccess" xml:space="preserve">
+    <value>Customer added successfully!</value>
+  </data>
+  <data name="AddCustomerTitle" xml:space="preserve">
+    <value>ADD NEW CUSTOMER</value>
+  </data>
   <data name="AddEmployeeError" xml:space="preserve">
     <value>Error adding employee</value>
   </data>
@@ -192,6 +201,9 @@
   <data name="BirthDateLabel" xml:space="preserve">
     <value>Birth Date</value>
   </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -219,6 +231,9 @@
   <data name="ChooseImage" xml:space="preserve">
     <value>Choose Image</value>
   </data>
+  <data name="CitizenID" xml:space="preserve">
+    <value>Citizen ID</value>
+  </data>
   <data name="Color" xml:space="preserve">
     <value>Color</value>
   </data>
@@ -237,9 +252,15 @@
   <data name="ConfirmDelete1" xml:space="preserve">
     <value>Confirm Delete</value>
   </data>
+  <data name="ConfirmDeleteCustomer" xml:space="preserve">
+    <value>Are you sure you want to delete customer '{0}' (Code: {1})? Note: This action cannot be undone!</value>
+  </data>
   <data name="ConfirmDeleteEmployee" xml:space="preserve">
     <value>Are you sure you want to delete employee '{0}' (ID: {1})?
 Note: This action cannot be undone!</value>
+  </data>
+  <data name="ConfirmDeleteVehicle" xml:space="preserve">
+    <value>Are you sure you want to delete vehicle {0}?</value>
   </data>
   <data name="CreateBtn" xml:space="preserve">
     <value>Create maintenance slip</value>
@@ -250,8 +271,14 @@ Note: This action cannot be undone!</value>
   <data name="Customer" xml:space="preserve">
     <value>Customer</value>
   </data>
+  <data name="CustomerCode" xml:space="preserve">
+    <value>Customer Code</value>
+  </data>
   <data name="CustomerID" xml:space="preserve">
     <value>Customer ID</value>
+  </data>
+  <data name="CustomerNotFound" xml:space="preserve">
+    <value>Customer not found!</value>
   </data>
   <data name="CustomerTitle" xml:space="preserve">
     <value>CUSTOMER MANAGEMENT</value>
@@ -264,6 +291,9 @@ Note: This action cannot be undone!</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Date</value>
+  </data>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Date of Birth</value>
   </data>
   <data name="DaysBefore" xml:space="preserve">
     <value>Days before notification:</value>
@@ -295,6 +325,9 @@ Note: This action cannot be undone!</value>
   <data name="DeleteBtn" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="DeleteCustomerSuccess" xml:space="preserve">
+    <value>Customer deleted successfully!</value>
+  </data>
   <data name="DeleteEmployeeError" xml:space="preserve">
     <value>Error deleting employee</value>
   </data>
@@ -302,7 +335,7 @@ Note: This action cannot be undone!</value>
     <value>Employee deleted successfully!</value>
   </data>
   <data name="DeleteError" xml:space="preserve">
-    <value>Error deleting vehicle</value>
+    <value>Delete Error</value>
   </data>
   <data name="DeleteError1" xml:space="preserve">
     <value>Delete Error</value>
@@ -310,7 +343,16 @@ Note: This action cannot be undone!</value>
   <data name="DeleteFailed" xml:space="preserve">
     <value>Failed to delete vehicle!</value>
   </data>
+  <data name="DeleteImage" xml:space="preserve">
+    <value>Delete Image</value>
+  </data>
   <data name="DeleteSuccess" xml:space="preserve">
+    <value>Vehicle deleted successfully!</value>
+  </data>
+  <data name="DeleteVehicleFailed" xml:space="preserve">
+    <value>Failed to delete vehicle!</value>
+  </data>
+  <data name="DeleteVehicleSuccess" xml:space="preserve">
     <value>Vehicle deleted successfully!</value>
   </data>
   <data name="DetailBtn" xml:space="preserve">
@@ -319,8 +361,17 @@ Note: This action cannot be undone!</value>
   <data name="DetailTitle" xml:space="preserve">
     <value>Part details</value>
   </data>
+  <data name="DriverLicense" xml:space="preserve">
+    <value>Driver License</value>
+  </data>
   <data name="EditBtn" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="EditCustomer" xml:space="preserve">
+    <value>Edit Customer Information</value>
+  </data>
+  <data name="EditCustomerTitle" xml:space="preserve">
+    <value>EDIT CUSTOMER INFORMATION</value>
   </data>
   <data name="EditEmployeeError" xml:space="preserve">
     <value>Error editing employee</value>
@@ -377,6 +428,30 @@ Please check the information.</value>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="ErrorAddingCustomer" xml:space="preserve">
+    <value>Error adding customer</value>
+  </data>
+  <data name="ErrorDeletingCustomer" xml:space="preserve">
+    <value>Error deleting customer</value>
+  </data>
+  <data name="ErrorDeletingVehicle" xml:space="preserve">
+    <value>Error deleting vehicle</value>
+  </data>
+  <data name="ErrorEditingCustomer" xml:space="preserve">
+    <value>Error editing customer</value>
+  </data>
+  <data name="ErrorLoadingCustomerData" xml:space="preserve">
+    <value>Error loading customer data</value>
+  </data>
+  <data name="ErrorLoadingData" xml:space="preserve">
+    <value>Error loading data</value>
+  </data>
+  <data name="ErrorLoadingImage" xml:space="preserve">
+    <value>Error loading image</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
   <data name="FontSize" xml:space="preserve">
     <value>Font size:</value>
   </data>
@@ -406,6 +481,15 @@ Please check the information.</value>
   </data>
   <data name="GeneralInfo" xml:space="preserve">
     <value>General Information</value>
+  </data>
+  <data name="IDNumber" xml:space="preserve">
+    <value>ID/Passport Number</value>
+  </data>
+  <data name="IDPhoto" xml:space="preserve">
+    <value>ID Photo</value>
+  </data>
+  <data name="IDType" xml:space="preserve">
+    <value>ID Type</value>
   </data>
   <data name="ImageLoadError" xml:space="preserve">
     <value>Error loading image</value>
@@ -458,6 +542,9 @@ Please check the information.</value>
   <data name="MaintenanceTitle" xml:space="preserve">
     <value>MAINTENANCE MANAGEMENT</value>
   </data>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
   <data name="ManagePhuTungBtn" xml:space="preserve">
     <value>Parts Management</value>
   </data>
@@ -500,8 +587,14 @@ Please check the information.</value>
   <data name="MillionVND" xml:space="preserve">
     <value>Million VND</value>
   </data>
+  <data name="Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
   <data name="MonthlyRevenue" xml:space="preserve">
     <value>Monthly Revenue</value>
+  </data>
+  <data name="NationalID" xml:space="preserve">
+    <value>National ID</value>
   </data>
   <data name="NewCustomers" xml:space="preserve">
     <value>New Customers</value>
@@ -525,10 +618,10 @@ Please check the information.</value>
     <value>NO PERMISSION</value>
   </data>
   <data name="NoResultFound" xml:space="preserve">
-    <value>No vehicles found matching the search criteria!</value>
+    <value>No vehicles found matching search criteria</value>
   </data>
   <data name="NoSaleData" xml:space="preserve">
-    <value>No ready-to-sell vehicles</value>
+    <value>No sale data</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Note</value>
@@ -560,8 +653,15 @@ Please check the information.</value>
   <data name="NoVehicleFound" xml:space="preserve">
     <value>No vehicles in database!. nPlease add new vehicles.</value>
   </data>
+  <data name="NoVehicleInDatabase" xml:space="preserve">
+    <value>No vehicles in database!
+Please add new vehicles.</value>
+  </data>
   <data name="OrderLabel" xml:space="preserve">
     <value>Order #{0}</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
   </data>
   <data name="Part" xml:space="preserve">
     <value>Part</value>
@@ -590,6 +690,9 @@ Please check the information.</value>
   <data name="PartNotFound" xml:space="preserve">
     <value>Part not found!</value>
   </data>
+  <data name="Passport" xml:space="preserve">
+    <value>Passport</value>
+  </data>
   <data name="PerDay" xml:space="preserve">
     <value>VNĐ/day</value>
   </data>
@@ -599,14 +702,32 @@ Please check the information.</value>
   <data name="PhoneLabel" xml:space="preserve">
     <value>Phone Number</value>
   </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Phone Number</value>
+  </data>
   <data name="PlateLabel" xml:space="preserve">
     <value> Plate: {0}</value>
+  </data>
+  <data name="PlateNumber" xml:space="preserve">
+    <value>Plate Number</value>
   </data>
   <data name="PleaseEnterFullInfo" xml:space="preserve">
     <value>Please enter all information!</value>
   </data>
+  <data name="PleaseEnterFullName" xml:space="preserve">
+    <value>Please enter customer's full name!</value>
+  </data>
+  <data name="PleaseEnterPhoneNumber" xml:space="preserve">
+    <value>Please enter phone number!</value>
+  </data>
   <data name="PleaseEnterValidInfo" xml:space="preserve">
     <value>Please enter valid information!</value>
+  </data>
+  <data name="PleaseSelectCustomerToDelete" xml:space="preserve">
+    <value>Please select a customer to delete!</value>
+  </data>
+  <data name="PleaseSelectCustomerToEdit" xml:space="preserve">
+    <value>Please select a customer to edit!</value>
   </data>
   <data name="PleaseSelectVehicleToDelete" xml:space="preserve">
     <value>Please select a vehicle to delete!</value>
@@ -719,6 +840,9 @@ Please check the information.</value>
   <data name="SelectEmployeeToEdit" xml:space="preserve">
     <value>Please select an employee to edit!</value>
   </data>
+  <data name="SelectIDPhoto" xml:space="preserve">
+    <value>Select ID Photo</value>
+  </data>
   <data name="SelectVehicleImage" xml:space="preserve">
     <value>Select Vehicle Image</value>
   </data>
@@ -818,6 +942,9 @@ Please check the information.</value>
   <data name="Unit_Set" xml:space="preserve">
     <value>Set</value>
   </data>
+  <data name="UpdateCustomerSuccess" xml:space="preserve">
+    <value>Customer updated successfully!</value>
+  </data>
   <data name="UpdatedDate" xml:space="preserve">
     <value>Updated Date</value>
   </data>
@@ -832,6 +959,9 @@ Please check the information.</value>
   </data>
   <data name="VehicleDetailTitle" xml:space="preserve">
     <value>VEHICLE DETAILS</value>
+  </data>
+  <data name="VehicleID" xml:space="preserve">
+    <value>Vehicle ID</value>
   </data>
   <data name="VehicleIDRequired" xml:space="preserve">
     <value>Vehicle ID is required!</value>
@@ -850,6 +980,9 @@ Please check the information.</value>
   </data>
   <data name="VehicleSales" xml:space="preserve">
     <value>Vehicle Sales</value>
+  </data>
+  <data name="VehiclesFound" xml:space="preserve">
+    <value>Found: {0} vehicles</value>
   </data>
   <data name="VehicleTitle" xml:space="preserve">
     <value>VEHICLE MANAGEMENT</value>

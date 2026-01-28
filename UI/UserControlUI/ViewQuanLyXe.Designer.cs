@@ -1,4 +1,7 @@
-﻿namespace UI.UserControlUI
+﻿using BLL;
+using System;
+
+namespace UI.UserControlUI
 {
     partial class ViewQuanLyXe
     {
@@ -11,13 +14,12 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+        private void ViewQuanLyXe_HandleDestroyed(object sender, EventArgs e)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            // Cleanup khi control bị destroy
+            langMgr.LanguageChanged -= OnLanguageChanged_ViewXe;
+            ThemeManager.Instance.ThemeChanged -= OnThemeChanged;
+            this.HandleDestroyed -= ViewQuanLyXe_HandleDestroyed;
         }
 
         #region Component Designer generated code

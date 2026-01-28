@@ -193,6 +193,7 @@ partial class ViewQuanLyKhachHang
             this.btn_DeleteCustomer.TabIndex = 2;
             this.btn_DeleteCustomer.Text = "Xóa";
             this.btn_DeleteCustomer.UseVisualStyleBackColor = false;
+            this.btn_DeleteCustomer.Click += new System.EventHandler(this.btn_DeleteCustomer_Click_1);
             // 
             // btn_EditCustomer
             // 

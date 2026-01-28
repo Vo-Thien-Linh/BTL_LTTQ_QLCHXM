@@ -126,6 +126,15 @@
   <data name="AddBtn" xml:space="preserve">
     <value>+ Thêm mới</value>
   </data>
+  <data name="AddCustomer" xml:space="preserve">
+    <value>Thêm Khách Hàng Mới</value>
+  </data>
+  <data name="AddCustomerSuccess" xml:space="preserve">
+    <value>Thêm khách hàng thành công!</value>
+  </data>
+  <data name="AddCustomerTitle" xml:space="preserve">
+    <value>THÊM KHÁCH HÀNG MỚI</value>
+  </data>
   <data name="AddEmployeeError" xml:space="preserve">
     <value>Lỗi thêm nhân viên</value>
   </data>
@@ -192,6 +201,9 @@
   <data name="BirthDateLabel" xml:space="preserve">
     <value>Ngày sinh</value>
   </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Hãng</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Hủy</value>
   </data>
@@ -219,6 +231,9 @@
   <data name="ChooseImage" xml:space="preserve">
     <value>Chọn file ảnh</value>
   </data>
+  <data name="CitizenID" xml:space="preserve">
+    <value>CCCD</value>
+  </data>
   <data name="Color" xml:space="preserve">
     <value>Màu</value>
   </data>
@@ -237,9 +252,15 @@
   <data name="ConfirmDelete1" xml:space="preserve">
     <value>Xác nhận xóa</value>
   </data>
+  <data name="ConfirmDeleteCustomer" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa khách hàng '{0}' (Mã: {1})? Lưu ý: Thao tác này không thể hoàn tác!</value>
+  </data>
   <data name="ConfirmDeleteEmployee" xml:space="preserve">
     <value>Bạn có chắc chắn muốn xóa nhân viên '{0}' (Mã: {1})?
 Lưu ý: Thao tác này không thể hoàn tác!</value>
+  </data>
+  <data name="ConfirmDeleteVehicle" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa xe {0}?</value>
   </data>
   <data name="CreateBtn" xml:space="preserve">
     <value>Tạo phiếu bảo trì</value>
@@ -250,8 +271,14 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="Customer" xml:space="preserve">
     <value>Khách hàng</value>
   </data>
+  <data name="CustomerCode" xml:space="preserve">
+    <value>Mã Khách Hàng</value>
+  </data>
   <data name="CustomerID" xml:space="preserve">
     <value>Mã KH</value>
+  </data>
+  <data name="CustomerNotFound" xml:space="preserve">
+    <value>Không tìm thấy khách hàng!</value>
   </data>
   <data name="CustomerTitle" xml:space="preserve">
     <value>QUẢN LÝ KHÁCH HÀNG</value>
@@ -264,6 +291,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="Date" xml:space="preserve">
     <value>Ngày</value>
+  </data>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Ngày Sinh</value>
   </data>
   <data name="DaysBefore" xml:space="preserve">
     <value>Số ngày nhắc trước:</value>
@@ -295,6 +325,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="DeleteBtn" xml:space="preserve">
     <value>Xóa</value>
   </data>
+  <data name="DeleteCustomerSuccess" xml:space="preserve">
+    <value>Xóa khách hàng thành công!</value>
+  </data>
   <data name="DeleteEmployeeError" xml:space="preserve">
     <value>Lỗi xóa nhân viên</value>
   </data>
@@ -310,7 +343,16 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="DeleteFailed" xml:space="preserve">
     <value>Xóa xe thất bại!</value>
   </data>
+  <data name="DeleteImage" xml:space="preserve">
+    <value>Xóa Ảnh</value>
+  </data>
   <data name="DeleteSuccess" xml:space="preserve">
+    <value>Xóa xe thành công!</value>
+  </data>
+  <data name="DeleteVehicleFailed" xml:space="preserve">
+    <value>Xóa xe thất bại!</value>
+  </data>
+  <data name="DeleteVehicleSuccess" xml:space="preserve">
     <value>Xóa xe thành công!</value>
   </data>
   <data name="DetailBtn" xml:space="preserve">
@@ -319,8 +361,17 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="DetailTitle" xml:space="preserve">
     <value>Chi tiết phụ tùng </value>
   </data>
+  <data name="DriverLicense" xml:space="preserve">
+    <value>Bằng lái xe</value>
+  </data>
   <data name="EditBtn" xml:space="preserve">
     <value>Sửa</value>
+  </data>
+  <data name="EditCustomer" xml:space="preserve">
+    <value>Sửa Thông Tin Khách Hàng</value>
+  </data>
+  <data name="EditCustomerTitle" xml:space="preserve">
+    <value>SỬA THÔNG TIN KHÁCH HÀNG</value>
   </data>
   <data name="EditEmployeeError" xml:space="preserve">
     <value>Lỗi sửa nhân viên</value>
@@ -376,6 +427,30 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="Error" xml:space="preserve">
     <value>Lỗi</value>
   </data>
+  <data name="ErrorAddingCustomer" xml:space="preserve">
+    <value>Lỗi thêm khách hàng</value>
+  </data>
+  <data name="ErrorDeletingCustomer" xml:space="preserve">
+    <value>Lỗi xóa khách hàng</value>
+  </data>
+  <data name="ErrorDeletingVehicle" xml:space="preserve">
+    <value>Lỗi khi xóa xe</value>
+  </data>
+  <data name="ErrorEditingCustomer" xml:space="preserve">
+    <value>Lỗi sửa khách hàng</value>
+  </data>
+  <data name="ErrorLoadingCustomerData" xml:space="preserve">
+    <value>Lỗi tải dữ liệu khách hàng</value>
+  </data>
+  <data name="ErrorLoadingData" xml:space="preserve">
+    <value>Lỗi tải dữ liệu</value>
+  </data>
+  <data name="ErrorLoadingImage" xml:space="preserve">
+    <value>Lỗi khi tải ảnh</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Nữ</value>
+  </data>
   <data name="FontSize" xml:space="preserve">
     <value>Kích thước font:</value>
   </data>
@@ -405,6 +480,15 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="GeneralInfo" xml:space="preserve">
     <value>Thông tin chung</value>
+  </data>
+  <data name="IDNumber" xml:space="preserve">
+    <value>Số CCCD/CMND</value>
+  </data>
+  <data name="IDPhoto" xml:space="preserve">
+    <value>Ảnh Giấy Tờ</value>
+  </data>
+  <data name="IDType" xml:space="preserve">
+    <value>Loại Giấy Tờ</value>
   </data>
   <data name="ImageLoadError" xml:space="preserve">
     <value>Lỗi khi tải ảnh</value>
@@ -457,6 +541,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="MaintenanceTitle" xml:space="preserve">
     <value>QUẢN LÝ BẢO TRÌ XE </value>
   </data>
+  <data name="Male" xml:space="preserve">
+    <value>Nam</value>
+  </data>
   <data name="ManagePhuTungBtn" xml:space="preserve">
     <value>Quản lý phụ tùng</value>
   </data>
@@ -499,8 +586,14 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="MillionVND" xml:space="preserve">
     <value>Triệu VNĐ</value>
   </data>
+  <data name="Model" xml:space="preserve">
+    <value>Dòng</value>
+  </data>
   <data name="MonthlyRevenue" xml:space="preserve">
     <value>Doanh Thu Tháng Này</value>
+  </data>
+  <data name="NationalID" xml:space="preserve">
+    <value>CMND</value>
   </data>
   <data name="NewCustomers" xml:space="preserve">
     <value>Khách Hàng Mới</value>
@@ -524,7 +617,7 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
     <value>KHÔNG CÓ QUYỀN </value>
   </data>
   <data name="NoResultFound" xml:space="preserve">
-    <value>Không tìm thấy xe nào phù hợp với điều kiện tìm kiếm!</value>
+    <value>Không tìm thấy xe nào phù hợp với điều kiện tìm kiếm</value>
   </data>
   <data name="NoSaleData" xml:space="preserve">
     <value>Không có xe nào sẵn sàng bán</value>
@@ -559,8 +652,14 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="NoVehicleFound" xml:space="preserve">
     <value>Database chưa có xe nào!. Vui lòng thêm xe mới.</value>
   </data>
+  <data name="NoVehicleInDatabase" xml:space="preserve">
+    <value>Database chưa có xe nào! Vui lòng thêm xe mới.</value>
+  </data>
   <data name="OrderLabel" xml:space="preserve">
     <value>Đơn #{0} </value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Khác</value>
   </data>
   <data name="Part" xml:space="preserve">
     <value>Phụ tùng</value>
@@ -589,6 +688,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="PartNotFound" xml:space="preserve">
     <value>Không tìm thấy phụ tùng!</value>
   </data>
+  <data name="Passport" xml:space="preserve">
+    <value>Hộ chiếu</value>
+  </data>
   <data name="PerDay" xml:space="preserve">
     <value>VNĐ/ngày</value>
   </data>
@@ -598,14 +700,32 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="PhoneLabel" xml:space="preserve">
     <value>Số điện thoại</value>
   </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Số Điện Thoại</value>
+  </data>
   <data name="PlateLabel" xml:space="preserve">
     <value>Biển số: {0} </value>
+  </data>
+  <data name="PlateNumber" xml:space="preserve">
+    <value>Biển số</value>
   </data>
   <data name="PleaseEnterFullInfo" xml:space="preserve">
     <value>Vui lòng nhập đầy đủ thông tin!</value>
   </data>
+  <data name="PleaseEnterFullName" xml:space="preserve">
+    <value>Vui lòng nhập họ tên khách hàng!</value>
+  </data>
+  <data name="PleaseEnterPhoneNumber" xml:space="preserve">
+    <value>Vui lòng nhập số điện thoại!</value>
+  </data>
   <data name="PleaseEnterValidInfo" xml:space="preserve">
     <value>Vui lòng nhập đúng và hợp lệ!</value>
+  </data>
+  <data name="PleaseSelectCustomerToDelete" xml:space="preserve">
+    <value>Vui lòng chọn một khách hàng để xóa!</value>
+  </data>
+  <data name="PleaseSelectCustomerToEdit" xml:space="preserve">
+    <value>Vui lòng chọn một khách hàng để sửa!</value>
   </data>
   <data name="PleaseSelectVehicleToDelete" xml:space="preserve">
     <value>Vui lòng chọn xe cần xóa!</value>
@@ -718,6 +838,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="SelectEmployeeToEdit" xml:space="preserve">
     <value>Vui lòng chọn một nhân viên để sửa!</value>
   </data>
+  <data name="SelectIDPhoto" xml:space="preserve">
+    <value>Chọn Ảnh Giấy Tờ</value>
+  </data>
   <data name="SelectVehicleImage" xml:space="preserve">
     <value>Chọn ảnh xe</value>
   </data>
@@ -817,6 +940,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="Unit_Set" xml:space="preserve">
     <value>Bộ</value>
   </data>
+  <data name="UpdateCustomerSuccess" xml:space="preserve">
+    <value>Cập nhật khách hàng thành công!</value>
+  </data>
   <data name="UpdatedDate" xml:space="preserve">
     <value>Cập Nhật</value>
   </data>
@@ -831,6 +957,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="VehicleDetailTitle" xml:space="preserve">
     <value>THÔNG TIN CHI TIẾT XE MÁY</value>
+  </data>
+  <data name="VehicleID" xml:space="preserve">
+    <value>Mã xe</value>
   </data>
   <data name="VehicleIDRequired" xml:space="preserve">
     <value>Mã xe không được để trống!</value>
@@ -849,6 +978,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="VehicleSales" xml:space="preserve">
     <value>Bán xe</value>
+  </data>
+  <data name="VehiclesFound" xml:space="preserve">
+    <value>Tìm thấy: {0} xe</value>
   </data>
   <data name="VehicleTitle" xml:space="preserve">
     <value>QUẢN LÝ XE</value>
