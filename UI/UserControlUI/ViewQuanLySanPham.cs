@@ -43,6 +43,17 @@ namespace UI.UserControlUI
             panel2.MouseLeave += Panel2_MouseLeave;
             btnQuanLyXe.MouseEnter += (s, e) => Panel2_MouseEnter(s, e);
             btnQuanLyPhuTung.MouseEnter += (s, e) => Panel2_MouseEnter(s, e);
+            
+            // Áp dụng phân quyền - ẩn nút khuyến mãi với role Kỹ thuật
+            ApplyPermissions();
+        }
+        
+        /// <summary>
+        /// Áp dụng phân quyền - Kỹ thuật không được xem khuyến mãi
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            btnQuanLyKhuyenMai.Visible = PermissionManager.CanViewKhuyenMai();
         }
         
         private void Panel2_MouseEnter(object sender, EventArgs e)

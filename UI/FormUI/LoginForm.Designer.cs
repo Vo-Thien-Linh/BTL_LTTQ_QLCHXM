@@ -37,6 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnTogglePassword = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,6 +46,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btnTogglePassword);
             this.panel1.Controls.Add(this.btnDangNhap);
             this.panel1.Controls.Add(this.txtMatKhau);
             this.panel1.Controls.Add(this.txtSoDienThoai);
@@ -76,8 +78,22 @@
             // 
             this.txtMatKhau.Location = new System.Drawing.Point(135, 160);
             this.txtMatKhau.Name = "txtMatKhau";
-            this.txtMatKhau.Size = new System.Drawing.Size(260, 22);
+            this.txtMatKhau.Size = new System.Drawing.Size(220, 22);
             this.txtMatKhau.TabIndex = 7;
+            // 
+            // btnTogglePassword
+            // 
+            this.btnTogglePassword.BackColor = System.Drawing.Color.White;
+            this.btnTogglePassword.FlatAppearance.BorderSize = 0;
+            this.btnTogglePassword.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTogglePassword.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnTogglePassword.Location = new System.Drawing.Point(360, 157);
+            this.btnTogglePassword.Name = "btnTogglePassword";
+            this.btnTogglePassword.Size = new System.Drawing.Size(35, 28);
+            this.btnTogglePassword.TabIndex = 9;
+            this.btnTogglePassword.Text = "👁";
+            this.btnTogglePassword.UseVisualStyleBackColor = false;
+            this.btnTogglePassword.Click += new System.EventHandler(this.btnTogglePassword_Click);
             // 
             // txtSoDienThoai
             // 
@@ -161,5 +177,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button btnTogglePassword;
     }
 }
