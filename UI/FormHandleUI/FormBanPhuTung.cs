@@ -433,5 +433,10 @@ namespace UI.FormHandleUI
         {
 
         }
+
+        private void txtKmValue_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

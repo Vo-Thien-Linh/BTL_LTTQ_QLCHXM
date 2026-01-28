@@ -663,7 +663,6 @@ namespace UI.UserControlUI
             CreateDetailLabel(langMgr.GetString("YearOfManufacture") + ":", xe["NamSX"]?.ToString(), rightX, yPos);
             yPos += 35;
             CreateDetailLabel(langMgr.GetString("EngineCapacity") + ":", xe["PhanKhoi"]?.ToString() + " cc", leftX, yPos);
-            CreateDetailLabel(langMgr.GetString("VehicleType") + ":", xe["LoaiXe"]?.ToString(), rightX, yPos);
             yPos += 35;
 
             string plateNumberText = xe["BienSo"] != DBNull.Value ? xe["BienSo"].ToString() : langMgr.GetString("NotYet");

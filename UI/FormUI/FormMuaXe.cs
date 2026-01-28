@@ -247,9 +247,9 @@ namespace UI.FormUI
                             
                             if (txtLoaiXe != null)
                             {
-                                txtLoaiXe.Text = row["LoaiXe"]?.ToString() ?? "Không xác định";
-                                txtLoaiXe.Visible = true;
-                                if (lblLoaiXe != null) lblLoaiXe.Visible = true;
+                                txtLoaiXe.Text = string.Empty;
+                                txtLoaiXe.Visible = false;
+                                if (lblLoaiXe != null) lblLoaiXe.Visible = false;
                             }
                             
                             if (txtPhanKhoi != null)

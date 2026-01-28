@@ -419,6 +419,7 @@ namespace UI.FormUI
             this.txtLoaiXe.ReadOnly = true;
             this.txtLoaiXe.Size = new System.Drawing.Size(372, 24);
             this.txtLoaiXe.TabIndex = 10;
+            this.txtLoaiXe.Visible = false;
             // 
             // txtPhanKhoi
             // 
@@ -493,6 +494,7 @@ namespace UI.FormUI
             this.lblLoaiXe.Size = new System.Drawing.Size(59, 18);
             this.lblLoaiXe.TabIndex = 11;
             this.lblLoaiXe.Text = "Loại xe:";
+            this.lblLoaiXe.Visible = false;
             // 
             // lblPhanKhoi
             // 
