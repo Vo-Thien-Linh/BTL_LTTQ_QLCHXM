@@ -539,22 +539,26 @@ namespace UI.FormUI
                 SizeMode = TabSizeMode.Fixed
             };
 
-            // Tab 1: Duyệt đơn thuê (chỉ hiển thị với tài khoản quản lý)
-            if (CurrentUser.LoaiTaiKhoan == "QuanLy") // điều kiện bạn tùy chỉnh theo kiểu tài khoản
+            // Tab 1: Quản lý cho thuê (tạo đơn thuê - Quản lý và nhân viên Bán hàng)
+            if (CurrentUser.ChucVu == "Quản lý" || CurrentUser.ChucVu == "Bán hàng")
             {
                 TabPage tabQuanLyChoThue = new TabPage(" " + langMgr.GetString("TabManageRental"));
-                ViewQuanLyChoThue viewQuanLyChoThue = new ViewQuanLyChoThue(CurrentUser.MaNV); // hoặc dữ liệu bạn cần truyền
+                ViewQuanLyChoThue viewQuanLyChoThue = new ViewQuanLyChoThue(CurrentUser.MaNV);
                 viewQuanLyChoThue.Dock = DockStyle.Fill;
                 tabQuanLyChoThue.Controls.Add(viewQuanLyChoThue);
                 tabControl.TabPages.Add(tabQuanLyChoThue);
             }
-            // Tab 2: Quản lý cho thuê (ai login cũng có)
-            TabPage tabDuyetDon = new TabPage(" " + langMgr.GetString("TabApproveRental"));
-            ViewDuyetDonThue viewDuyetDon = new ViewDuyetDonThue();
-            viewDuyetDon.SetMaNhanVien(CurrentUser.MaNV); // hoặc mã/nội dung theo business của bạn
-            viewDuyetDon.Dock = DockStyle.Fill;
-            tabDuyetDon.Controls.Add(viewDuyetDon);
-            tabControl.TabPages.Add(tabDuyetDon);
+
+            // Tab 2: Duyệt đơn thuê (chỉ Quản lý)
+            if (CurrentUser.LoaiTaiKhoan == "QuanLy")
+            {
+                TabPage tabDuyetDon = new TabPage(" " + langMgr.GetString("TabApproveRental"));
+                ViewDuyetDonThue viewDuyetDon = new ViewDuyetDonThue();
+                viewDuyetDon.SetMaNhanVien(CurrentUser.MaNV);
+                viewDuyetDon.Dock = DockStyle.Fill;
+                tabDuyetDon.Controls.Add(viewDuyetDon);
+                tabControl.TabPages.Add(tabDuyetDon);
+            }
 
             pnlContent.Controls.Add(tabControl);
             tabControl.BringToFront();

@@ -30,6 +30,22 @@ namespace UI.UserControlUI
             btnLamMoi.Click += BtnLamMoi_Click;
             btnTimKiem.Click += BtnTimKiem_Click;
             dgvQuanLyKhuyenMai.SelectionChanged += DgvQuanLyKhuyenMai_SelectionChanged;
+            
+            // Áp dụng phân quyền
+            ApplyPermissions();
+        }
+
+        /// <summary>
+        /// Áp dụng phân quyền - chỉ Admin mới có quyền thêm/sửa/xóa khuyến mãi
+        /// </summary>
+        private void ApplyPermissions()
+        {
+            bool isAdmin = PermissionManager.IsAdmin();
+            
+            // Chỉ Admin mới thấy và sử dụng các nút thêm/sửa/xóa
+            btnThem.Visible = isAdmin;
+            btnSua.Visible = isAdmin;
+            btnXoa.Visible = isAdmin;
         }
 
         private void ViewQuanLyKhuyenMai_Load(object sender, EventArgs e)

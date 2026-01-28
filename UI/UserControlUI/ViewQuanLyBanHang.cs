@@ -32,9 +32,18 @@ namespace UI.UserControlUI
             btnSearch.Click += BtnSearch_Click;
             btnRefresh.Click += BtnRefresh_Click;
             btnXemHopDong.Click += BtnXemHopDong_Click;
+            btnLichSuGiaoDich.Click += BtnLichSuGiaoDich_Click;
 
             langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadXeBan(); };
             ApplyLanguage();
+            ApplyPermissions();
+        }
+
+        private void ApplyPermissions()
+        {
+            // Chỉ Admin và Thu ngân được xem lịch sử giao dịch
+            bool canViewHistory = CurrentUser.ChucVu == "Quản lý" || CurrentUser.ChucVu == "Thu ngân";
+            btnLichSuGiaoDich.Visible = canViewHistory;
         }
 
         private void ApplyLanguage()
@@ -453,6 +462,234 @@ namespace UI.UserControlUI
             // Mở form danh sách hợp đồng mua
             FormDanhSachHopDongMua formHopDong = new FormDanhSachHopDongMua();
             formHopDong.ShowDialog();
+        }
+
+        private void BtnLichSuGiaoDich_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                GiaoDichBanBLL giaoDichBLL = new GiaoDichBanBLL();
+                DataTable dtGiaoDich = giaoDichBLL.GetLichSuGiaoDichTongHop();
+                DataTable dtPhuTung = giaoDichBLL.GetLichSuBanPhuTungLe();
+
+                // Tính tổng doanh thu
+                decimal doanhThuNgay = 0;
+                decimal doanhThuTuan = 0;
+                DateTime today = DateTime.Today;
+                DateTime startOfWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+
+                // Tính từ giao dịch bán/thuê
+                foreach (DataRow row in dtGiaoDich.Rows)
+                {
+                    DateTime ngay = Convert.ToDateTime(row["NgayGiaoDich"]);
+                    decimal tien = Convert.ToDecimal(row["ThanhToan"]);
+                    
+                    if (ngay.Date == today)
+                        doanhThuNgay += tien;
+                    
+                    if (ngay.Date >= startOfWeek && ngay.Date <= today)
+                        doanhThuTuan += tien;
+                }
+
+                // Tính từ phụ tùng lẻ
+                foreach (DataRow row in dtPhuTung.Rows)
+                {
+                    DateTime ngay = Convert.ToDateTime(row["NgayGiaoDich"]);
+                    decimal tien = Convert.ToDecimal(row["ThanhTien"]);
+                    
+                    if (ngay.Date == today)
+                        doanhThuNgay += tien;
+                    
+                    if (ngay.Date >= startOfWeek && ngay.Date <= today)
+                        doanhThuTuan += tien;
+                }
+
+                // Tạo form hiển thị lịch sử
+                Form formLichSu = new Form
+                {
+                    Text = "Lịch Sử Giao Dịch",
+                    Size = new System.Drawing.Size(1400, 850),
+                    StartPosition = FormStartPosition.CenterScreen,
+                    BackColor = Color.White
+                };
+
+                // Panel tổng hợp doanh thu
+                Panel panelSummary = new Panel
+                {
+                    Dock = DockStyle.Top,
+                    Height = 80,
+                    Padding = new Padding(20, 10, 20, 10),
+                    BackColor = Color.FromArgb(245, 245, 245)
+                };
+
+                Label lblDoanhThuNgay = new Label
+                {
+                    Text = $"💰 Doanh Thu Hôm Nay: {doanhThuNgay:N0} VNĐ",
+                    Font = new Font("Segoe UI", 13F, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(76, 175, 80),
+                    AutoSize = true,
+                    Location = new Point(20, 15)
+                };
+
+                Label lblDoanhThuTuan = new Label
+                {
+                    Text = $"📊 Doanh Thu Tuần Này: {doanhThuTuan:N0} VNĐ",
+                    Font = new Font("Segoe UI", 13F, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(33, 150, 243),
+                    AutoSize = true,
+                    Location = new Point(20, 45)
+                };
+
+                panelSummary.Controls.Add(lblDoanhThuNgay);
+                panelSummary.Controls.Add(lblDoanhThuTuan);
+
+                // Panel chứa bảng giao dịch bán/thuê
+                Panel panelTop = new Panel
+                {
+                    Dock = DockStyle.Top,
+                    Height = 360,
+                    Padding = new Padding(10)
+                };
+
+                Label lblGiaoDich = new Label
+                {
+                    Text = "GIAO DỊCH BÁN XE VÀ CHO THUÊ",
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(25, 118, 210),
+                    Dock = DockStyle.Top,
+                    Height = 30,
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
+
+                DataGridView dgvGiaoDich = new DataGridView
+                {
+                    Dock = DockStyle.Fill,
+                    DataSource = dtGiaoDich,
+                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                    ReadOnly = true,
+                    AllowUserToAddRows = false,
+                    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                    BackgroundColor = Color.White,
+                    BorderStyle = BorderStyle.None,
+                    CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal,
+                    RowHeadersVisible = false,
+                    AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.FromArgb(240, 240, 240) },
+                    DefaultCellStyle = new DataGridViewCellStyle { Font = new Font("Segoe UI", 9F) },
+                    ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        BackColor = Color.FromArgb(25, 118, 210),
+                        ForeColor = Color.White,
+                        Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+                    },
+                    EnableHeadersVisualStyles = false,
+                    RowTemplate = { Height = 30 }
+                };
+
+                panelTop.Controls.Add(dgvGiaoDich);
+                panelTop.Controls.Add(lblGiaoDich);
+
+                // Panel chứa bảng phụ tùng lẻ
+                Panel panelBottom = new Panel
+                {
+                    Dock = DockStyle.Fill,
+                    Padding = new Padding(10)
+                };
+
+                Label lblPhuTung = new Label
+                {
+                    Text = "LỊCH SỬ BÁN PHỤ TÙNG LẺ",
+                    Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(255, 152, 0),
+                    Dock = DockStyle.Top,
+                    Height = 30,
+                    TextAlign = ContentAlignment.MiddleLeft
+                };
+
+                DataGridView dgvPhuTung = new DataGridView
+                {
+                    Dock = DockStyle.Fill,
+                    DataSource = dtPhuTung,
+                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+                    ReadOnly = true,
+                    AllowUserToAddRows = false,
+                    SelectionMode = DataGridViewSelectionMode.FullRowSelect,
+                    BackgroundColor = Color.White,
+                    BorderStyle = BorderStyle.None,
+                    CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal,
+                    RowHeadersVisible = false,
+                    AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle { BackColor = Color.FromArgb(255, 248, 225) },
+                    DefaultCellStyle = new DataGridViewCellStyle { Font = new Font("Segoe UI", 9F) },
+                    ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+                    {
+                        BackColor = Color.FromArgb(255, 152, 0),
+                        ForeColor = Color.White,
+                        Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+                    },
+                    EnableHeadersVisualStyles = false,
+                    RowTemplate = { Height = 30 }
+                };
+
+                panelBottom.Controls.Add(dgvPhuTung);
+                panelBottom.Controls.Add(lblPhuTung);
+
+                formLichSu.Controls.Add(panelBottom);
+                formLichSu.Controls.Add(panelTop);
+                formLichSu.Controls.Add(panelSummary);
+
+                // Format cột cho bảng giao dịch
+                if (dgvGiaoDich.Columns["LoaiGiaoDich"] != null)
+                {
+                    dgvGiaoDich.Columns["LoaiGiaoDich"].HeaderText = "Loại";
+                    dgvGiaoDich.Columns["LoaiGiaoDich"].Width = 100;
+                }
+                if (dgvGiaoDich.Columns["NgayGiaoDich"] != null)
+                {
+                    dgvGiaoDich.Columns["NgayGiaoDich"].HeaderText = "Ngày";
+                    dgvGiaoDich.Columns["NgayGiaoDich"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+                if (dgvGiaoDich.Columns["ThanhToan"] != null)
+                {
+                    dgvGiaoDich.Columns["ThanhToan"].HeaderText = "Thanh Toán";
+                    dgvGiaoDich.Columns["ThanhToan"].DefaultCellStyle.Format = "#,##0 VNĐ";
+                    dgvGiaoDich.Columns["ThanhToan"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+
+                // Format cột cho bảng phụ tùng
+                if (dgvPhuTung.Columns["NgayGiaoDich"] != null)
+                {
+                    dgvPhuTung.Columns["NgayGiaoDich"].HeaderText = "Ngày";
+                    dgvPhuTung.Columns["NgayGiaoDich"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+                    dgvPhuTung.Columns["NgayGiaoDich"].Width = 150;
+                }
+                if (dgvPhuTung.Columns["SanPham"] != null)
+                {
+                    dgvPhuTung.Columns["SanPham"].HeaderText = "Phụ Tùng";
+                }
+                if (dgvPhuTung.Columns["SoLuong"] != null)
+                {
+                    dgvPhuTung.Columns["SoLuong"].HeaderText = "SL";
+                    dgvPhuTung.Columns["SoLuong"].Width = 50;
+                    dgvPhuTung.Columns["SoLuong"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                }
+                if (dgvPhuTung.Columns["ThanhTien"] != null)
+                {
+                    dgvPhuTung.Columns["ThanhTien"].HeaderText = "Thành Tiền";
+                    dgvPhuTung.Columns["ThanhTien"].DefaultCellStyle.Format = "#,##0 VNĐ";
+                    dgvPhuTung.Columns["ThanhTien"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+                if (dgvPhuTung.Columns["NhanVien"] != null)
+                {
+                    dgvPhuTung.Columns["NhanVien"].HeaderText = "Nhân Viên";
+                    dgvPhuTung.Columns["NhanVien"].Width = 150;
+                }
+
+                formLichSu.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải lịch sử giao dịch: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void panelTop_Paint(object sender, PaintEventArgs e)
