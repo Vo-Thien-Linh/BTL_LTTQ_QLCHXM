@@ -414,6 +414,53 @@ namespace UI.UserControlUI
                 }
             };
 
+            // Badge hết hàng (cho xe bán)
+            Label lblHetHang = null;
+            if (isXeBan && xe["SoLuong"] != DBNull.Value)
+            {
+                int soLuong = Convert.ToInt32(xe["SoLuong"]);
+                if (soLuong == 0)
+                {
+                    lblHetHang = new Label
+                    {
+                        Text = "HẾT HÀNG",
+                        Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                        Location = new Point(85, 222),
+                        Size = new Size(85, 20),
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        BackColor = Color.FromArgb(211, 47, 47),
+                        ForeColor = Color.White
+                    };
+                    lblHetHang.Paint += (s, e) =>
+                    {
+                        using (GraphicsPath path = GetRoundedRectangle(lblHetHang.ClientRectangle, 4))
+                        {
+                            lblHetHang.Region = new Region(path);
+                        }
+                    };
+                }
+                else if (soLuong <= 3)
+                {
+                    lblHetHang = new Label
+                    {
+                        Text = $"CÒN {soLuong} XE",
+                        Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                        Location = new Point(85, 222),
+                        Size = new Size(85, 20),
+                        TextAlign = ContentAlignment.MiddleCenter,
+                        BackColor = Color.FromArgb(255, 152, 0),
+                        ForeColor = Color.White
+                    };
+                    lblHetHang.Paint += (s, e) =>
+                    {
+                        using (GraphicsPath path = GetRoundedRectangle(lblHetHang.ClientRectangle, 4))
+                        {
+                            lblHetHang.Region = new Region(path);
+                        }
+                    };
+                }
+            }
+
             // Giá (lớn và nổi bật)
             string giaText = isXeChoThue
                 ? (xe["GiaMua"] != DBNull.Value ? string.Format("{0:N0} {1}", Convert.ToDecimal(xe["GiaMua"]) / 30, langMgr.GetString("PerDay")) : "N/A")
@@ -471,10 +518,15 @@ namespace UI.UserControlUI
             };
 
             // Thêm controls vào card
-            card.Controls.AddRange(new Control[] { 
+            var controlList = new List<Control> { 
                 imagePanel, lblTenXe, lblThongTin, lblTrangThai,
                 lblGia, btnAction
-            });
+            };
+            if (lblHetHang != null)
+            {
+                controlList.Add(lblHetHang);
+            }
+            card.Controls.AddRange(controlList.ToArray());
 
             // Hover effect
             card.MouseEnter += (s, e) =>

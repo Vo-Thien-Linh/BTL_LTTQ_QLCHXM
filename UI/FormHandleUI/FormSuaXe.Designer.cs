@@ -97,7 +97,7 @@
             this.btnSuaXe.Name = "btnSuaXe";
             this.btnSuaXe.Size = new System.Drawing.Size(236, 68);
             this.btnSuaXe.TabIndex = 7;
-            this.btnSuaXe.Text = "Sửa xe";
+            this.btnSuaXe.Text = "Xác Nhận";
             this.btnSuaXe.UseVisualStyleBackColor = true;
             this.btnSuaXe.Click += new System.EventHandler(this.btnSuaXe_Click);
             // 
@@ -128,8 +128,8 @@
             this.cbbLoaiXe.Name = "cbbLoaiXe";
             this.cbbLoaiXe.Size = new System.Drawing.Size(129, 24);
             this.cbbLoaiXe.TabIndex = 21;
-            this.cbbLoaiXe.SelectedIndexChanged += new System.EventHandler(this.cbbLoaiXe_SelectedIndexChanged);
             this.cbbLoaiXe.Visible = false;
+            this.cbbLoaiXe.SelectedIndexChanged += new System.EventHandler(this.cbbLoaiXe_SelectedIndexChanged);
             // 
             // cbbNhaCungCap
             // 
@@ -345,9 +345,10 @@
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(404, 38);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(168, 46);
+            this.label1.Size = new System.Drawing.Size(397, 46);
             this.label1.TabIndex = 0;
-            this.label1.Text = "SỬA XE";
+            this.label1.Text = "SỬA THÔNG TIN XE";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // btnChonFileAnh
             // 

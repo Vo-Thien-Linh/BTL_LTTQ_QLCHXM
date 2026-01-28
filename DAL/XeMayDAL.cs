@@ -610,6 +610,50 @@ namespace DAL
         }
 
         /// <summary>
+        /// Lấy tất cả xe để bán bao gồm cả xe hết hàng (để hiển thị status)
+        /// </summary>
+        public DataTable GetTatCaXeBan()
+        {
+            try
+            {
+                string query = @"
+                    SELECT 
+                        xe.ID_Xe,
+                        xe.ID_Loai,
+                        xe.BienSo,
+                        xe.AnhXe,
+                        hx.TenHang,
+                        dx.TenDong,
+                        ms.TenMau,
+                        lx.NamSX,
+                        dx.PhanKhoi,
+                        ISNULL(xe.SoLuong, 0) AS SoLuong,
+                        xe.TrangThai,
+                        ISNULL(tg.GiaBan, ISNULL(xe.GiaMua, 0)) AS GiaBanGanNhat
+                    FROM XeMay xe
+                    INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                    INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                    INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                    INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                    LEFT JOIN ThongTinGiaXe tg ON xe.ID_Xe = tg.ID_Xe AND tg.PhanLoai = N'Bán'
+                    WHERE xe.MucDichSuDung = N'Bán'
+                      AND (xe.TrangThai = N'Sẵn sàng' OR xe.TrangThai = N'Đã bán')
+                    ORDER BY 
+                        CASE WHEN xe.SoLuong > 0 THEN 0 ELSE 1 END,
+                        hx.TenHang, 
+                        dx.TenDong, 
+                        xe.BienSo";
+
+                return DataProvider.ExecuteQuery(query);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi GetTatCaXeBan: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
         /// Lấy 1 xe cụ thể từ loại xe để bán
         /// </summary>
         public DataTable GetXeTheoLoaiDeBan(string idLoai)

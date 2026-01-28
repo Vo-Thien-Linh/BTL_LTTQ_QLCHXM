@@ -275,8 +275,8 @@ namespace DAL
             DataTable dt = new DataTable();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                // ✅ SỬA: Lấy tất cả xe từ quản lý sản phẩm (không chỉ "Sẵn sàng")
-                // Bao gồm cả xe đang bảo trì, xe sẵn sàng, xe đang thuê
+                // Lấy tất cả xe (trừ xe đã xóa hoặc không tồn tại)
+                // Bao gồm: xe bán, xe thuê, xe sẵn sàng, xe đang bảo trì
                 string query = @"
                     SELECT 
                         xm.ID_Xe,
@@ -290,16 +290,25 @@ namespace DAL
                         xm.TrangThai,
                         xm.MucDichSuDung,
                         xm.KmDaChay,
-                        xm.BienSo + ' - ' + hx.TenHang + ' ' + dx.TenDong + ' (' + xm.TrangThai + ')' AS DisplayText
+                        CASE 
+                            WHEN xm.BienSo IS NOT NULL AND xm.BienSo <> '' 
+                            THEN xm.BienSo + ' - ' + hx.TenHang + ' ' + dx.TenDong + ' (' + xm.TrangThai + ')'
+                            ELSE xm.ID_Xe + ' - ' + hx.TenHang + ' ' + dx.TenDong + ' (' + xm.TrangThai + ')'
+                        END AS DisplayText
                     FROM XeMay xm
                     LEFT JOIN LoaiXe lx ON xm.ID_Loai = lx.ID_Loai
                     LEFT JOIN HangXe hx ON lx.MaHang = hx.MaHang
                     LEFT JOIN DongXe dx ON lx.MaDong = dx.MaDong
                     LEFT JOIN MauSac ms ON lx.MaMau = ms.MaMau
-                    WHERE xm.BienSo IS NOT NULL 
-                      AND xm.BienSo <> ''
-                      AND xm.TrangThai IN (N'Sẵn sàng', N'Đang thuê', N'Đang bảo trì')
-                    ORDER BY xm.TrangThai, xm.BienSo";
+                    WHERE xm.TrangThai IS NOT NULL
+                    ORDER BY 
+                        CASE xm.TrangThai
+                            WHEN N'Đang bảo trì' THEN 1
+                            WHEN N'Sẵn sàng' THEN 2
+                            WHEN N'Đang thuê' THEN 3
+                            ELSE 4
+                        END,
+                        xm.BienSo, xm.ID_Xe";
 
                 SqlDataAdapter da = new SqlDataAdapter(query, conn);
                 da.Fill(dt);

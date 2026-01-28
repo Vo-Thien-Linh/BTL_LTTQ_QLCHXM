@@ -107,7 +107,8 @@ namespace UI.UserControlUI
         {
             try
             {
-                DataTable dt = xeMayBLL.GetLoaiXeSanSangBan();
+                // Lấy tất cả xe bán bao gồm cả xe hết hàng
+                DataTable dt = xeMayBLL.GetTatCaXeBan();
                 DisplayXeCards(dt);
                 UpdateRecordCount(dt?.Rows.Count ?? 0);
             }
@@ -214,6 +215,81 @@ namespace UI.UserControlUI
 
             card.Controls.Add(imagePanel);
 
+            // Badge "Hết hàng" nếu số lượng = 0
+            if (soLuong <= 0)
+            {
+                Panel badgeHetHang = new Panel
+                {
+                    Size = new Size(100, 35),
+                    Location = new Point(10, 10),
+                    BackColor = Color.FromArgb(220, 244, 67, 54) // Đỏ với opacity
+                };
+                
+                badgeHetHang.Paint += (s, e) =>
+                {
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    Rectangle rect = new Rectangle(0, 0, badgeHetHang.Width - 1, badgeHetHang.Height - 1);
+                    using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectangle(rect, 4))
+                    {
+                        using (SolidBrush brush = new SolidBrush(Color.FromArgb(244, 67, 54)))
+                        {
+                            e.Graphics.FillPath(brush, path);
+                        }
+                    }
+                };
+                
+                Label lblHetHang = new Label
+                {
+                    Text = "HẾT HÀNG",
+                    Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                    ForeColor = Color.White,
+                    Size = new Size(100, 35),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    BackColor = Color.Transparent
+                };
+                
+                badgeHetHang.Controls.Add(lblHetHang);
+                imagePanel.Controls.Add(badgeHetHang);
+                badgeHetHang.BringToFront();
+            }
+            else if (soLuong <= 3)
+            {
+                // Badge cảnh báo sắp hết hàng
+                Panel badgeSapHet = new Panel
+                {
+                    Size = new Size(110, 35),
+                    Location = new Point(10, 10),
+                    BackColor = Color.FromArgb(220, 255, 152, 0) // Cam với opacity
+                };
+                
+                badgeSapHet.Paint += (s, e) =>
+                {
+                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    Rectangle rect = new Rectangle(0, 0, badgeSapHet.Width - 1, badgeSapHet.Height - 1);
+                    using (System.Drawing.Drawing2D.GraphicsPath path = GetRoundedRectangle(rect, 4))
+                    {
+                        using (SolidBrush brush = new SolidBrush(Color.FromArgb(255, 152, 0)))
+                        {
+                            e.Graphics.FillPath(brush, path);
+                        }
+                    }
+                };
+                
+                Label lblSapHet = new Label
+                {
+                    Text = $"CÒN {soLuong} XE",
+                    Font = new Font("Segoe UI", 8.5F, FontStyle.Bold),
+                    ForeColor = Color.White,
+                    Size = new Size(110, 35),
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    BackColor = Color.Transparent
+                };
+                
+                badgeSapHet.Controls.Add(lblSapHet);
+                imagePanel.Controls.Add(badgeSapHet);
+                badgeSapHet.BringToFront();
+            }
+
             // Tên xe (Hãng + Dòng)
             Label lblTenXe = new Label
             {
@@ -262,17 +338,34 @@ namespace UI.UserControlUI
             // Nút MUA NGAY
             Button btnMua = new Button
             {
-                Text = "MUA NGAY",
+                Text = soLuong <= 0 ? "HẾT HÀNG" : "MUA NGAY",
                 Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
                 Location = new Point(10, 260),
                 Size = new Size(240, 38),
-                BackColor = Color.FromArgb(76, 175, 80),
+                BackColor = soLuong <= 0 ? Color.FromArgb(158, 158, 158) : Color.FromArgb(76, 175, 80),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
+                Cursor = soLuong <= 0 ? Cursors.No : Cursors.Hand,
+                Enabled = soLuong > 0
             };
             btnMua.FlatAppearance.BorderSize = 0;
-            btnMua.Click += (s, e) => BtnMua_Click(s, e, idXe);
+            
+            if (soLuong > 0)
+            {
+                btnMua.Click += (s, e) => BtnMua_Click(s, e, idXe);
+            }
+            else
+            {
+                btnMua.Click += (s, e) => 
+                {
+                    MessageBox.Show(
+                        "Xe này đã hết hàng!\n\nVui lòng chọn xe khác hoặc liên hệ để nhập thêm hàng.",
+                        "Xe hết hàng",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                };
+            }
+            
             card.Controls.Add(btnMua);
 
             // Hover effect
@@ -286,6 +379,18 @@ namespace UI.UserControlUI
         {
             try
             {
+                // Kiểm tra xe trước khi mở form
+                string errorMessage;
+                if (!xeMayBLL.KiemTraXeTruocKhiBan(idXe, 1, out errorMessage))
+                {
+                    MessageBox.Show(
+                        errorMessage,
+                        "Không thể bán xe",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
                 // Mở form bán xe với thông tin xe đã chọn
                 FormMuaXe formBan = new FormMuaXe(currentMaTaiKhoan, idXe);
                 if (formBan.ShowDialog() == DialogResult.OK)

@@ -226,6 +226,20 @@ namespace UI.FormUI
                 {
                     if (row["ID_Xe"].ToString() == idXe)
                     {
+                        // Kiểm tra số lượng tồn kho
+                        int soLuong = row["SoLuong"] != DBNull.Value ? Convert.ToInt32(row["SoLuong"]) : 0;
+                        if (soLuong <= 0)
+                        {
+                            MessageBox.Show(
+                                "Xe này đã hết hàng!\n\nVui lòng chọn xe khác hoặc nhập thêm hàng.",
+                                "Xe hết hàng",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                            this.DialogResult = DialogResult.Cancel;
+                            this.Close();
+                            return;
+                        }
+                        
                         // Tạo DataRowView để lưu thông tin xe
                         DataView dv = dt.DefaultView;
                         dv.RowFilter = $"ID_Xe = '{idXe}'";
@@ -347,6 +361,18 @@ namespace UI.FormUI
                 string idXe = xeHienTai["ID_Xe"].ToString();
                 DateTime ngayBan = dtpNgayBan.Value.Date;
 
+                // Kiểm tra xe trước khi bán
+                string errorMessage;
+                if (!xeMayBLL.KiemTraXeTruocKhiBan(idXe, 1, out errorMessage))
+                {
+                    MessageBox.Show(
+                        errorMessage,
+                        "Không thể bán xe",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
                 decimal giaBan = xeHienTai["GiaBan"] != DBNull.Value ? Convert.ToDecimal(xeHienTai["GiaBan"]) : 0;
 
                 // Chuẩn bị danh sách phụ tùng (nếu có)
@@ -393,7 +419,7 @@ namespace UI.FormUI
                 }
 
                 // Lưu vào database (GỌI METHOD MỚI)
-                string errorMessage = "";
+                errorMessage = ""; // Reset error message
                 int maGDBan = giaoDichBanBLL.InsertGiaoDichBanKemPhuTung(
                     gd, maKM, soTienGiam, dsPhuTung, out errorMessage
                 );

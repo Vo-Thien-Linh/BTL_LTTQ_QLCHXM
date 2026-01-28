@@ -25,10 +25,10 @@ namespace DAL
                  WHERE TrangThai = N'Sẵn sàng'
                 ) AS XeSanSang,
     
-                -- 2. Doanh thu tháng này (từ cả bán và thuê)
+                -- 2. Doanh thu tháng này (từ cả bán xe và thuê xe)
                 (
-                    -- Doanh thu từ bán xe
-                    SELECT ISNULL(SUM(GiaBan), 0) 
+                    -- Doanh thu từ bán xe (đã bao gồm xe + phụ tùng - giảm giá)
+                    SELECT ISNULL(SUM(TongThanhToan), 0) 
                     FROM GiaoDichBan 
                     WHERE YEAR(NgayBan) = YEAR(GETDATE()) 
                       AND MONTH(NgayBan) = MONTH(GETDATE())
@@ -101,14 +101,14 @@ namespace DAL
             )
             SELECT 
                 d.Ngay,
-                -- Doanh thu bán
+                -- Doanh thu từ bán (bao gồm cả xe và phụ tùng, đã trừ giảm giá)
                 ISNULL((
-                    SELECT SUM(GiaBan) 
+                    SELECT SUM(TongThanhToan) 
                     FROM GiaoDichBan 
                     WHERE CAST(NgayBan AS DATE) = d.Ngay
                       AND TrangThaiThanhToan = N'Đã thanh toán'
                 ), 0) AS DoanhThuBan,
-                -- Doanh thu thuê
+                -- Doanh thu từ cho thuê
                 ISNULL((
                     SELECT SUM(TongGia) 
                     FROM GiaoDichThue 
@@ -214,7 +214,7 @@ namespace DAL
                     N'Bán' AS LoaiGiaoDich,
                     kh.HoTenKH AS TenKhachHang,
                     hx.TenHang + ' ' + dx.TenDong + ' ' + ms.TenMau AS ThongTinXe,
-                    gdb.GiaBan AS GiaTri
+                    gdb.TongThanhToan AS GiaTri
                 FROM GiaoDichBan gdb
                 JOIN KhachHang kh ON gdb.MaKH = kh.MaKH
                 JOIN XeMay xm ON gdb.ID_Xe = xm.ID_Xe
@@ -268,7 +268,7 @@ namespace DAL
         // ============================================================
         // 5. LẤY CẢNH BÁO TỒN KHO (PHỤ TÙNG SẮP HẾT)
         // ============================================================
-        public DataTable GetCanhBaoTonKho(int mucCanhBao = 30)
+        public DataTable GetCanhBaoTonKho(int mucCanhBao = 10)
         {
             var dt = new DataTable();
             const string sql = @"
@@ -278,13 +278,13 @@ namespace DAL
                 @MucCanhBao AS MucCanhBao,
                 CASE 
                     WHEN kpt.SoLuongTon = 0 THEN N'Hết hàng'
-                    WHEN kpt.SoLuongTon <= @MucCanhBao THEN N'Sắp hết'
-                    ELSE N'Bình thường'
+                    WHEN kpt.SoLuongTon <= 5 THEN N'Sắp hết'
+                    WHEN kpt.SoLuongTon <= 10 THEN N'Thấp'
+                    ELSE N'Còn hàng'
                 END AS TrangThai,
                 pt.DonViTinh
             FROM KhoPhuTung kpt
             JOIN PhuTung pt ON kpt.MaPhuTung = pt.MaPhuTung
-            WHERE kpt.SoLuongTon <= @MucCanhBao
             ORDER BY kpt.SoLuongTon ASC;";
 
             try

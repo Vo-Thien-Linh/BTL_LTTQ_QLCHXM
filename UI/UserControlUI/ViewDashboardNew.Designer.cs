@@ -193,7 +193,7 @@ namespace UI.UserControlUI
             this.lblDoanhThuIcon.ForeColor = System.Drawing.Color.White;
             this.lblDoanhThuIcon.Location = new System.Drawing.Point(15, 20);
             this.lblDoanhThuIcon.Name = "lblDoanhThuIcon";
-            this.lblDoanhThuIcon.Size = new System.Drawing.Size(78, 53);
+            this.lblDoanhThuIcon.Size = new System.Drawing.Size(70, 53);
             this.lblDoanhThuIcon.TabIndex = 0;
             this.lblDoanhThuIcon.Text = "💰";
             // 
@@ -289,7 +289,7 @@ namespace UI.UserControlUI
             this.lblGiaoDichIcon.ForeColor = System.Drawing.Color.White;
             this.lblGiaoDichIcon.Location = new System.Drawing.Point(15, 20);
             this.lblGiaoDichIcon.Name = "lblGiaoDichIcon";
-            this.lblGiaoDichIcon.Size = new System.Drawing.Size(78, 53);
+            this.lblGiaoDichIcon.Size = new System.Drawing.Size(75, 53);
             this.lblGiaoDichIcon.TabIndex = 0;
             this.lblGiaoDichIcon.Text = "📊";
             // 
@@ -391,6 +391,7 @@ namespace UI.UserControlUI
             this.dgvCanhBaoTonKho.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvCanhBaoTonKho.Size = new System.Drawing.Size(555, 205);
             this.dgvCanhBaoTonKho.TabIndex = 1;
+            this.dgvCanhBaoTonKho.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCanhBaoTonKho_CellContentClick);
             // 
             // lblTitleCanhBao
             // 
