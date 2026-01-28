@@ -206,10 +206,14 @@ namespace UI.FormUI
             // Button Trả xe
             btnTraXe.Enabled = (trangThai == "Đang thuê");
 
+            // Button In hóa đơn - CHỈ KHI ĐÃ THANH TOÁN
+            btnInHoaDon.Enabled = (ttThanhToan == "Đã thanh toán");
+
             // Màu sắc buttons
             SetButtonStyle(btnXacNhanThanhToan, btnXacNhanThanhToan.Enabled);
             SetButtonStyle(btnGiaoXe, btnGiaoXe.Enabled);
             SetButtonStyle(btnTraXe, btnTraXe.Enabled);
+            SetButtonStyle(btnInHoaDon, btnInHoaDon.Enabled);
         }
 
         private void SetButtonStyle(Button btn, bool enabled)
@@ -501,6 +505,79 @@ namespace UI.FormUI
                     MessageBoxIcon.Error);
 
                 System.Diagnostics.Debug.WriteLine($"[LỖI] btnXuatPDF_Click: {ex.Message}\n{ex.StackTrace}");
+            }
+        }
+
+        private void btnInHoaDon_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Kiểm tra trạng thái thanh toán
+                string trangThaiThanhToan = dataGiaoDich["TrangThaiThanhToan"].ToString();
+                
+                if (trangThaiThanhToan != "Đã thanh toán")
+                {
+                    MessageBox.Show(
+                        "❌ Không thể in hóa đơn!\n\n" +
+                        "Giao dịch chưa được thanh toán.\n" +
+                        "Vui lòng xác nhận thanh toán trước khi in hóa đơn.",
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Chọn nơi lưu file PDF
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "PDF Files|*.pdf",
+                    Title = "In hóa đơn thanh toán thuê xe",
+                    FileName = $"HoaDon_ThueXe_{maGDThue}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Lấy dữ liệu đầy đủ của giao dịch
+                    DataTable dtGiaoDich = giaoDichThueBLL.GetGiaoDichThueById(maGDThue);
+
+                    if (dtGiaoDich.Rows.Count == 0)
+                    {
+                        MessageBox.Show(
+                            "Không tìm thấy dữ liệu giao dịch!",
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Xuất PDF hóa đơn
+                    PDFHelper.ExportHoaDonThueXe(dtGiaoDich.Rows[0], saveDialog.FileName);
+
+                    // Thông báo thành công
+                    var result = MessageBox.Show(
+                        "✓ In hóa đơn thành công!\n\n" +
+                        $"File đã được lưu tại:\n{saveDialog.FileName}\n\n" +
+                        "Bạn có muốn mở file vừa xuất không?",
+                        "Thành công",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(saveDialog.FileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Lỗi khi in hóa đơn:\n\n{ex.Message}\n\n" +
+                    $"Chi tiết:\n{ex.StackTrace}",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                System.Diagnostics.Debug.WriteLine($"[LỖI] btnInHoaDon_Click: {ex.Message}\n{ex.StackTrace}");
             }
         }
     }

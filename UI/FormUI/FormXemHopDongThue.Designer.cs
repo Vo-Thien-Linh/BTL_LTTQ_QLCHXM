@@ -58,6 +58,8 @@
         private System.Windows.Forms.Button btnTraXe;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Button btnXuatPDF;
+        private System.Windows.Forms.Button btnInHoaDon;
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -66,6 +68,7 @@
             }
             base.Dispose(disposing);
         }
+        
         private void InitializeComponent()
         {
             this.panelTop = new System.Windows.Forms.Panel();
@@ -115,9 +118,10 @@
             this.cboHinhThucThanhToan = new System.Windows.Forms.ComboBox();
             this.btnXacNhanThanhToan = new System.Windows.Forms.Button();
             this.btnGiaoXe = new System.Windows.Forms.Button();
+            this.btnInHoaDon = new System.Windows.Forms.Button();
             this.btnTraXe = new System.Windows.Forms.Button();
-            this.btnClose = new System.Windows.Forms.Button();
             this.btnXuatPDF = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.panelTop.SuspendLayout();
             this.grpThongTinXe.SuspendLayout();
             this.grpThongTinKhach.SuspendLayout();
@@ -584,13 +588,14 @@
             this.panelButtons.Controls.Add(this.cboHinhThucThanhToan);
             this.panelButtons.Controls.Add(this.btnXacNhanThanhToan);
             this.panelButtons.Controls.Add(this.btnGiaoXe);
+            this.panelButtons.Controls.Add(this.btnInHoaDon);
             this.panelButtons.Controls.Add(this.btnTraXe);
-            this.panelButtons.Controls.Add(this.btnClose);
             this.panelButtons.Controls.Add(this.btnXuatPDF);
+            this.panelButtons.Controls.Add(this.btnClose);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelButtons.Location = new System.Drawing.Point(0, 620);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(1000, 100);
+            this.panelButtons.Size = new System.Drawing.Size(1200, 100);
             this.panelButtons.TabIndex = 5;
             // 
             // lblHinhThucThanhToanNew
@@ -648,6 +653,22 @@
             this.btnGiaoXe.UseVisualStyleBackColor = false;
             this.btnGiaoXe.Click += new System.EventHandler(this.btnGiaoXe_Click);
             // 
+            // btnInHoaDon
+            // 
+            this.btnInHoaDon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(150)))), ((int)(((byte)(136)))));
+            this.btnInHoaDon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnInHoaDon.FlatAppearance.BorderSize = 0;
+            this.btnInHoaDon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnInHoaDon.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnInHoaDon.ForeColor = System.Drawing.Color.White;
+            this.btnInHoaDon.Location = new System.Drawing.Point(570, 30);
+            this.btnInHoaDon.Name = "btnInHoaDon";
+            this.btnInHoaDon.Size = new System.Drawing.Size(160, 50);
+            this.btnInHoaDon.TabIndex = 4;
+            this.btnInHoaDon.Text = "IN HÓA ĐƠN THANH TOÁN";
+            this.btnInHoaDon.UseVisualStyleBackColor = false;
+            this.btnInHoaDon.Click += new System.EventHandler(this.btnInHoaDon_Click);
+            // 
             // btnTraXe
             // 
             this.btnTraXe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
@@ -656,29 +677,13 @@
             this.btnTraXe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnTraXe.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnTraXe.ForeColor = System.Drawing.Color.White;
-            this.btnTraXe.Location = new System.Drawing.Point(570, 30);
+            this.btnTraXe.Location = new System.Drawing.Point(745, 30);
             this.btnTraXe.Name = "btnTraXe";
             this.btnTraXe.Size = new System.Drawing.Size(160, 50);
-            this.btnTraXe.TabIndex = 4;
+            this.btnTraXe.TabIndex = 5;
             this.btnTraXe.Text = "TRẢ XE";
             this.btnTraXe.UseVisualStyleBackColor = false;
             this.btnTraXe.Click += new System.EventHandler(this.btnTraXe_Click);
-            // 
-            // btnClose
-            // 
-            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(158)))), ((int)(((byte)(158)))));
-            this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnClose.FlatAppearance.BorderSize = 0;
-            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnClose.ForeColor = System.Drawing.Color.White;
-            this.btnClose.Location = new System.Drawing.Point(920, 30);
-            this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(160, 50);
-            this.btnClose.TabIndex = 5;
-            this.btnClose.Text = "ĐÓNG";
-            this.btnClose.UseVisualStyleBackColor = false;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnXuatPDF
             // 
@@ -688,7 +693,7 @@
             this.btnXuatPDF.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnXuatPDF.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnXuatPDF.ForeColor = System.Drawing.Color.White;
-            this.btnXuatPDF.Location = new System.Drawing.Point(745, 30);
+            this.btnXuatPDF.Location = new System.Drawing.Point(920, 30);
             this.btnXuatPDF.Name = "btnXuatPDF";
             this.btnXuatPDF.Size = new System.Drawing.Size(160, 50);
             this.btnXuatPDF.TabIndex = 6;
@@ -696,12 +701,28 @@
             this.btnXuatPDF.UseVisualStyleBackColor = false;
             this.btnXuatPDF.Click += new System.EventHandler(this.btnXuatPDF_Click);
             // 
+            // btnClose
+            // 
+            this.btnClose.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(158)))), ((int)(((byte)(158)))));
+            this.btnClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnClose.FlatAppearance.BorderSize = 0;
+            this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnClose.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnClose.ForeColor = System.Drawing.Color.White;
+            this.btnClose.Location = new System.Drawing.Point(1095, 30);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(160, 50);
+            this.btnClose.TabIndex = 7;
+            this.btnClose.Text = "ĐÓNG";
+            this.btnClose.UseVisualStyleBackColor = false;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
             // FormXemHopDongThue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1000, 720);
+            this.ClientSize = new System.Drawing.Size(1200, 720);
             this.Controls.Add(this.panelButtons);
             this.Controls.Add(this.grpTinhToan);
             this.Controls.Add(this.grpThongTinThue);
