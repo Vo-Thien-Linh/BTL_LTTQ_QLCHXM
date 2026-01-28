@@ -36,16 +36,17 @@ namespace UI.UserControlUI
         }
 
         /// <summary>
-        /// Áp dụng phân quyền - chỉ Admin mới có quyền thêm/sửa/xóa khuyến mãi
+        /// Áp dụng phân quyền - chỉ Admin mới có quyền thêm/sửa/xóa/làm mới khuyến mãi
         /// </summary>
         private void ApplyPermissions()
         {
             bool isAdmin = PermissionManager.IsAdmin();
             
-            // Chỉ Admin mới thấy và sử dụng các nút thêm/sửa/xóa
+            // Chỉ Admin mới thấy và sử dụng các nút thêm/sửa/xóa/làm mới
             btnThem.Visible = isAdmin;
             btnSua.Visible = isAdmin;
             btnXoa.Visible = isAdmin;
+            btnLamMoi.Visible = isAdmin;
         }
 
         private void ViewQuanLyKhuyenMai_Load(object sender, EventArgs e)
@@ -357,10 +358,35 @@ namespace UI.UserControlUI
 
         private void BtnLamMoi_Click(object sender, EventArgs e)
         {
-            txtTuKhoa.Text = "";
-            cbbTimKiemTheo.SelectedIndex = 0;
-            LoadDanhSachKhuyenMai();
-            currentMaKM = "";
+            try
+            {
+                // Reset các trường tìm kiếm
+                txtTuKhoa.Text = "";
+                cbbTimKiemTheo.SelectedIndex = 0;
+                currentMaKM = "";
+
+                // Xóa DataSource hiện tại
+                dgvQuanLyKhuyenMai.DataSource = null;
+
+                // Tự động cập nhật trạng thái khuyến mãi hết hạn
+                int updatedCount = khuyenMaiBLL.CapNhatTrangThaiKhuyenMaiHetHan();
+                if (updatedCount > 0)
+                {
+                    MessageBox.Show($"Đã tự động cập nhật {updatedCount} khuyến mãi sang trạng thái 'Hết hạn'",
+                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                // Load lại danh sách
+                LoadDanhSachKhuyenMai();
+
+                MessageBox.Show("Đã làm mới dữ liệu thành công!", "Thông báo",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi làm mới dữ liệu: " + ex.Message, "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtnTimKiem_Click(object sender, EventArgs e)

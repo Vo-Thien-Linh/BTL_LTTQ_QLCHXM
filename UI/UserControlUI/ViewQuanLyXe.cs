@@ -100,14 +100,23 @@ namespace UI.UserControlUI
         /// Áp dụng phân quyền cho các nút thao tác
         /// Chỉ Quản lý: Thêm/Sửa/Xóa
         /// Bán hàng, Kỹ thuật: Chỉ xem
+        /// Kỹ thuật: Không được bán/mua xe
         /// </summary>
         private void ApplyPermissions()
         {
             bool canEdit = PermissionManager.CanEditSanPham(); // Chỉ Quản lý
+            bool isKyThuat = PermissionManager.IsKyThuat();
+            
             btnThem.Visible = canEdit;
             btnSua.Visible = canEdit;
             btnXoa.Visible = canEdit;
             btnLamMoi.Visible = canEdit;
+            
+            // Kỹ thuật không được bán/mua xe
+            if (isKyThuat)
+            {
+                // Sẽ ẩn nút bán trong card view - xử lý trong method RenderCardView
+            }
             
             ReorganizeButtons();
         }
@@ -476,52 +485,62 @@ namespace UI.UserControlUI
                 TextAlign = ContentAlignment.MiddleLeft
             };
 
-            // Nút action (MUA NGAY / THUÊ NGAY)
-            string btnText = isXeChoThue ? langMgr.GetString("RentNow") : langMgr.GetString("BuyNow");
-            Button btnAction = new Button
+            // Nút action (MUA NGAY / THUÊ NGAY) - Ẩn với role Kỹ thuật
+            Button btnAction = null;
+            bool isKyThuat = PermissionManager.IsKyThuat();
+            
+            if (!isKyThuat)
             {
-                Text = btnText,
-                Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
-                Location = new Point(10, 290),
-                Size = new Size(240, 38),
-                BackColor = isXeChoThue ? Color.FromArgb(33, 150, 243) : Color.FromArgb(76, 175, 80),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
-            };
-            btnAction.FlatAppearance.BorderSize = 0;
-            btnAction.Click += (s, e) =>
-            {
-                string idXe = xe["ID_Xe"].ToString();
-
-                Form mainForm = this.FindForm();
-                while (mainForm != null && mainForm.GetType().Name != "MainForm")
+                string btnText = isXeChoThue ? langMgr.GetString("RentNow") : langMgr.GetString("BuyNow");
+                btnAction = new Button
                 {
-                    mainForm = mainForm.ParentForm;
-                }
-
-                if (mainForm != null)
+                    Text = btnText,
+                    Font = new Font("Segoe UI", 9.5F, FontStyle.Bold),
+                    Location = new Point(10, 290),
+                    Size = new Size(240, 38),
+                    BackColor = isXeChoThue ? Color.FromArgb(33, 150, 243) : Color.FromArgb(76, 175, 80),
+                    ForeColor = Color.White,
+                    FlatStyle = FlatStyle.Flat,
+                    Cursor = Cursors.Hand
+                };
+                btnAction.FlatAppearance.BorderSize = 0;
+                btnAction.Click += (s, e) =>
                 {
-                    if (isXeChoThue)
+                    string idXe = xe["ID_Xe"].ToString();
+
+                    Form mainForm = this.FindForm();
+                    while (mainForm != null && mainForm.GetType().Name != "MainForm")
                     {
-                        var method = mainForm.GetType().GetMethod("NavigateToThueXe",
-                            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                        method?.Invoke(mainForm, new object[] { idXe });
+                        mainForm = mainForm.ParentForm;
                     }
-                    else
+
+                    if (mainForm != null)
                     {
-                        var method = mainForm.GetType().GetMethod("NavigateToBanXe",
-                            System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                        method?.Invoke(mainForm, new object[] { idXe });
+                        if (isXeChoThue)
+                        {
+                            var method = mainForm.GetType().GetMethod("NavigateToThueXe",
+                                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                            method?.Invoke(mainForm, new object[] { idXe });
+                        }
+                        else
+                        {
+                            var method = mainForm.GetType().GetMethod("NavigateToBanXe",
+                                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                            method?.Invoke(mainForm, new object[] { idXe });
+                        }
                     }
-                }
-            };
+                };
+            }
 
             // Thêm controls vào card
             var controlList = new List<Control> { 
                 imagePanel, lblTenXe, lblThongTin, lblTrangThai,
-                lblGia, btnAction
+                lblGia
             };
+            if (btnAction != null)
+            {
+                controlList.Add(btnAction);
+            }
             if (lblHetHang != null)
             {
                 controlList.Add(lblHetHang);

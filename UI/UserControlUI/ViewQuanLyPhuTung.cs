@@ -33,14 +33,20 @@ namespace UI.UserControlUI
         /// Áp dụng phân quyền cho các nút thao tác
         /// Chỉ Quản lý: Thêm/Sửa/Xóa
         /// Bán hàng, Kỹ thuật: Chỉ xem
+        /// Kỹ thuật: Không được bán phụ tùng
         /// </summary>
         private void ApplyPermissions()
         {
             bool canEdit = PermissionManager.CanEditSanPham(); // Chỉ Quản lý
+            bool isKyThuat = PermissionManager.IsKyThuat();
+            
             btnThem.Visible = canEdit;
             btnSua.Visible = canEdit;
             btnXoa.Visible = canEdit;
             btnLamMoi.Visible = canEdit;
+            
+            // Kỹ thuật không được bán phụ tùng
+            btnBan.Visible = !isKyThuat;
             
             ReorganizeButtons();
         }

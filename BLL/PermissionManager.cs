@@ -125,11 +125,27 @@ namespace BLL
         }
 
         /// <summary>
-        /// Chỉ Quản lý có thể xem cài đặt
+        /// Tất cả role đều có thể xem cài đặt
         /// </summary>
         public static bool CanViewSettings()
         {
-            return CurrentUser.ChucVu == "Quản lý";
+            return true; // Tất cả đều được xem cài đặt
+        }
+
+        /// <summary>
+        /// Kiểm tra có phải role Kỹ thuật/Bảo trì không
+        /// </summary>
+        public static bool IsKyThuat()
+        {
+            return CurrentUser.ChucVu == "Kỹ thuật";
+        }
+
+        /// <summary>
+        /// Kiểm tra có quyền xem khuyến mãi không (Kỹ thuật không được xem)
+        /// </summary>
+        public static bool CanViewKhuyenMai()
+        {
+            return CurrentUser.ChucVu != "Kỹ thuật";
         }
 
         /// <summary>

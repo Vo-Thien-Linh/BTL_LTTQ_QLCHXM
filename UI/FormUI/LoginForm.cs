@@ -35,6 +35,10 @@ namespace UI.FormUI
             txtMatKhau.KeyDown += TxtMatKhau_KeyDown;
             txtSoDienThoai.KeyDown += TxtSoDienThoai_KeyDown;
             this.FormClosing += LoginForm_FormClosing;
+            
+            // Style cho nút show/hide password
+            btnTogglePassword.Cursor = Cursors.Hand;
+            btnTogglePassword.TabStop = false;
 
         }
 
@@ -239,6 +243,20 @@ namespace UI.FormUI
 
                 // Cleanup trước khi thoát
                 Application.Exit();
+            }
+        }
+
+        private void btnTogglePassword_Click(object sender, EventArgs e)
+        {
+            if (txtMatKhau.UseSystemPasswordChar)
+            {
+                txtMatKhau.UseSystemPasswordChar = false;
+                btnTogglePassword.Text = "🙈"; // Ẩn mật khẩu
+            }
+            else
+            {
+                txtMatKhau.UseSystemPasswordChar = true;
+                btnTogglePassword.Text = "👁"; // Hiện mật khẩu
             }
         }
 
