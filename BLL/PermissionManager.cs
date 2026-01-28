@@ -141,6 +141,14 @@ namespace BLL
         }
 
         /// <summary>
+        /// Kiểm tra có phải role Thu ngân không
+        /// </summary>
+        public static bool IsThuNgan()
+        {
+            return CurrentUser.ChucVu == "Thu ngân";
+        }
+
+        /// <summary>
         /// Kiểm tra có quyền xem khuyến mãi không (Kỹ thuật không được xem)
         /// </summary>
         public static bool CanViewKhuyenMai()

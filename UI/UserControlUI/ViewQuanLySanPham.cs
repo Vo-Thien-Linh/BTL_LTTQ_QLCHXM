@@ -38,11 +38,9 @@ namespace UI.UserControlUI
             btnQuanLyXe.Visible = true;
             btnQuanLyPhuTung.Visible = true;
             
-            // Thêm events
-            panel2.MouseEnter += Panel2_MouseEnter;
-            panel2.MouseLeave += Panel2_MouseLeave;
-            btnQuanLyXe.MouseEnter += (s, e) => Panel2_MouseEnter(s, e);
-            btnQuanLyPhuTung.MouseEnter += (s, e) => Panel2_MouseEnter(s, e);
+            // Style cho nút toggle
+            btnToggleArrow.Cursor = Cursors.Hand;
+            btnToggleArrow.Text = "▼"; // Mũi tên xuống khi đang mở rộng
             
             // Áp dụng phân quyền - ẩn nút khuyến mãi với role Kỹ thuật
             ApplyPermissions();
@@ -56,30 +54,28 @@ namespace UI.UserControlUI
             btnQuanLyKhuyenMai.Visible = PermissionManager.CanViewKhuyenMai();
         }
         
-        private void Panel2_MouseEnter(object sender, EventArgs e)
+        /// <summary>
+        /// Xử lý click nút toggle để hiện/ẩn menu
+        /// </summary>
+        private void btnToggleArrow_Click(object sender, EventArgs e)
         {
-            if (!isExpanded)
+            if (isExpanded)
             {
+                // Thu gọn
+                targetHeight = collapsedHeight;
+                isExpanded = false;
+                btnToggleArrow.Text = "▲"; // Mũi tên lên
+            }
+            else
+            {
+                // Mở rộng
                 targetHeight = expandedHeight;
                 isExpanded = true;
+                btnToggleArrow.Text = "▼"; // Mũi tên xuống
                 btnQuanLyXe.Visible = true;
                 btnQuanLyPhuTung.Visible = true;
-                animationTimer.Start();
             }
-        }
-        
-        private void Panel2_MouseLeave(object sender, EventArgs e)
-        {
-            // Kiểm tra nếu chuột không còn trong panel2 và các button
-            if (!panel2.ClientRectangle.Contains(panel2.PointToClient(Cursor.Position)))
-            {
-                if (isExpanded)
-                {
-                    targetHeight = collapsedHeight;
-                    isExpanded = false;
-                    animationTimer.Start();
-                }
-            }
+            animationTimer.Start();
         }
         
         private void AnimationTimer_Tick(object sender, EventArgs e)
