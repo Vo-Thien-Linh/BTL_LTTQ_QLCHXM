@@ -153,6 +153,9 @@
   <data name="AddPartTitle" xml:space="preserve">
     <value>Thêm phụ tùng </value>
   </data>
+  <data name="AddPromotionSuccess" xml:space="preserve">
+    <value>Thêm khuyến mãi thành công!</value>
+  </data>
   <data name="Address" xml:space="preserve">
     <value>Địa Chỉ</value>
   </data>
@@ -168,6 +171,9 @@
   <data name="AddVehicleSuccess" xml:space="preserve">
     <value>Thêm xe thành công!</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>Tất cả</value>
+  </data>
   <data name="AllPartsInStock" xml:space="preserve">
     <value>✅ Tất cả phụ tùng đều đủ hàng</value>
   </data>
@@ -180,11 +186,17 @@
   <data name="Animations" xml:space="preserve">
     <value>Hiệu ứng chuyển động</value>
   </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Áp Dụng</value>
+  </data>
   <data name="ApproveBtn" xml:space="preserve">
     <value>Duyệt</value>
   </data>
   <data name="ApproveRentalTitle" xml:space="preserve">
     <value>DUYỆT ĐƠN THUÊ XE </value>
+  </data>
+  <data name="AutoUpdatedExpiredPromotions" xml:space="preserve">
+    <value>Đã tự động cập nhật {0} khuyến mãi sang trạng thái 'Hết hạn'</value>
   </data>
   <data name="AvailableVehicles" xml:space="preserve">
     <value>Xe Sẵn Sàng Bán</value>
@@ -247,7 +259,7 @@
     <value>Xác nhận</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>Bạn có chắc chắn muốn xóa xe</value>
+    <value>Xác nhận xóa</value>
   </data>
   <data name="ConfirmDelete1" xml:space="preserve">
     <value>Xác nhận xóa</value>
@@ -258,6 +270,10 @@
   <data name="ConfirmDeleteEmployee" xml:space="preserve">
     <value>Bạn có chắc chắn muốn xóa nhân viên '{0}' (Mã: {1})?
 Lưu ý: Thao tác này không thể hoàn tác!</value>
+  </data>
+  <data name="ConfirmDeletePromotion" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa khuyến mãi '{0}'?
+Khuyến mãi sẽ được chuyển sang trạng thái 'Hủy'.</value>
   </data>
   <data name="ConfirmDeleteVehicle" xml:space="preserve">
     <value>Bạn có chắc chắn muốn xóa xe {0}?</value>
@@ -346,6 +362,12 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="DeleteImage" xml:space="preserve">
     <value>Xóa Ảnh</value>
   </data>
+  <data name="DeletePromotionFailed" xml:space="preserve">
+    <value>Xóa khuyến mãi thất bại!</value>
+  </data>
+  <data name="DeletePromotionSuccess" xml:space="preserve">
+    <value>Xóa khuyến mãi thành công!</value>
+  </data>
   <data name="DeleteSuccess" xml:space="preserve">
     <value>Xóa xe thành công!</value>
   </data>
@@ -355,11 +377,20 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="DeleteVehicleSuccess" xml:space="preserve">
     <value>Xóa xe thành công!</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Mô Tả</value>
+  </data>
   <data name="DetailBtn" xml:space="preserve">
     <value>CHI TIẾT </value>
   </data>
   <data name="DetailTitle" xml:space="preserve">
     <value>Chi tiết phụ tùng </value>
+  </data>
+  <data name="DiscountAmount" xml:space="preserve">
+    <value>Tiền Giảm</value>
+  </data>
+  <data name="DiscountPercent" xml:space="preserve">
+    <value>% Giảm</value>
   </data>
   <data name="DriverLicense" xml:space="preserve">
     <value>Bằng lái xe</value>
@@ -414,6 +445,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="EmployeeTitle" xml:space="preserve">
     <value>QUẢN LÝ NHÂN VIÊN</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Ngày Kết Thúc</value>
   </data>
   <data name="EngineCapacity" xml:space="preserve">
     <value>Phân khối</value>
@@ -529,6 +563,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="LoadError" xml:space="preserve">
     <value>Lỗi khi tải cài đặt:</value>
   </data>
+  <data name="LoadPromotionListError" xml:space="preserve">
+    <value>Lỗi khi tải danh sách khuyến mãi</value>
+  </data>
   <data name="LowStockWarning" xml:space="preserve">
     <value>Cảnh Báo Tồn Kho Thấp</value>
   </data>
@@ -547,11 +584,17 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="ManagePhuTungBtn" xml:space="preserve">
     <value>Quản lý phụ tùng</value>
   </data>
+  <data name="ManagePromotionBtn" xml:space="preserve">
+    <value>Quản lý khuyến mãi</value>
+  </data>
   <data name="Manager" xml:space="preserve">
     <value>Quản lý</value>
   </data>
   <data name="ManageVehicleBtn" xml:space="preserve">
     <value>Quản Lý xe</value>
+  </data>
+  <data name="MaxDiscount" xml:space="preserve">
+    <value>Giảm Tối Đa</value>
   </data>
   <data name="MenuCustomer" xml:space="preserve">
     <value>Quản Lý Khách Hàng</value>
@@ -727,6 +770,12 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   <data name="PleaseSelectCustomerToEdit" xml:space="preserve">
     <value>Vui lòng chọn một khách hàng để sửa!</value>
   </data>
+  <data name="PleaseSelectPromotionToDelete" xml:space="preserve">
+    <value>Vui lòng chọn khuyến mãi cần xóa!</value>
+  </data>
+  <data name="PleaseSelectPromotionToEdit" xml:space="preserve">
+    <value>Vui lòng chọn khuyến mãi cần sửa!</value>
+  </data>
   <data name="PleaseSelectVehicleToDelete" xml:space="preserve">
     <value>Vui lòng chọn xe cần xóa!</value>
   </data>
@@ -741,6 +790,18 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="ProductTitle" xml:space="preserve">
     <value>QUẢN LÝ SẢN PHẨM</value>
+  </data>
+  <data name="PromotionCode" xml:space="preserve">
+    <value>Mã KM</value>
+  </data>
+  <data name="PromotionManagement" xml:space="preserve">
+    <value>Quản lý khuyến mãi</value>
+  </data>
+  <data name="PromotionName" xml:space="preserve">
+    <value>Tên Khuyến Mãi</value>
+  </data>
+  <data name="PromotionType" xml:space="preserve">
+    <value>Loại</value>
   </data>
   <data name="PurchaseDate" xml:space="preserve">
     <value>Ngày mua</value>
@@ -771,6 +832,12 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="RefreshBtn" xml:space="preserve">
     <value>Làm mới</value>
+  </data>
+  <data name="RefreshDataError" xml:space="preserve">
+    <value>Lỗi khi làm mới dữ liệu</value>
+  </data>
+  <data name="RefreshDataSuccess" xml:space="preserve">
+    <value>Đã làm mới dữ liệu thành công!</value>
   </data>
   <data name="RegistrationDate" xml:space="preserve">
     <value>Ngày đăng ký</value>
@@ -849,6 +916,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="SoldStatus" xml:space="preserve">
     <value>Đã bán</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Ngày Bắt Đầu</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Trạng thái</value>
@@ -948,6 +1018,9 @@ Lưu ý: Thao tác này không thể hoàn tác!</value>
   </data>
   <data name="UpdateEmployeeSuccess" xml:space="preserve">
     <value>Cập nhật nhân viên thành công!</value>
+  </data>
+  <data name="UpdatePromotionSuccess" xml:space="preserve">
+    <value>Cập nhật khuyến mãi thành công!</value>
   </data>
   <data name="UsagePriceColumn" xml:space="preserve">
     <value>Đơn Giá </value>

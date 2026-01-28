@@ -15,12 +15,15 @@ namespace UI.UserControlUI
     public partial class ViewQuanLyKhuyenMai : UserControl
     {
         private KhuyenMaiBLL khuyenMaiBLL;
+        private LanguageManagerBLL langMgr = LanguageManagerBLL.Instance;
         private string currentMaKM = "";
 
         public ViewQuanLyKhuyenMai()
         {
             InitializeComponent();
             khuyenMaiBLL = new KhuyenMaiBLL();
+
+            langMgr.LanguageChanged += (s, e) => ApplyLanguage();
 
             // Đăng ký sự kiện
             this.Load += ViewQuanLyKhuyenMai_Load;
@@ -33,6 +36,50 @@ namespace UI.UserControlUI
             
             // Áp dụng phân quyền
             ApplyPermissions();
+
+            ApplyLanguage();
+        }
+
+        /// <summary>
+        /// Áp dụng ngôn ngữ cho các control
+        /// </summary>
+        private void ApplyLanguage()
+        {
+            // Các nút
+            btnThem.Text = langMgr.GetString("AddBtn");
+            btnSua.Text = langMgr.GetString("EditBtn");
+            btnXoa.Text = langMgr.GetString("DeleteBtn");
+            btnLamMoi.Text = langMgr.GetString("RefreshBtn");
+            btnTimKiem.Text = langMgr.GetString("SearchBtn");
+
+            
+
+            // ComboBox tìm kiếm
+            LoadComboBoxTimKiem();
+
+            // Cập nhật header của DataGridView
+            UpdateDataGridViewHeaders();
+        }
+
+        /// <summary>
+        /// Cập nhật header của DataGridView theo ngôn ngữ
+        /// </summary>
+        private void UpdateDataGridViewHeaders()
+        {
+            if (dgvQuanLyKhuyenMai.Columns.Count > 0)
+            {
+                dgvQuanLyKhuyenMai.Columns["MaKM"].HeaderText = langMgr.GetString("PromotionCode");
+                dgvQuanLyKhuyenMai.Columns["TenKM"].HeaderText = langMgr.GetString("PromotionName");
+                dgvQuanLyKhuyenMai.Columns["MoTa"].HeaderText = langMgr.GetString("Description");
+                dgvQuanLyKhuyenMai.Columns["NgayBatDau"].HeaderText = langMgr.GetString("StartDate");
+                dgvQuanLyKhuyenMai.Columns["NgayKetThuc"].HeaderText = langMgr.GetString("EndDate");
+                dgvQuanLyKhuyenMai.Columns["LoaiKhuyenMai"].HeaderText = langMgr.GetString("PromotionType");
+                dgvQuanLyKhuyenMai.Columns["PhanTramGiam"].HeaderText = langMgr.GetString("DiscountPercent");
+                dgvQuanLyKhuyenMai.Columns["SoTienGiam"].HeaderText = langMgr.GetString("DiscountAmount");
+                dgvQuanLyKhuyenMai.Columns["GiaTriGiamToiDa"].HeaderText = langMgr.GetString("MaxDiscount");
+                dgvQuanLyKhuyenMai.Columns["LoaiApDung"].HeaderText = langMgr.GetString("ApplyTo");
+                dgvQuanLyKhuyenMai.Columns["TrangThai"].HeaderText = langMgr.GetString("Status");
+            }
         }
 
         /// <summary>
@@ -57,8 +104,11 @@ namespace UI.UserControlUI
                 int updatedCount = khuyenMaiBLL.CapNhatTrangThaiKhuyenMaiHetHan();
                 if (updatedCount > 0)
                 {
-                    MessageBox.Show($"Đã tự động cập nhật {updatedCount} khuyến mãi sang trạng thái 'Hết hạn'",
-                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        string.Format(langMgr.GetString("AutoUpdatedExpiredPromotions"), updatedCount),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
 
                 LoadComboBoxTimKiem();
@@ -67,8 +117,11 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải dữ liệu: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("LoadDataError") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -92,7 +145,7 @@ namespace UI.UserControlUI
             {
                 Name = "MaKM",
                 DataPropertyName = "MaKM",
-                HeaderText = "Mã KM",
+                HeaderText = langMgr.GetString("PromotionCode"),
                 Width = 100
             });
 
@@ -100,7 +153,7 @@ namespace UI.UserControlUI
             {
                 Name = "TenKM",
                 DataPropertyName = "TenKM",
-                HeaderText = "Tên Khuyến Mãi",
+                HeaderText = langMgr.GetString("PromotionName"),
                 Width = 250
             });
 
@@ -108,7 +161,7 @@ namespace UI.UserControlUI
             {
                 Name = "MoTa",
                 DataPropertyName = "MoTa",
-                HeaderText = "Mô Tả",
+                HeaderText = langMgr.GetString("Description"),
                 Width = 200
             });
 
@@ -116,7 +169,7 @@ namespace UI.UserControlUI
             {
                 Name = "NgayBatDau",
                 DataPropertyName = "NgayBatDau",
-                HeaderText = "Ngày Bắt Đầu",
+                HeaderText = langMgr.GetString("StartDate"),
                 Width = 130,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
             });
@@ -125,7 +178,7 @@ namespace UI.UserControlUI
             {
                 Name = "NgayKetThuc",
                 DataPropertyName = "NgayKetThuc",
-                HeaderText = "Ngày Kết Thúc",
+                HeaderText = langMgr.GetString("EndDate"),
                 Width = 130,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "dd/MM/yyyy" }
             });
@@ -134,7 +187,7 @@ namespace UI.UserControlUI
             {
                 Name = "LoaiKhuyenMai",
                 DataPropertyName = "LoaiKhuyenMai",
-                HeaderText = "Loại",
+                HeaderText = langMgr.GetString("PromotionType"),
                 Width = 100
             });
 
@@ -142,7 +195,7 @@ namespace UI.UserControlUI
             {
                 Name = "PhanTramGiam",
                 DataPropertyName = "PhanTramGiam",
-                HeaderText = "% Giảm",
+                HeaderText = langMgr.GetString("DiscountPercent"),
                 Width = 80,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "N2" }
             });
@@ -151,7 +204,7 @@ namespace UI.UserControlUI
             {
                 Name = "SoTienGiam",
                 DataPropertyName = "SoTienGiam",
-                HeaderText = "Tiền Giảm",
+                HeaderText = langMgr.GetString("DiscountAmount"),
                 Width = 120,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
             });
@@ -160,7 +213,7 @@ namespace UI.UserControlUI
             {
                 Name = "GiaTriGiamToiDa",
                 DataPropertyName = "GiaTriGiamToiDa",
-                HeaderText = "Giảm Tối Đa",
+                HeaderText = langMgr.GetString("MaxDiscount"),
                 Width = 120,
                 DefaultCellStyle = new DataGridViewCellStyle { Format = "N0" }
             });
@@ -169,7 +222,7 @@ namespace UI.UserControlUI
             {
                 Name = "LoaiApDung",
                 DataPropertyName = "LoaiApDung",
-                HeaderText = "Áp Dụng",
+                HeaderText = langMgr.GetString("ApplyTo"),
                 Width = 100
             });
 
@@ -177,7 +230,7 @@ namespace UI.UserControlUI
             {
                 Name = "TrangThai",
                 DataPropertyName = "TrangThai",
-                HeaderText = "Trạng Thái",
+                HeaderText = langMgr.GetString("Status"),
                 Width = 100
             });
 
@@ -215,10 +268,10 @@ namespace UI.UserControlUI
         private void LoadComboBoxTimKiem()
         {
             cbbTimKiemTheo.Items.Clear();
-            cbbTimKiemTheo.Items.Add("Tất cả");
-            cbbTimKiemTheo.Items.Add("Mã khuyến mãi");
-            cbbTimKiemTheo.Items.Add("Tên khuyến mãi");
-            cbbTimKiemTheo.Items.Add("Trạng thái");
+            cbbTimKiemTheo.Items.Add(langMgr.GetString("All"));
+            cbbTimKiemTheo.Items.Add(langMgr.GetString("PromotionCode"));
+            cbbTimKiemTheo.Items.Add(langMgr.GetString("PromotionName"));
+            cbbTimKiemTheo.Items.Add(langMgr.GetString("Status"));
             cbbTimKiemTheo.SelectedIndex = 0;
         }
 
@@ -236,22 +289,23 @@ namespace UI.UserControlUI
                 if (!string.IsNullOrWhiteSpace(timKiem))
                 {
                     string searchText = timKiem.Trim().Replace("'", "''");
-                    string loaiTimKiem = cbbTimKiemTheo.SelectedItem?.ToString() ?? "Tất cả";
+                    string loaiTimKiem = cbbTimKiemTheo.SelectedItem?.ToString() ?? langMgr.GetString("All");
 
-                    switch (loaiTimKiem)
+                    if (loaiTimKiem == langMgr.GetString("PromotionCode"))
                     {
-                        case "Mã khuyến mãi":
-                            dt.DefaultView.RowFilter = $"MaKM LIKE '%{searchText}%'";
-                            break;
-                        case "Tên khuyến mãi":
-                            dt.DefaultView.RowFilter = $"TenKM LIKE '%{searchText}%'";
-                            break;
-                        case "Trạng thái":
-                            dt.DefaultView.RowFilter = $"TrangThai LIKE '%{searchText}%'";
-                            break;
-                        default: // Tất cả
-                            dt.DefaultView.RowFilter = $"MaKM LIKE '%{searchText}%' OR TenKM LIKE '%{searchText}%' OR TrangThai LIKE '%{searchText}%'";
-                            break;
+                        dt.DefaultView.RowFilter = $"MaKM LIKE '%{searchText}%'";
+                    }
+                    else if (loaiTimKiem == langMgr.GetString("PromotionName"))
+                    {
+                        dt.DefaultView.RowFilter = $"TenKM LIKE '%{searchText}%'";
+                    }
+                    else if (loaiTimKiem == langMgr.GetString("Status"))
+                    {
+                        dt.DefaultView.RowFilter = $"TrangThai LIKE '%{searchText}%'";
+                    }
+                    else // Tất cả
+                    {
+                        dt.DefaultView.RowFilter = $"MaKM LIKE '%{searchText}%' OR TenKM LIKE '%{searchText}%' OR TrangThai LIKE '%{searchText}%'";
                     }
 
                     dt = dt.DefaultView.ToTable();
@@ -261,8 +315,11 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi tải danh sách khuyến mãi: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("LoadPromotionListError") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -278,14 +335,20 @@ namespace UI.UserControlUI
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     LoadDanhSachKhuyenMai();
-                    MessageBox.Show("Thêm khuyến mãi thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        langMgr.GetString("AddPromotionSuccess"),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("Error") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -295,8 +358,11 @@ namespace UI.UserControlUI
             {
                 if (string.IsNullOrWhiteSpace(currentMaKM))
                 {
-                    MessageBox.Show("Vui lòng chọn khuyến mãi cần sửa!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        langMgr.GetString("PleaseSelectPromotionToEdit"),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -304,14 +370,20 @@ namespace UI.UserControlUI
                 if (frm.ShowDialog() == DialogResult.OK)
                 {
                     LoadDanhSachKhuyenMai();
-                    MessageBox.Show("Cập nhật khuyến mãi thành công!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        langMgr.GetString("UpdatePromotionSuccess"),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("Error") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -321,14 +393,17 @@ namespace UI.UserControlUI
             {
                 if (string.IsNullOrWhiteSpace(currentMaKM))
                 {
-                    MessageBox.Show("Vui lòng chọn khuyến mãi cần xóa!", "Thông báo",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        langMgr.GetString("PleaseSelectPromotionToDelete"),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                     return;
                 }
 
                 DialogResult result = MessageBox.Show(
-                    $"Bạn có chắc chắn muốn xóa khuyến mãi '{currentMaKM}'?\nKhuyến mãi sẽ được chuyển sang trạng thái 'Hủy'.",
-                    "Xác nhận xóa",
+                    string.Format(langMgr.GetString("ConfirmDeletePromotion"), currentMaKM),
+                    langMgr.GetString("ConfirmDelete"),
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
 
@@ -339,20 +414,29 @@ namespace UI.UserControlUI
                     {
                         LoadDanhSachKhuyenMai();
                         currentMaKM = "";
-                        MessageBox.Show("Xóa khuyến mãi thành công!", "Thông báo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(
+                            langMgr.GetString("DeletePromotionSuccess"),
+                            langMgr.GetString("Notification"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Xóa khuyến mãi thất bại!\n" + errorMessage, "Lỗi",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(
+                            langMgr.GetString("DeletePromotionFailed") + "\n" + errorMessage,
+                            langMgr.GetString("Error"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("Error") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -372,20 +456,29 @@ namespace UI.UserControlUI
                 int updatedCount = khuyenMaiBLL.CapNhatTrangThaiKhuyenMaiHetHan();
                 if (updatedCount > 0)
                 {
-                    MessageBox.Show($"Đã tự động cập nhật {updatedCount} khuyến mãi sang trạng thái 'Hết hạn'",
-                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        string.Format(langMgr.GetString("AutoUpdatedExpiredPromotions"), updatedCount),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
 
                 // Load lại danh sách
                 LoadDanhSachKhuyenMai();
 
-                MessageBox.Show("Đã làm mới dữ liệu thành công!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(
+                    langMgr.GetString("RefreshDataSuccess"),
+                    langMgr.GetString("Notification"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi làm mới dữ liệu: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("RefreshDataError") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 

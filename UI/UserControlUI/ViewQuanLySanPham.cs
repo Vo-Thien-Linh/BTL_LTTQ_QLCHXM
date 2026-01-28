@@ -113,6 +113,7 @@ namespace UI.UserControlUI
             lblTitle.Text = langMgr.GetString("ProductTitle");
             btnQuanLyXe.Text = langMgr.GetString("ManageVehicleBtn");
             btnQuanLyPhuTung.Text = langMgr.GetString("ManagePhuTungBtn");
+            btnQuanLyKhuyenMai.Text = langMgr.GetString("ManagePromotionBtn");
         }
 
         private void OnThemeChanged(object sender, EventArgs e)

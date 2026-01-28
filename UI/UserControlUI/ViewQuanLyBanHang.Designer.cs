@@ -158,6 +158,7 @@
             this.btnLichSuGiaoDich.TabIndex = 5;
             this.btnLichSuGiaoDich.Text = "📊 Lịch Sử Giao Dịch";
             this.btnLichSuGiaoDich.UseVisualStyleBackColor = false;
+            this.btnLichSuGiaoDich.Click += new System.EventHandler(this.btnLichSuGiaoDich_Click_1);
             // 
             // lblRecordCount
             // 

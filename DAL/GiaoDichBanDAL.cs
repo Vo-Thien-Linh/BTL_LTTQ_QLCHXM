@@ -98,6 +98,8 @@ namespace DAL
             return DataProvider.ExecuteQuery(query);
         }
 
+
+
         /// <summary>
         /// Lấy giao dịch bán theo trạng thái duyệt
         /// </summary>
