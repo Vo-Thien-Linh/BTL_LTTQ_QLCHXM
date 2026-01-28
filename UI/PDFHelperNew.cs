@@ -238,7 +238,6 @@ namespace UI
 
                 AddSimpleInfoRow(xeTable, "Hãng xe:", hopDong["TenHangXe"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Dòng xe:", hopDong["TenDongXe"]?.ToString() ?? "");
-                AddSimpleInfoRow(xeTable, "Loại xe:", hopDong["TenLoaiXe"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Màu sắc:", hopDong["TenMauSac"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Năm sản xuất:", hopDong["NamSanXuat"]?.ToString() ?? "");
                 AddSimpleInfoRow(xeTable, "Biển số:", hopDong["BienSo"]?.ToString() ?? "Chưa đăng ký");

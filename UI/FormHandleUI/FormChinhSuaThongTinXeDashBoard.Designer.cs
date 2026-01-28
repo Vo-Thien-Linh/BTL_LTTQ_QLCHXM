@@ -122,6 +122,7 @@ namespace UI.FormHandleUI
             this.cbbLoaiXe.Name = "cbbLoaiXe";
             this.cbbLoaiXe.Size = new System.Drawing.Size(129, 24);
             this.cbbLoaiXe.TabIndex = 21;
+            this.cbbLoaiXe.Visible = false;
             // 
             // cbbNhaCungCap
             // 
@@ -381,6 +382,7 @@ namespace UI.FormHandleUI
             this.label9.Size = new System.Drawing.Size(50, 16);
             this.label9.TabIndex = 7;
             this.label9.Text = "Loại xe";
+            this.label9.Visible = false;
             // 
             // label8
             // 

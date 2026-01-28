@@ -393,6 +393,7 @@
             this.txtLoaiXe.ReadOnly = true;
             this.txtLoaiXe.Size = new System.Drawing.Size(372, 24);
             this.txtLoaiXe.TabIndex = 8;
+            this.txtLoaiXe.Visible = false;
             // 
             // txtNamSanXuat
             // 
@@ -486,6 +487,7 @@
             this.lblLoaiXe.Size = new System.Drawing.Size(59, 18);
             this.lblLoaiXe.TabIndex = 5;
             this.lblLoaiXe.Text = "Loại xe:";
+            this.lblLoaiXe.Visible = false;
             // 
             // lblNamSanXuat
             // 

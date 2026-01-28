@@ -216,6 +216,7 @@ namespace UI.FormHandleUI
             this.txtLoaiXe.ReadOnly = true;
             this.txtLoaiXe.Size = new System.Drawing.Size(370, 22);
             this.txtLoaiXe.TabIndex = 18;
+            this.txtLoaiXe.Visible = false;
             // 
             // txtNhaCungCap
             // 
@@ -315,6 +316,7 @@ namespace UI.FormHandleUI
             this.label9.Size = new System.Drawing.Size(50, 16);
             this.label9.TabIndex = 7;
             this.label9.Text = "Loại xe";
+            this.label9.Visible = false;
             // 
             // label8
             // 

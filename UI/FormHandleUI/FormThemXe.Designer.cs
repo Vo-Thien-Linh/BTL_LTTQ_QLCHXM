@@ -164,6 +164,7 @@
             this.cbbLoaiXe.Size = new System.Drawing.Size(129, 24);
             this.cbbLoaiXe.TabIndex = 21;
             this.cbbLoaiXe.SelectedIndexChanged += new System.EventHandler(this.cbbLoaiXe_SelectedIndexChanged);
+            this.cbbLoaiXe.Visible = false;
             // 
             // cbbNhaCungCap
             // 
@@ -264,8 +265,6 @@
             this.label12.TabIndex = 10;
             this.label12.Text = "Ngày đăng ký";
             // 
-            // label11
-            // 
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(299, 252);
             this.label11.Name = "label11";
@@ -290,7 +289,8 @@
             this.label9.Size = new System.Drawing.Size(50, 16);
             this.label9.TabIndex = 7;
             this.label9.Text = "Loại xe";
-            // 
+            this.label9.Visible = false;
+
             // label8
             // 
             this.label8.AutoSize = true;

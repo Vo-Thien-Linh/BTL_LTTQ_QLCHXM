@@ -155,7 +155,7 @@
 
         private void txtSearch_Enter(object sender, System.EventArgs e)
         {
-            if (txtSearch.Text == "Tìm kiếm theo hãng, dòng, màu, loại xe...")
+            if (txtSearch.Text == "Tìm kiếm theo hãng, dòng, màu...")
             {
                 txtSearch.Text = "";
                 txtSearch.ForeColor = System.Drawing.Color.Black;
@@ -166,7 +166,7 @@
         {
             if (string.IsNullOrWhiteSpace(txtSearch.Text))
             {
-                txtSearch.Text = "Tìm kiếm theo hãng, dòng, màu, loại xe...";
+                txtSearch.Text = "Tìm kiếm theo hãng, dòng, màu...";
                 txtSearch.ForeColor = System.Drawing.Color.Gray;
             }
         }

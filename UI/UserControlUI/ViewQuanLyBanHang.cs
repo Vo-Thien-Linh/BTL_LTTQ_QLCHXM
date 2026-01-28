@@ -339,7 +339,7 @@ namespace UI.UserControlUI
 
         private void UpdateRecordCount(int count)
         {
-            lblRecordCount.Text = $"Tổng số loại xe có thể bán: {count}";
+            lblRecordCount.Text = $"Tổng số xe có thể bán: {count}";
             lblRecordCount.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
         }
 
