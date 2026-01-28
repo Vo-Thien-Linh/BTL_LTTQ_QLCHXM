@@ -667,6 +667,19 @@ namespace UI.FormUI
             string maTaiKhoan = CurrentUser.MaTaiKhoan;
             LoadControl(new ViewQuanLyBanHang(maTaiKhoan));
             
+            // Kiểm tra xe trước khi mở form
+            XeMayBLL xeMayBLL = new XeMayBLL();
+            string errorMessage;
+            if (!xeMayBLL.KiemTraXeTruocKhiBan(idXe, 1, out errorMessage))
+            {
+                MessageBox.Show(
+                    errorMessage,
+                    "Không thể bán xe",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            
             // Mở form bán xe với xe đã chọn
             FormMuaXe formMuaXe = new FormMuaXe(maTaiKhoan, idXe);
             formMuaXe.ShowDialog();

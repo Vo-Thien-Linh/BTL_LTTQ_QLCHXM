@@ -126,6 +126,31 @@ namespace BLL
                     throw new Exception("Xe bán không thể có trạng thái 'Đang thuê'!\nVui lòng chọn trạng thái phù hợp.");
                 }
 
+                // Validate số lượng và trạng thái xe bán
+                if (xe.MucDichSuDung == "Bán")
+                {
+                    // Nếu không có số lượng, mặc định = 1
+                    if (xe.SoLuong == null || xe.SoLuong < 0)
+                    {
+                        xe.SoLuong = 1;
+                    }
+
+                    // Tự động điều chỉnh trạng thái dựa vào số lượng
+                    if (xe.SoLuong > 0)
+                    {
+                        // Có hàng: phải là Sẵn sàng (trừ khi đang bảo trì)
+                        if (xe.TrangThai == "Đã bán")
+                        {
+                            xe.TrangThai = "Sẵn sàng";
+                        }
+                    }
+                    else // SoLuong = 0
+                    {
+                        // Hết hàng: phải là Đã bán
+                        xe.TrangThai = "Đã bán";
+                    }
+                }
+
                 // Validate năm sản xuất hợp lý
                 int currentYear = DateTime.Now.Year;
                 if (xe.NamSX != null && (xe.NamSX < 1900 || xe.NamSX > currentYear + 1))
@@ -292,6 +317,34 @@ namespace BLL
                     throw new Exception("Xe bán không thể có trạng thái 'Đang thuê'!\nVui lòng chọn trạng thái phù hợp.");
                 }
 
+                // Validate số lượng và trạng thái xe bán khi cập nhật
+                if (xe.MucDichSuDung == "Bán")
+                {
+                    // Nếu không có số lượng, giữ nguyên hoặc mặc định = 0
+                    if (xe.SoLuong == null || xe.SoLuong < 0)
+                    {
+                        xe.SoLuong = 0;
+                    }
+
+                    // Tự động điều chỉnh trạng thái dựa vào số lượng
+                    if (xe.SoLuong > 0)
+                    {
+                        // Có hàng: phải là Sẵn sàng (trừ khi đang bảo trì)
+                        if (xe.TrangThai == "Đã bán")
+                        {
+                            xe.TrangThai = "Sẵn sàng";
+                        }
+                    }
+                    else // SoLuong = 0
+                    {
+                        // Hết hàng: phải là Đã bán (trừ khi đang bảo trì)
+                        if (xe.TrangThai != "Đang bảo trì")
+                        {
+                            xe.TrangThai = "Đã bán";
+                        }
+                    }
+                }
+
                 // Validate năm sản xuất hợp lý
                 int currentYear = DateTime.Now.Year;
                 if (xe.NamSX != null && (xe.NamSX < 1900 || xe.NamSX > currentYear + 1))
@@ -420,17 +473,38 @@ namespace BLL
                     throw new Exception("Không tìm thấy xe!");
                 }
 
+                // Kiểm tra xe phải là xe bán
+                if (xe.MucDichSuDung != "Bán")
+                {
+                    throw new Exception("Chỉ áp dụng cho xe bán!");
+                }
+
+                // Kiểm tra số lượng đủ để bán
+                int soLuongHienTai = xe.SoLuong ?? 0;
+                if (soLuongHienTai < soLuongBan)
+                {
+                    throw new Exception($"Không đủ số lượng! Còn {soLuongHienTai} xe, yêu cầu bán {soLuongBan} xe.");
+                }
+
                 // Tăng số lượng đã bán
                 xe.SoLuongBanRa = (xe.SoLuongBanRa ?? 0) + soLuongBan;
 
                 // Giảm số lượng tồn kho
-                xe.SoLuong = (xe.SoLuong ?? 1) - soLuongBan;
-                if (xe.SoLuong < 0) xe.SoLuong = 0;
+                xe.SoLuong = soLuongHienTai - soLuongBan;
 
-                // Nếu hết hàng và là xe bán, cập nhật trạng thái
-                if (xe.SoLuong == 0 && xe.MucDichSuDung == "Bán")
+                // Tự động cập nhật trạng thái dựa vào số lượng còn lại
+                if (xe.SoLuong <= 0)
                 {
-                    xe.TrangThai = "Đã bán";
+                    xe.SoLuong = 0;
+                    xe.TrangThai = "Đã bán"; // Hết hàng
+                }
+                else
+                {
+                    // Còn hàng: giữ nguyên trạng thái nếu không phải Đã bán
+                    if (xe.TrangThai == "Đã bán")
+                    {
+                        xe.TrangThai = "Sẵn sàng"; // Có hàng thì để Sẵn sàng
+                    }
                 }
 
                 return xeMayDAL.UpdateXeMay(xe);
@@ -615,6 +689,150 @@ namespace BLL
         }
 
         /// <summary>
+        /// Kiểm tra xe có thể bán được không (Sẵn sàng + có số lượng)
+        /// </summary>
+        public bool KiemTraXeTruocKhiBan(string idXe, int soLuongCanBan, out string errorMessage)
+        {
+            errorMessage = "";
+
+            try
+            {
+                var xe = xeMayDAL.GetXeMayById(idXe);
+                if (xe == null)
+                {
+                    errorMessage = "Không tìm thấy xe!";
+                    return false;
+                }
+
+                if (xe.MucDichSuDung != "Bán")
+                {
+                    errorMessage = "Xe này không phải để bán!";
+                    return false;
+                }
+
+                if (xe.TrangThai != "Sẵn sàng")
+                {
+                    errorMessage = $"Xe đang ở trạng thái '{xe.TrangThai}', không thể bán!";
+                    return false;
+                }
+
+                int soLuongHienTai = xe.SoLuong ?? 0;
+                if (soLuongHienTai <= 0)
+                {
+                    errorMessage = "Xe đã hết hàng!";
+                    return false;
+                }
+
+                if (soLuongHienTai < soLuongCanBan)
+                {
+                    errorMessage = $"Không đủ số lượng! Còn {soLuongHienTai} xe, yêu cầu bán {soLuongCanBan} xe.";
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = "Lỗi khi kiểm tra xe: " + ex.Message;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Đồng bộ trạng thái tất cả xe bán theo số lượng tồn kho
+        /// </summary>
+        public int DongBoTrangThaiXeBan()
+        {
+            try
+            {
+                int soXeCapNhat = 0;
+                DataTable dtXeBan = xeMayDAL.GetAllXeMay();
+
+                foreach (DataRow row in dtXeBan.Rows)
+                {
+                    string mucDich = row["MucDichSuDung"].ToString();
+                    if (mucDich != "Bán") continue;
+
+                    string idXe = row["ID_Xe"].ToString();
+                    string trangThaiHienTai = row["TrangThai"].ToString();
+                    int soLuong = row["SoLuong"] != DBNull.Value ? Convert.ToInt32(row["SoLuong"]) : 0;
+
+                    string trangThaiDung = "";
+
+                    if (soLuong > 0)
+                    {
+                        // Còn hàng: phải là Sẵn sàng (trừ khi đang bảo trì)
+                        if (trangThaiHienTai == "Đã bán")
+                        {
+                            trangThaiDung = "Sẵn sàng";
+                        }
+                    }
+                    else
+                    {
+                        // Hết hàng: phải là Đã bán
+                        if (trangThaiHienTai != "Đã bán")
+                        {
+                            trangThaiDung = "Đã bán";
+                        }
+                    }
+
+                    // Cập nhật nếu trạng thái không đúng
+                    if (!string.IsNullOrEmpty(trangThaiDung))
+                    {
+                        xeMayDAL.UpdateTrangThai(idXe, trangThaiDung);
+                        soXeCapNhat++;
+                    }
+                }
+
+                return soXeCapNhat;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi đồng bộ trạng thái xe bán: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Thêm số lượng vào kho cho xe bán (khi nhập thêm hàng)
+        /// </summary>
+        public bool ThemSoLuongXeBan(string idXe, int soLuongThem)
+        {
+            try
+            {
+                if (soLuongThem <= 0)
+                {
+                    throw new Exception("Số lượng thêm phải lớn hơn 0!");
+                }
+
+                var xe = xeMayDAL.GetXeMayById(idXe);
+                if (xe == null)
+                {
+                    throw new Exception("Không tìm thấy xe!");
+                }
+
+                if (xe.MucDichSuDung != "Bán")
+                {
+                    throw new Exception("Chỉ áp dụng cho xe bán!");
+                }
+
+                // Tăng số lượng
+                xe.SoLuong = (xe.SoLuong ?? 0) + soLuongThem;
+
+                // Nếu có hàng, cập nhật trạng thái thành Sẵn sàng
+                if (xe.SoLuong > 0 && xe.TrangThai == "Đã bán")
+                {
+                    xe.TrangThai = "Sẵn sàng";
+                }
+
+                return xeMayDAL.UpdateXeMay(xe);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi thêm số lượng xe: " + ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Lấy giá xe theo loại (Bán hoặc Thuê)
         /// </summary>
         public DataTable GetGiaXe(string idXe, string phanLoai)
@@ -641,6 +859,21 @@ namespace BLL
             catch (Exception ex)
             {
                 throw new Exception("Lỗi khi lấy danh sách loại xe bán: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Lấy tất cả xe bán bao gồm cả xe hết hàng (để hiển thị trạng thái)
+        /// </summary>
+        public DataTable GetTatCaXeBan()
+        {
+            try
+            {
+                return xeMayDAL.GetTatCaXeBan();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi lấy danh sách xe bán: " + ex.Message);
             }
         }
 

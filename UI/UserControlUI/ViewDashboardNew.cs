@@ -142,7 +142,7 @@ namespace UI.UserControlUI
 
             if (chartDoanhThu.Series.Count > 0)
             {
-                chartDoanhThu.Series[0].Name = langMgr.GetString("VehicleSales") ?? "Bán xe";
+                chartDoanhThu.Series[0].Name = langMgr.GetString("Sales") ?? "Bán hàng";
                 chartDoanhThu.Series[1].Name = langMgr.GetString("VehicleRental") ?? "Cho thuê";
             }
 
@@ -257,7 +257,7 @@ namespace UI.UserControlUI
 
                 Series seriesBan = new Series
                 {
-                    Name = langMgr.GetString("VehicleSales") ?? "Bán xe",
+                    Name = langMgr.GetString("Sales") ?? "Bán hàng",
                     ChartType = SeriesChartType.Column,
                     Color = Color.FromArgb(33, 150, 243),
                     BorderWidth = 2
@@ -530,5 +530,10 @@ namespace UI.UserControlUI
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
         }
         #endregion
+
+        private void dgvCanhBaoTonKho_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

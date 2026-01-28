@@ -32,17 +32,16 @@ namespace UI.UserControlUI
 
         /// <summary>
         /// Áp dụng phân quyền cho các nút thao tác
-        /// Quản lý: Xem (không sửa)
-        /// Kỹ thuật: Thêm/Sửa/Xóa
+        /// Cả Quản lý và Kỹ thuật đều có thể thao tác bảo trì
         /// </summary>
         private void ApplyPermissions()
         {
-            bool canEdit = PermissionManager.CanEditBaoTri(); // Chỉ Kỹ thuật
+            bool canEdit = PermissionManager.CanEditBaoTri(); // Kỹ thuật hoặc Quản lý
             btnThem.Visible = canEdit;
             btnXoa.Visible = canEdit;
             btnThemPhuTung.Visible = canEdit;
             
-            // Nếu không có quyền sửa, chỉ cho xem
+            // Nếu không có quyền sửa (thu ngân, nhân viên khác)
             if (!canEdit)
             {
                 cboXe.Enabled = false;

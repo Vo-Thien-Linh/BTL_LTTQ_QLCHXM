@@ -94,11 +94,11 @@ namespace BLL
         }
 
         /// <summary>
-        /// Kiểm tra có quyền sửa bảo trì (chỉ Kỹ thuật)
+        /// Kiểm tra có quyền sửa bảo trì (Kỹ thuật hoặc Quản lý)
         /// </summary>
         public static bool CanEditBaoTri()
         {
-            return CurrentUser.ChucVu == "Kỹ thuật";
+            return CurrentUser.ChucVu == "Kỹ thuật" || CurrentUser.ChucVu == "Quản lý";
         }
 
         /// <summary>
