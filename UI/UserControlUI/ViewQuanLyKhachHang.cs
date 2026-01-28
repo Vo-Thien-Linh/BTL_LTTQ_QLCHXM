@@ -179,14 +179,15 @@ namespace UI.UserControlUI
                 DataTable dt = khachHangBLL.GetAllKhachHang();
                 dgvKhachHang.DataSource = dt;
                 UpdateRecordCount(dt.Rows.Count);
-
-                // Tùy chỉnh hiển thị cột
                 FormatDataGridView();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu khách hàng: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("ErrorLoadingCustomerData") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -230,7 +231,7 @@ namespace UI.UserControlUI
 
             dgvKhachHang.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
-        
+
         private void BtnSearch_Click(object sender, EventArgs e)
         {
             string displayField = cboSearchBy.SelectedItem?.ToString() ?? langMgr.GetString("CustomerID");
@@ -238,7 +239,7 @@ namespace UI.UserControlUI
 
             string searchField;
             if (!searchFieldMap.TryGetValue(displayField, out searchField))
-                searchField = "MaKH"; // Default field nếu không khớp
+                searchField = "MaKH";
 
             if (string.IsNullOrEmpty(keyword))
             {
@@ -255,8 +256,11 @@ namespace UI.UserControlUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tìm kiếm: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("SearchError") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -271,33 +275,39 @@ namespace UI.UserControlUI
         {
             try
             {
-                // DÙNG FORM MỚI: FormThemKhachHang (không tham số = chế độ thêm mới)
                 using (var form = new FormThemKhachHang())
                 {
                     if (form.ShowDialog() == DialogResult.OK)
                     {
-                        LoadData(); // Refresh danh sách sau khi thêm thành công
-                        MessageBox.Show("Thêm khách hàng thành công!", "Thành công",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadData();
+                        MessageBox.Show(
+                            langMgr.GetString("AddCustomerSuccess"),
+                            langMgr.GetString("Success"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi thêm khách hàng: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("ErrorAddingCustomer") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
         // === THAY ĐỔI HÀM NÀY ===
         private void Btn_EditCustomer_Click(object sender, EventArgs e)
         {
-            
-
             if (dgvKhachHang.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Vui lòng chọn một khách hàng để sửa!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    langMgr.GetString("PleaseSelectCustomerToEdit"),
+                    langMgr.GetString("Notification"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -305,11 +315,14 @@ namespace UI.UserControlUI
             {
                 string maKH = dgvKhachHang.SelectedRows[0].Cells["MaKH"].Value.ToString();
 
-                // Lấy dữ liệu khách hàng hiện tại từ database để truyền vào form
                 DataTable dt = khachHangBLL.GetKhachHangByMaKH(maKH);
                 if (dt.Rows.Count == 0)
                 {
-                    MessageBox.Show("Không tìm thấy khách hàng!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        langMgr.GetString("CustomerNotFound"),
+                        langMgr.GetString("Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                     return;
                 }
 
@@ -329,21 +342,26 @@ namespace UI.UserControlUI
                     AnhGiayTo = row["AnhGiayTo"] == DBNull.Value ? null : (byte[])row["AnhGiayTo"]
                 };
 
-                // DÙNG FORM MỚI: truyền vào đối tượng KhachHangDTO = chế độ sửa
                 using (var form = new FormThemKhachHang(kh))
                 {
                     if (form.ShowDialog() == DialogResult.OK)
                     {
-                        LoadData(); // Refresh lại danh sách
-                        MessageBox.Show("Cập nhật khách hàng thành công!", "Thành công",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadData();
+                        MessageBox.Show(
+                            langMgr.GetString("UpdateCustomerSuccess"),
+                            langMgr.GetString("Success"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi sửa khách hàng: " + ex.Message, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("ErrorEditingCustomer") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
 
@@ -351,8 +369,11 @@ namespace UI.UserControlUI
         {
             if (dgvKhachHang.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Vui lòng chọn một khách hàng để xóa!", "Thông báo",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    langMgr.GetString("PleaseSelectCustomerToDelete"),
+                    langMgr.GetString("Notification"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -360,8 +381,10 @@ namespace UI.UserControlUI
             string hoTenKH = dgvKhachHang.SelectedRows[0].Cells["HoTenKH"].Value.ToString();
 
             var confirmResult = MessageBox.Show(
-                $"Bạn có chắc chắn muốn xóa khách hàng '{hoTenKH}' (Mã: {maKH})?\n\nLưu ý: Thao tác này không thể hoàn tác!",
-                "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                string.Format(langMgr.GetString("ConfirmDeleteCustomer"), hoTenKH, maKH),
+                langMgr.GetString("ConfirmDelete"),
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
 
             if (confirmResult == DialogResult.Yes)
             {
@@ -372,27 +395,36 @@ namespace UI.UserControlUI
 
                     if (success)
                     {
-                        MessageBox.Show("Xóa khách hàng thành công!", "Thông báo",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(
+                            langMgr.GetString("DeleteCustomerSuccess"),
+                            langMgr.GetString("Notification"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
                         LoadData();
                     }
                     else
                     {
-                        MessageBox.Show(errorMessage, "Lỗi xóa",
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(
+                            errorMessage,
+                            langMgr.GetString("DeleteError"),
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi xóa khách hàng: " + ex.Message, "Lỗi",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        langMgr.GetString("ErrorDeletingCustomer") + ": " + ex.Message,
+                        langMgr.GetString("Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
 
         private void UpdateRecordCount(int count)
         {
-            lblRecordCount.Text = $"Tổng số bản ghi: {count}";
+            lblRecordCount.Text = string.Format(langMgr.GetString("TotalRecords"), count);
             lblRecordCount.ForeColor = count > 0 ? Color.FromArgb(25, 118, 210) : Color.Gray;
         }
 
@@ -432,6 +464,11 @@ namespace UI.UserControlUI
         }
 
         private void cboSearchBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_DeleteCustomer_Click_1(object sender, EventArgs e)
         {
 
         }

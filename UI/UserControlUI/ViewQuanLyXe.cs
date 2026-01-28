@@ -26,24 +26,74 @@ namespace UI.UserControlUI
 
         private Dictionary<string, string> searchFieldMap;
 
+        private Dictionary<string, string> statusMap;
+
 
         public ViewQuanLyXe()
         {
             InitializeComponent();
+
+            // Khởi tạo ComboBox TRƯỚC KHI gọi ApplyLanguage
             InitializeComboBox();
-            InitializeCardView();
             InitializeTimKiemTheoComboBox();
+
+            // Khởi tạo maps
+            InitSearchFieldMap();
+            InitStatusMap();
+
+            // Khởi tạo UI khác
+            InitializeCardView();
+
+            // Áp dụng ngôn ngữ SAU KHI đã có items
+            ApplyLanguage();
+
+            // Load dữ liệu
             LoadData();
+
+            // Theme
             ThemeManager.Instance.ThemeChanged += OnThemeChanged;
             ApplyTheme(ThemeManager.Instance.CurrentTheme);
 
-            langMgr.LanguageChanged += (s, e) => { ApplyLanguage(); LoadData(); };
-            ApplyLanguage();
-            
-            InitSearchFieldMap();
-            
-            // Áp dụng phân quyền cho nút Thêm/Sửa/Xóa
+            // Đăng ký event language changed
+            langMgr.LanguageChanged += OnLanguageChanged_ViewXe;
+
+            // ✅ THÊM: Đăng ký event khi control bị dispose
+            this.HandleDestroyed += ViewQuanLyXe_HandleDestroyed;
+
+            // Phân quyền
             ApplyPermissions();
+        }
+
+        private void OnLanguageChanged_ViewXe(object sender, EventArgs e)
+        {
+            ApplyLanguage();
+            LoadData();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                langMgr.LanguageChanged -= OnLanguageChanged_ViewXe;
+            }
+            base.Dispose(disposing);
+        }
+        private void InitStatusMap()
+        {
+            statusMap = new Dictionary<string, string>();
+            UpdateStatusMap();
+        }
+
+        private void UpdateStatusMap()
+        {
+            statusMap.Clear();
+
+            // Map từ text hiển thị sang giá trị DB (luôn là tiếng Việt)
+            statusMap[langMgr.GetString("AllStatus")] = null; // "Tất cả" hoặc "All" -> null
+            statusMap[langMgr.GetString("ReadyStatus")] = "Sẵn sàng";
+            statusMap[langMgr.GetString("RentedStatus")] = "Đang thuê";
+            statusMap[langMgr.GetString("SoldStatus")] = "Đã bán";
+            statusMap[langMgr.GetString("MaintenanceStatus")] = "Đang bảo trì";
         }
 
         /// <summary>
@@ -84,18 +134,25 @@ namespace UI.UserControlUI
 
         private void InitSearchFieldMap()
         {
-            searchFieldMap = new Dictionary<string, string>
-    {
-        { langMgr.GetString("Biển số"), "BienSo" },
-        { langMgr.GetString("Hãng"), "TenHang" },
-        { langMgr.GetString("Dòng"), "TenDong" },
-        // Có thể có thêm field khác nếu cần thiết
-    };
+            searchFieldMap = new Dictionary<string, string>();
+            UpdateSearchFieldMap();
+        }
+
+        private void UpdateSearchFieldMap()
+        {
+            searchFieldMap.Clear();
+
+            searchFieldMap[langMgr.GetString("AllStatus")] = null;
+            searchFieldMap[langMgr.GetString("VehicleID")] = "ID_Xe";
+            searchFieldMap[langMgr.GetString("PlateNumber")] = "BienSo";
+            searchFieldMap[langMgr.GetString("Brand")] = "TenHang";
+            searchFieldMap[langMgr.GetString("Model")] = "TenDong";
         }
 
 
         private void ApplyLanguage()
         {
+            // Cập nhật buttons và labels
             btnThem.Text = langMgr.GetString("AddBtn");
             btnSua.Text = langMgr.GetString("EditBtn");
             btnXoa.Text = langMgr.GetString("DeleteBtn");
@@ -106,17 +163,35 @@ namespace UI.UserControlUI
             lblTrangThai.Text = langMgr.GetString("Status");
             lblTuKhoa.Text = langMgr.GetString("Keyword");
 
-            cbbTrangThai.Items[0] = langMgr.GetString("AllStatus");
-            cbbTrangThai.Items[1] = langMgr.GetString("ReadyStatus");
-            cbbTrangThai.Items[2] = langMgr.GetString("RentedStatus");
-            cbbTrangThai.Items[3] = langMgr.GetString("SoldStatus");
-            cbbTrangThai.Items[4] = langMgr.GetString("MaintenanceStatus");
+            // ✅ CHỈ cập nhật nếu ComboBox đã có items
+            if (cbbTrangThai.Items.Count > 0)
+            {
+                int selectedIndex = cbbTrangThai.SelectedIndex;
+                cbbTrangThai.Items.Clear();
+                cbbTrangThai.Items.Add(langMgr.GetString("AllStatus"));
+                cbbTrangThai.Items.Add(langMgr.GetString("ReadyStatus"));
+                cbbTrangThai.Items.Add(langMgr.GetString("RentedStatus"));
+                cbbTrangThai.Items.Add(langMgr.GetString("SoldStatus"));
+                cbbTrangThai.Items.Add(langMgr.GetString("MaintenanceStatus"));
+                cbbTrangThai.SelectedIndex = selectedIndex >= 0 ? selectedIndex : 0;
+            }
 
-            cbbTimKiemTheo.Items[0] = langMgr.GetString("AllStatus");
-            cbbTimKiemTheo.Items[1] = langMgr.GetString("VehicleID");
-            cbbTimKiemTheo.Items[2] = langMgr.GetString("PlateNumber");
-            cbbTimKiemTheo.Items[3] = langMgr.GetString("Brand");
-            cbbTimKiemTheo.Items[4] = langMgr.GetString("Model");
+            // ✅ CHỈ cập nhật nếu ComboBox đã có items
+            if (cbbTimKiemTheo.Items.Count > 0)
+            {
+                int selectedIndex = cbbTimKiemTheo.SelectedIndex;
+                cbbTimKiemTheo.Items.Clear();
+                cbbTimKiemTheo.Items.Add(langMgr.GetString("AllStatus"));
+                cbbTimKiemTheo.Items.Add(langMgr.GetString("VehicleID"));
+                cbbTimKiemTheo.Items.Add(langMgr.GetString("PlateNumber"));
+                cbbTimKiemTheo.Items.Add(langMgr.GetString("Brand"));
+                cbbTimKiemTheo.Items.Add(langMgr.GetString("Model"));
+                cbbTimKiemTheo.SelectedIndex = selectedIndex >= 0 ? selectedIndex : 0;
+            }
+
+            // Cập nhật maps
+            UpdateStatusMap();
+            UpdateSearchFieldMap();
         }
 
 
@@ -151,6 +226,7 @@ namespace UI.UserControlUI
             cbbTrangThai.Items.Add("Đã bán");
             cbbTrangThai.Items.Add("Đang bảo trì");
             cbbTrangThai.SelectedIndex = 0;
+            cbbTrangThai.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         
@@ -692,6 +768,7 @@ namespace UI.UserControlUI
             cbbTimKiemTheo.Items.Add("Hãng xe");
             cbbTimKiemTheo.Items.Add("Dòng xe");
             cbbTimKiemTheo.SelectedIndex = 0;
+            cbbTimKiemTheo.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
         // Load dữ liệu
@@ -716,8 +793,11 @@ namespace UI.UserControlUI
 
                 if (dt == null || dt.Rows.Count == 0)
                 {
-                    MessageBox.Show("Database chưa có xe nào!\nVui lòng thêm xe mới.",
-                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        langMgr.GetString("NoVehicleInDatabase"),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     flowPanelXe.Controls.Clear();
                     return;
                 }
@@ -728,18 +808,20 @@ namespace UI.UserControlUI
                 Label lblCount = this.Controls.Find("lblRecordCount", true).FirstOrDefault() as Label;
                 if (lblCount != null)
                 {
-                    lblCount.Text = $"Tổng số xe: {dt.Rows.Count}";
+                    lblCount.Text = string.Format(langMgr.GetString("TotalVehicles"), dt.Rows.Count);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message + "\n\n" + ex.StackTrace, "Lỗi",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("ErrorLoadingData") + ": " + ex.Message + "\n\n" + ex.StackTrace,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
 
             cbbTrangThai.DropDownStyle = ComboBoxStyle.DropDownList;
             cbbTimKiemTheo.DropDownStyle = ComboBoxStyle.DropDownList;
-
         }
 
 
@@ -761,82 +843,20 @@ namespace UI.UserControlUI
             string trangThaiDisplay = cbbTrangThai.SelectedItem?.ToString();
             string displayField = cbbTimKiemTheo.SelectedItem?.ToString();
 
-            // ✅ Chuyển đổi trạng thái hiển thị sang giá trị DB
+            // Lấy giá trị DB từ Dictionary
             string trangThaiDB = null;
-            if (!string.IsNullOrEmpty(trangThaiDisplay))
+            if (!string.IsNullOrEmpty(trangThaiDisplay) && statusMap.ContainsKey(trangThaiDisplay))
             {
-                switch (trangThaiDisplay)
-                {
-                    case "Tất cả":
-                        trangThaiDB = null;
-                        break;
-                    case "Sẵn sàng":
-                    case "ReadyStatus": // Tiếng Anh nếu có
-                        trangThaiDB = "Sẵn sàng";
-                        break;
-                    case "Đang thuê":
-                    case "RentedStatus":
-                        trangThaiDB = "Đang thuê";
-                        break;
-                    case "Đã bán":
-                    case "SoldStatus":
-                        trangThaiDB = "Đã bán";
-                        break;
-                    case "Đang bảo trì":
-                    case "MaintenanceStatus":
-                        trangThaiDB = "Đang bảo trì";
-                        break;
-                    default:
-                        trangThaiDB = trangThaiDisplay;
-                        break;
-                }
+                trangThaiDB = statusMap[trangThaiDisplay];
             }
 
-            // ✅ Chuyển đổi field hiển thị sang tên cột DB
+            // Lấy search field từ Dictionary
             string searchField = null;
-
-            if (!string.IsNullOrEmpty(displayField))
+            if (!string.IsNullOrEmpty(displayField) && searchFieldMap.ContainsKey(displayField))
             {
-                // Kiểm tra nếu là "Tất cả" hoặc "AllStatus"
-                if (displayField == "Tất cả" || displayField == langMgr.GetString("AllStatus"))
-                {
-                    searchField = null; // Tìm tất cả
-                }
-                else
-                {
-                    // Map từ tên hiển thị sang tên cột
-                    switch (displayField)
-                    {
-                        case "Mã xe":
-                        case "VehicleID":
-                            searchField = "ID_Xe";
-                            break;
-                        case "Biển số":
-                        case "PlateNumber":
-                            searchField = "BienSo";
-                            break;
-                        case "Hãng":
-                        case "Hãng xe":
-                        case "Brand":
-                            searchField = "TenHang";
-                            break;
-                        case "Dòng":
-                        case "Dòng xe":
-                        case "Model":
-                            searchField = "TenDong";
-                            break;
-                        default:
-                            // Thử dùng searchFieldMap nếu có
-                            if (!searchFieldMap.TryGetValue(displayField, out searchField))
-                            {
-                                searchField = null;
-                            }
-                            break;
-                    }
-                }
+                searchField = searchFieldMap[displayField];
             }
 
-            // ✅ Xử lý logic tìm kiếm
             try
             {
                 DataTable dt;
@@ -844,30 +864,19 @@ namespace UI.UserControlUI
                 // TH1: Không có từ khóa, chỉ lọc theo trạng thái
                 if (string.IsNullOrEmpty(keyword))
                 {
-                    if (string.IsNullOrEmpty(trangThaiDB) || trangThaiDB == "Tất cả")
+                    if (string.IsNullOrEmpty(trangThaiDB))
                     {
-                        // Hiển thị tất cả
                         dt = xeMayBLL.GetAllXeMay();
                     }
                     else
                     {
-                        // Lọc theo trạng thái
                         dt = xeMayBLL.SearchXeMay(null, null, trangThaiDB);
                     }
                 }
                 // TH2: Có từ khóa
                 else
                 {
-                    if (string.IsNullOrEmpty(searchField))
-                    {
-                        // Tìm theo tất cả field + trạng thái
-                        dt = xeMayBLL.SearchXeMay(null, keyword, trangThaiDB);
-                    }
-                    else
-                    {
-                        // Tìm theo field cụ thể + trạng thái
-                        dt = xeMayBLL.SearchXeMay(searchField, keyword, trangThaiDB);
-                    }
+                    dt = xeMayBLL.SearchXeMay(searchField, keyword, trangThaiDB);
                 }
 
                 // Hiển thị kết quả
@@ -876,11 +885,13 @@ namespace UI.UserControlUI
                 if (dt == null || dt.Rows.Count == 0)
                 {
                     MessageBox.Show(
-                        "Không tìm thấy xe nào phù hợp với điều kiện tìm kiếm!\n\n" +
-                        $"Từ khóa: {keyword}\n" +
-                        $"Trường: {displayField}\n" +
-                        $"Trạng thái: {trangThaiDisplay}",
-                        "Thông báo",
+                        string.Format(
+                            langMgr.GetString("NoVehicleFound"),
+                            string.IsNullOrEmpty(keyword) ? "N/A" : keyword,
+                            displayField ?? "N/A",
+                            trangThaiDisplay ?? "N/A"
+                        ),
+                        langMgr.GetString("Notification"),
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
                     );
@@ -894,15 +905,15 @@ namespace UI.UserControlUI
                     Label lblCount = this.Controls.Find("lblRecordCount", true).FirstOrDefault() as Label;
                     if (lblCount != null)
                     {
-                        lblCount.Text = $"Tìm thấy: {dt.Rows.Count} xe";
+                        lblCount.Text = string.Format(langMgr.GetString("VehiclesFound"), dt.Rows.Count);
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Lỗi khi tìm kiếm xe!\n\n{ex.Message}",
-                    "Lỗi",
+                    langMgr.GetString("SearchError") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
@@ -936,14 +947,20 @@ namespace UI.UserControlUI
         {
             if (string.IsNullOrEmpty(selectedXeId))
             {
-                MessageBox.Show("Vui lòng chọn xe cần xóa!", "Thông báo", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    langMgr.GetString("PleaseSelectVehicleToDelete"),
+                    langMgr.GetString("Notification"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            DialogResult result = MessageBox.Show($"Bạn có chắc chắn muốn xóa xe {selectedXeId}?", 
-                "Xác nhận xóa", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
+            DialogResult result = MessageBox.Show(
+                string.Format(langMgr.GetString("ConfirmDeleteVehicle"), selectedXeId),
+                langMgr.GetString("ConfirmDelete"),
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
             if (result != DialogResult.Yes)
                 return;
 
@@ -952,31 +969,44 @@ namespace UI.UserControlUI
                 bool success = xeMayBLL.DeleteXeMay(selectedXeId);
                 if (success)
                 {
-                    MessageBox.Show("Xóa xe thành công!", "Thông báo", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        langMgr.GetString("DeleteVehicleSuccess"),
+                        langMgr.GetString("Notification"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                     panelXeDetail.Visible = false;
                     selectedXeId = null;
                     LoadData();
                 }
                 else
                 {
-                    MessageBox.Show("Xóa xe thất bại!", "Lỗi", 
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        langMgr.GetString("DeleteVehicleFailed"),
+                        langMgr.GetString("Error"),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi xóa xe: {ex.Message}", "Lỗi", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    langMgr.GetString("ErrorDeletingVehicle") + ": " + ex.Message,
+                    langMgr.GetString("Error"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
+
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(selectedXeId))
             {
-                MessageBox.Show("Vui lòng chọn xe cần sửa!", "Thông báo", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    langMgr.GetString("PleaseSelectVehicleToEdit"),
+                    langMgr.GetString("Notification"),
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
