@@ -13,23 +13,23 @@ namespace UI.UserControlUI
     {
         private GiaoDichThueBLL giaoDichThueBLL;
         private FlowLayoutPanel flpDonThue;
-        private string currentFilter = "";// "Đang thuê", "Chờ xác nhận", etc.
-        private string maNhanVien;  // ✅ THÊM: Lưu mã nhân viên
-        private string maTaiKhoan;  // ✅ THÊM: Lưu mã tài khoản
+        private string currentFilter = "";// "Đang thuê", "Chờ xác nhận"
+        private string maNhanVien;  //  Lưu mã nhân viên
+        private string maTaiKhoan;  //  Lưu mã tài khoản
 
         public ViewQuanLyChoThue(string maNV)
         {
             InitializeComponent();
             this.maNhanVien = maNV;
 
-            // LẤY MÃ TÀI KHOẢN TỪ CurrentUser
+            // Llấy mã tk từ CurrentUser
             this.maTaiKhoan = CurrentUser.MaTaiKhoan;
 
-            //  KIỂM TRA NGAY TỪ ĐẦU
+            //  kiểm tra ngay từ đầu
             if (string.IsNullOrWhiteSpace(this.maTaiKhoan))
             {
                 MessageBox.Show(
-                    "❌ Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
+                    "Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
                     "Vui lòng đăng nhập lại.",
                     "Lỗi",
                     MessageBoxButtons.OK,
@@ -48,6 +48,7 @@ namespace UI.UserControlUI
             btnRefresh.Click += BtnRefresh_Click;
             cboFilter.SelectedIndexChanged += CboFilter_SelectedIndexChanged;
             txtSearch.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) BtnSearch_Click(s, e); };
+            InitializeXuatPDFButton(); // Khởi tạo nút xuất PDF
         }
 
         // Constructor mặc định (để Designer không lỗi)
@@ -489,7 +490,7 @@ namespace UI.UserControlUI
             if (string.IsNullOrWhiteSpace(maTaiKhoan))
             {
                 MessageBox.Show(
-                    "❌ Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
+                    " Lỗi: Không xác định được tài khoản đang đăng nhập!\n" +
                     "Vui lòng đăng nhập lại.",
                     "Lỗi",
                     MessageBoxButtons.OK,
@@ -508,7 +509,6 @@ namespace UI.UserControlUI
                     {
                         cboFilter.SelectedIndex = 0;  // Giả sử index 0 là "Tất cả"
                     }
-                    //  Reload dữ liệu
                     LoadData();
                 }
             }
@@ -530,7 +530,7 @@ namespace UI.UserControlUI
 
             if (this.Visible)
             {
-                // Reload dữ liệu mỗi khi tab được hiển thị
+                // Reload dữ liệu 
                 LoadData();
             }
         }
@@ -550,6 +550,57 @@ namespace UI.UserControlUI
             {
                 System.Diagnostics.Debug.WriteLine($"Lỗi convert ảnh: {ex.Message}");
                 return null;
+            }
+        }
+
+        // Thêm nút vào toolbar
+        private Button btnXuatDanhSachPDF;
+
+        private void InitializeXuatPDFButton()
+        {
+            btnXuatDanhSachPDF = new Button();
+            btnXuatDanhSachPDF.Text = "📄 Xuất DS Hợp Đồng";
+            btnXuatDanhSachPDF.Size = new Size(150, 35);
+            btnXuatDanhSachPDF.BackColor = Color.FromArgb(156, 39, 176);
+            btnXuatDanhSachPDF.ForeColor = Color.White;
+            btnXuatDanhSachPDF.FlatStyle = FlatStyle.Flat;
+            btnXuatDanhSachPDF.Click += BtnXuatDanhSachPDF_Click;
+
+            // panelTop.Controls.Add(btnXuatDanhSachPDF);
+        }
+
+        private void BtnXuatDanhSachPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                HopDongThueBLL hopDongBLL = new HopDongThueBLL();
+                DataTable dtDanhSach = hopDongBLL.GetAllHopDongThue(); // Cần tạo method này
+
+                if (dtDanhSach.Rows.Count == 0)
+                {
+                    MessageBox.Show("Không có hợp đồng nào để xuất!", "Thông báo",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+                saveDialog.FileName = $"DanhSach_HopDongThue_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    PDFHelper.ExportDanhSachHopDongThue(dtDanhSach, saveDialog.FileName);
+
+                    MessageBox.Show("✓ Xuất danh sách thành công!", "Thành công",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    System.Diagnostics.Process.Start(saveDialog.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
