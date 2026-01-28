@@ -28,6 +28,9 @@ namespace UI.FormHandleUI
             txtGiaBan.Validating += txtGiaBan_Validating;
             txtSoLuongTonKho.Validating += txtSoLuongTonKho_Validating;
             txtTenPhuTung.Validating += txtTenPhuTung_Validating;
+            txtGiaMua.KeyPress += txtGiaMua_KeyPress;
+            txtGiaBan.KeyPress += txtGiaBan_KeyPress;
+            txtSoLuongTonKho.KeyPress += txtSoLuongTonKho_KeyPress;
             cbbHangXeTuongThich.SelectedIndexChanged += cbbHangXeTuongThich_SelectedIndexChanged;
 
             langMgr.LanguageChanged += (s, e) => ApplyLanguage();
@@ -185,6 +188,11 @@ namespace UI.FormHandleUI
                 errorProvider1.SetError(txtGiaBan, langMgr.GetString("SalePricePositiveRequired") ?? "Giá bán phải là số dương!");
                 e.Cancel = true;
             }
+            else if (decimal.TryParse(txtGiaMua.Text, out decimal giaMua) && giaBan < giaMua)
+            {
+                errorProvider1.SetError(txtGiaBan, langMgr.GetString("SalePriceMustBeGreaterOrEqualPurchase") ?? "Giá bán phải lớn hơn hoặc bằng giá mua!");
+                e.Cancel = true;
+            }
             else
             {
                 errorProvider1.SetError(txtGiaBan, "");
@@ -251,6 +259,18 @@ namespace UI.FormHandleUI
             decimal giaBan = decimal.Parse(txtGiaBan.Text);
             int soLuongTon = int.Parse(txtSoLuongTonKho.Text);
 
+            if (giaBan < giaMua)
+            {
+                MessageBox.Show(
+                    langMgr.GetString("SalePriceMustBeGreaterOrEqualPurchase") ?? "Giá bán phải lớn hơn hoặc bằng giá mua!",
+                    langMgr.GetString("Notification") ?? "Thông báo",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                txtGiaBan.Focus();
+                return;
+            }
+
             bool success = phuTungBLL.InsertPhuTungKho(
                 maPT, tenPT, maHang, maDong,
                 giaMua, giaBan, donVi, ghiChu, soLuongTon);
@@ -285,5 +305,43 @@ namespace UI.FormHandleUI
         private void cbbDonViTinh_SelectedIndexChanged(object sender, EventArgs e) { }
         private void txtGhiChu_TextChanged(object sender, EventArgs e) { }
         private void txtSoLuongTonKho_TextChanged(object sender, EventArgs e) { }
+
+        private void txtGiaMua_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            HandleDecimalKeyPress(sender as TextBox, e);
+        }
+
+        private void txtGiaBan_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            HandleDecimalKeyPress(sender as TextBox, e);
+        }
+
+        private void txtSoLuongTonKho_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private void HandleDecimalKeyPress(TextBox textBox, KeyPressEventArgs e)
+        {
+            if (textBox == null)
+                return;
+
+            bool isControl = char.IsControl(e.KeyChar);
+            bool isDigit = char.IsDigit(e.KeyChar);
+            bool isDecimalSeparator = e.KeyChar == '.' || e.KeyChar == ',';
+
+            if (!isControl && !isDigit)
+            {
+                if (!isDecimalSeparator)
+                {
+                    e.Handled = true;
+                }
+                else if (textBox.Text.Contains(".") || textBox.Text.Contains(","))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
     }
 }
