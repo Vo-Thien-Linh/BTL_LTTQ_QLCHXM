@@ -13,8 +13,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
         private void InitializeComponent()
         {
             this.pnlHeader = new System.Windows.Forms.Panel();
@@ -211,8 +209,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudKmBatDau)).EndInit();
             this.ResumeLayout(false);
         }
-
-        #endregion
 
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitle;

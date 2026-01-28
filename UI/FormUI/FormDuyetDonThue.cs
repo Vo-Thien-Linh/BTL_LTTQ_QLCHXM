@@ -297,7 +297,7 @@ namespace UI.FormUI
                 if (success)
                 {
                     MessageBox.Show(
-                        $"✓ Đã duyệt đơn #{selectedMaGD} thành công!\n\n" +
+                        $"Đã duyệt đơn #{selectedMaGD} thành công!\n\n" +
                         $"Trạng thái mới: Chờ giao xe\n" +
                         $"Người duyệt: {maNhanVien}\n" +
                         $"Thời gian: {DateTime.Now:dd/MM/yyyy HH:mm}",
@@ -349,7 +349,7 @@ namespace UI.FormUI
                 $"Khách hàng: {txtKhachHang.Text}\n" +
                 $"Xe: {txtXe.Text} ({txtBienSo.Text})\n\n" +
                 $"Lý do từ chối:\n{lyDo}\n\n" +
-                $"⚠ Đơn sẽ bị hủy và KHÔNG THỂ KHÔI PHỤC!",
+                $"Đơn sẽ bị hủy và KHÔNG THỂ KHÔI PHỤC!",
                 "Xác nhận từ chối đơn",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning

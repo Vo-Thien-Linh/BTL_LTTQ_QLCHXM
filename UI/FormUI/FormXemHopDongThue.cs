@@ -12,8 +12,9 @@ namespace UI.FormUI
     {
         private int maGDThue;
         private string maNV;
-        private string maTaiKhoan;  //  THÊM BIẾN MÃ TÀI KHOẢN
+        private string maTaiKhoan;
         private GiaoDichThueBLL giaoDichThueBLL;
+        private HopDongThueBLL hopDongThueBLL;
         private DataRow dataGiaoDich;
 
         public FormXemHopDongThue(int maGD, string maNhanVien)
@@ -40,6 +41,7 @@ namespace UI.FormUI
             }
 
             giaoDichThueBLL = new GiaoDichThueBLL();
+            hopDongThueBLL = new HopDongThueBLL();
 
             LoadData();
             ConfigureButtons();
@@ -152,9 +154,8 @@ namespace UI.FormUI
                     txtTrangThai.BackColor = Color.FromArgb(255, 243, 205);
                     txtTrangThai.ForeColor = Color.FromArgb(255, 152, 0);
                     break;
-                //  THÊM: Highlight cho "Chờ giao xe"
                 case "Chờ giao xe":
-                    txtTrangThai.BackColor = Color.FromArgb(179, 229, 252); // Màu xanh nhạt
+                    txtTrangThai.BackColor = Color.FromArgb(179, 229, 252);
                     txtTrangThai.ForeColor = Color.FromArgb(1, 87, 155);
                     break;
                 case "Đã thuê":
@@ -188,10 +189,7 @@ namespace UI.FormUI
             string ttThanhToan = dataGiaoDich["TrangThaiThanhToan"].ToString();
             string trangThaiDuyet = dataGiaoDich["TrangThaiDuyet"].ToString();
 
-            //  SỬA: Logic enable/disable buttons chính xác hơn
-
             // Button Xác nhận Thanh toán
-            // Chỉ cho phép khi: Đã duyệt + Chưa thanh toán + Chưa giao xe
             btnXacNhanThanhToan.Enabled = (
                 trangThaiDuyet == "Đã duyệt" &&
                 ttThanhToan == "Chưa thanh toán" &&
@@ -200,14 +198,12 @@ namespace UI.FormUI
             );
 
             // Button Giao xe
-            // Chỉ cho phép khi: Đã thanh toán + TrangThai = "Chờ giao xe"
             btnGiaoXe.Enabled = (
                 ttThanhToan == "Đã thanh toán" &&
                 trangThai == "Chờ giao xe"
             );
 
             // Button Trả xe
-            // Chỉ cho phép khi: Đang thuê
             btnTraXe.Enabled = (trangThai == "Đang thuê");
 
             // Màu sắc buttons
@@ -263,9 +259,7 @@ namespace UI.FormUI
                         MessageBox.Show("Xac nhan thanh toan thanh cong!", "Thanh cong",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // ✅ THÊM: Set DialogResult để trigger refresh ở View cha
                         this.DialogResult = DialogResult.OK;
-
                         LoadData();
                         ConfigureButtons();
                     }
@@ -315,7 +309,6 @@ namespace UI.FormUI
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             this.DialogResult = DialogResult.OK;
-
                             LoadData();
                             ConfigureButtons();
                         }
@@ -336,7 +329,6 @@ namespace UI.FormUI
 
         private void btnTraXe_Click(object sender, EventArgs e)
         {
-            // ✅ LẤY LẠI DỮ LIỆU ĐẦY ĐỦ
             DataTable dtFull = giaoDichThueBLL.GetGiaoDichThueById(maGDThue);
 
             if (dtFull.Rows.Count == 0)
@@ -354,10 +346,9 @@ namespace UI.FormUI
                     {
                         string errorMessage;
 
-                        //TRUYỀN maTaiKhoan THAY VÌ maNV
                         bool success = giaoDichThueBLL.XacNhanTraXe(
                             maGDThue,
-                            maTaiKhoan,  //  Truyền mã tài khoản
+                            maTaiKhoan,
                             formTraXe.TinhTrangXe,
                             formTraXe.ChiPhiPhatSinh,
                             formTraXe.KmKetThuc,
@@ -369,7 +360,7 @@ namespace UI.FormUI
                         if (success)
                         {
                             MessageBox.Show(
-                                $"✓ Trả xe thành công!\n\n" +
+                                $"Trả xe thành công!\n\n" +
                                 $"Tiền hoàn cọc: {formTraXe.TienHoanCoc:N0} VNĐ",
                                 "Thành công",
                                 MessageBoxButtons.OK,
@@ -396,6 +387,121 @@ namespace UI.FormUI
         private void btnClose_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnXuatPDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Kiểm tra trạng thái duyệt
+                string trangThaiDuyet = dataGiaoDich["TrangThaiDuyet"].ToString();
+                
+                if (trangThaiDuyet != "Đã duyệt")
+                {
+                    MessageBox.Show(
+                        "❌ Không thể xuất hợp đồng!\n\n" +
+                        $"Đơn thuê chưa được duyệt (Trạng thái: {trangThaiDuyet})\n" +
+                        "Vui lòng chờ quản lý duyệt đơn trước.",
+                        "Lỗi",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Lấy dữ liệu hợp đồng từ database
+                DataTable dtHopDong = hopDongThueBLL.GetHopDongByMaGDThue(maGDThue);
+
+                // Nếu chưa có hợp đồng, tạo tự động
+                if (dtHopDong.Rows.Count == 0)
+                {
+                    var confirmCreate = MessageBox.Show(
+                        "Hợp đồng chưa được tạo!\n\n" +
+                        "Bạn có muốn tạo hợp đồng ngay bây giờ không?",
+                        "Xác nhận",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (confirmCreate != DialogResult.Yes)
+                    {
+                        return;
+                    }
+
+                    // Tạo hợp đồng
+                    string errorMessage;
+                    bool createSuccess = hopDongThueBLL.TaoHopDongThue(
+                        maGDThue,
+                        maTaiKhoan,
+                        out errorMessage);
+
+                    if (!createSuccess)
+                    {
+                        MessageBox.Show(
+                            $"Không thể tạo hợp đồng!\n\n{errorMessage}",
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Tải lại dữ liệu hợp đồng sau khi tạo
+                    dtHopDong = hopDongThueBLL.GetHopDongByMaGDThue(maGDThue);
+
+                    if (dtHopDong.Rows.Count == 0)
+                    {
+                        MessageBox.Show(
+                            "Lỗi: Đã tạo hợp đồng nhưng không thể tải lại dữ liệu!",
+                            "Lỗi",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    MessageBox.Show(
+                        "Tạo hợp đồng thành công!",
+                        "Thành công",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+
+                // Chọn nơi lưu file PDF
+                SaveFileDialog saveDialog = new SaveFileDialog
+                {
+                    Filter = "PDF Files|*.pdf",
+                    Title = "Xuất hợp đồng thuê xe",
+                    FileName = $"HopDong_ThueXe_{maGDThue}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Xuất PDF
+                    PDFHelper.ExportChiTietHopDongThue(dtHopDong.Rows[0], saveDialog.FileName);
+
+                    // Thông báo thành công
+                    var result = MessageBox.Show(
+                        "✓ Xuất hợp đồng thành công!\n\n" +
+                        $"File đã được lưu tại:\n{saveDialog.FileName}\n\n" +
+                        "Bạn có muốn mở file vừa xuất không?",
+                        "Thành công",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(saveDialog.FileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Lỗi khi xuất hợp đồng:\n\n{ex.Message}\n\n" +
+                    $"Chi tiết:\n{ex.StackTrace}",
+                    "Lỗi",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                System.Diagnostics.Debug.WriteLine($"[LỖI] btnXuatPDF_Click: {ex.Message}\n{ex.StackTrace}");
+            }
         }
     }
 }

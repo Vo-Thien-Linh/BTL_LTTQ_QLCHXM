@@ -308,11 +308,27 @@ namespace BLL
                     return false;
                 }
 
-                //  TẠO HỢP ĐỒNG TỰ ĐỘNG (SAU KHI DUYỆT THÀNH CÔNG)
+                //  ========== BƯỚC 1: LẤY MaTaiKhoan CỦA NGƯỜI DUYỆT ==========
+                System.Diagnostics.Debug.WriteLine($"[INFO] Người duyệt: {nguoiDuyet}");
+                
+                string maTaiKhoanDuyet = GetMaTaiKhoanByMaNV(nguoiDuyet);
+                
+                if (string.IsNullOrWhiteSpace(maTaiKhoanDuyet))
+                {
+                    System.Diagnostics.Debug.WriteLine($"[CẢNH BÁO] Không tìm thấy MaTaiKhoan cho MaNV: {nguoiDuyet}");
+                    
+                    // ✅ VẪN LƯU HÀNG NHƯNG BỎ QUED BƯỚC TẠO HỢP ĐỒNG
+                    errorMessage = $"✓ Duyệt đơn thành công!\n\n" +
+                                  $"⚠ NHƯNG không tìm thấy tài khoản nhân viên để tạo hợp đồng.\n" +
+                                  $"→ Vui lòng tạo hợp đồng thủ công sau!";
+                    return true;
+                }
+
+                //  ========== BƯỚC 2: TẠO HỢP ĐỒNG TỰ ĐỘNG ==========
                 string hopDongError;
                 bool hopDongSuccess = hopDongThueBLL.TaoHopDongThue(
                     maGDThue,
-                    nguoiDuyet,  //  Truyền đúng MaTaiKhoan
+                    maTaiKhoanDuyet,  //  ✅ Truyền MaTaiKhoan đúng
                     out hopDongError
                 );
 
@@ -338,6 +354,44 @@ namespace BLL
                 errorMessage = "Lỗi khi duyệt giao dịch thuê: " + ex.Message;
                 System.Diagnostics.Debug.WriteLine($"[LỖI] ApproveGiaoDichThue: {ex.Message}\n{ex.StackTrace}");
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// ✅ THÊM METHOD MỚI: Lấy MaTaiKhoan từ MaNV
+        /// </summary>
+        private string GetMaTaiKhoanByMaNV(string maNV)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(maNV))
+                {
+                    return null;
+                }
+
+                string query = @"
+                    SELECT MaTaiKhoan 
+                    FROM TaiKhoan 
+                    WHERE MaNV = @MaNV 
+                      AND TrangThaiTaiKhoan = N'Hoạt động'
+                    LIMIT 1";
+
+                SqlParameter[] parameters = { new SqlParameter("@MaNV", maNV) };
+
+                object result = DataProvider.ExecuteScalar(query, parameters);
+
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString();
+                }
+
+                System.Diagnostics.Debug.WriteLine($"[WARN] Không tìm thấy MaTaiKhoan hoạt động cho MaNV: {maNV}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[ERROR] GetMaTaiKhoanByMaNV: {ex.Message}");
+                return null;
             }
         }
 
@@ -984,9 +1038,7 @@ namespace BLL
                                      $"Tiền cọc nhập vào: {gd.SoTienCoc.Value:N0}đ";
                         return false;
                     }
-                }
-                // ✅ BỎ PHẦN KIỂM TRA: if (gd.SoTienCoc.Value > gd.TongGia)
-                // Vì đã có quy định tiền cọc cho từng xe, không cần so sánh với tổng tiền thuê nữa
+                }// Vì đã có quy định tiền cọc cho từng xe, không cần so sánh với tổng tiền thuê nữa
             }
 
             return true;
@@ -1034,9 +1086,7 @@ namespace BLL
 
         #region KHUYẾN MÃI
 
-        /// <summary>
         /// Lấy danh sách khuyến mãi khả dụng cho thuê xe
-        /// </summary>
         public DataTable GetKhuyenMaiThueXe(DateTime? ngayThue = null)
         {
             if (!ngayThue.HasValue)
@@ -1046,10 +1096,7 @@ namespace BLL
 
             return giaoDichThueDAL.GetKhuyenMaiThueXe(ngayThue.Value);
         }
-
-        /// <summary>
         /// Kiểm tra và tính giá trị giảm từ khuyến mãi
-        /// </summary>
         public decimal TinhGiaTriGiamKhuyenMai(string maKM, decimal tongTienThue, DateTime ngayThue, out string errorMessage)
         {
             errorMessage = "";
@@ -1068,10 +1115,7 @@ namespace BLL
             // Tính giá trị giảm
             return giaoDichThueDAL.TinhGiaTriGiamKhuyenMai(maKM, tongTienThue, out errorMessage);
         }
-
-        /// <summary>
         /// Cập nhật khuyến mãi cho giao dịch thuê (chỉ khi đơn chưa duyệt hoặc chờ giao xe)
-        /// </summary>
         public bool CapNhatKhuyenMai(int maGDThue, string maKM, out string errorMessage)
         {
             errorMessage = "";
@@ -1142,9 +1186,7 @@ namespace BLL
                 return false;
             }
         }
-        /// <summary>
         /// Lấy tiền cọc quy định của xe từ database
-        /// </summary>
         private decimal GetTienCocQuyDinhCuaXe(string idXe)
         {
             try
