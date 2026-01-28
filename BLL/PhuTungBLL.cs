@@ -107,5 +107,33 @@ namespace BLL
     };
             return DataProvider.ExecuteNonQuery(query, pars) > 0;
         }
+
+        /// <summary>
+        /// Lưu lịch sử bán phụ tùng lẻ
+        /// </summary>
+        public void LuuLichSuBanLe(string maPT, string tenPT, int soLuong, decimal donGia, 
+            decimal giamGia, decimal thanhTien, string maTK, string maKM)
+        {
+            string query = @"
+                INSERT INTO LichSuBanPhuTungLe (MaPhuTung, TenPhuTung, SoLuong, DonGia, 
+                    SoTienGiam, ThanhTien, NgayBan, MaTaiKhoan, MaKM)
+                VALUES (@MaPT, @TenPT, @SoLuong, @DonGia, @GiamGia, @ThanhTien, 
+                    @NgayBan, @MaTK, @MaKM)";
+            
+            SqlParameter[] pars = new[]
+            {
+                new SqlParameter("@MaPT", maPT),
+                new SqlParameter("@TenPT", tenPT),
+                new SqlParameter("@SoLuong", soLuong),
+                new SqlParameter("@DonGia", donGia),
+                new SqlParameter("@GiamGia", giamGia),
+                new SqlParameter("@ThanhTien", thanhTien),
+                new SqlParameter("@NgayBan", DateTime.Now),
+                new SqlParameter("@MaTK", (object)maTK ?? DBNull.Value),
+                new SqlParameter("@MaKM", (object)maKM ?? DBNull.Value)
+            };
+            
+            DataProvider.ExecuteNonQuery(query, pars);
+        }
     }
 }

@@ -11,6 +11,7 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnXemHopDong;
+        private System.Windows.Forms.Button btnLichSuGiaoDich;
         private System.Windows.Forms.Label lblRecordCount;
 
         protected override void Dispose(bool disposing)
@@ -32,6 +33,7 @@
             this.panelDataGrid = new System.Windows.Forms.Panel();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.btnXemHopDong = new System.Windows.Forms.Button();
+            this.btnLichSuGiaoDich = new System.Windows.Forms.Button();
             this.lblRecordCount = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
@@ -119,6 +121,7 @@
             // 
             this.panelBottom.BackColor = System.Drawing.Color.White;
             this.panelBottom.Controls.Add(this.btnXemHopDong);
+            this.panelBottom.Controls.Add(this.btnLichSuGiaoDich);
             this.panelBottom.Controls.Add(this.lblRecordCount);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 739);
@@ -141,6 +144,20 @@
             this.btnXemHopDong.TabIndex = 4;
             this.btnXemHopDong.Text = "📋 Xem Hợp Đồng";
             this.btnXemHopDong.UseVisualStyleBackColor = false;
+            // 
+            // btnLichSuGiaoDich
+            // 
+            this.btnLichSuGiaoDich.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(152)))), ((int)(((byte)(0)))));
+            this.btnLichSuGiaoDich.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLichSuGiaoDich.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnLichSuGiaoDich.ForeColor = System.Drawing.Color.White;
+            this.btnLichSuGiaoDich.Location = new System.Drawing.Point(260, 31);
+            this.btnLichSuGiaoDich.Margin = new System.Windows.Forms.Padding(4);
+            this.btnLichSuGiaoDich.Name = "btnLichSuGiaoDich";
+            this.btnLichSuGiaoDich.Size = new System.Drawing.Size(200, 43);
+            this.btnLichSuGiaoDich.TabIndex = 5;
+            this.btnLichSuGiaoDich.Text = "📊 Lịch Sử Giao Dịch";
+            this.btnLichSuGiaoDich.UseVisualStyleBackColor = false;
             // 
             // lblRecordCount
             // 

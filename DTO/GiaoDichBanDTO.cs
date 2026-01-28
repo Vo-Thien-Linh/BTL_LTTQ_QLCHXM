@@ -13,6 +13,13 @@ namespace DTO
         public string HinhThucThanhToan { get; set; }
         public string MaTaiKhoan { get; set; }
 
+        // Khuyến mãi và phụ tùng
+        public string MaKM { get; set; }
+        public decimal SoTienGiam { get; set; }
+        public decimal TongGiaPhuTung { get; set; }
+        public decimal TongGiamPhuTung { get; set; }
+        public decimal TongThanhToan { get; set; }
+
         // Thông tin bổ sung từ các bảng liên quan (không lưu DB)
         public string TenKhachHang { get; set; }
         public string SdtKhachHang { get; set; }

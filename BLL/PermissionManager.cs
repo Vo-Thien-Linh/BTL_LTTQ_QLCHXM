@@ -14,11 +14,11 @@ namespace BLL
     public static class PermissionManager
     {
         /// <summary>
-        /// Chỉ Quản lý có thể xem Dashboard
+        /// Quản lý và Thu ngân có thể xem Dashboard
         /// </summary>
         public static bool CanViewDashboard()
         {
-            return CurrentUser.ChucVu == "Quản lý";
+            return CurrentUser.ChucVu == "Quản lý" || CurrentUser.ChucVu == "Thu ngân";
         }
 
         /// <summary>
@@ -40,11 +40,11 @@ namespace BLL
         }
 
         /// <summary>
-        /// Kiểm tra có quyền sửa khách hàng (Quản lý, Thu ngân)
+        /// Kiểm tra có quyền sửa khách hàng (Chỉ Quản lý)
         /// </summary>
         public static bool CanEditKhachHang()
         {
-            return CurrentUser.ChucVu == "Quản lý" || CurrentUser.ChucVu == "Thu ngân";
+            return CurrentUser.ChucVu == "Quản lý";
         }
 
         /// <summary>
@@ -76,12 +76,11 @@ namespace BLL
         }
 
         /// <summary>
-        /// Quản lý, Thu ngân, Bán hàng có thể cho thuê
+        /// Quản lý, Bán hàng có thể cho thuê (Thu ngân không)
         /// </summary>
         public static bool CanViewChoThue()
         {
             return CurrentUser.ChucVu == "Quản lý" || 
-                   CurrentUser.ChucVu == "Thu ngân" || 
                    CurrentUser.ChucVu == "Bán hàng";
         }
 
@@ -99,6 +98,14 @@ namespace BLL
         public static bool CanEditBaoTri()
         {
             return CurrentUser.ChucVu == "Kỹ thuật" || CurrentUser.ChucVu == "Quản lý";
+        }
+
+        /// <summary>
+        /// Kiểm tra có phải Admin không (chỉ Admin mới có quyền quản lý khuyến mãi)
+        /// </summary>
+        public static bool IsAdmin()
+        {
+            return CurrentUser.ChucVu == "Admin" || CurrentUser.ChucVu == "Quản lý";
         }
 
         /// <summary>

@@ -8,6 +8,59 @@ namespace DAL
     public class GiaoDichBanDAL
     {
         /// <summary>
+        /// Lấy lịch sử giao dịch tổng hợp (Bán + Thuê) với thông tin gọn
+        /// </summary>
+        public DataTable GetLichSuGiaoDichTongHop()
+        {
+            string query = @"
+                -- Giao dịch BÁN XE (có xe)
+                SELECT 
+                    'Bán Xe' AS LoaiGiaoDich,
+                    gd.NgayBan AS NgayGiaoDich, 
+                    kh.HoTenKH AS KhachHang,
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau) AS SanPham,
+                    gd.TongThanhToan AS ThanhToan,
+                    gd.TongGiaPhuTung AS TienPhuTung,
+                    gd.TrangThaiThanhToan,
+                    nv.HoTenNV AS NhanVien
+                FROM GiaoDichBan gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+
+                UNION ALL
+
+                -- Giao dịch THUÊ
+                SELECT 
+                    'Cho Thuê' AS LoaiGiaoDich,
+                    gd.NgayBatDau AS NgayGiaoDich, 
+                    kh.HoTenKH AS KhachHang,
+                    CONCAT(hx.TenHang, ' ', dx.TenDong, ' - ', ms.TenMau, ' (', DATEDIFF(DAY, gd.NgayBatDau, gd.NgayKetThuc), ' ngày)') AS SanPham,
+                    gd.TongThanhToan AS ThanhToan,
+                    0 AS TienPhuTung,
+                    gd.TrangThaiThanhToan,
+                    nv.HoTenNV AS NhanVien
+                FROM GiaoDichThue gd
+                INNER JOIN KhachHang kh ON gd.MaKH = kh.MaKH
+                INNER JOIN XeMay xe ON gd.ID_Xe = xe.ID_Xe
+                INNER JOIN LoaiXe lx ON xe.ID_Loai = lx.ID_Loai
+                INNER JOIN HangXe hx ON lx.MaHang = hx.MaHang
+                INNER JOIN DongXe dx ON lx.MaDong = dx.MaDong
+                INNER JOIN MauSac ms ON lx.MaMau = ms.MaMau
+                LEFT JOIN TaiKhoan tk ON gd.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+
+                ORDER BY NgayGiaoDich DESC";
+
+            return DataProvider.ExecuteQuery(query);
+        }
+
+        /// <summary>
         /// Lấy tất cả giao dịch bán với thông tin chi tiết
         /// </summary>
         public DataTable GetAllGiaoDichBan()
@@ -150,52 +203,63 @@ namespace DAL
 
                 try
                 {
-                    // 1. Kiểm tra số lượng tồn
-                    string checkQuery = "SELECT SoLuong FROM XeMay WHERE ID_Xe = @ID_Xe";
-                    SqlCommand checkCmd = new SqlCommand(checkQuery, connection, transaction);
-                    checkCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
-                    
-                    object result = checkCmd.ExecuteScalar();
-                    if (result == null || Convert.ToInt32(result) <= 0)
+                    // Chỉ kiểm tra số lượng tồn nếu có xe
+                    if (!string.IsNullOrEmpty(gd.ID_Xe))
                     {
-                        transaction.Rollback();
-                        errorMessage = "Xe đã hết hàng!";
-                        return 0;
+                        string checkQuery = "SELECT SoLuong FROM XeMay WHERE ID_Xe = @ID_Xe";
+                        SqlCommand checkCmd = new SqlCommand(checkQuery, connection, transaction);
+                        checkCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
+                        
+                        object result = checkCmd.ExecuteScalar();
+                        if (result == null || Convert.ToInt32(result) <= 0)
+                        {
+                            transaction.Rollback();
+                            errorMessage = "Xe đã hết hàng!";
+                            return 0;
+                        }
                     }
 
-                    // 2. Thêm giao dịch bán và lấy MaGDBan
+                    // Thêm giao dịch bán và lấy MaGDBan
                     string insertQuery = @"
                         INSERT INTO GiaoDichBan (MaKH, ID_Xe, NgayBan, GiaBan, TrangThaiThanhToan, 
-                            HinhThucThanhToan, MaTaiKhoan)
+                            HinhThucThanhToan, MaTaiKhoan, MaKM, SoTienGiam, TongGiaPhuTung, TongGiamPhuTung, TongThanhToan)
                         VALUES (@MaKH, @ID_Xe, @NgayBan, @GiaBan, @TrangThaiThanhToan, 
-                            @HinhThucThanhToan, @MaTaiKhoan);
+                            @HinhThucThanhToan, @MaTaiKhoan, @MaKM, @SoTienGiam, @TongGiaPhuTung, @TongGiamPhuTung, @TongThanhToan);
                         SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
                     SqlCommand insertCmd = new SqlCommand(insertQuery, connection, transaction);
                     insertCmd.Parameters.AddWithValue("@MaKH", gd.MaKH);
-                    insertCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
+                    insertCmd.Parameters.AddWithValue("@ID_Xe", (object)gd.ID_Xe ?? DBNull.Value);
                     insertCmd.Parameters.AddWithValue("@NgayBan", gd.NgayBan);
                     insertCmd.Parameters.AddWithValue("@GiaBan", gd.GiaBan);
                     insertCmd.Parameters.AddWithValue("@TrangThaiThanhToan", (object)gd.TrangThaiThanhToan ?? DBNull.Value);
                     insertCmd.Parameters.AddWithValue("@HinhThucThanhToan", (object)gd.HinhThucThanhToan ?? DBNull.Value);
                     insertCmd.Parameters.AddWithValue("@MaTaiKhoan", (object)gd.MaTaiKhoan ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@MaKM", (object)gd.MaKM ?? DBNull.Value);
+                    insertCmd.Parameters.AddWithValue("@SoTienGiam", gd.SoTienGiam);
+                    insertCmd.Parameters.AddWithValue("@TongGiaPhuTung", gd.TongGiaPhuTung);
+                    insertCmd.Parameters.AddWithValue("@TongGiamPhuTung", gd.TongGiamPhuTung);
+                    insertCmd.Parameters.AddWithValue("@TongThanhToan", gd.TongThanhToan);
                     
                     int maGDBan = Convert.ToInt32(insertCmd.ExecuteScalar());
 
-                    // 3. Cập nhật số lượng xe (giảm 1) và tăng SoLuongBanRa
-                    string updateQuery = @"
-                        UPDATE XeMay 
-                        SET SoLuong = SoLuong - 1,
-                            SoLuongBanRa = ISNULL(SoLuongBanRa, 0) + 1,
-                            TrangThai = CASE 
-                                WHEN SoLuong - 1 = 0 THEN N'Đã bán'
-                                ELSE TrangThai
-                            END
-                        WHERE ID_Xe = @ID_Xe";
+                    // Chỉ cập nhật xe nếu có xe
+                    if (!string.IsNullOrEmpty(gd.ID_Xe))
+                    {
+                        string updateQuery = @"
+                            UPDATE XeMay 
+                            SET SoLuong = SoLuong - 1,
+                                SoLuongBanRa = ISNULL(SoLuongBanRa, 0) + 1,
+                                TrangThai = CASE 
+                                    WHEN SoLuong - 1 = 0 THEN N'Đã bán'
+                                    ELSE TrangThai
+                                END
+                            WHERE ID_Xe = @ID_Xe";
 
-                    SqlCommand updateCmd = new SqlCommand(updateQuery, connection, transaction);
-                    updateCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
-                    updateCmd.ExecuteNonQuery();
+                        SqlCommand updateCmd = new SqlCommand(updateQuery, connection, transaction);
+                        updateCmd.Parameters.AddWithValue("@ID_Xe", gd.ID_Xe);
+                        updateCmd.ExecuteNonQuery();
+                    }
 
                     transaction.Commit();
                     return maGDBan;
@@ -401,6 +465,47 @@ namespace DAL
             };
 
             return DataProvider.ExecuteQuery(query, parameters);
+        }
+
+        /// <summary>
+        /// Thêm chi tiết phụ tùng bán
+        /// </summary>
+        public bool InsertChiTietPhuTungBan(ChiTietPhuTungBanDTO chiTiet)
+        {
+            string query = @"
+                INSERT INTO ChiTietPhuTungBan (MaGDBan, MaPhuTung, SoLuong, DonGia, ThanhTien)
+                VALUES (@MaGDBan, @MaPhuTung, @SoLuong, @DonGia, @ThanhTien)";
+
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@MaGDBan", chiTiet.MaGDBan),
+                new SqlParameter("@MaPhuTung", chiTiet.MaPhuTung),
+                new SqlParameter("@SoLuong", chiTiet.SoLuong),
+                new SqlParameter("@DonGia", chiTiet.DonGia),
+                new SqlParameter("@ThanhTien", chiTiet.SoLuong * chiTiet.DonGia)
+            };
+
+            return DataProvider.ExecuteNonQuery(query, parameters) > 0;
+        }
+
+        /// <summary>
+        /// Lấy lịch sử bán phụ tùng lẻ
+        /// </summary>
+        public DataTable GetLichSuBanPhuTungLe()
+        {
+            string query = @"
+                SELECT 
+                    ls.NgayBan AS NgayGiaoDich,
+                    ls.TenPhuTung AS SanPham,
+                    ls.SoLuong,
+                    ls.ThanhTien,
+                    nv.HoTenNV AS NhanVien
+                FROM LichSuBanPhuTungLe ls
+                LEFT JOIN TaiKhoan tk ON ls.MaTaiKhoan = tk.MaTaiKhoan
+                LEFT JOIN NhanVien nv ON tk.MaNV = nv.MaNV
+                ORDER BY ls.NgayBan DESC";
+
+            return DataProvider.ExecuteQuery(query);
         }
     }
 }

@@ -291,6 +291,18 @@ namespace UI.FormHandleUI
 
             if (phuTungBLL.UpdateKhoPhuTungSoLuong(_maPhuTung, tonKhoMoi))
             {
+                // Lưu lịch sử bán phụ tùng lẻ
+                try
+                {
+                    phuTungBLL.LuuLichSuBanLe(_maPhuTung, _tenPhuTung, soLuongBan, _giaBan, 
+                        _soTienGiamKm, thanhSauGiam, CurrentUser.MaTaiKhoan, _kmChon?.MaKM);
+                }
+                catch (Exception ex)
+                {
+                    // Không báo lỗi, chỉ log
+                    System.Diagnostics.Debug.WriteLine("Lỗi lưu lịch sử: " + ex.Message);
+                }
+
                 MessageBox.Show($"Bán thành công {soLuongBan} sản phẩm!\nTồn kho còn lại: {tonKhoMoi}\nTiền hàng: {thanhTien:N0}\nKhuyến mãi: {_soTienGiamKm:N0}\nKhách trả: {thanhSauGiam:N0}",
                     "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -427,6 +439,37 @@ namespace UI.FormHandleUI
         private void lblKm_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private string PromptForCustomer()
+        {
+            Form prompt = new Form
+            {
+                Width = 400,
+                Height = 180,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = "Nhập mã khách hàng",
+                StartPosition = FormStartPosition.CenterParent,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            Label textLabel = new Label { Left = 20, Top = 20, Width = 340, Text = "Mã khách hàng:" };
+            TextBox textBox = new TextBox { Left = 20, Top = 50, Width = 340, Text = "KH00001" };
+            Button confirmation = new Button { Text = "OK", Left = 200, Width = 80, Top = 90, DialogResult = DialogResult.OK };
+            Button cancel = new Button { Text = "Hủy", Left = 290, Width = 80, Top = 90, DialogResult = DialogResult.Cancel };
+
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            cancel.Click += (sender, e) => { prompt.Close(); };
+
+            prompt.Controls.Add(textLabel);
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(cancel);
+            prompt.AcceptButton = confirmation;
+            prompt.CancelButton = cancel;
+
+            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
 
         private void txtGiamValue_TextChanged(object sender, EventArgs e)

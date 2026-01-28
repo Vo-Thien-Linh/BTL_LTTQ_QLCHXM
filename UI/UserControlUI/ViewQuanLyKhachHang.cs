@@ -55,18 +55,16 @@ namespace UI.UserControlUI
 
         /// <summary>
         /// Áp dụng phân quyền cho các nút thao tác
-        /// Quản lý + Thu ngân: Sửa
-        /// Chỉ Quản lý: Thêm/Xóa
-        /// Bán hàng: Chỉ xem (không có nút)
+        /// Quản lý: Thêm/Sửa/Xóa/Làm mới
+        /// Thu ngân + Bán hàng: Chỉ xem (không có nút)
         /// </summary>
         private void ApplyPermissions()
         {
-            bool canEdit = PermissionManager.CanEditKhachHang(); // Quản lý, Thu ngân
-            bool canManage = CurrentUser.ChucVu == "Quản lý"; // Chỉ Quản lý
+            bool canEdit = PermissionManager.CanEditKhachHang(); // Chỉ Quản lý
             
-            btn_AddCustomer.Visible = canManage;
+            btn_AddCustomer.Visible = canEdit;
             btn_EditCustomer.Visible = canEdit;
-            btn_DeleteCustomer.Visible = canManage;
+            btn_DeleteCustomer.Visible = canEdit;
             btn_RefreshCustomer.Visible = canEdit;
             
             ReorganizeButtons();

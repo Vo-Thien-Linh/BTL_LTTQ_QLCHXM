@@ -18,6 +18,30 @@ namespace BLL
         }
 
         /// <summary>
+        /// Lấy lịch sử giao dịch tổng hợp (Bán + Thuê)
+        /// </summary>
+        public DataTable GetLichSuGiaoDichTongHop()
+        {
+            return giaoDichBanDAL.GetLichSuGiaoDichTongHop();
+        }
+
+        /// <summary>
+        /// Thêm chi tiết phụ tùng bán
+        /// </summary>
+        public bool ThemChiTietPhuTungBan(ChiTietPhuTungBanDTO chiTiet)
+        {
+            return giaoDichBanDAL.InsertChiTietPhuTungBan(chiTiet);
+        }
+
+        /// <summary>
+        /// Lấy lịch sử bán phụ tùng lẻ
+        /// </summary>
+        public DataTable GetLichSuBanPhuTungLe()
+        {
+            return giaoDichBanDAL.GetLichSuBanPhuTungLe();
+        }
+
+        /// <summary>
         /// Lấy tất cả giao dịch bán
         /// </summary>
         public DataTable GetAllGiaoDichBan()
