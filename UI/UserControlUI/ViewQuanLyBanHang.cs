@@ -706,5 +706,10 @@ namespace UI.UserControlUI
         {
 
         }
+
+        private void btnLichSuGiaoDich_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

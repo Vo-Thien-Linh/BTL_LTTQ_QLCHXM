@@ -153,6 +153,9 @@
   <data name="AddPartTitle" xml:space="preserve">
     <value>Add part</value>
   </data>
+  <data name="AddPromotionSuccess" xml:space="preserve">
+    <value>Promotion added successfully!</value>
+  </data>
   <data name="Address" xml:space="preserve">
     <value>Address</value>
   </data>
@@ -168,6 +171,9 @@
   <data name="AddVehicleSuccess" xml:space="preserve">
     <value>Vehicle added successfully!</value>
   </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
   <data name="AllPartsInStock" xml:space="preserve">
     <value>✅ All parts are sufficiently stocked</value>
   </data>
@@ -180,11 +186,17 @@
   <data name="Animations" xml:space="preserve">
     <value>Enable animations</value>
   </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>Apply To</value>
+  </data>
   <data name="ApproveBtn" xml:space="preserve">
     <value>Approve</value>
   </data>
   <data name="ApproveRentalTitle" xml:space="preserve">
     <value>APPROVE RENTAL</value>
+  </data>
+  <data name="AutoUpdatedExpiredPromotions" xml:space="preserve">
+    <value>Automatically updated {0} promotion(s) to 'Expired' status</value>
   </data>
   <data name="AvailableVehicles" xml:space="preserve">
     <value>Available Vehicles</value>
@@ -247,7 +259,7 @@
     <value>Confirm</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>Are you sure you want to delete vehicle</value>
+    <value>Confirm Delete</value>
   </data>
   <data name="ConfirmDelete1" xml:space="preserve">
     <value>Confirm Delete</value>
@@ -258,6 +270,10 @@
   <data name="ConfirmDeleteEmployee" xml:space="preserve">
     <value>Are you sure you want to delete employee '{0}' (ID: {1})?
 Note: This action cannot be undone!</value>
+  </data>
+  <data name="ConfirmDeletePromotion" xml:space="preserve">
+    <value>Are you sure you want to delete promotion '{0}'?
+The promotion will be marked as 'Cancelled'.</value>
   </data>
   <data name="ConfirmDeleteVehicle" xml:space="preserve">
     <value>Are you sure you want to delete vehicle {0}?</value>
@@ -346,6 +362,12 @@ Note: This action cannot be undone!</value>
   <data name="DeleteImage" xml:space="preserve">
     <value>Delete Image</value>
   </data>
+  <data name="DeletePromotionFailed" xml:space="preserve">
+    <value>Failed to delete promotion!</value>
+  </data>
+  <data name="DeletePromotionSuccess" xml:space="preserve">
+    <value>Promotion deleted successfully!</value>
+  </data>
   <data name="DeleteSuccess" xml:space="preserve">
     <value>Vehicle deleted successfully!</value>
   </data>
@@ -355,11 +377,20 @@ Note: This action cannot be undone!</value>
   <data name="DeleteVehicleSuccess" xml:space="preserve">
     <value>Vehicle deleted successfully!</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
   <data name="DetailBtn" xml:space="preserve">
     <value>DETAILS</value>
   </data>
   <data name="DetailTitle" xml:space="preserve">
     <value>Part details</value>
+  </data>
+  <data name="DiscountAmount" xml:space="preserve">
+    <value>Discount</value>
+  </data>
+  <data name="DiscountPercent" xml:space="preserve">
+    <value>% Off</value>
   </data>
   <data name="DriverLicense" xml:space="preserve">
     <value>Driver License</value>
@@ -415,6 +446,9 @@ Please check the information.</value>
   </data>
   <data name="EmployeeTitle" xml:space="preserve">
     <value>EMPLOYEE MANAGEMENT</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
   </data>
   <data name="EngineCapacity" xml:space="preserve">
     <value>Engine</value>
@@ -530,6 +564,9 @@ Please check the information.</value>
   <data name="LoadError" xml:space="preserve">
     <value>Error loading settings:</value>
   </data>
+  <data name="LoadPromotionListError" xml:space="preserve">
+    <value>Error loading promotion list</value>
+  </data>
   <data name="LowStockWarning" xml:space="preserve">
     <value>Low Stock Warning</value>
   </data>
@@ -548,11 +585,17 @@ Please check the information.</value>
   <data name="ManagePhuTungBtn" xml:space="preserve">
     <value>Parts Management</value>
   </data>
+  <data name="ManagePromotionBtn" xml:space="preserve">
+    <value>Promotion Management</value>
+  </data>
   <data name="Manager" xml:space="preserve">
     <value>Manager</value>
   </data>
   <data name="ManageVehicleBtn" xml:space="preserve">
     <value>Vehicle Management</value>
+  </data>
+  <data name="MaxDiscount" xml:space="preserve">
+    <value>Max Discount</value>
   </data>
   <data name="MenuCustomer" xml:space="preserve">
     <value>Customer Manager</value>
@@ -729,6 +772,12 @@ Please add new vehicles.</value>
   <data name="PleaseSelectCustomerToEdit" xml:space="preserve">
     <value>Please select a customer to edit!</value>
   </data>
+  <data name="PleaseSelectPromotionToDelete" xml:space="preserve">
+    <value>Please select a promotion to delete!</value>
+  </data>
+  <data name="PleaseSelectPromotionToEdit" xml:space="preserve">
+    <value>Please select a promotion to edit!</value>
+  </data>
   <data name="PleaseSelectVehicleToDelete" xml:space="preserve">
     <value>Please select a vehicle to delete!</value>
   </data>
@@ -743,6 +792,18 @@ Please add new vehicles.</value>
   </data>
   <data name="ProductTitle" xml:space="preserve">
     <value>PRODUCT MANAGEMENT</value>
+  </data>
+  <data name="PromotionCode" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="PromotionManagement" xml:space="preserve">
+    <value>Promotion Management</value>
+  </data>
+  <data name="PromotionName" xml:space="preserve">
+    <value>Promotion Name</value>
+  </data>
+  <data name="PromotionType" xml:space="preserve">
+    <value>Type</value>
   </data>
   <data name="PurchaseDate" xml:space="preserve">
     <value>Purchase Date</value>
@@ -773,6 +834,12 @@ Please add new vehicles.</value>
   </data>
   <data name="RefreshBtn" xml:space="preserve">
     <value>Refresh</value>
+  </data>
+  <data name="RefreshDataError" xml:space="preserve">
+    <value>Error refreshing data</value>
+  </data>
+  <data name="RefreshDataSuccess" xml:space="preserve">
+    <value>Data refreshed successfully!</value>
   </data>
   <data name="RegistrationDate" xml:space="preserve">
     <value>Reg. Date</value>
@@ -851,6 +918,9 @@ Please add new vehicles.</value>
   </data>
   <data name="SoldStatus" xml:space="preserve">
     <value>Sold</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
@@ -950,6 +1020,9 @@ Please add new vehicles.</value>
   </data>
   <data name="UpdateEmployeeSuccess" xml:space="preserve">
     <value>Employee updated successfully!</value>
+  </data>
+  <data name="UpdatePromotionSuccess" xml:space="preserve">
+    <value>Promotion updated successfully!</value>
   </data>
   <data name="UsagePriceColumn" xml:space="preserve">
     <value>Unit Price</value>

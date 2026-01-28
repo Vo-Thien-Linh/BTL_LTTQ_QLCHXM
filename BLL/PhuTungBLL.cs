@@ -135,5 +135,23 @@ namespace BLL
             
             DataProvider.ExecuteNonQuery(query, pars);
         }
+
+        public DataTable GetLichSuBanPhuTungLe()
+        {
+            string query = @"
+        SELECT
+            LS.NgayBan        AS NgayGiaoDich,
+            LS.TenPhuTung     AS SanPham,
+            LS.SoLuong,
+            LS.DonGia,
+            LS.SoTienGiam,
+            LS.ThanhTien,
+            LS.MaTaiKhoan     AS NhanVien
+        FROM LichSuBanPhuTungLe LS
+        ORDER BY LS.NgayBan DESC";
+
+            return DataProvider.ExecuteQuery(query);
+        }
+
     }
 }
