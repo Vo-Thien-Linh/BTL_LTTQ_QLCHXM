@@ -362,7 +362,9 @@ namespace UI.FormUI
                             MaPhuTung = row["MaPhuTung"].ToString(),
                             SoLuong = Convert.ToInt32(row["SoLuong"]),
                             DonGia = Convert.ToDecimal(row["DonGia"]),
-                            ThanhTien = Convert.ToDecimal(row["ThanhTien"])
+                            ThanhTien = Convert.ToDecimal(row["ThanhTien"]),
+                            MaKM = row["MaKM"]?.ToString(),
+                            SoTienGiam = row["SoTienGiam"] != DBNull.Value ? Convert.ToDecimal(row["SoTienGiam"]) : 0
                         };
                         dsPhuTung.Add(pt);
                         tongTienPhuTung += pt.ThanhTien;
@@ -651,6 +653,10 @@ namespace UI.FormUI
             dtPhuTungDaChon.Columns.Add("DonGia", typeof(decimal));
             dtPhuTungDaChon.Columns.Add("ThanhTien", typeof(decimal));
             dtPhuTungDaChon.Columns.Add("DonViTinh", typeof(string));
+            dtPhuTungDaChon.Columns.Add("MaKM", typeof(string));
+            dtPhuTungDaChon.Columns.Add("TenKM", typeof(string));
+            dtPhuTungDaChon.Columns.Add("SoTienGiam", typeof(decimal));
+            dtPhuTungDaChon.Columns.Add("ThanhTienSauGiam", typeof(decimal));
 
             dgvPhuTung.DataSource = dtPhuTungDaChon;
 
@@ -662,6 +668,9 @@ namespace UI.FormUI
                     
                 if (dgvPhuTung.Columns.Contains("DonViTinh"))
                     dgvPhuTung.Columns["DonViTinh"].Visible = false;
+
+                if (dgvPhuTung.Columns.Contains("MaKM"))
+                    dgvPhuTung.Columns["MaKM"].Visible = false;
             }
 
             TinhTongTien();
@@ -677,9 +686,16 @@ namespace UI.FormUI
                 {
                     var phuTungChon = formChonPT.PhuTungDaChon;
                     int soLuong = formChonPT.SoLuong;
+                    var kmPt = formChonPT.KhuyenMaiDaChon;
+                    decimal soTienGiamPt = formChonPT.SoTienGiamKhuyenMai;
 
                     if (phuTungChon != null && soLuong > 0)
                     {
+                        decimal thanhTien = soLuong * phuTungChon.GiaBan;
+                        decimal thanhTienSauGiam = Math.Max(thanhTien - soTienGiamPt, 0);
+                        string maKM = kmPt?.MaKM ?? "";
+                        string tenKM = kmPt?.TenKM ?? "";
+
                         DataRow[] existingRows = dtPhuTungDaChon.Select($"MaPhuTung = '{phuTungChon.MaPhuTung}'");
                         
                         if (existingRows.Length > 0)
@@ -687,7 +703,32 @@ namespace UI.FormUI
                             int soLuongCu = Convert.ToInt32(existingRows[0]["SoLuong"]);
                             int soLuongMoi = soLuongCu + soLuong;
                             existingRows[0]["SoLuong"] = soLuongMoi;
-                            existingRows[0]["ThanhTien"] = soLuongMoi * phuTungChon.GiaBan;
+
+                            decimal thanhTienMoi = soLuongMoi * phuTungChon.GiaBan;
+
+                            // Nếu dòng đã có KM thì giữ nguyên mã và tính lại giảm; nếu chưa có, lấy từ lựa chọn mới
+                            string maKmHienTai = existingRows[0]["MaKM"]?.ToString() ?? "";
+                            string tenKmHienTai = existingRows[0]["TenKM"]?.ToString() ?? "";
+                            if (string.IsNullOrEmpty(maKmHienTai) && !string.IsNullOrEmpty(maKM))
+                            {
+                                maKmHienTai = maKM;
+                                tenKmHienTai = tenKM;
+                            }
+
+                            decimal giamPt = 0;
+                            if (!string.IsNullOrEmpty(maKmHienTai))
+                            {
+                                string errKm;
+                                giamPt = khuyenMaiBLL.TinhGiaTriGiam(maKmHienTai, thanhTienMoi, out errKm);
+                                if (!string.IsNullOrEmpty(errKm))
+                                    giamPt = 0;
+                            }
+
+                            existingRows[0]["MaKM"] = maKmHienTai;
+                            existingRows[0]["TenKM"] = tenKmHienTai;
+                            existingRows[0]["ThanhTien"] = thanhTienMoi;
+                            existingRows[0]["SoTienGiam"] = giamPt;
+                            existingRows[0]["ThanhTienSauGiam"] = Math.Max(thanhTienMoi - giamPt, 0);
                         }
                         else
                         {
@@ -696,8 +737,12 @@ namespace UI.FormUI
                             newRow["TenPhuTung"] = phuTungChon.TenPhuTung;
                             newRow["SoLuong"] = soLuong;
                             newRow["DonGia"] = phuTungChon.GiaBan;
-                            newRow["ThanhTien"] = soLuong * phuTungChon.GiaBan;
+                            newRow["ThanhTien"] = thanhTien;
                             newRow["DonViTinh"] = phuTungChon.DonViTinh ?? "";
+                            newRow["MaKM"] = maKM;
+                            newRow["TenKM"] = tenKM;
+                            newRow["SoTienGiam"] = soTienGiamPt;
+                            newRow["ThanhTienSauGiam"] = thanhTienSauGiam;
 
                             dtPhuTungDaChon.Rows.Add(newRow);
                         }
@@ -791,6 +836,7 @@ namespace UI.FormUI
                     txtTongTienXe.Text = tongTienXe.ToString("N0") + " VNĐ";
 
                 decimal tongTienPhuTung = 0;
+                decimal tongGiamPhuTung = 0;
                 if (dtPhuTungDaChon != null)
                 {
                     foreach (DataRow row in dtPhuTungDaChon.Rows)
@@ -798,6 +844,7 @@ namespace UI.FormUI
                         if (row.RowState != DataRowState.Deleted)
                         {
                             tongTienPhuTung += Convert.ToDecimal(row["ThanhTien"]);
+                            tongGiamPhuTung += row["SoTienGiam"] != DBNull.Value ? Convert.ToDecimal(row["SoTienGiam"]) : 0;
                         }
                     }
                 }
@@ -809,17 +856,19 @@ namespace UI.FormUI
                 decimal tongTruocGiam = tongTienXe + tongTienPhuTung;
                 
                 // Tính số tiền giảm từ khuyến mãi
-                decimal soTienGiam = 0;
+                decimal soTienGiamXe = 0;
                 if (khuyenMaiHienTai != null)
                 {
-                    soTienGiam = khuyenMaiBLL.TinhGiaTriGiam(khuyenMaiHienTai, tongTruocGiam);
+                    soTienGiamXe = khuyenMaiBLL.TinhGiaTriGiam(khuyenMaiHienTai, tongTruocGiam);
                 }
+
+                decimal tongGiam = soTienGiamXe + tongGiamPhuTung;
                 
                 if (txtSoTienGiam != null)
-                    txtSoTienGiam.Text = soTienGiam.ToString("N0") + " VNĐ";
+                    txtSoTienGiam.Text = tongGiam.ToString("N0") + " VNĐ";
 
                 // Tổng thanh toán sau khi giảm
-                decimal tongThanhToan = tongTruocGiam - soTienGiam;
+                decimal tongThanhToan = tongTruocGiam - tongGiam;
                 if (txtTongThanhToan != null)
                     txtTongThanhToan.Text = tongThanhToan.ToString("N0") + " VNĐ";
             }

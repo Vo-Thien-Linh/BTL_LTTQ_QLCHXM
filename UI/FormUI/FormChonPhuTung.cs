@@ -2,6 +2,7 @@ using BLL;
 using DTO;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace UI.FormUI
@@ -11,6 +12,10 @@ namespace UI.FormUI
         private PhuTungBLL phuTungBLL;
         public PhuTungDTO PhuTungDaChon { get; private set; }
         public int SoLuong { get; private set; }
+        public KhuyenMaiDTO KhuyenMaiDaChon { get; private set; }
+        public decimal SoTienGiamKhuyenMai { get; private set; }
+
+        private readonly KhuyenMaiBLL khuyenMaiBLL = new KhuyenMaiBLL();
 
         public FormChonPhuTung()
         {
@@ -171,6 +176,12 @@ namespace UI.FormUI
 
                 if (PhuTungDaChon != null)
                 {
+                    decimal thanhTien = PhuTungDaChon.GiaBan * SoLuong;
+
+                    // Cho phép chọn khuyến mãi cho phụ tùng (nếu có)
+                    if (!ChonKhuyenMaiChoPhuTung(thanhTien))
+                        return;
+
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
@@ -190,6 +201,191 @@ namespace UI.FormUI
                     "Lỗi",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Hiển thị hộp thoại nhỏ cho phép chọn khuyến mãi áp dụng cho phụ tùng.
+        /// Trả về false nếu người dùng bấm Hủy.
+        /// </summary>
+        private bool ChonKhuyenMaiChoPhuTung(decimal thanhTien)
+        {
+            try
+            {
+                DataTable dt = khuyenMaiBLL.GetKhuyenMaiHieuLuc(DateTime.Now, "Phụ tùng");
+
+                // Không có khuyến mãi khả dụng
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    KhuyenMaiDaChon = null;
+                    SoTienGiamKhuyenMai = 0;
+                    return true;
+                }
+
+                Form picker = new Form
+                {
+                    Text = "Chọn khuyến mãi phụ tùng",
+                    Size = new Size(420, 240),
+                    StartPosition = FormStartPosition.CenterParent,
+                    FormBorderStyle = FormBorderStyle.FixedDialog,
+                    MaximizeBox = false,
+                    MinimizeBox = false
+                };
+
+                Label lblTitle = new Label
+                {
+                    Text = "Chọn khuyến mãi áp dụng",
+                    AutoSize = true,
+                    Location = new Point(16, 16)
+                };
+
+                ComboBox cboKm = new ComboBox
+                {
+                    DropDownStyle = ComboBoxStyle.DropDownList,
+                    Location = new Point(16, 44),
+                    Width = 360,
+                    DataSource = dt,
+                    DisplayMember = "TenKM",
+                    ValueMember = "MaKM"
+                };
+
+                CheckBox chkNone = new CheckBox
+                {
+                    Text = "Không áp dụng khuyến mãi",
+                    AutoSize = true,
+                    Location = new Point(16, 78)
+                };
+
+                Label lblInfo = new Label
+                {
+                    AutoSize = true,
+                    MaximumSize = new Size(360, 0),
+                    Location = new Point(16, 110)
+                };
+
+                Button btnOk = new Button
+                {
+                    Text = "Đồng ý",
+                    DialogResult = DialogResult.OK,
+                    Location = new Point(200, 170),
+                    Width = 80
+                };
+
+                Button btnCancel = new Button
+                {
+                    Text = "Hủy",
+                    DialogResult = DialogResult.Cancel,
+                    Location = new Point(296, 170),
+                    Width = 80
+                };
+
+                picker.AcceptButton = btnOk;
+                picker.CancelButton = btnCancel;
+
+                void UpdateInfo()
+                {
+                    if (cboKm.SelectedValue == null)
+                        return;
+
+                    DataRow[] rows = dt.Select($"MaKM = '{cboKm.SelectedValue}'");
+                    if (rows.Length == 0)
+                        return;
+
+                    DataRow r = rows[0];
+                    string loai = r["LoaiKhuyenMai"]?.ToString() ?? "";
+                    string info = $"Loại: {loai}";
+
+                    if (loai == "Giảm %")
+                    {
+                        string pt = r["PhanTramGiam"] != DBNull.Value ? Convert.ToDecimal(r["PhanTramGiam"]).ToString("0.##") : "0";
+                        string max = r["GiaTriGiamToiDa"] != DBNull.Value ? Convert.ToDecimal(r["GiaTriGiamToiDa"]).ToString("N0") : "Không giới hạn";
+                        info += $" | -{pt}% (tối đa {max})";
+                    }
+                    else
+                    {
+                        string soTien = r["SoTienGiam"] != DBNull.Value ? Convert.ToDecimal(r["SoTienGiam"]).ToString("N0") : "0";
+                        info += $" | -{soTien} đ";
+                    }
+
+                    lblInfo.Text = info;
+                }
+
+                cboKm.SelectedIndexChanged += (s, e) =>
+                {
+                    chkNone.Checked = false;
+                    UpdateInfo();
+                };
+
+                chkNone.CheckedChanged += (s, e) =>
+                {
+                    if (chkNone.Checked)
+                    {
+                        cboKm.Enabled = false;
+                        lblInfo.Text = "Không áp dụng";
+                    }
+                    else
+                    {
+                        cboKm.Enabled = true;
+                        UpdateInfo();
+                    }
+                };
+
+                picker.Controls.Add(lblTitle);
+                picker.Controls.Add(cboKm);
+                picker.Controls.Add(chkNone);
+                picker.Controls.Add(lblInfo);
+                picker.Controls.Add(btnOk);
+                picker.Controls.Add(btnCancel);
+
+                UpdateInfo();
+
+                DialogResult dr = picker.ShowDialog(this);
+                if (dr == DialogResult.Cancel)
+                {
+                    return false;
+                }
+
+                if (chkNone.Checked)
+                {
+                    KhuyenMaiDaChon = null;
+                    SoTienGiamKhuyenMai = 0;
+                    return true;
+                }
+
+                DataRow[] selectedRows = dt.Select($"MaKM = '{cboKm.SelectedValue}'");
+                if (selectedRows.Length == 0)
+                {
+                    MessageBox.Show("Không xác định được khuyến mãi đã chọn!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+
+                DataRow row = selectedRows[0];
+                KhuyenMaiDaChon = new KhuyenMaiDTO
+                {
+                    MaKM = row["MaKM"].ToString(),
+                    TenKM = row["TenKM"].ToString(),
+                    LoaiKhuyenMai = row["LoaiKhuyenMai"].ToString(),
+                    PhanTramGiam = row["PhanTramGiam"] != DBNull.Value ? Convert.ToDecimal(row["PhanTramGiam"]) : (decimal?)null,
+                    SoTienGiam = row["SoTienGiam"] != DBNull.Value ? Convert.ToDecimal(row["SoTienGiam"]) : (decimal?)null,
+                    GiaTriGiamToiDa = row["GiaTriGiamToiDa"] != DBNull.Value ? Convert.ToDecimal(row["GiaTriGiamToiDa"]) : (decimal?)null,
+                    LoaiApDung = row["LoaiApDung"].ToString()
+                };
+
+                string err;
+                SoTienGiamKhuyenMai = khuyenMaiBLL.TinhGiaTriGiam(KhuyenMaiDaChon.MaKM, thanhTien, out err);
+
+                if (!string.IsNullOrEmpty(err))
+                {
+                    MessageBox.Show(err, "Khuyến mãi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi chọn khuyến mãi: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
